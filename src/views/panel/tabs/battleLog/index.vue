@@ -1,0 +1,116 @@
+<template>
+  <el-descriptions border :column="1" v-if="battleLog.bossInfo.name">
+    <el-descriptions-item label="BOSS信息">{{
+      battleLog.bossInfo.name +
+      '——' +
+      battleLog.bossInfo.hp +
+      `  第${battleLog.bossInfo.turn}回合`
+    }}</el-descriptions-item>
+    <el-descriptions-item label="BUFF">
+      <template #default>
+        <div class="flex flex-wrap">
+          <img
+            class="h-10"
+            v-for="buff in battleLog.bossInfo.buffs"
+            :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
+          />
+        </div>
+      </template>
+    </el-descriptions-item>
+    <el-descriptions-item label="DEBUFF">
+      <template #default>
+        <div class="flex flex-wrap">
+          <img
+            class="h-10"
+            v-for="db in battleLog.bossInfo.debuffs"
+            :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${db.status}.png`"
+          />
+        </div>
+      </template>
+    </el-descriptions-item>
+    <el-descriptions-item label="特别玩家 BUFF">
+      <template #default>
+        <div class="flex flex-wrap">
+          <img
+            class="h-10"
+            v-for="buff in battleLog.bossInfo.importantPlayerBuffs"
+            :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
+          />
+        </div>
+      </template>
+    </el-descriptions-item>
+    <el-descriptions-item label="特别BOSS BUFF">
+      <template #default>
+        <div class="flex flex-wrap">
+          <img
+            class="h-10"
+            v-for="buff in battleLog.bossInfo.importantBossBuffs"
+            :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
+          />
+        </div>
+      </template>
+    </el-descriptions-item>
+    <el-descriptions-item label="攻击结果">
+      {{
+        `hit: ${battleLog.attackInfo.hit} 总伤害：${battleLog.attackInfo.damage}`
+      }}
+    </el-descriptions-item>
+    <el-descriptions-item label="召唤" v-if="battleLog.summonInfo.length > 2">
+      <template #default>
+        <div class="flex">
+          <div v-for="summon in battleLog.summonInfo">
+            <div class="relative">
+              <div
+                v-if="summon.recast != 0"
+                class="absolute w-full h-full bg-black/40"
+              ></div>
+              <img
+                :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/raid_normal/${summon.image_id}.jpg`"
+              />
+            </div>
+            <div v-if="summon.recast != 0" class="text-center">
+              <span>还差{{ summon.recast }}回合</span>
+            </div>
+          </div>
+        </div>
+      </template>
+    </el-descriptions-item>
+  </el-descriptions>
+  <el-table :data="battleLog.battleResultList">
+    <el-table-column type="expand">
+      <template #default="{ row }">
+        <div class="prt-result-detail">
+          <div class="prt-reward-item">
+            <div class="prt-item-list">
+              <div
+                class="lis-treasure btn-treasure-item"
+                v-for="treasure in row.treasureList"
+              >
+                <div class="prt-treasure-image">
+                  <img class="img-treasure-item" :src="treasure.src" />
+                  <div class="prt-article-count" v-if="treasure.number">
+                    <span class="txt-small">x</span>{{ treasure.number }}
+                  </div>
+                </div>
+                <div :class="treasure.boxClass"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column prop="raidTime" label="结束时间" align="center" />
+    <el-table-column prop="raidName" label="副本" align="center" />
+    <el-table-column prop="point" label="伤害" align="center" />
+    <el-table-column prop="turn" label="回合数" align="center" width="100" />
+    <el-table-column prop="time" label="讨伐时间" align="center" width="100" />
+    <el-table-column prop="speed" label="跑速" align="center" width="100" />
+  </el-table>
+</template>
+
+<script setup lang="ts">
+import useStore from '@/store'
+const { battleLog } = useStore()
+</script>
+
+<style lang="scss" scoped></style>
