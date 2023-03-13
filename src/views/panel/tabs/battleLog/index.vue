@@ -58,13 +58,14 @@
     <el-descriptions-item label="召唤" v-if="battleLog.summonInfo.length > 2">
       <template #default>
         <div class="flex">
-          <div v-for="summon in battleLog.summonInfo">
+          <div m-1 v-for="summon in battleLog.summonInfo">
             <div class="relative">
               <div
                 v-if="summon.recast != 0"
                 class="absolute w-full h-full bg-black/40"
               ></div>
               <img
+                block
                 :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/raid_normal/${summon.image_id}.jpg`"
               />
             </div>
@@ -76,7 +77,7 @@
       </template>
     </el-descriptions-item>
   </el-descriptions>
-  <div class="member-list" border="2 black solid" flex>
+  <div class="member-list" border="2 black solid" flex flex-wrap>
     <div
       relative
       w-40
@@ -97,10 +98,10 @@
     >
       <img :src="member.jobIcon" mr-2 />
       <div flex flex-col justify-center>
-        <span text-start text-base text-ellipsis overflow-hidden>
+        <span text-start text-base text-ellipsis font-500 overflow-hidden>
           {{ member.nickname }}
         </span>
-        <span text-start text-base>
+        <span text-start text-base font-500>
           {{ member.userRank }}
         </span>
       </div>
