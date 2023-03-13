@@ -22,7 +22,6 @@ chrome.devtools.network.onRequestFinished.addListener(async function (request) {
   if (request.request.url.includes('game.granbluefantasy.jp/gacha/list')) {
     request.getContent((content: string) => {
       const gachaInfo = JSON.parse(content)
-      console.log(gachaInfo)
       dashboard.stone = Number(gachaInfo.stone_num)
 
       dashboard.legendticket10 = Number(
@@ -97,7 +96,25 @@ chrome.devtools.network.onRequestFinished.addListener(async function (request) {
       }
     })
   }
-
+  // 查询房间成员
+  if (request.request.url.includes('/lobby/content/room_member')) {
+    request.getContent((content: string) => {
+      battleLog.memberList = []
+      const resp = JSON.parse(content)
+      const htmlString = decodeURIComponent(resp.data)
+      const $ = load(htmlString)
+      const memberEl = $('.prt-room-member').children()
+      memberEl.each(function (i, elem) {
+        battleLog.memberList.push({
+          nickname: elem.attribs['data-nick-name'],
+          userId: elem.attribs['data-user-id'],
+          userRank: elem.attribs['data-user-rank'],
+          jobIcon: $(this).find('.img-job-icon').attr('src'),
+          attributeClass: $(this).find('.ico-attribute').attr('class'),
+        })
+      })
+    })
+  }
   // 记录战斗日志
   if (
     request.request.url.includes('rest/raid/start.json') ||

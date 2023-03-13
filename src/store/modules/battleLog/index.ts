@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Log, AttackResult } from './types'
+import { Log, AttackResult, Member } from './types'
 
 const importantPlayerBuffsList = ['6255']
 const importantBossBuffsList = ['7038']
@@ -9,6 +9,7 @@ const useEvokerStore = defineStore({
     rawData: {} as Log,
     attackResult: {} as AttackResult,
     battleResultList: [] as any[],
+    memberList: [] as Member[],
   }),
   getters: {
     bossInfo: state => {

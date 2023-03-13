@@ -1,3 +1,11 @@
+export interface Member {
+  nickname: string
+  userId: string
+  userRank: string
+  jobIcon?: string
+  attributeClass?: string
+}
+
 export interface Battle {
   total: number
   count: string

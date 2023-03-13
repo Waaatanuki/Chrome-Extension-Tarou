@@ -76,6 +76,38 @@
       </template>
     </el-descriptions-item>
   </el-descriptions>
+  <div class="member-list" border="2 black solid" flex>
+    <div
+      relative
+      w-40
+      h-14
+      m-2
+      p-1
+      flex
+      border="2 black solid"
+      bg-slate
+      hover:scale-110
+      transition
+      duration-450
+      ease-in-out
+      cursor-pointer
+      select-none
+      v-for="member in battleLog.memberList"
+      @click="jump(member.userId)"
+    >
+      <img :src="member.jobIcon" mr-2 />
+      <div flex flex-col justify-center>
+        <span text-start text-base text-ellipsis overflow-hidden>
+          {{ member.nickname }}
+        </span>
+        <span text-start text-base>
+          {{ member.userRank }}
+        </span>
+      </div>
+
+      <div :class="member.attributeClass" scale-200></div>
+    </div>
+  </div>
   <el-table :data="battleLog.battleResultList">
     <el-table-column type="expand">
       <template #default="{ row }">
@@ -111,6 +143,10 @@
 <script setup lang="ts">
 import useStore from '@/store'
 const { battleLog } = useStore()
+
+function jump(userId: string) {
+  window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
+}
 </script>
 
 <style lang="scss" scoped></style>
