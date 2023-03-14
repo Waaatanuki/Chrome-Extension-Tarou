@@ -81,24 +81,33 @@
     <div
       relative
       w-40
-      h-14
-      m-2
-      p-1
+      h-15
+      m-1
       flex
-      border="2 black solid"
+      items-center
+      border="1 black solid"
       bg-slate
-      hover:scale-110
-      transition
-      duration-450
-      ease-in-out
       cursor-pointer
       select-none
+      hover:scale-105
+      transition-all
       v-for="member in battleLog.memberList"
-      @click="jump(member.userId)"
+      @click="goProfilePage(member.userId)"
     >
-      <img :src="member.jobIcon" mr-2 />
+      <div v-if="member.is_dead" class="absolute w-full h-full bg-black/40 fc">
+        <span text-red text-base font-bold>Dead</span>
+      </div>
+      <img :src="member.jobIcon" mx-1 h-10 />
       <div flex flex-col justify-center>
-        <span text-start text-base text-ellipsis font-500 overflow-hidden>
+        <span
+          text-start
+          text-base
+          font-500
+          whitespace-nowrap
+          text-ellipsis
+          overflow-hidden
+          w-25
+        >
           {{ member.nickname }}
         </span>
         <span text-start text-base font-500>
@@ -145,7 +154,7 @@
 import useStore from '@/store'
 const { battleLog } = useStore()
 
-function jump(userId: string) {
+function goProfilePage(userId: string) {
   window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
 }
 </script>

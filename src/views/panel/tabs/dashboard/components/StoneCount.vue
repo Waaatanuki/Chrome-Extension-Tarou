@@ -13,8 +13,8 @@
         <el-button type="primary" link @click="reset">重置</el-button>
       </div>
     </template>
-    <div class="flex flex-col justify-center items-center">
-      <div class="flex items-center justify-center">
+    <div fc flex-col>
+      <div fc>
         <div class="w-20 flex flex-col p-3">
           <img
             src="https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/ticket/20010.jpg"
@@ -32,7 +32,7 @@
           </span>
         </div>
       </div>
-      <div class="flex items-center justify-center">
+      <div fc>
         <div class="w-20 flex flex-col p-3">
           <img
             src="https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/normal/s/gem.jpg"

@@ -7,6 +7,7 @@ import {
 } from 'unocss'
 
 export default defineConfig({
+  shortcuts: [['fc', 'flex justify-center items-center']],
   presets: [presetUno(), presetAttributify(), presetIcons()],
   transformers: [transformerDirectives()],
 })

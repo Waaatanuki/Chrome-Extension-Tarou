@@ -4,6 +4,7 @@ export interface Member {
   userRank: string
   jobIcon?: string
   attributeClass?: string
+  is_dead?: boolean
 }
 
 export interface Battle {
@@ -203,142 +204,18 @@ export interface Temporary {
   temporary_potion_all_battle_icon_type: string
 }
 
-export interface Buff3 {
+export interface Buff {
   status: string
   detail: string
   effect: string
   help_flag: string
 }
 
-export interface AbilityDetail {
-  buff: Buff3[]
-}
-
-export interface List {
-  1: 13[]
-  2: 22[]
-  3: 32[]
-}
-
-export interface Buff4 {
+export interface Debuff {
   status: string
   detail: string
   effect: string
   help_flag: string
-}
-
-export interface Debuff2 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail2 {
-  buff: Buff4[]
-  debuff: Debuff2[]
-}
-
-export interface Buff5 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail3 {
-  buff: Buff5[]
-}
-
-export interface Buff6 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail4 {
-  buff: Buff6[]
-}
-
-export interface List2 {
-  1: 14[]
-  2: 24[]
-  3: 33[]
-}
-
-export interface Buff7 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail5 {
-  buff: Buff7[]
-}
-
-export interface Buff8 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail6 {
-  buff: Buff8[]
-}
-
-export interface List3 {
-  1: 15[]
-  2: 25[]
-  3: 35[]
-}
-
-export interface Debuff3 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail7 {
-  debuff: Debuff3[]
-}
-
-export interface Buff9 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail8 {
-  buff: Buff9[]
-}
-
-export interface Buff10 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail9 {
-  buff: Buff10[]
-}
-
-export interface List4 {
-  1: 16[]
-  2: 26[]
-  3: 36[]
-}
-
-export interface Ability {
-  1: 12
-  2: 23
-  3: 34
-  4: 42
 }
 
 export interface Summon {
@@ -398,8 +275,48 @@ export interface BgmSetting {
   bgm?: any
 }
 
+export interface Ability {
+  1: AbilityDetail
+  2: AbilityDetail
+  3: AbilityDetail
+  4: AbilityDetail
+}
+
+export interface AbilityDetail {
+  mode: string
+  pos: number
+  alive: number
+  src: string
+  list: List
+}
+
+export interface List {
+  1?: 119[]
+  2?: 217[]
+  3?: 310[]
+  4?: 47[]
+}
+export interface ListItem {
+  class: string
+  'ability-id': string
+  'ability-recast': string
+  ' recaset-default': string
+  'recast-additional-comment': string
+  duration: string
+  'duration-second': string
+  'duration-type': string
+  'ability-character-num': number
+  'text-data': string
+  'ability-name': string
+  'icon-type': string
+  'ability-pick': string
+  start_skill_set_recast: number
+  'ability-attribute': string
+  'full-auto-permit-flag': boolean
+  ability_detail: { buff: Buff }
+  value: string
+}
 export interface Log {
-  0: string
   raid_id: number
   quest_id: string
   base_fps: number
@@ -506,6 +423,7 @@ export interface Log {
   disabled_auto: boolean
   avm: string
   turn_waiting: number
+  multi_raid_member_info?: MultiRaidMemberInfo[]
 }
 
 export interface Buff {
@@ -513,126 +431,6 @@ export interface Buff {
   detail: string
   effect: string
   help_flag: string
-}
-
-export interface List {
-  1: 13[]
-  2: 22[]
-  3: 32[]
-  4: 42[]
-}
-
-export interface Debuff {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface Debuff2 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface Buff2 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface Buff3 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail4 {
-  buff: Buff3[]
-}
-
-export interface List2 {
-  1: 14[]
-  2: 24[]
-  3: 33[]
-}
-
-export interface Buff4 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail5 {
-  buff: Buff4[]
-}
-
-export interface Buff5 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail6 {
-  buff: Buff5[]
-}
-
-export interface List3 {
-  1: 15[]
-  2: 25[]
-  3: 35[]
-}
-
-export interface Buff6 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail7 {
-  buff: Buff6[]
-}
-
-export interface Buff7 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface Debuff3 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail8 {
-  buff: Buff7[]
-  debuff: Debuff3[]
-}
-
-export interface Buff8 {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface AbilityDetail9 {
-  buff: Buff8[]
-}
-
-export interface List4 {
-  1: 16[]
-  2: 26[]
-  3: 36[]
 }
 
 export interface Supporter {
@@ -714,4 +512,21 @@ export interface AttackResult {
   navi_information: NaviInformation[]
   duplicate_key: number
   lyria_pos: number
+}
+export interface MultiRaidMemberInfo {
+  max_hp: number[]
+  total_max_hp: number
+  pc_image: string
+  pc_image_original: string
+  pc_attribute: string
+  nickname: string
+  job_id: string
+  viewer_id: string
+  user_id: string
+  level: string
+  is_complete_perfection_proof: boolean
+  retired_flag: boolean
+  is_dead: boolean
+  is_host: boolean
+  hp_ratio: number
 }

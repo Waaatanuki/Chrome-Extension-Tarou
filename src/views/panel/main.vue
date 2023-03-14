@@ -3,8 +3,6 @@
     <el-tab-pane label="主页"> <Dashborad /></el-tab-pane>
     <el-tab-pane label="贤者素材"> <EvokerPage /></el-tab-pane>
     <el-tab-pane label="战斗日志"><BattleLog /></el-tab-pane>
-    <el-tab-pane label="猎金统计"><GoldBrick /></el-tab-pane>
-    <el-tab-pane label="Task">Task</el-tab-pane>
   </el-tabs>
   <div></div>
 </template>
@@ -13,12 +11,11 @@
 import Dashborad from './tabs/dashboard/index.vue'
 import EvokerPage from './tabs/evoker/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
-import GoldBrick from './tabs/goldBrick/index.vue'
 import useStore from '@/store'
 import { load } from 'cheerio'
 const { dashboard, evoker, battleLog } = useStore()
 
-chrome.devtools.network.onRequestFinished.addListener(async function (request) {
+chrome.devtools.network.onRequestFinished.addListener(function (request) {
   if (request.request.url.includes('game.granbluefantasy.jp/gacha/list')) {
     request.getContent((content: string) => {
       const gachaInfo = JSON.parse(content)
@@ -111,6 +108,7 @@ chrome.devtools.network.onRequestFinished.addListener(async function (request) {
           userRank: elem.attribs['data-user-rank'],
           jobIcon: $(this).find('.img-job-icon').attr('src'),
           attributeClass: $(this).find('.ico-attribute').attr('class'),
+          is_dead: false,
         })
       })
     })
@@ -122,6 +120,20 @@ chrome.devtools.network.onRequestFinished.addListener(async function (request) {
   ) {
     request.getContent((content: string) => {
       battleLog.rawData = JSON.parse(content)
+
+      if (battleLog.rawData.multi_raid_member_info) {
+        battleLog.memberList = []
+        battleLog.rawData.multi_raid_member_info.forEach(member => {
+          battleLog.memberList.push({
+            nickname: member.nickname,
+            userId: member.user_id,
+            userRank: member.level,
+            jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${member.job_id}.png`,
+            attributeClass: `ico-attribute ico-attribute-${member.pc_attribute}`,
+            is_dead: member.is_dead,
+          })
+        })
+      }
     })
   }
   // 记录单次攻击日志
@@ -131,7 +143,6 @@ chrome.devtools.network.onRequestFinished.addListener(async function (request) {
   ) {
     request.getContent((content: string) => {
       battleLog.attackResult = JSON.parse(content)
-      console.log(battleLog.attackResult)
     })
   }
   // 记录战斗结果
@@ -175,7 +186,7 @@ chrome.devtools.network.onRequestFinished.addListener(async function (request) {
           })
         })
 
-        const info = {
+        battleLog.battleResultList.push({
           raidId,
           raidTime,
           raidName,
@@ -184,9 +195,7 @@ chrome.devtools.network.onRequestFinished.addListener(async function (request) {
           time,
           speed,
           treasureList,
-        }
-
-        battleLog.battleResultList.push(info)
+        })
 
         battleLog.battleResultList.sort(
           (a, b) => Number(b.raidId) - Number(a.raidId)
