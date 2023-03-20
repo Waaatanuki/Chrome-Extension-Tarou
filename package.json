@@ -19,21 +19,21 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.16",
-    "@types/chrome": "^0.0.222",
-    "@types/node": "^18.15.1",
-    "@vitejs/plugin-vue": "^4.0.0",
+    "@types/chrome": "^0.0.224",
+    "@types/node": "^18.15.3",
+    "@vitejs/plugin-vue": "^4.1.0",
     "@vueuse/core": "^9.13.0",
     "cheerio": "^1.0.0-rc.12",
-    "element-plus": "^2.3.0",
+    "element-plus": "^2.3.1",
     "fast-glob": "^3.2.12",
     "npm-watch": "^0.11.0",
     "pinia": "^2.0.33",
-    "prettier": "^2.8.4",
-    "unocss": "^0.50.4",
+    "prettier": "^2.8.5",
+    "unocss": "^0.50.6",
     "unplugin-auto-import": "^0.15.1",
     "unplugin-icons": "^0.15.3",
     "unplugin-vue-components": "^0.24.1",
-    "vite": "^4.1.4",
+    "vite": "^4.2.0",
     "vue": "^3.2.47"
   }
 }
