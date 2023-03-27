@@ -1,20 +1,21 @@
+import { useChromeStorage } from '@/composables/useChromeStorage'
 import { defineStore } from 'pinia'
-import { Log, AttackResult, Member } from './types'
+import { StartJson, AttackResult, Member } from './types'
 
-const importantPlayerBuffsList = ['6255']
-const importantBossBuffsList = ['7038']
 const useEvokerStore = defineStore({
   id: 'battleLog',
   state: () => ({
-    rawData: {} as Log,
+    startJson: {} as StartJson,
     attackResult: {} as AttackResult,
     battleResultList: [] as any[],
     memberList: [] as Member[],
+    specBossBuff: useChromeStorage('specBossBuff', [] as string[]),
+    specPlayerBuff: useChromeStorage('specPlayerBuff', [] as string[]),
   }),
   getters: {
     bossInfo: state => {
       try {
-        const boss = state.rawData.boss?.param[0]
+        const boss = state.startJson.boss?.param[0]
         const bossBuffs = boss.condition.buff ?? []
         const bossDebuffs = boss.condition.debuff ?? []
         const totalBossBuffs = bossBuffs.concat(bossDebuffs)
@@ -22,14 +23,14 @@ const useEvokerStore = defineStore({
           status: string
           is_unusable_harb: boolean
         }[]
-        importantBossBuffsList.forEach(item => {
+        state.specBossBuff.forEach(item => {
           const hit = totalBossBuffs.find((buff: any) =>
             buff.status.startsWith(item)
           )
           if (hit) importantBossBuffs.push(hit)
         })
 
-        const player = state.rawData.player?.param[0]
+        const player = state.startJson.player?.param[0]
         const playerBuffs = player.condition.buff ?? []
         const playerDebuffs = player.condition.debuff ?? []
         const totalPlayerBuffs = playerBuffs.concat(playerDebuffs)
@@ -37,7 +38,7 @@ const useEvokerStore = defineStore({
           status: string
           is_unusable_harb: boolean
         }[]
-        importantPlayerBuffsList.forEach(item => {
+        state.specPlayerBuff.forEach(item => {
           const hit = totalPlayerBuffs.find((buff: any) =>
             buff.status.startsWith(item)
           )
@@ -47,9 +48,9 @@ const useEvokerStore = defineStore({
         return {
           name: boss.monster,
           hp: ((Number(boss.hp) / Number(boss.hpmax)) * 100).toFixed(2) + '%',
-          turn: state.rawData.turn,
-          buffs: boss.condition.buff,
-          debuffs: boss.condition.debuff,
+          turn: state.startJson.turn,
+          bossBuffs: totalBossBuffs,
+          playerBuffs: totalPlayerBuffs,
           importantPlayerBuffs,
           importantBossBuffs,
         }
@@ -60,8 +61,8 @@ const useEvokerStore = defineStore({
           name: '',
           hp: '',
           turn: '',
-          buffs: [],
-          debuffs: [],
+          bossBuffs: [],
+          playerBuffs: [],
           importantPlayerBuffs: [],
           importantBossBuffs: [],
         }
@@ -69,8 +70,8 @@ const useEvokerStore = defineStore({
     },
     summonInfo: state => {
       try {
-        const summon: any = state.rawData.summon ?? []
-        const supporter = state.rawData.supporter ?? {}
+        const summon: any = state.startJson.summon ?? []
+        const supporter = state.startJson.supporter ?? {}
         summon.push(supporter)
         return summon
       } catch (error) {

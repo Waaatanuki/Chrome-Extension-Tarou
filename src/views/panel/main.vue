@@ -119,11 +119,11 @@ chrome.devtools.network.onRequestFinished.addListener(function (request) {
     request.request.url.includes('rest/multiraid/start.json')
   ) {
     request.getContent((content: string) => {
-      battleLog.rawData = JSON.parse(content)
+      battleLog.startJson = JSON.parse(content)
 
-      if (battleLog.rawData.multi_raid_member_info) {
+      if (battleLog.startJson.multi_raid_member_info) {
         battleLog.memberList = []
-        battleLog.rawData.multi_raid_member_info.forEach(member => {
+        battleLog.startJson.multi_raid_member_info.forEach(member => {
           battleLog.memberList.push({
             nickname: member.nickname,
             userId: member.user_id,

@@ -12,18 +12,13 @@ export interface Battle {
   count: string
 }
 
-export interface Buff {
-  status: string
-  is_unusable_harb: boolean
-}
-
 export interface Condition {
   buff: Buff[]
-  debuff: any[]
+  debuff: Buff[]
   num?: number
 }
 
-export interface Param {
+export interface PlayerParam {
   name: string
   cjs: string
   pid: string
@@ -59,7 +54,7 @@ export interface Param {
 export interface Player {
   type: string
   number: number
-  param: Param[]
+  param: PlayerParam[]
   job_is_formchange: string
 }
 
@@ -68,42 +63,12 @@ export interface Name {
   en: string
 }
 
-export interface Debuff {
-  status: string
-  is_unusable_harb: boolean
-}
-
-export interface Buff2 {
-  status: string
-  is_unusable_harb: boolean
-}
-
-export interface Condition2 {
-  debuff: Debuff[]
-  buff: Buff2[]
-}
-
 export interface Timing {
   effect: string
   damage: string
 }
 
-export interface MessagePosition {
-  x: string
-  y: string
-}
-
-export interface EffectPosition {
-  x: string
-  y: string
-}
-
-export interface DamagePositionPlus {
-  x: string
-  y: string
-}
-
-export interface Param2 {
+export interface BossParam {
   type: string
   name: Name
   cjs: string
@@ -139,11 +104,8 @@ export interface Param2 {
   tribe: string
   spec: string
   visible_after_dead: string
-  condition: Condition2
+  condition: Condition
   timing: Timing
-  message_position: MessagePosition
-  effect_position: EffectPosition
-  damage_position_plus: DamagePositionPlus
   dropped: any[]
   cutin_flag: string
   no_attribute_flag: string
@@ -156,7 +118,7 @@ export interface Boss {
   modechange: string
   modegauge: number
   star: number
-  param: Param2[]
+  param: BossParam[]
 }
 
 export interface Balloon {
@@ -196,28 +158,6 @@ export interface Supporter {
   skill_color_type: number
 }
 
-export interface Temporary {
-  cmd: string
-  small: string
-  large: string
-  temporary_potion_one_battle_icon_type: string
-  temporary_potion_all_battle_icon_type: string
-}
-
-export interface Buff {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
-export interface Debuff {
-  status: string
-  detail: string
-  effect: string
-  help_flag: string
-}
-
 export interface Summon {
   id: string
   image_id: string
@@ -240,16 +180,6 @@ export interface Summon {
   summon_skin_id: string
   is_quick_summon: boolean
   skill_color_type: number
-}
-
-export interface Potion {
-  count: string
-  item_name: string
-  limit_remain: number
-  limit_number: number
-  limit_flg: boolean
-  is_trialbattle: boolean
-  battle_icon_type: string
 }
 
 export interface Weapon {
@@ -291,16 +221,17 @@ export interface AbilityDetail {
 }
 
 export interface List {
-  1?: 119[]
-  2?: 217[]
-  3?: 310[]
-  4?: 47[]
+  1?: [AbilityInfo, AbilityRecast]
+  2?: [AbilityInfo, AbilityRecast]
+  3?: [AbilityInfo, AbilityRecast]
+  4?: [AbilityInfo, AbilityRecast]
 }
-export interface ListItem {
+
+export interface AbilityInfo {
   class: string
   'ability-id': string
   'ability-recast': string
-  ' recaset-default': string
+  'recaset-default': string
   'recast-additional-comment': string
   duration: string
   'duration-second': string
@@ -313,10 +244,20 @@ export interface ListItem {
   start_skill_set_recast: number
   'ability-attribute': string
   'full-auto-permit-flag': boolean
-  ability_detail: { buff: Buff }
+  ability_detail: AbilityDetail
+}
+
+export interface AbilityRecast {
+  class: string
   value: string
 }
-export interface Log {
+
+export interface AbilityDetail {
+  buff: Buff[]
+  debuff: Buff[]
+}
+
+export interface StartJson {
   raid_id: number
   quest_id: string
   base_fps: number
@@ -353,14 +294,10 @@ export interface Log {
   next: string
   supporter: Supporter
   nickname: string
-  temporary: Temporary
-  temporary_potion_one_name: string
-  temporary_potion_all_name: string
   ability: Ability
   summon: Summon[]
   chain_burst_gauge: string
   unique_gauge?: any
-  potion: Potion
   shop_lowest_price: string
   shop_potion_id: number
   weapon: Weapon
@@ -428,9 +365,10 @@ export interface Log {
 
 export interface Buff {
   status: string
-  detail: string
-  effect: string
-  help_flag: string
+  is_unusable_harb: boolean
+  detail?: string
+  effect?: string
+  help_flag?: string
 }
 
 export interface Supporter {

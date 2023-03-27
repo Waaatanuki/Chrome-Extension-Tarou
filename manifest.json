@@ -8,33 +8,28 @@
     "48": "./assets/icon-48.png",
     "128": "./assets/icon-128.png"
   },
-  "permissions": [
-    "contextMenus",
-    "clipboardWrite",
-    "storage",
-    "unlimitedStorage",
-    "activeTab",
-    "scripting",
-    "tabs",
-    "webRequest"
+  "permissions": ["storage", "unlimitedStorage"],
+  "host_permissions": [
+    "*://*.granbluefantasy.jp/*",
+    "*://gbf.game.mbga.jp/*",
+    "*://waaatanuki.github.io/gbf-app/*",
+    "*://waaatanuki.gitee.io/gbf-app/*",
+    "*://localhost/*"
   ],
-  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
   },
-  "action": {
-    "default_title": "Tarou",
-    "default_popup": "src/views/popup/main.html",
-    "default_icon": {
-      "16": "./assets/icon-16.png",
-      "48": "./assets/icon-48.png",
-      "128": "./assets/icon-128.png"
-    }
-  },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content_script.js"]
+      "matches": [
+        "*://*.granbluefantasy.jp/*",
+        "*://gbf.game.mbga.jp/*",
+        "*://waaatanuki.github.io/gbf-app/*",
+        "*://waaatanuki.gitee.io/gbf-app/*",
+        "*://localhost/*"
+      ],
+      "js": ["content_script.js"],
+      "run_at": "document_end"
     }
   ],
   "devtools_page": "src/views/devtools/main.html"

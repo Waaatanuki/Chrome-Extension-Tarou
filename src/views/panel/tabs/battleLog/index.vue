@@ -6,35 +6,26 @@
       battleLog.bossInfo.hp +
       `  第${battleLog.bossInfo.turn}回合`
     }}</el-descriptions-item>
-    <el-descriptions-item label="BUFF">
+    <el-descriptions-item label="BOSS BUFF">
       <template #default>
         <div class="flex flex-wrap">
           <img
-            class="h-10"
-            v-for="buff in battleLog.bossInfo.buffs"
+            class="h-10 cursor-pointer"
+            v-for="buff in battleLog.bossInfo.bossBuffs"
             :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
+            @click="toggleImage('specBossBuff', buff.status.split('_')[0])"
           />
         </div>
       </template>
     </el-descriptions-item>
-    <el-descriptions-item label="DEBUFF">
+    <el-descriptions-item label="PLAYER BUFF">
       <template #default>
         <div class="flex flex-wrap">
           <img
-            class="h-10"
-            v-for="db in battleLog.bossInfo.debuffs"
-            :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${db.status}.png`"
-          />
-        </div>
-      </template>
-    </el-descriptions-item>
-    <el-descriptions-item label="特别玩家 BUFF">
-      <template #default>
-        <div class="flex flex-wrap">
-          <img
-            class="h-10"
-            v-for="buff in battleLog.bossInfo.importantPlayerBuffs"
+            class="h-10 cursor-pointer"
+            v-for="buff in battleLog.bossInfo.playerBuffs"
             :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
+            @click="toggleImage('specPlayerBuff', buff.status.split('_')[0])"
           />
         </div>
       </template>
@@ -44,13 +35,26 @@
         <div class="flex flex-wrap">
           <img
             class="h-10"
-            v-for="buff in battleLog.bossInfo.importantBossBuffs"
+            v-for="(buff, index) in battleLog.bossInfo.importantBossBuffs"
+            @click="battleLog.bossInfo.importantBossBuffs.splice(index, 1)"
             :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
           />
         </div>
       </template>
     </el-descriptions-item>
-    <el-descriptions-item label="攻击结果">
+    <el-descriptions-item label="特别玩家 BUFF">
+      <template #default>
+        <div class="flex flex-wrap">
+          <img
+            class="h-10"
+            v-for="(buff, index) in battleLog.bossInfo.importantPlayerBuffs"
+            @click="battleLog.bossInfo.importantPlayerBuffs.splice(index, 1)"
+            :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
+          />
+        </div>
+      </template>
+    </el-descriptions-item>
+    <el-descriptions-item label="平A结果">
       {{
         `hit: ${battleLog.attackInfo.hit} 总伤害：${battleLog.attackInfo.damage}`
       }}
@@ -77,86 +81,23 @@
       </template>
     </el-descriptions-item>
   </el-descriptions>
-  <div class="member-list" border="2 black solid" flex flex-wrap>
-    <div
-      relative
-      w-40
-      h-15
-      m-1
-      flex
-      items-center
-      border="1 black solid"
-      bg-slate
-      cursor-pointer
-      select-none
-      hover:scale-105
-      transition-all
-      v-for="member in battleLog.memberList"
-      @click="goProfilePage(member.userId)"
-    >
-      <div v-if="member.is_dead" class="absolute w-full h-full bg-black/40 fc">
-        <span text-red text-base font-bold>Dead</span>
-      </div>
-      <img :src="member.jobIcon" mx-1 h-10 />
-      <div flex flex-col justify-center>
-        <span
-          text-start
-          text-base
-          font-500
-          whitespace-nowrap
-          text-ellipsis
-          overflow-hidden
-          w-25
-        >
-          {{ member.nickname }}
-        </span>
-        <span text-start text-base font-500>
-          {{ member.userRank }}
-        </span>
-      </div>
 
-      <div :class="member.attributeClass" scale-200></div>
-    </div>
-  </div>
-  <el-table :data="battleLog.battleResultList">
-    <el-table-column type="expand">
-      <template #default="{ row }">
-        <div class="prt-result-detail">
-          <div class="prt-reward-item">
-            <div class="prt-item-list">
-              <div
-                class="lis-treasure btn-treasure-item"
-                v-for="treasure in row.treasureList"
-              >
-                <div class="prt-treasure-image">
-                  <img class="img-treasure-item" :src="treasure.src" />
-                  <div class="prt-article-count" v-if="treasure.number">
-                    <span class="txt-small">x</span>{{ treasure.number }}
-                  </div>
-                </div>
-                <div :class="treasure.boxClass"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column prop="raidTime" label="结束时间" align="center" />
-    <el-table-column prop="raidName" label="副本" align="center" />
-    <el-table-column prop="point" label="伤害" align="center" />
-    <el-table-column prop="turn" label="回合数" align="center" width="100" />
-    <el-table-column prop="time" label="讨伐时间" align="center" width="100" />
-    <el-table-column prop="speed" label="跑速" align="center" width="100" />
-  </el-table>
+  <MemberList :data="battleLog.memberList" />
+  <BattleResult :tableData="battleLog.battleResultList" />
 </template>
 
 <script setup lang="ts">
 import useStore from '@/store'
+import MemberList from './components/MemberList.vue'
+import BattleResult from './components/BattleResult.vue'
 const { battleLog } = useStore()
 
-function goProfilePage(userId: string) {
-  window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
+function toggleImage(type: 'specBossBuff' | 'specPlayerBuff', buffId: string) {
+  const index = battleLog[type].indexOf(buffId)
+  if (index >= 0) {
+    battleLog[type].splice(index, 1)
+  } else {
+    battleLog[type].push(buffId)
+  }
 }
 </script>
-
-<style lang="scss" scoped></style>
