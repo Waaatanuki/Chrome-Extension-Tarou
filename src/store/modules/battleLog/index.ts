@@ -47,7 +47,9 @@ const useEvokerStore = defineStore({
 
         return {
           name: boss.monster,
-          hp: ((Number(boss.hp) / Number(boss.hpmax)) * 100).toFixed(2) + '%',
+          hp: Number(boss.hp),
+          hpPercent:
+            ((Number(boss.hp) / Number(boss.hpmax)) * 100).toFixed(2) + '%',
           turn: state.startJson.turn,
           bossBuffs: totalBossBuffs,
           playerBuffs: totalPlayerBuffs,
@@ -59,7 +61,7 @@ const useEvokerStore = defineStore({
 
         return {
           name: '',
-          hp: '',
+          hp: NaN,
           turn: '',
           bossBuffs: [],
           playerBuffs: [],

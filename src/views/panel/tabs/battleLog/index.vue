@@ -3,7 +3,9 @@
     <el-descriptions-item label="BOSS信息">{{
       battleLog.bossInfo.name +
       '——' +
-      battleLog.bossInfo.hp +
+      useNumberFormat(battleLog.bossInfo.hp) +
+      '——' +
+      battleLog.bossInfo.hpPercent +
       `  第${battleLog.bossInfo.turn}回合`
     }}</el-descriptions-item>
     <el-descriptions-item label="BOSS BUFF">
