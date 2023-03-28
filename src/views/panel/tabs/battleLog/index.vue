@@ -4,6 +4,8 @@
       battleLog.bossInfo.name +
       '——' +
       useNumberFormat(battleLog.bossInfo.hp) +
+      '/' +
+      useNumberFormat(battleLog.bossInfo.hpmax) +
       '——' +
       battleLog.bossInfo.hpPercent +
       `  第${battleLog.bossInfo.turn}回合`
@@ -20,7 +22,7 @@
         </div>
       </template>
     </el-descriptions-item>
-    <el-descriptions-item label="PLAYER BUFF">
+    <el-descriptions-item label="主角 BUFF">
       <template #default>
         <div class="flex flex-wrap">
           <img
@@ -36,21 +38,21 @@
       <template #default>
         <div class="flex flex-wrap">
           <img
-            class="h-10"
-            v-for="(buff, index) in battleLog.bossInfo.importantBossBuffs"
-            @click="battleLog.bossInfo.importantBossBuffs.splice(index, 1)"
+            class="h-10 cursor-pointer"
+            v-for="buff in battleLog.bossInfo.importantBossBuffs"
+            @click="toggleImage('specBossBuff', buff.status.split('_')[0])"
             :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
           />
         </div>
       </template>
     </el-descriptions-item>
-    <el-descriptions-item label="特别玩家 BUFF">
+    <el-descriptions-item label="特别主角 BUFF">
       <template #default>
         <div class="flex flex-wrap">
           <img
-            class="h-10"
-            v-for="(buff, index) in battleLog.bossInfo.importantPlayerBuffs"
-            @click="battleLog.bossInfo.importantPlayerBuffs.splice(index, 1)"
+            class="h-10 cursor-pointer"
+            v-for="buff in battleLog.bossInfo.importantPlayerBuffs"
+            @click="toggleImage('specPlayerBuff', buff.status.split('_')[0])"
             :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${buff.status}.png`"
           />
         </div>

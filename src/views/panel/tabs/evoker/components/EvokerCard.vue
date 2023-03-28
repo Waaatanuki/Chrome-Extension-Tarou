@@ -96,7 +96,7 @@ defineProps(['evokerInfo'])
 .evoker-card {
   .el-select.completed {
     .el-input__wrapper {
-      background-color: orange;
+      background-color: rgba(255, 166, 0, 0.7);
     }
   }
 }

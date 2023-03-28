@@ -48,6 +48,7 @@ const useEvokerStore = defineStore({
         return {
           name: boss.monster,
           hp: Number(boss.hp),
+          hpmax: Number(boss.hpmax),
           hpPercent:
             ((Number(boss.hp) / Number(boss.hpmax)) * 100).toFixed(2) + '%',
           turn: state.startJson.turn,

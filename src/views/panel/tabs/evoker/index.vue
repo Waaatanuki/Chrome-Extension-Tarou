@@ -45,10 +45,6 @@ const { evoker } = useStore()
 </script>
 
 <style lang="scss" scoped>
-.completed {
-  background-color: orange;
-}
-
 .showBox {
   display: flex;
   flex-wrap: wrap;
