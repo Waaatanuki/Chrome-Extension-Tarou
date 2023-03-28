@@ -119,20 +119,22 @@ chrome.devtools.network.onRequestFinished.addListener(function (request) {
     request.request.url.includes('rest/multiraid/start.json')
   ) {
     request.getContent((content: string) => {
-      battleLog.startJson = JSON.parse(content)
+      if (content) {
+        battleLog.startJson = JSON.parse(content)
 
-      if (battleLog.startJson.multi_raid_member_info) {
-        battleLog.memberList = []
-        battleLog.startJson.multi_raid_member_info.forEach(member => {
-          battleLog.memberList.push({
-            nickname: member.nickname,
-            userId: member.user_id,
-            userRank: member.level,
-            jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${member.job_id}.png`,
-            attributeClass: `ico-attribute ico-attribute-${member.pc_attribute}`,
-            is_dead: member.is_dead,
+        if (battleLog.startJson && battleLog.startJson.multi_raid_member_info) {
+          battleLog.memberList = []
+          battleLog.startJson.multi_raid_member_info.forEach(member => {
+            battleLog.memberList.push({
+              nickname: member.nickname,
+              userId: member.user_id,
+              userRank: member.level,
+              jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${member.job_id}.png`,
+              attributeClass: `ico-attribute ico-attribute-${member.pc_attribute}`,
+              is_dead: member.is_dead,
+            })
           })
-        })
+        }
       }
     })
   }

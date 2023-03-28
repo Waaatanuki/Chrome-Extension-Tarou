@@ -75,7 +75,7 @@ const useEvokerStore = defineStore({
       try {
         const summon: any = state.startJson.summon ?? []
         const supporter = state.startJson.supporter ?? {}
-        summon.push(supporter)
+        supporter.id && summon.push(supporter)
         return summon
       } catch (error) {
         console.log(error)

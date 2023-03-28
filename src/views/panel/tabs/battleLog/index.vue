@@ -2,11 +2,11 @@
   <el-descriptions border :column="1" v-if="battleLog.bossInfo.name">
     <el-descriptions-item label="BOSS信息">{{
       battleLog.bossInfo.name +
-      '——' +
+      '—— ' +
       useNumberFormat(battleLog.bossInfo.hp) +
       '/' +
       useNumberFormat(battleLog.bossInfo.hpmax) +
-      '——' +
+      ' —— ' +
       battleLog.bossInfo.hpPercent +
       `  第${battleLog.bossInfo.turn}回合`
     }}</el-descriptions-item>

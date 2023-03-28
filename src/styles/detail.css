@@ -176,3 +176,38 @@
   left: -4px;
   z-index: 10;
 }
+
+.prt-result-detail
+  .prt-reward-item
+  .prt-item-list
+  .lis-treasure
+  .ico-treasure-11-mini {
+  display: block;
+  background: url('https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/result/parts-s506117cfa4.png')
+    no-repeat 0 -2115px;
+  -webkit-background-size: 294px 2663px;
+  background-size: 294px 2663px;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0px;
+  left: -4px;
+  z-index: 10;
+}
+.prt-result-detail
+  .prt-reward-item
+  .prt-item-list
+  .lis-treasure
+  .ico-treasure-13-mini {
+  display: block;
+  background: url('https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/result/parts-s506117cfa4.png')
+    no-repeat 0 -2424px;
+  -webkit-background-size: 294px 2663px;
+  background-size: 294px 2663px;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0px;
+  left: -4px;
+  z-index: 10;
+}
