@@ -8,6 +8,7 @@
       flex
       items-center
       border="1 black solid"
+      rounded-md
       bg-slate
       cursor-pointer
       select-none
@@ -36,7 +37,7 @@
           {{ member.userRank }}
         </span>
       </div>
-      <div :class="member.attributeClass" scale-200></div>
+      <div :class="member.attributeClass" scale-150></div>
     </div>
   </div>
 </template>
