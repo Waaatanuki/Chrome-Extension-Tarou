@@ -150,6 +150,7 @@ export const evokerList = [
   { label: '贤者2凸', value: 3 },
   { label: '贤者3凸', value: 4 },
   { label: '贤者4凸', value: 5 },
+  { label: '贤者5凸', value: 6 },
 ]
 export const weaponList = [
   { label: '未入手', value: 0 },
