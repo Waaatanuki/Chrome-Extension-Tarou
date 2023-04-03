@@ -47,12 +47,23 @@ const useEvokerStore = defineStore({
               j++
             ) {
               const uncapData = evokerData[currentNo][type][j]
-              for (const k in uncapData) {
-                if (isNaN(result[k])) {
-                  result[k] = 0
+              for (const [key, value] of Object.entries(uncapData)) {
+                if (isNaN(result[key])) {
+                  result[key] = 0
                 }
-                result[k] += uncapData[k as keyof typeof uncapData]
+                result[key] += value
               }
+            }
+          }
+
+          // 贤者四技能解锁
+          if (!state.evokerInfo[i].isAbility4Release) {
+            const releaseData = evokerData[currentNo].ability4Release
+            for (const [key, value] of Object.entries(releaseData)) {
+              if (isNaN(result[key])) {
+                result[key] = 0
+              }
+              result[key] += value
             }
           }
         }

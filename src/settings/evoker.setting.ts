@@ -10,6 +10,7 @@ export const evokerInfoDefault = [
     weaponId: 1040912600,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040168000,
@@ -22,6 +23,7 @@ export const evokerInfoDefault = [
     weaponId: 1040710700,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040164000,
@@ -34,6 +36,7 @@ export const evokerInfoDefault = [
     weaponId: 1040215500,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040166000,
@@ -46,6 +49,7 @@ export const evokerInfoDefault = [
     weaponId: 1040813300,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040162000,
@@ -58,6 +62,7 @@ export const evokerInfoDefault = [
     weaponId: 1040513700,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040161000,
@@ -70,6 +75,7 @@ export const evokerInfoDefault = [
     weaponId: 1040614300,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040160000,
@@ -82,6 +88,7 @@ export const evokerInfoDefault = [
     weaponId: 1040020800,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040165000,
@@ -94,6 +101,7 @@ export const evokerInfoDefault = [
     weaponId: 1040313500,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040163000,
@@ -106,6 +114,7 @@ export const evokerInfoDefault = [
     weaponId: 1040418200,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
   {
     npcId: 3040169000,
@@ -118,19 +127,8 @@ export const evokerInfoDefault = [
     weaponId: 1040113200,
     weaponLevel: 0,
     domainLevel: 0,
+    isAbility4Release: false,
   },
-]
-
-export const materialList = [
-  [0, 0, 0, 25000, 25001],
-  [25002, 25003, 25004, 25005, 25006],
-  [25007, 25008, 25009, 25010, 25011],
-  [25012, 25013, 25014, 25015, 25016],
-  [25020, 25021, 25033, 25034, 25035],
-  [25036, 25023, 25024, 25025, 25026],
-  [25047, 25048, 25049, 25050, 25051],
-  [25052, 25053, 25054, 25055, 25056],
-  [25070, 25071, 25072, 25073, 25074],
 ]
 
 export const tarotList = [

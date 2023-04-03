@@ -67,6 +67,21 @@ chrome.devtools.network.onRequestFinished.addListener(function (request) {
       })
     })
   }
+  if (request.request.url.includes('/npc/npc')) {
+    request.getContent((content: string) => {
+      const npcDetail = JSON.parse(content)
+
+      const hitEvoker = evoker.evokerInfo.find(
+        (evoker: any) => evoker.npcId == npcDetail.master.id
+      )
+      if (hitEvoker) {
+        hitEvoker.isAbility4Release =
+          npcDetail.action_ability4 && npcDetail.action_ability4.quest.is_clear
+            ? true
+            : false
+      }
+    })
+  }
   if (request.request.url.includes('/summon/list')) {
     request.getContent((content: string) => {
       const summonList = JSON.parse(content).list

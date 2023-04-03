@@ -76,6 +76,14 @@
       </el-select>
 
       <div>
+        <el-checkbox
+          v-model="evokerInfo.isAbility4Release"
+          label="四技能解锁"
+          size="small"
+        />
+      </div>
+
+      <div>
         <el-checkbox v-model="evokerInfo.target" label="目标" size="small" />
       </div>
     </div>

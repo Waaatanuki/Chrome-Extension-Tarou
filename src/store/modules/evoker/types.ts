@@ -1,15 +1,3 @@
-export interface EvokerState {
-  materialInfo: Array<MaterialInfo>
-  evokerInfo: {
-    no: number
-    name: string
-    target: boolean
-    tarotLevel: number
-    evokerLevel: number
-    weaponId: number
-  }[]
-}
-
 export interface MaterialInfo {
   item_id: string
   image: string
@@ -31,4 +19,5 @@ export interface EvokerInfo {
   weaponId: number
   weaponLevel?: number
   domainLevel?: number
+  isAbility4Release?: boolean
 }
