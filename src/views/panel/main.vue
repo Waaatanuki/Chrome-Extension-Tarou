@@ -13,6 +13,7 @@ import EvokerPage from './tabs/evoker/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import useStore from '@/store'
 import { load } from 'cheerio'
+import dayjs from 'dayjs'
 const { dashboard, evoker, battleLog } = useStore()
 
 chrome.devtools.network.onRequestFinished.addListener(function (request) {
@@ -40,6 +41,68 @@ chrome.devtools.network.onRequestFinished.addListener(function (request) {
       evoker.materialInfo = JSON.parse(content)
     })
   }
+
+  if (
+    request.request.url.includes(
+      '/item/recovery_and_evolution_list_by_filter_mode'
+    )
+  ) {
+    request.getContent((content: string) => {
+      const itemList = JSON.parse(content)
+      const firstList = itemList[0]
+
+      const recoveryList = [
+        {
+          item_id: '1',
+          prop: 'fullElixir',
+          number: 0,
+        },
+        {
+          item_id: '2',
+          prop: 'halfElixir',
+          number: 0,
+        },
+        {
+          item_id: '3',
+          prop: 'soulBalm',
+          number: 0,
+        },
+        {
+          item_id: '5',
+          prop: 'soulBerry',
+          number: 0,
+        },
+      ]
+      const res: any = {}
+      res.timeStamp = dayjs().valueOf()
+
+      if (dashboard.recoveryItemList.length > 0) {
+        const lastData = dashboard.recoveryItemList[0]
+        if (dayjs().isSame(dayjs(lastData.timeStamp), 'day')) return
+        recoveryList.forEach(item => {
+          const target = firstList.find((i: any) => i.item_id == item.item_id)
+          res[item.prop] = Number(target?.number) ?? 0
+          res[item.prop + 'Diff'] =
+            Number(target.number) -
+            lastData[
+              item.prop as
+                | 'fullElixir'
+                | 'halfElixir'
+                | 'soulBalm'
+                | 'soulBerry'
+            ]
+        })
+      } else {
+        recoveryList.forEach(item => {
+          const target = firstList.find((i: any) => i.item_id == item.item_id)
+          res[item.prop] = Number(target?.number) ?? 0
+          res[item.prop + 'Diff'] = 0
+        })
+      }
+      dashboard.recoveryItemList.unshift(res)
+    })
+  }
+
   if (request.request.url.includes('/weapon/list')) {
     request.getContent((content: string) => {
       const weaponList = JSON.parse(content).list

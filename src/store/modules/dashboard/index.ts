@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useChromeStorage } from '@/composables/useChromeStorage'
+import { RecoveryItem } from './types'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
@@ -24,6 +25,10 @@ const useDashboardStore = defineStore({
       { done: false, content: '抽卢比' },
     ]),
     lastUpdateTodo: useChromeStorage('lastUpdateTodo', dayjs().tz().unix()),
+    recoveryItemList: useChromeStorage(
+      'recoveryItemList',
+      [] as RecoveryItem[]
+    ),
   }),
   getters: {
     totalStone: state =>

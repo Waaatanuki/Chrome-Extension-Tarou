@@ -10,7 +10,7 @@
             )}天`
           }}</span
         >
-        <el-button type="primary" link @click="reset">重置</el-button>
+        <el-button type="danger" link @click="reset">重置</el-button>
       </div>
     </template>
     <div fc flex-col>
@@ -56,30 +56,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import useStore from '@/store'
 import dayjs from 'dayjs'
 const { dashboard } = useStore()
 
-chrome.storage.onChanged.addListener((changes: object) => {
-  for (let [key, { newValue }] of Object.entries(changes)) {
-    if (key == 'legendticket10' || key == 'legendticket' || key == 'stone')
-      dashboard[key] = newValue
-  }
-})
-
 function reset() {
   dashboard.saveStoneDate = dayjs().unix()
 }
-onMounted(() => {
-  chrome.storage.local
-    .get(['legendticket10', 'legendticket', 'stone'])
-    .then(result => {
-      dashboard['legendticket10'] = result['legendticket10']
-      dashboard['legendticket'] = result['legendticket']
-      dashboard['stone'] = result['stone']
-    })
-})
 </script>
 
 <style lang="scss" scoped></style>
