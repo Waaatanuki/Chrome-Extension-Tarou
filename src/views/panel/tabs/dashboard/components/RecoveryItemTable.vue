@@ -1,5 +1,5 @@
 <template>
-  <el-card m-2 w-full>
+  <el-card m-3 w-full>
     <template #header>
       <div flex justify-between>
         <div text-xl>回复道具记录</div>
