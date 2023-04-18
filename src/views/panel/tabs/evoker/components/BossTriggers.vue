@@ -1,5 +1,5 @@
 <template>
-  <div class="sand-box-boss">
+  <div class="sand-box-boss" mt-5>
     <template v-for="area in sandBoxBossInfo">
       <el-descriptions :column="2" border mb-2>
         <template v-for="boss in area">
@@ -41,6 +41,6 @@ function getTriggerNumber(id: string) {
 
 <style>
 .el-descriptions__label.el-descriptions__cell.is-bordered-label.bossLabelClass {
-  width: 00px;
+  width: 100px;
 }
 </style>

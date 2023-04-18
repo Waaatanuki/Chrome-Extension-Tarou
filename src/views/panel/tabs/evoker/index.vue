@@ -36,10 +36,12 @@
       </div>
     </el-scrollbar>
   </div>
+  <BossTriggers />
 </template>
 
 <script setup lang="ts">
 import EvokerCard from './components/EvokerCard.vue'
+import BossTriggers from './components/BossTriggers.vue'
 import useStore from '@/store'
 const { evoker } = useStore()
 </script>
