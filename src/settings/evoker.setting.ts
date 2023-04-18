@@ -166,3 +166,48 @@ export const domainList = [
   { label: '解放三格', value: 3 },
   { label: '全部解放', value: 4 },
 ]
+
+export const sandBoxBossInfo = [
+  [
+    {
+      bossId: 5610130,
+      itemList: ['25058', '25059', '25060'],
+    },
+    {
+      bossId: 5620130,
+      itemList: ['25061', '25062', '25063'],
+    },
+    {
+      bossId: 5630130,
+      itemList: ['25064', '25065', '25066'],
+    },
+    {
+      bossId: 5640130,
+      itemList: ['25067', '25068', '25069'],
+    },
+  ],
+  [
+    {
+      bossId: 5650090,
+      itemList: ['25075', '25079'],
+    },
+    {
+      bossId: 5660090,
+      itemList: ['25076', '25080'],
+    },
+    {
+      bossId: 5670090,
+      itemList: ['25077', '25081'],
+    },
+    {
+      bossId: 5680090,
+      itemList: ['25078', '25082'],
+    },
+  ],
+  [
+    {
+      bossId: 5710170,
+      itemList: ['25085', '25086', '25087', '25088'],
+    },
+  ],
+]
