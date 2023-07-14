@@ -27,11 +27,11 @@
             placement="top"
           >
             <img
-              style="width: 100%"
+              w-full
               :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${item.id}.jpg`"
             />
           </el-tooltip>
-          <label class="itemNum">{{ item.need }}</label>
+          <label>{{ item.need }}</label>
         </div>
       </div>
     </el-scrollbar>

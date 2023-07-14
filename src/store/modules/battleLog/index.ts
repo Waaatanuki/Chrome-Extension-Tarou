@@ -24,10 +24,10 @@ const useEvokerStore = defineStore({
           is_unusable_harb: boolean
         }[]
         state.specBossBuff.forEach(item => {
-          const hit = totalBossBuffs.find((buff: any) =>
-            buff.status.startsWith(item)
+          totalBossBuffs.forEach(
+            buff =>
+              buff.status.startsWith(item) && importantBossBuffs.push(buff)
           )
-          if (hit) importantBossBuffs.push(hit)
         })
 
         const player = state.startJson.player?.param[0]
@@ -39,10 +39,10 @@ const useEvokerStore = defineStore({
           is_unusable_harb: boolean
         }[]
         state.specPlayerBuff.forEach(item => {
-          const hit = totalPlayerBuffs.find((buff: any) =>
-            buff.status.startsWith(item)
+          totalPlayerBuffs.forEach(
+            buff =>
+              buff.status.startsWith(item) && importantPlayerBuffs.push(buff)
           )
-          if (hit) importantPlayerBuffs.push(hit)
         })
 
         return {

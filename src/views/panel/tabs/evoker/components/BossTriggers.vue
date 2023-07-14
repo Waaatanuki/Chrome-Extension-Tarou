@@ -18,7 +18,7 @@
                   w-10
                   :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${img}.jpg`"
                 />
-                <label class="itemNum">{{ getTriggerNumber(img) }}</label>
+                <label>{{ getTriggerNumber(img) }}</label>
               </div>
             </div>
           </el-descriptions-item>
