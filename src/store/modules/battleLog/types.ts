@@ -258,6 +258,7 @@ export interface AbilityDetail {
 }
 
 export interface StartJson {
+  twitter: any
   raid_id: number
   quest_id: string
   base_fps: number

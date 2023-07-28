@@ -46,6 +46,7 @@ const useEvokerStore = defineStore({
         })
 
         return {
+          battleId: state.startJson.twitter.battle_id,
           name: boss.monster,
           hp: Number(boss.hp),
           hpmax: Number(boss.hpmax),

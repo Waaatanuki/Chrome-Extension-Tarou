@@ -8,7 +8,9 @@
       useNumberFormat(battleLog.bossInfo.hpmax) +
       ' —— ' +
       battleLog.bossInfo.hpPercent +
-      `  第${battleLog.bossInfo.turn}回合`
+      `  第${battleLog.bossInfo.turn}回合` +
+      '—— ' +
+      battleLog.bossInfo.battleId
     }}</el-descriptions-item>
     <el-descriptions-item label="BOSS BUFF">
       <template #default>
