@@ -22,16 +22,21 @@ chrome.devtools.network.onRequestFinished.addListener(function (request) {
       const gachaInfo = JSON.parse(content)
       dashboard.stone = Number(gachaInfo.stone_num)
 
+      // 十连ticket id为 20010
       dashboard.legendticket10 = Number(
-        gachaInfo.legend.lineup.find(
-          (item: any) => item.text_btn_image == 'text_legend10'
-        ).ticket_num
+        gachaInfo.legend.lineup
+          .find((item: any) => item.text_btn_image == 'text_legend10')
+          .legend_gacha_ticket_list.find(
+            (ticket: any) => ticket.ticket_id == 20010
+          ).ticket_num
       )
-
+      // 单抽ticket id为 20011
       dashboard.legendticket = Number(
         gachaInfo.legend.lineup.find(
           (item: any) => item.text_btn_image == 'text_legend'
-        ).ticket_num
+        ).legend_gacha_ticket_list.find(
+            (ticket: any) => ticket.ticket_id == 20011
+          ).ticket_num
       )
     })
   }

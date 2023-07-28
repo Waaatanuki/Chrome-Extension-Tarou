@@ -18,7 +18,7 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "allowSyntheticDefaultImports": true /* 允许默认导入 */,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-    "types": ["element-plus/global", "node", "chrome"],
+    "types": ["node", "chrome"],
     "typeRoots": [
       "./node_modules/@types/",
       "./types"
