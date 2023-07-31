@@ -1,241 +1,180 @@
-<template>
-  <el-tabs type="border-card">
-    <el-tab-pane label="主页"> <Dashborad /></el-tab-pane>
-    <el-tab-pane label="贤者素材"> <EvokerPage /></el-tab-pane>
-    <el-tab-pane label="战斗日志"><BattleLog /></el-tab-pane>
-  </el-tabs>
-  <div></div>
-</template>
-
 <script setup lang="ts">
+import { load } from 'cheerio'
+import dayjs from 'dayjs'
 import Dashborad from './tabs/dashboard/index.vue'
 import EvokerPage from './tabs/evoker/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
-import useStore from '@/store'
-import { load } from 'cheerio'
-import dayjs from 'dayjs'
-const { dashboard, evoker, battleLog } = useStore()
+import { evokerInfo, legendticket, legendticket10, materialInfo, recoveryItemList, stone } from '~/logic'
+import type { BattleResult } from '~/logic/types'
 
-chrome.devtools.network.onRequestFinished.addListener(function (request) {
+const battleStartJson = ref()
+const attackResultJson = ref()
+const lobbyMemberList = ref()
+const battleResultList = ref<BattleResult[]>([])
+
+chrome.devtools.network.onRequestFinished.addListener((request) => {
+  // Dashboard 抽卡数据
   if (request.request.url.includes('game.granbluefantasy.jp/gacha/list')) {
     request.getContent((content: string) => {
       const gachaInfo = JSON.parse(content)
-      dashboard.stone = Number(gachaInfo.stone_num)
+      stone.value = Number(gachaInfo.stone_num)
 
       // 十连ticket id为 20010
-      dashboard.legendticket10 = Number(
+      legendticket10.value = Number(
         gachaInfo.legend.lineup
-          .find((item: any) => item.text_btn_image == 'text_legend10')
-          .legend_gacha_ticket_list.find(
-            (ticket: any) => ticket.ticket_id == 20010
-          ).ticket_num
+          .find((item: any) => item.text_btn_image === 'text_legend10')
+          .legend_gacha_ticket_list.find((ticket: any) => Number(ticket.ticket_id) === 20010).ticket_num,
       )
       // 单抽ticket id为 20011
-      dashboard.legendticket = Number(
-        gachaInfo.legend.lineup.find(
-          (item: any) => item.text_btn_image == 'text_legend'
-        ).legend_gacha_ticket_list.find(
-            (ticket: any) => ticket.ticket_id == 20011
-          ).ticket_num
+      legendticket.value = Number(
+        gachaInfo.legend.lineup
+          .find((item: any) => item.text_btn_image === 'text_legend')
+          .legend_gacha_ticket_list.find((ticket: any) => Number(ticket.ticket_id) === 20011).ticket_num,
       )
     })
   }
 
-  if (request.request.url.includes('/item/article_list_by_filter_mode')) {
-    request.getContent((content: string) => {
-      evoker.materialInfo = JSON.parse(content)
-    })
-  }
-
-  if (
-    request.request.url.includes(
-      '/item/recovery_and_evolution_list_by_filter_mode'
-    )
-  ) {
+  // Dashboard 体力道具数据
+  if (request.request.url.includes('/item/recovery_and_evolution_list_by_filter_mode')) {
     request.getContent((content: string) => {
       const itemList = JSON.parse(content)
       const firstList = itemList[0]
 
       const recoveryList = [
-        {
-          item_id: '1',
-          prop: 'fullElixir',
-          number: 0,
-        },
-        {
-          item_id: '2',
-          prop: 'halfElixir',
-          number: 0,
-        },
-        {
-          item_id: '3',
-          prop: 'soulBalm',
-          number: 0,
-        },
-        {
-          item_id: '5',
-          prop: 'soulBerry',
-          number: 0,
-        },
+        { item_id: '1', prop: 'fullElixir', number: 0 },
+        { item_id: '2', prop: 'halfElixir', number: 0 },
+        { item_id: '3', prop: 'soulBalm', number: 0 },
+        { item_id: '5', prop: 'soulBerry', number: 0 },
       ]
       const res: any = {}
       res.timeStamp = dayjs().valueOf()
 
-      if (dashboard.recoveryItemList.length > 0) {
-        const lastData = dashboard.recoveryItemList[0]
-        if (dayjs().isSame(dayjs(lastData.timeStamp), 'day')) return
-        recoveryList.forEach(item => {
-          const target = firstList.find((i: any) => i.item_id == item.item_id)
-          res[item.prop] = Number(target?.number) ?? 0
-          res[item.prop + 'Diff'] =
-            Number(target.number) -
-            lastData[
-              item.prop as
-                | 'fullElixir'
-                | 'halfElixir'
-                | 'soulBalm'
-                | 'soulBerry'
-            ]
-        })
-      } else {
-        recoveryList.forEach(item => {
-          const target = firstList.find((i: any) => i.item_id == item.item_id)
-          res[item.prop] = Number(target?.number) ?? 0
-          res[item.prop + 'Diff'] = 0
+      if (recoveryItemList.value.length > 0) {
+        const lastData = recoveryItemList.value[0]
+        if (dayjs().isSame(dayjs(lastData.timeStamp), 'day'))
+          return
+        recoveryList.forEach((item) => {
+          const target = firstList.find((i: any) => String(i.item_id) === item.item_id)
+          const targetNumber = Number(target?.number) || 0
+          res[item.prop] = targetNumber
+          res[`${item.prop}Diff`] = targetNumber - lastData[item.prop as 'fullElixir' | 'halfElixir' | 'soulBalm' | 'soulBerry']
         })
       }
-      dashboard.recoveryItemList.unshift(res)
+      else {
+        recoveryList.forEach((item) => {
+          const target = firstList.find((i: any) => String(i.item_id) === item.item_id)
+          res[item.prop] = Number(target?.number) || 0
+          res[`${item.prop}Diff`] = 0
+        })
+      }
+      recoveryItemList.value.unshift(res)
     })
   }
 
+  // Evoker 素材数据
+  if (request.request.url.includes('/item/article_list_by_filter_mode')) {
+    request.getContent((content: string) => {
+      materialInfo.value = JSON.parse(content)
+    })
+  }
+
+  // Evoker 贤武数据
   if (request.request.url.includes('/weapon/list')) {
     request.getContent((content: string) => {
       const weaponList = JSON.parse(content).list
-
       weaponList.forEach((weapon: any) => {
-        const hitEvoker = evoker.evokerInfo.find(
-          (evoker: any) => evoker.weaponId == weapon.master.id
-        )
+        const hitEvoker = evokerInfo.value.find(evoker => evoker.weaponId === Number(weapon.master.id))
         if (hitEvoker)
           hitEvoker.weaponLevel = Number(weapon.param.evolution) + 1
       })
     })
   }
+
+  // Evoker 贤者数据
   if (request.request.url.includes('/npc/list')) {
     request.getContent((content: string) => {
       const npcList = JSON.parse(content).list
-
       npcList.forEach((npc: any) => {
-        const hitEvoker = evoker.evokerInfo.find(
-          (evoker: any) => evoker.npcId == npc.master.id
-        )
-        if (hitEvoker) {
+        const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(npc.master.id))
+        if (hitEvoker)
           hitEvoker.evokerLevel = Number(npc.param.evolution) + 1
-        }
       })
     })
   }
+
+  // Evoker 贤者四技能数据
   if (request.request.url.includes('/npc/npc')) {
     request.getContent((content: string) => {
       const npcDetail = JSON.parse(content)
-
-      const hitEvoker = evoker.evokerInfo.find(
-        (evoker: any) => evoker.npcId == npcDetail.master.id
-      )
-      if (hitEvoker) {
-        hitEvoker.isAbility4Release =
-          npcDetail.action_ability4 && npcDetail.action_ability4.quest.is_clear
-            ? true
-            : false
-      }
+      const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(npcDetail.master.id))
+      if (hitEvoker)
+        hitEvoker.isAbility4Release = !!(npcDetail.action_ability4 && npcDetail.action_ability4.quest.is_clear)
     })
   }
+
+  // Evoker 塔罗数据
   if (request.request.url.includes('/summon/list')) {
     request.getContent((content: string) => {
       const summonList = JSON.parse(content).list
-
       summonList.forEach((summon: any) => {
-        const hitEvoker = evoker.evokerInfo.find(
-          (evoker: any) => evoker.summonId == summon.master.id
-        )
-        if (hitEvoker) {
+        const hitEvoker = evokerInfo.value.find(evoker => evoker.summonId === Number(summon.master.id))
+        if (hitEvoker)
           hitEvoker.tarotLevel = Number(summon.param.evolution) + 2
-        }
       })
     })
   }
+
+  // Evoker 领域数据
   if (request.request.url.includes('/rest/npcevoker/evoker_list')) {
     request.getContent((content: string) => {
       const data = JSON.parse(content).evoker
-
-      const hitEvoker = evoker.evokerInfo.find(
-        (evoker: any) => evoker.npcId == data.param.npc_id
-      )
-      if (hitEvoker) {
+      const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(data.param.npc_id))
+      if (hitEvoker)
         hitEvoker.domainLevel = Number(data.param.evoker_lv)
-      }
     })
   }
-  // 查询房间成员
+
+  // BattleLog 查询房间成员
   if (request.request.url.includes('/lobby/content/room_member')) {
     request.getContent((content: string) => {
-      battleLog.memberList = []
+      lobbyMemberList.value = []
       const resp = JSON.parse(content)
       const htmlString = decodeURIComponent(resp.data)
       const $ = load(htmlString)
       const memberEl = $('.prt-room-member').children()
-      memberEl.each(function (i, elem) {
-        battleLog.memberList.push({
+      memberEl.each((i, elem) => {
+        lobbyMemberList.value.push({
           nickname: elem.attribs['data-nick-name'],
           userId: elem.attribs['data-user-id'],
           userRank: elem.attribs['data-user-rank'],
-          jobIcon: $(this).find('.img-job-icon').attr('src'),
-          attributeClass: $(this).find('.ico-attribute').attr('class'),
+          jobIcon: $(elem).find('.img-job-icon').attr('src'),
+          attributeClass: $(elem).find('.ico-attribute').attr('class'),
           is_dead: false,
         })
       })
     })
   }
-  // 记录战斗日志
-  if (
-    request.request.url.includes('rest/raid/start.json') ||
-    request.request.url.includes('rest/multiraid/start.json')
-  ) {
-    request.getContent((content: string) => {
-      if (content) {
-        battleLog.startJson = JSON.parse(content)
 
-        if (battleLog.startJson && battleLog.startJson.multi_raid_member_info) {
-          battleLog.memberList = []
-          battleLog.startJson.multi_raid_member_info.forEach(member => {
-            battleLog.memberList.push({
-              nickname: member.nickname,
-              userId: member.user_id,
-              userRank: member.level,
-              jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${member.job_id}.png`,
-              attributeClass: `ico-attribute ico-attribute-${member.pc_attribute}`,
-              is_dead: member.is_dead,
-            })
-          })
-        }
-      }
-    })
-  }
-  // 记录单次攻击日志
-  if (
-    request.request.url.includes('rest/raid/normal_attack_result.json') ||
-    request.request.url.includes('rest/multiraid/normal_attack_result.json')
-  ) {
+  // BattleLog 记录副本start信息
+  if (request.request.url.includes('rest/raid/start.json') || request.request.url.includes('rest/multiraid/start.json')) {
     request.getContent((content: string) => {
-      battleLog.attackResult = JSON.parse(content)
+      battleStartJson.value = JSON.parse(content)
     })
   }
-  // 记录战斗结果
+
+  // BattleLog 记录单次攻击日志
+  if (request.request.url.includes('rest/raid/normal_attack_result.json') || request.request.url.includes('rest/multiraid/normal_attack_result.json')) {
+    request.getContent((content: string) => {
+      attackResultJson.value = JSON.parse(content)
+    })
+  }
+
+  // BattleLog 记录战斗结果
   if (request.request.url.includes('resultmulti/content/detail')) {
     const regex = /\/detail\/(\d+)\?/
     const match = regex.exec(request.request.url) as RegExpExecArray
-    const raidId = match[1]
-    if (!battleLog.battleResultList.some(result => result.raidId == raidId))
+    const battleId = match[1]
+    if (!battleResultList.value.some(result => result.battleId === battleId)) {
       request.getContent((content: string) => {
         const resp = JSON.parse(content)
         const htmlString = decodeURIComponent(resp.data)
@@ -245,8 +184,8 @@ chrome.devtools.network.onRequestFinished.addListener(function (request) {
         const raidTime = $('.txt-defeat-value').first().text()
         const gainList: string[] = []
 
-        $('.txt-gain-value').each(function (i, elem) {
-          gainList.push($(this).text())
+        $('.txt-gain-value').each((i, elem) => {
+          gainList.push($(elem).text())
         })
         const point = gainList[2]
         const turn = gainList[3]
@@ -261,33 +200,34 @@ chrome.devtools.network.onRequestFinished.addListener(function (request) {
 
         const speed = getSpeed(point, time)
 
-        const treasureList: any[] = []
+        const treasureList: { src: string; number: string; boxClass: string }[] = []
 
-        $('.lis-treasure').each(function (i, elem) {
+        $('.lis-treasure').each((i, elem) => {
           treasureList.push({
-            src: $(this).find('img').attr('src'),
-            number: $(this).find('.prt-article-count').text().split('x')[1],
-            boxClass: $(this).children().last().attr('class'),
+            src: $(elem).find('img').attr('src') || '',
+            number: $(elem).find('.prt-article-count').text().split('x')[1],
+            boxClass: $(elem).children().last().attr('class') || '',
           })
         })
 
-        battleLog.battleResultList.push({
-          raidId,
-          raidTime,
-          raidName,
-          point,
-          turn,
-          time,
-          speed,
-          treasureList,
-        })
-
-        battleLog.battleResultList.sort(
-          (a, b) => Number(b.raidId) - Number(a.raidId)
-        )
+        battleResultList.value.push({ battleId, raidTime, raidName, point, turn, time, speed, treasureList })
+        battleResultList.value.sort((a, b) => Number(b.battleId) - Number(a.battleId))
       })
+    }
   }
 })
 </script>
 
-<style scoped></style>
+<template>
+  <el-tabs type="border-card">
+    <el-tab-pane label="主页">
+      <Dashborad />
+    </el-tab-pane>
+    <el-tab-pane label="贤者素材">
+      <EvokerPage />
+    </el-tab-pane>
+    <el-tab-pane label="战斗日志">
+      <BattleLog :battle-start-json="battleStartJson" :attack-result-json="attackResultJson" :lobby-member-list="lobbyMemberList" :battle-result-list="battleResultList" />
+    </el-tab-pane>
+  </el-tabs>
+</template>
