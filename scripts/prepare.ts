@@ -1,5 +1,5 @@
-import path from 'node:path'
 import fsPromises from 'node:fs/promises'
+import { r } from './utils'
 
 const copyList = [{ src: 'src/assets/icon', dest: 'dist/assets' }]
 
@@ -10,8 +10,8 @@ async function copyFile(sourcePath: string, targetPath: string) {
     withFileTypes: true,
   })
   for (const file of sourceFile) {
-    const newSourcePath = path.resolve(sourcePath, file.name)
-    const newTargetPath = path.resolve(targetPath, file.name)
+    const newSourcePath = r(sourcePath, file.name)
+    const newTargetPath = r(targetPath, file.name)
     if (file.isDirectory())
       await copyFile(newSourcePath, newTargetPath)
 
