@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tarou",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "extension for gbf",
   "icons": {
     "16": "./assets/icon-16.png",
@@ -10,7 +10,9 @@
   },
   "permissions": [
     "storage",
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "tabs",
+    "notifications"
   ],
   "host_permissions": [
     "*://*.granbluefantasy.jp/*",
@@ -20,7 +22,8 @@
     "*://localhost/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
@@ -37,5 +40,15 @@
       "run_at": "document_end"
     }
   ],
+  "action": {
+    "default_title": "Tarou",
+    "default_popup": "src/views/popup/main.html",
+    "default_icon": {
+      "16": "./assets/icon-16.png",
+      "48": "./assets/icon-48.png",
+      "128": "./assets/icon-128.png"
+    }
+  },
+  "options_page": "src/views/options/main.html",
   "devtools_page": "src/views/devtools/main.html"
 }

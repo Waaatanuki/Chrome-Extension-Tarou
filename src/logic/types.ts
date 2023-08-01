@@ -223,3 +223,49 @@ export interface BattleResult {
   speed: string
   treasureList: { src: string; number: string; boxClass: string }[]
 }
+
+export interface RaidInfo {
+  quest_id: string
+  level: string
+  element: string
+  tweet_name_en: string
+  tweet_name_jp: string
+  quest_name_en: string
+  quest_name_jp: string
+  impossible: number
+  difficulty: string
+  stage_id: string
+  thumbnail_image: string
+  is_blue_treasure: boolean
+  visiable?: boolean
+  is_blue_eternitySand?: boolean
+  total?: number
+  blueChest?: number
+  eternitySand?: number
+  lastDropCount?: number
+}
+
+export interface GoldBrickTableData {
+  quest_id: string
+  total: number
+  blueChest: number
+  goldBrick: number
+  ring1: number
+  ring2: number
+  ring3: number
+  lastBlueChestCount: number
+}
+
+export interface GoldBrickData {
+  timestamp: number
+  raidName: string
+  battleId: string
+  blueChests?: string
+  goldBrick?: string
+}
+
+export interface BattleMemo {
+  battle_id: string
+  quest_id: string
+  timestamp: number
+}
