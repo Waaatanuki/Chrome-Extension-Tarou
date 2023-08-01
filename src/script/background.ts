@@ -167,6 +167,15 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     }
     if (changes.battleMemo)
       battleMemo.value = JSON.parse(changes.battleMemo.newValue)
+
+    if (changes.eternitySandData)
+      eternitySandData.value = JSON.parse(changes.eternitySandData.newValue)
+
+    if (changes.goldBrickData)
+      goldBrickData.value = JSON.parse(changes.goldBrickData.newValue)
+
+    if (changes.goldBrickTableData)
+      goldBrickTableData.value = JSON.parse(changes.goldBrickTableData.newValue)
   })
 })()
 
