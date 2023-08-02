@@ -24,7 +24,7 @@ const evokerPageResult = computed(() => {
         for (let j = currentLevel[m]; j < evokerUncapData[currentNo][type].length; j++) {
           const uncapData = evokerUncapData[currentNo][type][j]
           for (const [key, value] of Object.entries(uncapData)) {
-            if (Number.isNaN(result[key]))
+            if (!(key in result))
               result[key] = 0
             result[key] += value
           }
@@ -35,7 +35,7 @@ const evokerPageResult = computed(() => {
       if (!evokerInfo.value[i].isAbility4Release) {
         const releaseData = evokerUncapData[currentNo].ability4Release
         for (const [key, value] of Object.entries(releaseData)) {
-          if (Number.isNaN(result[key]))
+          if (!(key in result))
             result[key] = 0
           result[key] += value
         }
