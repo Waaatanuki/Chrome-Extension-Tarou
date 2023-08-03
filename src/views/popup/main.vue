@@ -27,12 +27,11 @@ function handleReset(command: string) {
 }
 
 function importData() {
-  if (goldBrickData.value.length === 0)
-    return ElMessage.info('当前没有可导入的数据')
   const re = /waaatanuki.[a-zA-Z]+.io\/gbf-app/
-
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs.length > 0 && tabs[0].id && tabs[0].url && re.test(tabs[0].url)) {
+      if (goldBrickData.value.length === 0)
+        return ElMessage.info('当前没有可导入的数据')
       chrome.tabs.sendMessage(tabs[0].id, { todo: 'importData' }).then((res) => {
         if (res?.isDone)
           goldBrickData.value = []
