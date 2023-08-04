@@ -75,10 +75,16 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
   function showNotifications(treasureList: Treasure[]) {
     const hitTreasure = treasureList.find(treasure => noticeItem.some(item => item.key === treasure.key))
+    const length = Math.floor(Math.random() * 10) + 1
+
+    let str = ''
+    for (let i = 0; i < length; i++)
+      str += 'e'
+
     if (hitTreasure) {
       chrome.notifications.create({
         iconUrl: `/assets/${hitTreasure.key}.png`,
-        message: ' Get☆Daze!',
+        message: ` G${str}t☆Daze!`,
         type: 'basic',
         title: '通知',
       })
