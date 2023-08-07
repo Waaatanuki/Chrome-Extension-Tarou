@@ -144,7 +144,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         treasure.key === '73_1' && hitRaid!.ring1++
         treasure.key === '73_2' && hitRaid!.ring2++
         treasure.key === '73_3' && hitRaid!.ring3++
-        hitRaid!.lastBlueChestCount = treasure.key === '17_20004' ? 0 : hitRaid!.lastBlueChestCount++
+        hitRaid!.lastBlueChestCount = treasure.key === '17_20004' ? 0 : ++hitRaid!.lastBlueChestCount
       }
       if (treasure.key === '17_20004') {
         data.goldBrick = treasure.box
