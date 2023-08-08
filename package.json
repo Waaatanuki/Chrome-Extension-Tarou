@@ -15,6 +15,7 @@
     "build": "run-s clear build:web build:prepare",
     "build:prepare": "esno scripts/prepare.ts",
     "build:web": "vite build",
+    "zip": "esno scripts/zip.ts",
     "watch": "npm-watch",
     "clear": "rimraf --glob dist",
     "lint": "eslint --cache ."
@@ -44,6 +45,7 @@
     "unplugin-icons": "^0.16.5",
     "unplugin-vue-components": "^0.25.1",
     "vite": "^4.4.7",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "zip-a-folder": "^2.0.0"
   }
 }

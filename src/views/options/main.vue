@@ -22,7 +22,7 @@ import { eternitySandData } from '~/logic/storage'
             </el-text>
           </div>
         </template>
-        <RaidCard is-collapse :data="eternitySandData.filter(i => !i.visiable)" />
+        <RaidCard collapse :data="eternitySandData.filter(i => !i.visiable)" />
       </el-collapse-item>
     </el-collapse>
   </main>

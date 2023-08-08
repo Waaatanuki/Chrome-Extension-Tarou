@@ -2,8 +2,8 @@
 import type { RaidInfo } from '~/logic/types'
 
 withDefaults(
-  defineProps<{ isCollapse?: boolean; data: RaidInfo[] }>(),
-  { isCollapse: false })
+  defineProps<{ collapse?: boolean; data: RaidInfo[] }>(),
+  { collapse: false })
 
 function getRatio(a = 0, b = 0) {
   if (b === 0)
@@ -22,7 +22,7 @@ function getEternitySandRatio(item: RaidInfo) {
 
 <template>
   <el-card v-for="item in data" :key="item.quest_id" relative>
-    <div v-if="isCollapse" i-carbon:checkmark-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
+    <div v-if="collapse" i-carbon:checkmark-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
     <div v-else i-carbon:close-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
     <div flex justify-evenly gap-5>
       <img :src="getImgSrc(item.quest_id, 'raid')">
@@ -39,9 +39,7 @@ function getEternitySandRatio(item: RaidInfo) {
           </div>
           <div w-25 flex flex-col items-center justify-start>
             <el-statistic :value="item.eternitySand" title="沙漏" />
-            <el-tooltip
-              placement="bottom-start"
-            >
+            <el-tooltip placement="bottom-start">
               <template #content>
                 蓝箱掉落沙漏的副本，计算沙漏率时分母为蓝箱数，否则为总次数
               </template>
