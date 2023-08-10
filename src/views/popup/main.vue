@@ -157,7 +157,7 @@ function exportJSONFile(itemList: any) {
         <div>
           <el-button m-2 size="small" type="primary" @click="importData">
             <div mr-1 i-carbon:document-import />
-            导入
+            导入至APP
           </el-button>
           <el-button m-2 size="small" type="primary" @click="exportData">
             <div mr-1 i-carbon:document-export />

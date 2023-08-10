@@ -25,19 +25,21 @@ function getEternitySandRatio(item: RaidInfo) {
     <div v-if="collapse" i-carbon:checkmark-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
     <div v-else i-carbon:close-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
     <div flex justify-evenly gap-5>
-      <img :src="getImgSrc(item.quest_id, 'raid')">
-      <div class="w-60%" fc flex-col gap-4>
+      <div fc w-150px shrink-0>
+        <img w-full :src="getImgSrc(item.quest_id, 'raid')">
+      </div>
+      <div w-full fc flex-col gap-4>
         <div flex justify-between gap-10>
-          <div w-25 flex items-start justify-center>
+          <div max-w-25 flex items-start justify-center>
             <el-statistic :value="item.total" title="总次数" />
           </div>
-          <div v-if="item.is_blue_treasure" w-25 flex flex-col items-center justify-start>
+          <div v-if="item.is_blue_treasure" max-w-25 flex flex-col items-center justify-start>
             <el-statistic :value="item.blueChest" title="蓝箱" />
             <el-text size="small">
               蓝箱率： {{ getRatio(item.blueChest, item.total) }}%
             </el-text>
           </div>
-          <div w-25 flex flex-col items-center justify-start>
+          <div max-w-25 flex flex-col items-center justify-start>
             <el-statistic :value="item.eternitySand" title="沙漏" />
             <el-tooltip placement="bottom-start">
               <template #content>

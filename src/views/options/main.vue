@@ -54,9 +54,14 @@ function handleExport() {
 
 <template>
   <main font-sans>
-    <div sticky left-0 right-0 top-0 z-999 h-10 fc bg-violet text-base>
-      沙漏掉落统计
-      <div absolute right-4 fc gap-2>
+    <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between bg-violet px-4 text-base>
+      <div fc gap-2>
+        <div
+          i-carbon-sun dark:i-carbon-moon icon-btn
+          @click="toggleDark()"
+        />沙漏掉落统计
+      </div>
+      <div fc gap-2>
         <div fc btn text-xs @click="handleExport">
           <div mr-1 i-carbon:document-export />
           导出
@@ -69,10 +74,6 @@ function handleExport() {
             </div>
           </template>
         </el-upload>
-        <div
-          dark:i-carbon-moon i-carbon-sun icon-btn
-          @click="toggleDark()"
-        />
       </div>
     </div>
     <RaidCard :data="eternitySandData.filter(i => i.visiable)" />
