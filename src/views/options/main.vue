@@ -19,6 +19,7 @@ function handleUploadChange(uploadFile: any) {
         hit.total! += item.total ?? 0
         hit.blueChest! += item.blueChest ?? 0
         hit.eternitySand! += item.eternitySand ?? 0
+        hit.lastDropCount! += item.lastDropCount ?? 0
       }
     })
     ElMessage.success('导入成功')
@@ -34,6 +35,7 @@ function handleExport() {
       total: cur.total,
       blueChest: cur.blueChest,
       eternitySand: cur.eternitySand,
+      lastDropCount: cur.lastDropCount,
     })
     return pre
   }, [] as any[])
