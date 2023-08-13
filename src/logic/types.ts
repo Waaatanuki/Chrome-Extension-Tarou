@@ -39,6 +39,8 @@ export interface BattleStartJson {
   boss: Boss
   player: Player
   turn: number
+  timer: number
+  is_boss: string
   multi_raid_member_info?: MultiRaidMemberInfo[]
   twitter: { battle_id: string }
   summon: Summon[]
@@ -169,7 +171,7 @@ export interface Summon {
   attribute: string
   skill: string
   comment: string
-  recast: string
+  recast: string | number | null
   start_recast: string
   require: string
   protection_name: string
@@ -211,7 +213,20 @@ export interface AttackResultJson {
   scenario: any[]
   duplicate_key: number
   lyria_pos: number
+  status: {
+    supporter: { recast: null | number | string }
+    summon: { recast: (null | number | string)[] }
+    timer: number
+    turn: number
+  }
 }
+
+// export interface Scenario {
+//   cmd: string
+//   pos: number
+//   to: string
+//   condition: Condition
+// }
 
 export interface BattleResult {
   battleId: string

@@ -8,7 +8,10 @@ import { evokerInfo, legendticket, legendticket10, materialInfo, recoveryItemLis
 import type { BattleResult } from '~/logic/types'
 
 const battleStartJson = ref()
-const attackResultJson = ref()
+const normalAttackResultJson = ref()
+const summonResultJson = ref()
+const abilityResultJson = ref()
+
 const lobbyMemberList = ref()
 const battleResultList = ref<BattleResult[]>([])
 
@@ -165,10 +168,23 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   // BattleLog 记录单次攻击日志
   if (request.request.url.includes('rest/raid/normal_attack_result.json') || request.request.url.includes('rest/multiraid/normal_attack_result.json')) {
     request.getContent((content: string) => {
-      attackResultJson.value = JSON.parse(content)
+      normalAttackResultJson.value = JSON.parse(content)
     })
   }
 
+  // BattleLog 记录使用召唤日志
+  if (request.request.url.includes('rest/raid/summon_result.json') || request.request.url.includes('rest/multiraid/summon_result.json')) {
+    request.getContent((content: string) => {
+      summonResultJson.value = JSON.parse(content)
+    })
+  }
+
+  // BattleLog 记录使用技能日志
+  if (request.request.url.includes('rest/raid/ability_result.json') || request.request.url.includes('rest/multiraid/ability_result.json')) {
+    request.getContent((content: string) => {
+      abilityResultJson.value = JSON.parse(content)
+    })
+  }
   // BattleLog 记录战斗结果
   if (request.request.url.includes('resultmulti/content/detail')) {
     const regex = /\/detail\/(\d+)\?/
@@ -227,7 +243,11 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       <EvokerPage />
     </el-tab-pane>
     <el-tab-pane label="战斗日志">
-      <BattleLog :battle-start-json="battleStartJson" :attack-result-json="attackResultJson" :lobby-member-list="lobbyMemberList" :battle-result-list="battleResultList" />
+      <BattleLog
+        :battle-start-json="battleStartJson"
+        :normal-attack-result-json="normalAttackResultJson" :summon-result-json="summonResultJson" :ability-result-json="abilityResultJson"
+        :lobby-member-list="lobbyMemberList" :battle-result-list="battleResultList"
+      />
     </el-tab-pane>
   </el-tabs>
 </template>
