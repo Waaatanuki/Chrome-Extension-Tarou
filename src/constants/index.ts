@@ -15,7 +15,7 @@ export const noticeItem = [
   { key: '17_20004', comment: 'ffj' },
 ]
 
-export const defaultEternitySandData = Raid_EternitySand.reduce((pre, cur) => {
+export const defaultEternitySandData = Raid_EternitySand.reduce<RaidInfo[]>((pre, cur) => {
   const data: RaidInfo = { ...cur }
   data.visiable = true
   data.total = 0
@@ -24,9 +24,9 @@ export const defaultEternitySandData = Raid_EternitySand.reduce((pre, cur) => {
   data.lastDropCount = 0
   pre.push(data)
   return pre
-}, [] as RaidInfo[])
+}, [])
 
-export const defaultGoldBrickTableData = Raid_GoldBrick.reduce((pre, cur) => {
+export const defaultGoldBrickTableData = Raid_GoldBrick.reduce<GoldBrickTableData[]>((pre, cur) => {
   const data: GoldBrickTableData = {
     quest_id: cur.quest_id,
     total: 0,
@@ -39,4 +39,4 @@ export const defaultGoldBrickTableData = Raid_GoldBrick.reduce((pre, cur) => {
   }
   pre.push(data)
   return pre
-}, [] as GoldBrickTableData[])
+}, [])

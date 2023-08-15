@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import MemberList from './components/MemberList.vue'
 import BattleResultTable from './components/BattleResult.vue'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
+import MemberList from './components/MemberList.vue'
+import Summon from './components/Summon.vue'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from './types'
 import type { AttackResultJson, BattleResult, BattleStartJson, BossParam, PlayerParam } from '~/logic/types'
 
@@ -68,6 +69,8 @@ function handleConditionInfo(boss: BossParam, player: PlayerParam) {
 }
 
 function handleAttackRusult(data: AttackResultJson) {
+  if (!data)
+    return
   const bossGauge = data.scenario.find(item => item.cmd === 'boss_gauge')
   const status = data.status
 
@@ -99,23 +102,22 @@ function handleAttackRusult(data: AttackResultJson) {
   handleConditionInfo(bossBuffs, playerBuffs)
 }
 
-watch(() => props.normalAttackResultJson, (data) => {
-  if (!data)
-    return
-  handleAttackRusult(data)
-})
+function watchMultiple(watchExpressions: (() => AttackResultJson)[], callback: (data: AttackResultJson) => void): void {
+  watchExpressions.forEach((expression) => {
+    watch(expression, callback)
+  })
+}
 
-watch(() => props.summonResultJson, (data) => {
-  if (!data)
-    return
-  handleAttackRusult(data)
-})
-
-watch(() => props.abilityResultJson, (data) => {
-  if (!data)
-    return
-  handleAttackRusult(data)
-})
+watchMultiple(
+  [
+    () => props.normalAttackResultJson,
+    () => props.summonResultJson,
+    () => props.abilityResultJson,
+  ],
+  (data) => {
+    handleAttackRusult(data)
+  },
+)
 
 const normalAttackInfo = computed(() => {
   if (!props.normalAttackResultJson)
@@ -135,7 +137,7 @@ const normalAttackInfo = computed(() => {
       data.push(damage[key])
   })
 
-  const damage = data.reduce((pre, cur) => pre + Number(cur.value), 0)
+  const damage = data.reduce<number>((pre, cur) => pre + Number(cur.value), 0)
   return { hit: data.length, damage }
 })
 
@@ -143,7 +145,7 @@ const memberList = computed(() => {
   if (!props.battleStartJson?.multi_raid_member_info)
     return props.lobbyMemberList || []
 
-  return props.battleStartJson.multi_raid_member_info.reduce((pre: Member[], cur) => {
+  return props.battleStartJson.multi_raid_member_info.reduce<Member[]>((pre, cur) => {
     pre.push({
       nickname: cur.nickname,
       userId: cur.user_id,
@@ -168,28 +170,7 @@ const memberList = computed(() => {
         {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage}` }}
       </el-descriptions-item>
       <el-descriptions-item v-if="summonInfo" label="召唤">
-        <template #default>
-          <div flex>
-            <div v-for="summon, idx in summonInfo.summon" :key="idx" m-1>
-              <div relative>
-                <div v-if="Number(summon.recast) !== 0" class="absolute w-full h-full bg-black/40" />
-                <img block :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/raid_normal/${summon.image_id ? summon.image_id : 'empty'}.jpg`">
-              </div>
-              <div v-if="Number(summon.recast) !== 0" text-center>
-                <span>还差{{ summon.recast }}回合</span>
-              </div>
-            </div>
-            <div v-if="summonInfo.supporter.id" m-1>
-              <div relative>
-                <div v-if="Number(summonInfo.supporter.recast) !== 0" class="absolute w-full h-full bg-black/40" />
-                <img block :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/raid_normal/${summonInfo.supporter.image_id}.jpg`">
-              </div>
-              <div v-if="Number(summonInfo.supporter.recast) !== 0" text-center>
-                <span>还差{{ summonInfo.supporter.recast }}回合</span>
-              </div>
-            </div>
-          </div>
-        </template>
+        <Summon :summon-info="summonInfo" />
       </el-descriptions-item>
     </el-descriptions>
 
@@ -197,14 +178,3 @@ const memberList = computed(() => {
     <BattleResultTable :table-data="battleResultList" />
   </div>
 </template>
-
-<style scoped>
-.buff-wrapper{
-  display: flex;
-  flex-wrap: wrap;
-}
-.buff-icon{
-  height: 2.5rem;
-  cursor: pointer;
-}
-</style>

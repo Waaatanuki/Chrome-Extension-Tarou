@@ -27,7 +27,7 @@ function handleUploadChange(uploadFile: any) {
 }
 
 function handleExport() {
-  const exportData = eternitySandData.value.reduce((pre, cur) => {
+  const exportData = eternitySandData.value.reduce<any[]>((pre, cur) => {
     pre.push({
       quest_id: cur.quest_id,
       quest_name_en: cur.quest_name_en,
@@ -38,7 +38,7 @@ function handleExport() {
       lastDropCount: cur.lastDropCount,
     })
     return pre
-  }, [] as any[])
+  }, [])
 
   const data = JSON.stringify(exportData, null, 2)
   const timeStr = dayjs().format('YYYY-MM-DD')

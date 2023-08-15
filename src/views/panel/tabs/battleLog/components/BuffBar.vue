@@ -6,17 +6,17 @@ import { specBossBuff, specPlayerBuff } from '~/logic'
 const props = defineProps<{ buffInfo: BuffInfo }>()
 
 const importantBossBuffs = computed(() =>
-  specBossBuff.value.reduce((pre, cur) => {
+  specBossBuff.value.reduce<Buff[]>((pre, cur) => {
     props.buffInfo.bossBuffs.forEach(buff => buff.status.startsWith(cur) && pre.push(buff))
     return pre
-  }, [] as Buff[]),
+  }, []),
 )
 
 const importantPlayerBuffs = computed(() =>
-  specPlayerBuff.value.reduce((pre, cur) => {
+  specPlayerBuff.value.reduce<Buff[]>((pre, cur) => {
     props.buffInfo.playerBuffs.forEach(buff => buff.status.startsWith(cur) && pre.push(buff))
     return pre
-  }, [] as Buff[]),
+  }, []),
 )
 
 function toggleImage(specBuff: string[], buffId: string) {

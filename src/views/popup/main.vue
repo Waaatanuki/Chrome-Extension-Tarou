@@ -46,12 +46,12 @@ function importData() {
 function exportData() {
   if (goldBrickData.value.length === 0)
     return ElMessage.info('当前没有可导出的数据')
-  const exportData = goldBrickData.value.reduce((pre, cur) => {
+  const exportData = goldBrickData.value.reduce<any[]>((pre, cur) => {
     const val: any = { ...cur }
     delete val.battleId
     pre.push({ [cur.battleId]: val })
     return pre
-  }, [] as any[])
+  }, [])
   exportJSONFile(exportData)
   goldBrickData.value = []
   ElMessage.success('导出成功,并清空数据')
@@ -93,9 +93,7 @@ function exportJSONFile(itemList: any) {
             <el-tooltip effect="dark" placement="top">
               <template #content>
                 总次数：{{ row.total }}<br>
-                蓝箱率：{{
-                  ((row.blueChest / row.total || 0) * 100).toFixed(1)
-                }}%
+                蓝箱率：{{ ((row.blueChest / row.total || 0) * 100).toFixed(1) }}%
               </template>
               {{ row.blueChest }}
             </el-tooltip>
