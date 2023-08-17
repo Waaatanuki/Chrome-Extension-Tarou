@@ -126,12 +126,12 @@ const normalAttackInfo = computed(() => {
   const attackList = props.normalAttackResultJson.scenario.filter((item: any) => item.cmd === 'attack' && item.from === 'player')
   if (attackList.length === 0)
     return { hit: 0, damage: 0 }
-  let damageList = [] as any[]
+  let damageList: any[] = []
   attackList.forEach((item: any) => {
     damageList = damageList.concat(item.damage)
   })
 
-  const data = [] as any[]
+  const data: any[] = []
   damageList.forEach((damage: any) => {
     for (const key in damage)
       data.push(damage[key])

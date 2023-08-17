@@ -282,5 +282,6 @@ export interface GoldBrickData {
 export interface BattleMemo {
   battle_id: string
   quest_id: string
+  quest_name: string
   timestamp: number
 }

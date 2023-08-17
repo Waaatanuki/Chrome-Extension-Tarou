@@ -35,7 +35,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         if (!hit)
           return
 
-        battleMemo.value.push({ battle_id, quest_id: hit.quest_id, timestamp: Date.now() })
+        battleMemo.value.push({ battle_id, quest_id: hit.quest_id, quest_name: res.questName, timestamp: Date.now() })
 
         if (battleMemo.value.length > 15)
           battleMemo.value.shift()
