@@ -1,55 +1,24 @@
 import fs from 'node:fs'
-import path from 'node:path'
-import { zip } from 'zip-a-folder'
+import archiver from 'archiver'
+import manifest from '../manifest.json'
 
-function copyFolderSync(source: string, target: string) {
-  // 创建目标文件夹
-  fs.mkdirSync(target, { recursive: true })
+function zipDirectory(dirpath: string, destpath: string, outPath: string) {
+  const archive = archiver('zip', { zlib: { level: 9 } })
+  const stream = fs.createWriteStream(outPath)
 
-  // 读取源文件夹中的所有文件和子文件夹
-  const files = fs.readdirSync(source)
+  return new Promise<void>((resolve, reject) => {
+    archive
+      .directory(dirpath, destpath)
+      .on('error', err => reject(err))
+      .pipe(stream)
 
-  // 遍历文件和子文件夹
-  files.forEach((file) => {
-    const sourcePath = path.join(source, file)
-    const targetPath = path.join(target, file)
-
-    // 如果是文件夹，则递归拷贝子文件夹
-    if (fs.statSync(sourcePath).isDirectory()) {
-      copyFolderSync(sourcePath, targetPath)
-    }
-    else {
-      // 拷贝文件
-      fs.copyFileSync(sourcePath, targetPath)
-    }
+    stream.on('close', () => resolve())
+    archive.finalize()
   })
 }
 
-function deleteFolderRecursive(folderPath: string) {
-  if (fs.existsSync(folderPath)) {
-    fs.readdirSync(folderPath).forEach((file) => {
-      const curPath = path.join(folderPath, file)
-      if (fs.lstatSync(curPath).isDirectory()) {
-        // 递归删除子文件夹
-        deleteFolderRecursive(curPath)
-      }
-      else {
-        // 删除文件
-        fs.unlinkSync(curPath)
-      }
-    })
-    // 删除空文件夹
-    fs.rmdirSync(folderPath)
-  }
-}
+const dirpath = 'dist'
+const destpath = 'Chrome-Extension-Tarou'
+const zipFilePath = `${destpath} v${manifest.version}.zip`
 
-const sourceFolder = 'dist'
-const targetFolder = 'Chrome-Extension-Tarou'
-
-async function copyANDzip() {
-  copyFolderSync(sourceFolder, targetFolder)
-  await zip('Chrome-Extension-Tarou', 'Chrome-Extension-Tarou.zip')
-  deleteFolderRecursive(targetFolder)
-}
-
-copyANDzip()
+zipDirectory(dirpath, destpath, zipFilePath)
