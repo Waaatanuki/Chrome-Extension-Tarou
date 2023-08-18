@@ -8,7 +8,12 @@
     "48": "./assets/icon-48.png",
     "128": "./assets/icon-128.png"
   },
-  "permissions": ["storage", "unlimitedStorage", "tabs", "notifications"],
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "tabs",
+    "notifications"
+  ],
   "host_permissions": [
     "*://*.granbluefantasy.jp/*",
     "*://gbf.game.mbga.jp/*",
@@ -29,7 +34,9 @@
         "*://waaatanuki.gitee.io/gbf-app/*",
         "*://localhost/*"
       ],
-      "js": ["content_script.js"],
+      "js": [
+        "content_script.js"
+      ],
       "run_at": "document_end"
     }
   ],
@@ -43,5 +50,6 @@
     }
   },
   "options_page": "src/views/options/main.html",
-  "devtools_page": "src/views/devtools/main.html"
+  "devtools_page": "src/views/devtools/main.html",
+  "minimum_chrome_version": "99"
 }

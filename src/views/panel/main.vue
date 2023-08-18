@@ -245,8 +245,11 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     <el-tab-pane label="战斗日志">
       <BattleLog
         :battle-start-json="battleStartJson"
-        :normal-attack-result-json="normalAttackResultJson" :summon-result-json="summonResultJson" :ability-result-json="abilityResultJson"
-        :lobby-member-list="lobbyMemberList" :battle-result-list="battleResultList"
+        :normal-attack-result-json="normalAttackResultJson"
+        :summon-result-json="summonResultJson"
+        :ability-result-json="abilityResultJson"
+        :lobby-member-list="lobbyMemberList"
+        :battle-result-list="battleResultList"
       />
     </el-tab-pane>
   </el-tabs>
