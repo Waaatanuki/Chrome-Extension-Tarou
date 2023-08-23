@@ -258,6 +258,7 @@ export interface RaidInfo {
   blueChest?: number
   eternitySand?: number
   lastDropCount?: number
+  lastDropTake?: number
 }
 
 export interface GoldBrickTableData {
@@ -269,6 +270,7 @@ export interface GoldBrickTableData {
   ring2: number
   ring3: number
   lastBlueChestCount: number
+  lastBlueChestTake?: number
 }
 
 export interface GoldBrickData {
@@ -284,4 +286,67 @@ export interface BattleMemo {
   quest_id: string
   quest_name: string
   timestamp: number
+}
+
+export interface Deck {
+  group_name: string
+  combination_group_id: number
+  combination_id: number
+  name: string
+  order_no: number
+  priority: number
+  pc: Pc
+}
+
+export interface Pc {
+  summons: DeckSummon
+  sub_summons: DeckSummon
+  weapons: Weapon
+  damage_info: DamageInfo
+  after_damage_info: DamageInfo
+}
+
+export interface DeckSummon {
+  [key: string]: {
+    param: SummonParam
+  }
+}
+
+export interface SummonParam {
+  id: string
+  image_id: string
+  level: string
+  attack: string
+  hp: string
+  quality: string
+  evolution_flag: string
+  evolution: string
+  is_mypage: boolean
+}
+
+export interface Weapon {
+  [key: string]: {
+    master: WeaponMaster
+  }
+}
+
+export interface WeaponMaster {
+  id: string
+  name: string
+  attribute: string
+}
+
+export interface DamageInfo {
+  assumed_advantage_damage_attribute: number
+  assumed_normal_damage_attribute: number
+  assumed_advantage_damage: number
+  assumed_normal_damage: number
+  hp: number
+  effect_value_info: EffectValueInfo[]
+}
+
+export interface EffectValueInfo {
+  icon_img: string
+  value: string
+  is_max: boolean
 }

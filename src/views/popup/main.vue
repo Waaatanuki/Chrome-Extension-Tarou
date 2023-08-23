@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { eternitySandData, goldBrickData, goldBrickTableData } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
+import type { GoldBrickTableData } from '~/logic/types'
 
 const goldBrickTableShowData = computed(() => goldBrickTableData.value.filter(raid => raid.quest_id !== '303141'))
 
@@ -24,6 +25,13 @@ function handleReset(command: string) {
       ElMessage.success('沙漏本数据已重置')
       break
   }
+}
+
+function getMsg(item: GoldBrickTableData) {
+  if (item.lastBlueChestTake)
+    return `上次出金打了${item.lastBlueChestTake}蓝箱，已经有${item.lastBlueChestCount}蓝箱没出过金了`
+  else
+    return `距离上次出金已经打了${item.lastBlueChestCount}蓝箱`
 }
 
 function importData() {
@@ -108,7 +116,7 @@ function exportJSONFile(itemList: any) {
               <template #content>
                 蓝箱金率：{{ ((row.goldBrick / row.blueChest || 0) * 100).toFixed(1) }}%
                 <br>
-                已经{{ row.lastBlueChestCount }}个蓝箱没出金
+                {{ getMsg(row) }}
               </template>
               {{ row.goldBrick }}
             </el-tooltip>

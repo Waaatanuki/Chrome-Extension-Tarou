@@ -18,6 +18,13 @@ function getEternitySandRatio(item: RaidInfo) {
   else
     return getRatio(item.eternitySand, item.total)
 }
+
+function getMsg(item: RaidInfo) {
+  if (item.lastDropTake)
+    return `上次出沙漏经历了${item.lastDropTake}场，已经有${item.lastDropCount}场没出过沙漏了`
+  else
+    return `距离上次出沙漏已经过去了${item.lastDropCount}场`
+}
 </script>
 
 <template>
@@ -55,7 +62,7 @@ function getEternitySandRatio(item: RaidInfo) {
           还未出过沙漏
         </el-text>
         <el-text v-else type="info">
-          距离上次出沙漏已经过去了{{ item.lastDropCount }}场
+          {{ getMsg(item) }}
         </el-text>
       </div>
     </div>

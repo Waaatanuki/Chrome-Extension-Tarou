@@ -108,6 +108,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       treasure.box === '11' && hitRaid!.blueChest!++
       if (treasure.key === '10_215') {
         hitRaid!.eternitySand!++
+        hitRaid!.lastDropTake = hitRaid!.lastDropCount
         hitRaid!.lastDropCount = 0
       }
     })
@@ -147,6 +148,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         treasure.key === '73_3' && hitRaid!.ring3++
         if (treasure.key === '17_20004') {
           hitRaid!.goldBrick++
+          hitRaid!.lastBlueChestTake = hitRaid!.lastBlueChestCount
           hitRaid!.lastBlueChestCount = 0
         }
       }
