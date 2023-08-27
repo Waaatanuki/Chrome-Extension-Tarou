@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import Dashborad from './tabs/dashboard/index.vue'
 import EvokerPage from './tabs/evoker/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
+import Party from './tabs/party/index.vue'
 import { evokerInfo, legendticket, legendticket10, materialInfo, recoveryItemList, stone } from '~/logic'
 import type { BattleResult } from '~/logic/types'
 
@@ -14,6 +15,9 @@ const abilityResultJson = ref()
 
 const lobbyMemberList = ref()
 const battleResultList = ref<BattleResult[]>([])
+
+const deckJson = ref()
+const calculateSetting = ref()
 
 chrome.devtools.network.onRequestFinished.addListener((request) => {
   // Dashboard 抽卡数据
@@ -231,6 +235,28 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       })
     }
   }
+
+  // Deck 记录当前队伍信息
+  if (request.request.url.includes('party/deck')) {
+    request.getContent((content: string) => {
+      try {
+        deckJson.value = JSON.parse(content).deck
+      }
+      catch (error) {
+      }
+    })
+  }
+
+  // Deck 记录伤害计算设置
+  if (request.request.url.includes('party/calculate_setting')) {
+    request.getContent((content: string) => {
+      calculateSetting.value = JSON.parse(content)
+    })
+  }
+
+  // Deck 记录更改伤害计算设置
+  if (request.request.url.includes('party/save_calculate_setting'))
+    calculateSetting.value = JSON.parse(request.request.postData!.text!)
 })
 </script>
 
@@ -251,6 +277,9 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         :lobby-member-list="lobbyMemberList"
         :battle-result-list="battleResultList"
       />
+    </el-tab-pane>
+    <el-tab-pane label="队伍信息">
+      <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
     </el-tab-pane>
   </el-tabs>
 </template>

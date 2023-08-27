@@ -288,7 +288,7 @@ export interface BattleMemo {
   timestamp: number
 }
 
-export interface Deck {
+export interface DeckJson {
   group_name: string
   combination_group_id: number
   combination_id: number
@@ -296,14 +296,28 @@ export interface Deck {
   order_no: number
   priority: number
   pc: Pc
+  npc: DeckNpc
+}
+
+export interface DeckNpc {
+  [key: string]: {
+    param: NpcParam
+  }
+}
+
+export interface NpcParam {
+  image_id_3: string
 }
 
 export interface Pc {
+  param: { image: string }
   summons: DeckSummon
   sub_summons: DeckSummon
-  weapons: Weapon
+  weapons: DeckWeapon
   damage_info: DamageInfo
   after_damage_info: DamageInfo
+  set_action: { name: string }[]
+  quick_user_summon_id: number
 }
 
 export interface DeckSummon {
@@ -324,7 +338,7 @@ export interface SummonParam {
   is_mypage: boolean
 }
 
-export interface Weapon {
+export interface DeckWeapon {
   [key: string]: {
     master: WeaponMaster
   }
@@ -349,4 +363,10 @@ export interface EffectValueInfo {
   icon_img: string
   value: string
   is_max: boolean
+}
+
+export interface CalculateSetting {
+  image_id: string
+  group_priority?: string
+  priority?: string
 }
