@@ -32,10 +32,10 @@ const effectChecked = ref(true)
 watch(() => props.deckJson, (value) => {
   if (value) {
     let lastCalculateSetting
-    if (deckList.value.length > 0 && deckList.value.at(-1)!.priority === String(value.priority))
-      lastCalculateSetting = deckList.value.at(-1)!.calculateSetting
+    if (deckList.value.length > 0 && deckList.value[0].priority === String(value.priority))
+      lastCalculateSetting = deckList.value[0].calculateSetting
 
-    deckList.value.push({
+    deckList.value.unshift({
       priority: String(value.priority),
       leader: value.pc.param,
       npcs: value.npc,
@@ -47,12 +47,15 @@ watch(() => props.deckJson, (value) => {
       damageInfo: value.pc.damage_info,
       calculateSetting: lastCalculateSetting,
     })
+
+    if (deckList.value.length > 20)
+      deckList.value.pop()
   }
 })
 
 watch(() => props.calculateSetting, (value) => {
   if (deckList.value.length > 0 && value)
-    deckList.value.at(-1)!.calculateSetting = value
+    deckList.value[0].calculateSetting = value
 })
 </script>
 
