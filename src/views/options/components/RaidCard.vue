@@ -37,16 +37,16 @@ function getMsg(item: RaidInfo) {
       </div>
       <div w-full fc flex-col gap-4>
         <div flex justify-between gap-10>
-          <div max-w-25 flex items-start justify-center>
+          <div max-w-120px flex items-start justify-center>
             <el-statistic :value="item.total" title="总次数" />
           </div>
-          <div v-if="item.is_blue_treasure" max-w-25 flex flex-col items-center justify-start>
+          <div v-if="item.is_blue_treasure" max-w-120px flex flex-col items-center justify-start>
             <el-statistic :value="item.blueChest" title="蓝箱" />
             <el-text size="small">
               蓝箱率： {{ getRatio(item.blueChest, item.total) }}%
             </el-text>
           </div>
-          <div max-w-25 flex flex-col items-center justify-start>
+          <div max-w-120px flex flex-col items-center justify-start>
             <el-statistic :value="item.eternitySand" title="沙漏" />
             <el-tooltip placement="bottom-start">
               <template #content>

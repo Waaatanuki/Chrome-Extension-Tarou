@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CheckboxValueType } from 'element-plus'
 import Effect from './components/Effect.vue'
 import Weapon from './components/Weapon.vue'
 import Npc from './components/Npc.vue'
@@ -24,6 +25,7 @@ interface Deck {
 }
 
 const deckList = ref<Deck[]>([])
+const simpleChecked = ref(false)
 const weaponChecked = ref(true)
 const summonChecked = ref(true)
 const npcChecked = ref(true)
@@ -48,7 +50,7 @@ watch(() => props.deckJson, (value) => {
       calculateSetting: lastCalculateSetting,
     })
 
-    if (deckList.value.length > 20)
+    if (deckList.value.length > 10)
       deckList.value.pop()
   }
 })
@@ -57,24 +59,35 @@ watch(() => props.calculateSetting, (value) => {
   if (deckList.value.length > 0 && value)
     deckList.value[0].calculateSetting = value
 })
+
+function triggerSimpleModel(value: CheckboxValueType) {
+  weaponChecked.value = !value
+  summonChecked.value = !value
+  npcChecked.value = !value
+  effectChecked.value = !value
+}
 </script>
 
 <template>
   <div flex justify-between items-center mb-2>
     <div pl-5>
-      <el-checkbox-button v-model="weaponChecked">
+      <el-checkbox-button v-model="simpleChecked" @change="triggerSimpleModel">
+        简略模式
+      </el-checkbox-button>
+
+      <el-checkbox-button v-model="weaponChecked" :disabled="simpleChecked">
         武器
       </el-checkbox-button>
 
-      <el-checkbox-button v-model="summonChecked">
+      <el-checkbox-button v-model="summonChecked" :disabled="simpleChecked">
         召唤
       </el-checkbox-button>
 
-      <el-checkbox-button v-model="npcChecked">
+      <el-checkbox-button v-model="npcChecked" :disabled="simpleChecked">
         队伍
       </el-checkbox-button>
 
-      <el-checkbox-button v-model="effectChecked">
+      <el-checkbox-button v-model="effectChecked" :disabled="simpleChecked">
         效果量
       </el-checkbox-button>
     </div>
@@ -84,17 +97,26 @@ watch(() => props.calculateSetting, (value) => {
       </div>
     </div>
   </div>
-  <el-card v-for="deck, idx in deckList" :key="idx" :body-style="{ padding: '10px' }">
-    <div fc flex-col gap-2 relative>
-      <div w-1250px fc flex-wrap gap-2>
-        <Weapon v-show="weaponChecked" :weapons="deck.weapons" />
-        <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />
-        <Npc v-show="npcChecked" :npcs="deck.npcs" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
+  <div fc flex-col gap-2 :class="{ simpleMode: simpleChecked }">
+    <el-card v-for="deck, idx in deckList" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
+      <div fc flex-col gap-2 relative>
+        <div fc flex-wrap gap-2>
+          <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
+          <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />
+          <Npc v-show="npcChecked" :npcs="deck.npcs" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
+        </div>
+        <div fc>
+          <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />
+        </div>
+        <div i-carbon:close-outline absolute bottom--8px right--8px text-sm icon-btn @click="deckList.splice(idx, 1)" />
       </div>
-      <div w-1250px fc>
-        <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />
-      </div>
-      <div i-carbon:close-outline absolute right-2 bottom-2 text-sm icon-btn @click="deckList.splice(idx, 1)" />
-    </div>
-  </el-card>
+    </el-card>
+  </div>
 </template>
+
+<style scoped>
+.simpleMode{
+  flex-wrap: wrap;
+  flex-direction: row !important
+}
+</style>
