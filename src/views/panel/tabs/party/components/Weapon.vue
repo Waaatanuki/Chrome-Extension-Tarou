@@ -10,6 +10,10 @@ defineProps<{
 function getImg(type: string, id: string, size = 'm') {
   return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/${size}/${id}.jpg`
 }
+
+function getArousalType(form: number) {
+  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/arousal_type/type_${form}.png`
+}
 </script>
 
 <template>
@@ -19,8 +23,9 @@ function getImg(type: string, id: string, size = 'm') {
         <img w-full :src="getImg('weapon', weapons[1].master.id, 'ls')">
       </div>
       <div w-275px fc flex-wrap gap-5px>
-        <div v-for="idx in 12" :key="idx" h-48px w-85px fc bg-slate-300>
+        <div v-for="idx in 12" :key="idx" h-48px w-85px fc bg-slate-300 relative>
           <img v-if="weapons[idx + 1]?.master?.id" w-full :src="getImg('weapon', weapons[idx + 1]?.master?.id)">
+          <img v-if="weapons[idx + 1]?.param?.arousal.is_arousal_weapon" class="ico-arousal-type" :src="getArousalType(weapons[idx + 1]?.param?.arousal.form)">
         </div>
       </div>
     </div>
@@ -30,3 +35,12 @@ function getImg(type: string, id: string, size = 'm') {
     </div>
   </div>
 </template>
+
+<style scoped>
+.ico-arousal-type{
+  position: absolute;
+  top: 9px;
+  left: -2px;
+  width: 22px;
+}
+</style>

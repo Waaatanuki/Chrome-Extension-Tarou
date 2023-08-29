@@ -341,6 +341,7 @@ export interface SummonParam {
 export interface DeckWeapon {
   [key: string]: {
     master: WeaponMaster
+    param: WeaponParam
   }
 }
 
@@ -350,6 +351,12 @@ export interface WeaponMaster {
   attribute: string
 }
 
+export interface WeaponParam {
+  arousal: {
+    is_arousal_weapon: boolean
+    form: number
+  }
+}
 export interface DamageInfo {
   assumed_advantage_damage_attribute: number
   assumed_normal_damage_attribute: number
