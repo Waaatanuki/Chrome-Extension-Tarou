@@ -19,13 +19,19 @@ function getArousalType(form: number) {
 <template>
   <div fc flex-col>
     <div h-210px fc>
-      <div w-100px>
+      <div w-100px relative>
         <img w-full :src="getImg('weapon', weapons[1].master.id, 'ls')">
+        <div v-if="weapons[1].master.series_id === '3'" class="skill-name" text-xs>
+          {{ weapons[1].skill3?.name.split('の')[1] }}
+        </div>
       </div>
       <div w-275px fc flex-wrap gap-5px>
         <div v-for="idx in 12" :key="idx" h-48px w-85px fc bg-slate-300 relative>
           <img v-if="weapons[idx + 1]?.master?.id" w-full :src="getImg('weapon', weapons[idx + 1]?.master?.id)">
           <img v-if="weapons[idx + 1]?.param?.arousal.is_arousal_weapon" class="ico-arousal-type" :src="getArousalType(weapons[idx + 1]?.param?.arousal.form)">
+          <div v-if="weapons[idx + 1]?.master.series_id === '3'" class="skill-name" text-xs>
+            {{ weapons[idx + 1]?.skill3?.name.split('の')[1] }}
+          </div>
         </div>
       </div>
     </div>
@@ -42,5 +48,13 @@ function getArousalType(form: number) {
   top: 9px;
   left: -2px;
   width: 22px;
+}
+.skill-name{
+  background-color: white;
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  color: red;
+  font-weight: bolder;
 }
 </style>

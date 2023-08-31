@@ -342,6 +342,9 @@ export interface DeckWeapon {
   [key: string]: {
     master: WeaponMaster
     param: WeaponParam
+    skill1: WeaponSkill
+    skill2: WeaponSkill
+    skill3: WeaponSkill
   }
 }
 
@@ -349,6 +352,7 @@ export interface WeaponMaster {
   id: string
   name: string
   attribute: string
+  series_id: string
 }
 
 export interface WeaponParam {
@@ -357,6 +361,14 @@ export interface WeaponParam {
     form: number
   }
 }
+export interface WeaponSkill {
+  id: string
+  description: string
+  image: string
+  attribute: string
+  name: string
+}
+
 export interface DamageInfo {
   assumed_advantage_damage_attribute: number
   assumed_normal_damage_attribute: number
