@@ -17,7 +17,7 @@ function getArousalType(form: number) {
 }
 
 function getSkillAlias(description: string) {
-  return weaponSkill.find(skill => description.includes(skill.comment))?.alias
+  return weaponSkill.find(skill => description.includes(skill.comment) || description.includes(skill.comment_en))?.alias
 }
 </script>
 
