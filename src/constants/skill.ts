@@ -122,3 +122,51 @@ const a = {
     ],
   },
 }
+
+const b = {
+  condition: {
+    buff: [
+      {
+        status: '1609',
+        class: 'time',
+        remain: 0,
+        name: '頑強',
+        detail: '毎ターンHPが回復する状態',
+        is_unusable_harb: true,
+      },
+    ],
+    debuff: [
+      {
+        status: '1020',
+        class: 'time',
+        remain: '02:57',
+        name: '防御力DOWN',
+        detail: '防御力が減少した状態',
+        is_unusable_harb: false,
+      },
+      {
+        status: '1011',
+        class: 'time',
+        remain: '02:57',
+        name: '弱体耐性DOWN',
+        detail: '弱体耐性が減少した状態',
+        is_unusable_harb: false,
+      },
+      {
+        status: '3136',
+        class: 'turn',
+        remain: 1,
+        name: '穿孔',
+        detail: '防御力が大幅に減少し、被ダメージが大幅に上昇した状態(消去不可/延長不可)',
+        is_unusable_harb: true,
+      },
+      {
+        status: '1609',
+        class: 'time',
+        remain: 0,
+        name: '頑強',
+        detail: '毎ターンHPが回復する状態',
+      },
+    ],
+  },
+}

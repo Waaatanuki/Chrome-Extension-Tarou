@@ -5,13 +5,14 @@ import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from './types'
-import type { AttackResultJson, BattleResult, BattleStartJson, BossParam, PlayerParam } from '~/logic/types'
+import type { AttackResultJson, BattleResult, BattleStartJson, BossConditionJson, BossParam, PlayerParam } from '~/logic/types'
 
 const props = defineProps<{
   battleStartJson: BattleStartJson
   normalAttackResultJson: AttackResultJson
   summonResultJson: AttackResultJson
   abilityResultJson: AttackResultJson
+  bossConditionJson: BossConditionJson
   lobbyMemberList: Member[]
   battleResultList: BattleResult[]
 }>()

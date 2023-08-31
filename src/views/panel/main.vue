@@ -12,6 +12,7 @@ const battleStartJson = ref()
 const normalAttackResultJson = ref()
 const summonResultJson = ref()
 const abilityResultJson = ref()
+const bossConditionJson = ref()
 
 const lobbyMemberList = ref()
 const battleResultList = ref<BattleResult[]>([])
@@ -189,6 +190,14 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       abilityResultJson.value = JSON.parse(content)
     })
   }
+
+  // BattleLog 记录boss buff信息
+  if (request.request.url.includes('rest/raid/condition')) {
+    request.getContent((content: string) => {
+      bossConditionJson.value = JSON.parse(content).condition
+    })
+  }
+
   // BattleLog 记录战斗结果
   if (request.request.url.includes('resultmulti/content/detail')) {
     const regex = /\/detail\/(\d+)\?/
@@ -274,6 +283,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         :normal-attack-result-json="normalAttackResultJson"
         :summon-result-json="summonResultJson"
         :ability-result-json="abilityResultJson"
+        :boss-condition-json="bossConditionJson"
         :lobby-member-list="lobbyMemberList"
         :battle-result-list="battleResultList"
       />

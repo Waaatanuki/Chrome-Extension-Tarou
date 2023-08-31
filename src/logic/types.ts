@@ -221,6 +221,19 @@ export interface AttackResultJson {
   }
 }
 
+export interface BossConditionJson {
+  buff: BossCondition[]
+  debuff: BossCondition[]
+}
+
+export interface BossCondition {
+  status: string
+  class: string
+  remain: string
+  name: string
+  detail: string
+}
+
 // export interface Scenario {
 //   cmd: string
 //   pos: number
