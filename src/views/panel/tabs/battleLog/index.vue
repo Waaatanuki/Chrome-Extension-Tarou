@@ -71,7 +71,7 @@ function handleConditionInfo(boss: BossParam, player: PlayerParam) {
 function handleAttackRusult(data: AttackResultJson) {
   if (!data)
     return
-  const bossGauge = data.scenario.find(item => item.cmd === 'boss_gauge')
+  const bossGauge = data.scenario.filter(item => item.cmd === 'boss_gauge').at(-1)
   const status = data.status
 
   if (bossGauge && bossInfo.value) {

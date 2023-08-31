@@ -17,7 +17,15 @@ function getSkillIcon(id: string) {
       w-190px flex items-center justify-between text-base
     >
       <img w-100px :src="getSkillIcon(effect.icon_img)">
-      <div>{{ effect.value }}</div>
+      <div :class="{ max: effect.is_max }">
+        {{ effect.value }}
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.max{
+  color: #ffa826;
+}
+</style>
