@@ -178,4 +178,9 @@ const memberList = computed(() => {
     <MemberList :data="memberList" />
     <BattleResultTable :table-data="battleResultList" />
   </div>
+  <div v-else fc>
+    <el-tag type="info" effect="dark" size="large" round>
+      进入战斗时将会读取相关信息
+    </el-tag>
+  </div>
 </template>

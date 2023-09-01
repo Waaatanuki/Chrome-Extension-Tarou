@@ -98,6 +98,9 @@ function triggerSimpleModel(value: CheckboxValueType) {
     </div>
   </div>
   <div fc flex-col gap-2 :class="{ simpleMode: simpleChecked }">
+    <el-tag v-if="deckList.length === 0" type="info" effect="dark" size="large" round>
+      进入编成界面读取队伍信息
+    </el-tag>
     <el-card v-for="deck, idx in deckList" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
       <div fc flex-col gap-2 relative>
         <div fc flex-wrap gap-2>

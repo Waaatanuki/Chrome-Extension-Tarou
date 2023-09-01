@@ -72,7 +72,7 @@ const evokerPageResult = computed(() => {
     </div>
   </div>
   <div v-if="evokerPageResult.length === 0">
-    <h1 style="text-align: center">
+    <h1 text-center>
       请先去游戏的素材界面读取素材信息
     </h1>
   </div>
