@@ -164,7 +164,7 @@ const memberList = computed(() => {
   <div v-if="bossInfo && buffInfo">
     <div fc gap-2 p-2>
       <BossDashboard :boss-info="bossInfo" />
-      <BuffBar :buff-info="buffInfo" />
+      <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
     </div>
     <el-descriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
       <el-descriptions-item label="平A结果">

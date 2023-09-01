@@ -1,3 +1,4 @@
+import '@unocss/reset/tailwind.css'
 import './main.css'
 import './detail.css'
 import './room_member.css'

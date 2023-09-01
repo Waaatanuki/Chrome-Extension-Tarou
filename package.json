@@ -28,6 +28,7 @@
     "@types/node": "^20.5.7",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
+    "@unocss/reset": "^0.55.4",
     "@vitejs/plugin-vue": "^4.3.3",
     "@vueuse/core": "^10.4.1",
     "archiver": "^6.0.0",

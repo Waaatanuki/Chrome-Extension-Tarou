@@ -117,6 +117,7 @@ export interface Buff {
   detail?: string
   effect?: string
   help_flag?: string
+  remain?: number
 }
 
 export interface Timing {
@@ -229,7 +230,7 @@ export interface BossConditionJson {
 export interface BossCondition {
   status: string
   class: string
-  remain: string
+  remain: string | number
   name: string
   detail: string
 }
