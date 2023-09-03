@@ -2,7 +2,6 @@
 import { load } from 'cheerio'
 import type { BattleMemo, GoldBrickData } from '~/logic/types'
 import { battleMemo, eternitySandData, goldBrickData, goldBrickTableData } from '~/logic/storage'
-import { isForbiddenUrl } from '~/env'
 import { noticeItem } from '~/constants'
 import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
@@ -12,13 +11,13 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
   let checkFlag = false
   chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     // 记录id与副本名称
-    if (changeInfo.url && raidUrlREG.test(changeInfo.url) && tab.favIconUrl && !isForbiddenUrl(changeInfo.url))
+    if (changeInfo.url && raidUrlREG.test(changeInfo.url) && tab.favIconUrl)
       checkFlag = false
 
-    if (changeInfo.status === 'loading' && !changeInfo.url && tab.url && raidUrlREG.test(tab.url) && !isForbiddenUrl(tab.url))
+    if (changeInfo.status === 'loading' && !changeInfo.url && tab.url && raidUrlREG.test(tab.url))
       checkFlag = true
 
-    if (changeInfo.status === 'complete' && tab.url && raidUrlREG.test(tab.url) && !isForbiddenUrl(tab.url)) {
+    if (changeInfo.status === 'complete' && tab.url && raidUrlREG.test(tab.url)) {
       if (!checkFlag)
         return
 
@@ -43,7 +42,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       })
     }
 
-    if (changeInfo.url && resultUrlREG.test(changeInfo.url) && tab.favIconUrl && !isForbiddenUrl(changeInfo.url)) {
+    if (changeInfo.url && resultUrlREG.test(changeInfo.url)) {
       // 记录id与掉落结果
       const battle_id = changeInfo.url.match(/[0-9]+/g)![0]
       const hitMemo = battleMemo.value.find(memo => memo.battle_id === battle_id)
