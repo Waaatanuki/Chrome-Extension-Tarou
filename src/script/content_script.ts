@@ -8,8 +8,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.todo === 'getRaidName') {
     const start = setInterval(() => {
-      if (!raidUrlREG.test(document.URL))
+      if (!raidUrlREG.test(document.URL)) {
         clearInterval(start)
+        sendResponse({})
+      }
 
       console.log('监测到战斗开始')
       const targetEl = document.querySelector('.enemy-info .name')
@@ -22,9 +24,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.todo === 'getBattleResult') {
     const start = setInterval(() => {
-      // if (!document.URL.includes('foo'))
-      if (!resultUrlREG.test(document.URL))
+      if (!resultUrlREG.test(document.URL)) {
         clearInterval(start)
+        sendResponse({})
+      }
 
       console.log('监测到结算')
       const targetEl = document.querySelector('.prt-item-list')
