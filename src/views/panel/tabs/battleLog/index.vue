@@ -54,13 +54,13 @@ function handleConditionInfo(boss: BossParam, player: PlayerParam) {
   const bossBuffs = boss.condition.buff || []
   const bossDebuffs = boss.condition.debuff || []
   const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => {
-    return index === self.findIndex(t => t.status === item.status)
+    return index === self.findIndex(t => t.status === item.status) && !item.personal_debuff_user_id && !item.personal_buff_user_id
   })
 
   const playerBuffs = player.condition.buff || []
   const playerDebuffs = player.condition.debuff || []
   const totalPlayerBuffs = playerBuffs.concat(playerDebuffs).filter((item, index, self) => {
-    return index === self.findIndex(t => t.status === item.status)
+    return index === self.findIndex(t => t.status === item.status) && !item.personal_debuff_user_id && !item.personal_buff_user_id
   })
 
   buffInfo.value = {

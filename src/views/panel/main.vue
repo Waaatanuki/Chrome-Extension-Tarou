@@ -5,8 +5,8 @@ import Dashborad from './tabs/dashboard/index.vue'
 import EvokerPage from './tabs/evoker/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
-import { evokerInfo, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
-import type { BattleResult, NpcInfo } from '~/logic/types'
+import { evokerInfo, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
+import type { BattleResult, NpcAbility, NpcInfo } from '~/logic/types'
 
 const battleStartJson = ref()
 const normalAttackResultJson = ref()
@@ -140,12 +140,47 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
           }
         }
       }
-
-      let hit = localNpcList.value.find(npc => npc.id === npcDetail.id)
-      if (hit)
-        hit = npcInfo
-      else
+      const hitIndex = localNpcList.value.findIndex(npc => npc.id === npcDetail.id)
+      if (hitIndex === -1)
         localNpcList.value.push(npcInfo)
+      else
+        localNpcList.value[hitIndex] = npcInfo
+    })
+  }
+
+  // Party 角色技能切换fa开关
+  if (request.request.url.includes('/npc/full_auto_ability_setting')) {
+    const faAbilitySetting = JSON.parse(request.request.postData!.text!)
+    const hit = localNpcList.value.find(npc => npc.id === faAbilitySetting.user_npc_id)
+    if (hit)
+      hit.action_ability[faAbilitySetting.ability_num].user_full_auto_setting_flag = faAbilitySetting.auto_execute_flag
+  }
+
+  // Party 主角技能
+  if (request.request.url.includes('/party/job_equipped')) {
+    request.getContent((content: string) => {
+      jobAbilityList.value = []
+      const jobInfo = JSON.parse(content).job
+      const job_param_id = jobInfo.param.id
+
+      for (let i = 1; i <= 4; i++) {
+        const actionAbility = jobInfo.action_ability[i]
+        if (actionAbility) {
+          const ab: NpcAbility = {
+            action_id: String(actionAbility.action_id),
+            name: actionAbility.name,
+            icon_type: actionAbility.action_icon.split('_')[1],
+            user_full_auto_setting_flag: actionAbility.user_full_auto_setting_flag,
+          }
+          if (i === 1)
+            ab.job_param_id = job_param_id
+          const hitIndex = jobAbilityList.value.findIndex(a => a.action_id === ab.action_id)
+          if (hitIndex === -1)
+            jobAbilityList.value.push(ab)
+          else
+            jobAbilityList.value[hitIndex] = ab
+        }
+      }
     })
   }
 

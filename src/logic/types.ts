@@ -118,6 +118,8 @@ export interface Buff {
   effect?: string
   help_flag?: string
   remain?: number
+  personal_buff_user_id?: boolean | string
+  personal_debuff_user_id?: boolean | string
 }
 
 export interface Timing {
@@ -331,13 +333,13 @@ export interface NpcMaster {
 }
 
 export interface Pc {
-  param: { image: string }
+  param: { image: string; id: number }
   summons: DeckSummon
   sub_summons: DeckSummon
   weapons: DeckWeapon
   damage_info: DamageInfo
   after_damage_info: DamageInfo
-  set_action: { name: string }[]
+  set_action: { name: string; set_action_id: string }[]
   quick_user_summon_id: number
 }
 
@@ -428,4 +430,5 @@ export interface NpcAbility {
   name: string
   icon_type: string
   user_full_auto_setting_flag: number
+  job_param_id?: string
 }

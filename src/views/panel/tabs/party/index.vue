@@ -4,8 +4,8 @@ import Effect from './components/Effect.vue'
 import Weapon from './components/Weapon.vue'
 import Npc from './components/Npc.vue'
 import Summon from './components/Summon.vue'
-import { localNpcList } from '~/logic'
-import type { CalculateSetting, DamageInfo, DeckJson, DeckSummon, DeckWeapon, NpcInfo } from '~/logic/types'
+import { jobAbilityList, localNpcList } from '~/logic'
+import type { CalculateSetting, DamageInfo, DeckJson, DeckSummon, DeckWeapon, NpcAbility, NpcInfo } from '~/logic/types'
 
 const props = defineProps<{
   deckJson: DeckJson
@@ -15,8 +15,9 @@ const props = defineProps<{
 interface Deck {
   priority: string
   leader: { image: string }
+  jobActionList: { [key: number]: NpcAbility }
   npcs: { [key: string]: NpcInfo }
-  setAction: { name: string }[]
+  setAction: { name: string; set_action_id: string }[]
   weapons: DeckWeapon
   summons: DeckSummon
   quickSummoniId: string
@@ -58,9 +59,29 @@ watch(() => props.deckJson, (value) => {
         newNpcs[i] = newNpc
       }
     }
+
+    // 获取主角技能
+    const job_param_id = String(value.pc.job.param.id)
+    console.log(value.pc.param)
+    console.log(job_param_id)
+    console.log(typeof job_param_id)
+    const jobFirstAbility = jobAbilityList.value.find(a => a.job_param_id === job_param_id)
+    console.log(jobFirstAbility)
+
+    const jobActionList: NpcAbility[] = []
+    if (jobFirstAbility) {
+      jobActionList[0] = jobFirstAbility
+      value.pc.set_action.forEach((ab, idx) => {
+        const hitAb = jobAbilityList.value.find(a => a.action_id === ab.set_action_id)
+        if (hitAb)
+          jobActionList[idx + 1] = { ...hitAb }
+      })
+    }
+    console.log(jobActionList)
     deckList.value.unshift({
       priority: String(value.priority),
       leader: value.pc.param,
+      jobActionList,
       npcs: newNpcs,
       setAction: value.pc.set_action,
       weapons: value.pc.weapons,
@@ -127,7 +148,7 @@ function triggerSimpleModel(value: CheckboxValueType) {
         <div fc flex-wrap gap-2>
           <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
           <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />
-          <Npc v-show="npcChecked" :npcs="deck.npcs" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
+          <Npc v-show="npcChecked" :npcs="deck.npcs" :job-action-list="deck.jobActionList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
         </div>
         <div fc>
           <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />
