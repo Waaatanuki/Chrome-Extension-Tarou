@@ -5,6 +5,8 @@ import fg from 'fast-glob'
 import Unocss from 'unocss/vite'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { r } from './scripts/utils'
 
@@ -36,9 +38,10 @@ export default defineConfig({
       dts: r('types/auto-imports.d.ts'),
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver(), IconsResolver({ prefix: '' })],
       dts: r('types/components.d.ts'),
     }),
+    Icons(),
     Unocss(),
   ],
   resolve: {

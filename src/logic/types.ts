@@ -316,11 +316,18 @@ export interface DeckJson {
 export interface DeckNpc {
   [key: string]: {
     param: NpcParam
+    master: NpcMaster
   }
 }
 
 export interface NpcParam {
   image_id_3: string
+  id: number
+}
+
+export interface NpcMaster {
+  id: string
+  name: string
 }
 
 export interface Pc {
@@ -402,4 +409,23 @@ export interface CalculateSetting {
   image_id: string
   group_priority?: string
   priority?: string
+}
+
+export interface NpcInfo {
+  id: number
+  image_id_3: string
+  master: {
+    id: string
+    name: string
+  }
+  action_ability: {
+    [key: string]: NpcAbility
+  }
+}
+
+export interface NpcAbility {
+  action_id: string
+  name: string
+  icon_type: string
+  user_full_auto_setting_flag: number
 }

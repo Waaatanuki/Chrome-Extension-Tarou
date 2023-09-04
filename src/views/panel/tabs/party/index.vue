@@ -4,7 +4,8 @@ import Effect from './components/Effect.vue'
 import Weapon from './components/Weapon.vue'
 import Npc from './components/Npc.vue'
 import Summon from './components/Summon.vue'
-import type { CalculateSetting, DamageInfo, DeckJson, DeckNpc, DeckSummon, DeckWeapon } from '~/logic/types'
+import { localNpcList } from '~/logic'
+import type { CalculateSetting, DamageInfo, DeckJson, DeckSummon, DeckWeapon, NpcInfo } from '~/logic/types'
 
 const props = defineProps<{
   deckJson: DeckJson
@@ -14,7 +15,7 @@ const props = defineProps<{
 interface Deck {
   priority: string
   leader: { image: string }
-  npcs: DeckNpc
+  npcs: { [key: string]: NpcInfo }
   setAction: { name: string }[]
   weapons: DeckWeapon
   summons: DeckSummon
@@ -37,10 +38,30 @@ watch(() => props.deckJson, (value) => {
     if (deckList.value.length > 0 && deckList.value[0].priority === String(value.priority))
       lastCalculateSetting = deckList.value[0].calculateSetting
 
+    const npcs = value.npc
+    const newNpcs: { [key: string]: NpcInfo } = {}
+    for (let i = 1; i <= 5; i++) {
+      const npc = npcs[i]
+      if (npc.param) {
+        const newNpc: NpcInfo = {
+          id: npc.param.id,
+          image_id_3: npc.param.image_id_3,
+          master: {
+            id: npc.master.id,
+            name: npc.master.name,
+          },
+          action_ability: {},
+        }
+        const hit = localNpcList.value.find(n => n.id === newNpc.id)
+        if (hit)
+          newNpc.action_ability = hit.action_ability
+        newNpcs[i] = newNpc
+      }
+    }
     deckList.value.unshift({
       priority: String(value.priority),
       leader: value.pc.param,
-      npcs: value.npc,
+      npcs: newNpcs,
       setAction: value.pc.set_action,
       weapons: value.pc.weapons,
       summons: value.pc.summons,

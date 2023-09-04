@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { DamageInfo, DeckNpc } from '~/logic/types'
+import type { DamageInfo, NpcInfo } from '~/logic/types'
 
 defineProps<{
   leader: any
-  npcs: DeckNpc
+  npcs: { [key: string]: NpcInfo }
   setAction: { name: string }[]
   damageInfo: DamageInfo
 }>()
@@ -19,8 +19,20 @@ function getImg(id: string, type = 'npc') {
       <div h-109px w-60px bg-slate-300>
         <img v-if="leader?.image" w-full :src="getImg(leader?.image, 'leader')">
       </div>
-      <div v-for="idx in 5" :key="idx" h-109px w-60px fc bg-slate-300>
-        <img v-if="npcs[idx ]?.param?.image_id_3" w-full :src="getImg(npcs[idx ]?.param?.image_id_3)">
+      <div v-for="idx in 5" :key="idx" h-122px w-60px>
+        <div v-if="npcs[idx]?.image_id_3">
+          <img h-109px w-full :src="getImg(npcs[idx]?.image_id_3)">
+          <div mt-1px h-12px flex items-center justify-start>
+            <div v-for=" i in 4" :key="i" relative w-15px fc>
+              <img v-if="npcs[idx].action_ability[i]" w-12px :src="getImgSrc(`ability_icon_type_${npcs[idx].action_ability[i].icon_type}`, 'npc')">
+              <CarbonClose
+                v-if="npcs[idx].action_ability[i] && !npcs[idx].action_ability[i].user_full_auto_setting_flag"
+                absolute left-2px top-0 text-10px text-black
+              />
+            </div>
+          </div>
+        </div>
+        <div v-else h-109px w-60px bg-slate-300 />
       </div>
     </div>
     <div h-full w-full flex items-center justify-between>

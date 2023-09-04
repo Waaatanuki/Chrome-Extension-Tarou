@@ -5,8 +5,8 @@ import Dashborad from './tabs/dashboard/index.vue'
 import EvokerPage from './tabs/evoker/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
-import { evokerInfo, legendticket, legendticket10, materialInfo, recoveryItemList, stone } from '~/logic'
-import type { BattleResult } from '~/logic/types'
+import { evokerInfo, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
+import type { BattleResult, NpcInfo } from '~/logic/types'
 
 const battleStartJson = ref()
 const normalAttackResultJson = ref()
@@ -110,13 +110,42 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     })
   }
 
-  // Evoker 贤者四技能数据
+  // Evoker 贤者四技能数据 & Party 角色数据
   if (request.request.url.includes('/npc/npc')) {
     request.getContent((content: string) => {
       const npcDetail = JSON.parse(content)
       const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(npcDetail.master.id))
       if (hitEvoker)
         hitEvoker.isAbility4Release = !!(npcDetail.action_ability4 && npcDetail.action_ability4.quest.is_clear)
+
+      // 记录角色信息
+      const npcInfo: NpcInfo = {
+        id: npcDetail.id,
+        image_id_3: '',
+        master: {
+          id: npcDetail.master.id,
+          name: npcDetail.master.name,
+        },
+        action_ability: {},
+      }
+
+      for (let i = 1; i < 5; i++) {
+        const currentAbility = npcDetail[`action_ability${i}`]
+        if (currentAbility) {
+          npcInfo.action_ability[i] = {
+            action_id: currentAbility.action_id,
+            name: currentAbility.name,
+            icon_type: currentAbility.icon_type,
+            user_full_auto_setting_flag: currentAbility.user_full_auto_setting_flag,
+          }
+        }
+      }
+
+      let hit = localNpcList.value.find(npc => npc.id === npcDetail.id)
+      if (hit)
+        hit = npcInfo
+      else
+        localNpcList.value.push(npcInfo)
     })
   }
 

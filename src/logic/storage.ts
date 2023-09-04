@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { BattleMemo, MaterialInfo, RecoveryItem } from './types'
+import type { BattleMemo, MaterialInfo, NpcInfo, RecoveryItem } from './types'
 import { useStorageLocal } from '~/composables/useStorageLocal'
 import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
 import { defaultEvokerInfo } from '~/constants/evoker'
@@ -26,3 +26,6 @@ export const goldBrickData = useStorageLocal<GoldBrickData[]>('goldBrickData', [
 export const goldBrickTableData = useStorageLocal('goldBrickTableData', defaultGoldBrickTableData)
 export const eternitySandData = useStorageLocal('eternitySandData', defaultEternitySandData)
 export const battleMemo = useStorageLocal<BattleMemo[]>('battleMemo', [])
+
+// Party
+export const localNpcList = useStorageLocal<NpcInfo[]>('localNpcList', [])
