@@ -45,6 +45,7 @@ export interface BattleStartJson {
   twitter: { battle_id: string }
   summon: Summon[]
   supporter: Summon
+  user_id: string
 }
 
 export interface Boss {

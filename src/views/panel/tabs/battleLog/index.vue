@@ -8,6 +8,7 @@ import type { BossInfo, BuffInfo, Member, SummonInfo } from './types'
 import type { AttackResultJson, BattleResult, BattleStartJson, BossConditionJson, BossParam, PlayerParam } from '~/logic/types'
 
 const props = defineProps<{
+  userId: string
   battleStartJson: BattleStartJson
   normalAttackResultJson: AttackResultJson
   summonResultJson: AttackResultJson
@@ -51,16 +52,19 @@ watch(() => props.battleStartJson, (data) => {
 function handleConditionInfo(boss: BossParam, player: PlayerParam) {
   if (!boss || !player)
     return
+
   const bossBuffs = boss.condition.buff || []
   const bossDebuffs = boss.condition.debuff || []
   const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => {
-    return index === self.findIndex(t => t.status === item.status) && !item.personal_debuff_user_id && !item.personal_buff_user_id
+    return index === self.findIndex(t => t.status === item.status)
+     && (!item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId)
+     && (!item.personal_buff_user_id || item.personal_buff_user_id === props.userId)
   })
 
   const playerBuffs = player.condition.buff || []
   const playerDebuffs = player.condition.debuff || []
   const totalPlayerBuffs = playerBuffs.concat(playerDebuffs).filter((item, index, self) => {
-    return index === self.findIndex(t => t.status === item.status) && !item.personal_debuff_user_id && !item.personal_buff_user_id
+    return index === self.findIndex(t => t.status === item.status)
   })
 
   buffInfo.value = {

@@ -8,6 +8,7 @@ import Party from './tabs/party/index.vue'
 import { evokerInfo, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
 import type { BattleResult, NpcAbility, NpcInfo } from '~/logic/types'
 
+const userId = ref<string>('')
 const battleStartJson = ref()
 const normalAttackResultJson = ref()
 const summonResultJson = ref()
@@ -236,6 +237,10 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 
   // BattleLog 记录副本start信息
   if (request.request.url.includes('rest/raid/start.json') || request.request.url.includes('rest/multiraid/start.json')) {
+    request.request.queryString.forEach((param) => {
+      if (param.name === 'uid')
+        userId.value = param.value
+    })
     request.getContent((content: string) => {
       battleStartJson.value = JSON.parse(content)
     })
@@ -350,6 +355,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     </el-tab-pane>
     <el-tab-pane label="战斗日志">
       <BattleLog
+        :user-id="userId"
         :battle-start-json="battleStartJson"
         :normal-attack-result-json="normalAttackResultJson"
         :summon-result-json="summonResultJson"
