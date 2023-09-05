@@ -341,6 +341,11 @@ export interface Pc {
   after_damage_info: DamageInfo
   set_action: { name: string; set_action_id: string }[]
   quick_user_summon_id: number
+  job: {
+    param: {
+      id: string
+    }
+  }
 }
 
 export interface DeckSummon {
@@ -420,9 +425,7 @@ export interface NpcInfo {
     id: string
     name: string
   }
-  action_ability: {
-    [key: string]: NpcAbility
-  }
+  action_ability: NpcAbility[]
 }
 
 export interface NpcAbility {

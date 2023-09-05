@@ -15,8 +15,8 @@ const props = defineProps<{
 interface Deck {
   priority: string
   leader: { image: string }
-  jobActionList: { [key: number]: NpcAbility }
-  npcs: { [key: string]: NpcInfo }
+  leaderAbilityList: NpcAbility[]
+  npcs: NpcInfo[]
   setAction: { name: string; set_action_id: string }[]
   weapons: DeckWeapon
   summons: DeckSummon
@@ -40,7 +40,7 @@ watch(() => props.deckJson, (value) => {
       lastCalculateSetting = deckList.value[0].calculateSetting
 
     const npcs = value.npc
-    const newNpcs: { [key: string]: NpcInfo } = {}
+    const newNpcs: NpcInfo[] = []
     for (let i = 1; i <= 5; i++) {
       const npc = npcs[i]
       if (npc.param) {
@@ -51,37 +51,32 @@ watch(() => props.deckJson, (value) => {
             id: npc.master.id,
             name: npc.master.name,
           },
-          action_ability: {},
+          action_ability: [],
         }
         const hit = localNpcList.value.find(n => n.id === newNpc.id)
         if (hit)
           newNpc.action_ability = hit.action_ability
-        newNpcs[i] = newNpc
+        newNpcs.push(newNpc)
       }
     }
 
     // 获取主角技能
     const job_param_id = String(value.pc.job.param.id)
-    console.log(value.pc.param)
-    console.log(job_param_id)
-    console.log(typeof job_param_id)
     const jobFirstAbility = jobAbilityList.value.find(a => a.job_param_id === job_param_id)
-    console.log(jobFirstAbility)
 
-    const jobActionList: NpcAbility[] = []
+    const leaderAbilityList: NpcAbility[] = []
     if (jobFirstAbility) {
-      jobActionList[0] = jobFirstAbility
+      leaderAbilityList[0] = jobFirstAbility
       value.pc.set_action.forEach((ab, idx) => {
         const hitAb = jobAbilityList.value.find(a => a.action_id === ab.set_action_id)
         if (hitAb)
-          jobActionList[idx + 1] = { ...hitAb }
+          leaderAbilityList[idx + 1] = { ...hitAb }
       })
     }
-    console.log(jobActionList)
     deckList.value.unshift({
       priority: String(value.priority),
       leader: value.pc.param,
-      jobActionList,
+      leaderAbilityList,
       npcs: newNpcs,
       setAction: value.pc.set_action,
       weapons: value.pc.weapons,
@@ -148,7 +143,7 @@ function triggerSimpleModel(value: CheckboxValueType) {
         <div fc flex-wrap gap-2>
           <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
           <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />
-          <Npc v-show="npcChecked" :npcs="deck.npcs" :job-action-list="deck.jobActionList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
+          <Npc v-show="npcChecked" :npcs="deck.npcs" :leader-ability-list="deck.leaderAbilityList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
         </div>
         <div fc>
           <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />

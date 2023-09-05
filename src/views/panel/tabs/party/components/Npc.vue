@@ -3,8 +3,8 @@ import type { DamageInfo, NpcAbility, NpcInfo } from '~/logic/types'
 
 defineProps<{
   leader: any
-  jobActionList: { [key: number]: NpcAbility }
-  npcs: { [key: string]: NpcInfo }
+  leaderAbilityList: NpcAbility[]
+  npcs: NpcInfo[]
   setAction: { name: string; set_action_id: string }[]
   damageInfo: DamageInfo
 }>()
@@ -16,33 +16,33 @@ function getImg(id: string, type = 'npc') {
 
 <template>
   <div h-210px w-380px fc flex-col justify-start>
-    <div w-full flex justify-evenly>
+    <div w-full flex justify-start items-start gap-4px>
       <div h-122px w-60px>
-        <img v-if="leader?.image" w-full :src="getImg(leader?.image, 'leader')">
+        <img w-full :src="getImg(leader.image, 'leader')">
         <div mt-1px h-12px flex items-center justify-start>
           <div v-for=" i in 4" :key="i" relative w-15px fc>
-            <img v-if="jobActionList[i - 1]" w-12px :src="getImgSrc(`ability_icon_type_${jobActionList[i - 1].icon_type}`, 'npc')">
+            <div v-if="leaderAbilityList[i - 1]" :class="`ability_icon_type_${leaderAbilityList[i - 1].icon_type}`" h-12px w-12px border-1 rounded-sm />
             <CarbonClose
-              v-if="jobActionList[i - 1] && !jobActionList[i - 1].user_full_auto_setting_flag"
-              absolute left-2px top-0 bottom-0 text-10px text-black
+              v-if="leaderAbilityList[i - 1] && !leaderAbilityList[i - 1].user_full_auto_setting_flag"
+              absolute bottom-0 left-0 right-0 top-0 m-auto text-13px text-black
             />
           </div>
         </div>
       </div>
-      <div v-for="idx in 5" :key="idx" h-122px w-60px>
-        <div v-if="npcs[idx]?.image_id_3">
-          <img h-109px w-full :src="getImg(npcs[idx]?.image_id_3)">
-          <div mt-1px h-12px flex items-center justify-start>
-            <div v-for=" i in 4" :key="i" relative w-15px fc>
-              <img v-if="npcs[idx].action_ability[i]" w-12px :src="getImgSrc(`ability_icon_type_${npcs[idx].action_ability[i].icon_type}`, 'npc')">
-              <CarbonClose
-                v-if="npcs[idx].action_ability[i] && !npcs[idx].action_ability[i].user_full_auto_setting_flag"
-                absolute left-2px top-0 bottom-0 text-10px text-black
-              />
-            </div>
+      <div v-for="npc in npcs" :key="npc.id" h-122px w-60px>
+        <img h-109px w-full :src="getImg(npc.image_id_3)">
+        <div mt-1px h-12px flex items-center justify-start>
+          <div v-for="ability in npc.action_ability" :key="ability.action_id" relative w-15px fc>
+            <div
+              :class="`ability_icon_type_${ability.icon_type}`"
+              h-12px w-12px border-1 rounded-sm
+            />
+            <CarbonClose
+              v-if=" !ability.user_full_auto_setting_flag"
+              absolute bottom-0 left-0 right-0 top-0 m-auto text-13px text-black
+            />
           </div>
         </div>
-        <div v-else h-109px w-60px bg-slate-300 />
       </div>
     </div>
     <div h-full w-full flex items-center justify-between>
@@ -60,14 +60,19 @@ function getImg(id: string, type = 'npc') {
 </template>
 
 <style scoped>
-.ico-summon-quick{
-  display: block;
-  background: url(https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/summon-sdb20d1475e.png) no-repeat 0 -85px;
-  -webkit-background-size: 28px 124px;
-  background-size: 28px 124px;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-
+.ability_icon_type_1{
+  background-color: rgb(251, 113, 133);
+}
+.ability_icon_type_2{
+  background-color: rgb(74, 222, 128);
+}
+.ability_icon_type_3{
+  background-color: rgb(250, 204, 21);
+}
+.ability_icon_type_4{
+  background-color: rgb(96, 165, 250);
+}
+.ability_icon_type_5{
+  background-color: rgb(192, 132, 252);
 }
 </style>

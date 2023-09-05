@@ -126,18 +126,18 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
           id: npcDetail.master.id,
           name: npcDetail.master.name,
         },
-        action_ability: {},
+        action_ability: [],
       }
 
-      for (let i = 1; i < 5; i++) {
+      for (let i = 1; i <= 4; i++) {
         const currentAbility = npcDetail[`action_ability${i}`]
         if (currentAbility) {
-          npcInfo.action_ability[i] = {
+          npcInfo.action_ability.push({
             action_id: currentAbility.action_id,
             name: currentAbility.name,
             icon_type: currentAbility.icon_type,
             user_full_auto_setting_flag: currentAbility.user_full_auto_setting_flag,
-          }
+          })
         }
       }
       const hitIndex = localNpcList.value.findIndex(npc => npc.id === npcDetail.id)
@@ -153,13 +153,12 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     const faAbilitySetting = JSON.parse(request.request.postData!.text!)
     const hit = localNpcList.value.find(npc => npc.id === faAbilitySetting.user_npc_id)
     if (hit)
-      hit.action_ability[faAbilitySetting.ability_num].user_full_auto_setting_flag = faAbilitySetting.auto_execute_flag
+      hit.action_ability[faAbilitySetting.ability_num - 1].user_full_auto_setting_flag = faAbilitySetting.auto_execute_flag
   }
 
   // Party 主角技能
   if (request.request.url.includes('/party/job_equipped')) {
     request.getContent((content: string) => {
-      jobAbilityList.value = []
       const jobInfo = JSON.parse(content).job
       const job_param_id = jobInfo.param.id
 
@@ -182,6 +181,14 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         }
       }
     })
+  }
+
+  // Party 主角技能切换fa开关
+  if (request.request.url.includes('/job/fullautosetting/pc_full_auto_setting')) {
+    const faAbilitySetting = JSON.parse(request.request.postData!.text!)
+    const hit = jobAbilityList.value.find(a => a.action_id === String(faAbilitySetting.ability_id))
+    if (hit)
+      hit.user_full_auto_setting_flag = faAbilitySetting.auto_execute_flag
   }
 
   // Evoker 塔罗数据
