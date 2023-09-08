@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import type { RaidRecord } from 'myStorage'
 import type { BattleMemo, MaterialInfo, NpcAbility, NpcInfo, RecoveryItem } from './types'
 import { useStorageLocal } from '~/composables/useStorageLocal'
 import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
@@ -18,6 +19,7 @@ export const materialInfo = useStorageLocal<MaterialInfo[]>('materialInfo', [])
 export const evokerInfo = useStorageLocal('evokerInfo', defaultEvokerInfo)
 
 // BattleLog
+export const raidRecord = useStorageLocal<RaidRecord[]>('raidRecord', [])
 export const specBossBuff = useStorageLocal<string[]>('specBossBuff', [])
 export const specPlayerBuff = useStorageLocal<string[]>('specPlayerBuff', [])
 

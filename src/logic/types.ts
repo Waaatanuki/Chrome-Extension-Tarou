@@ -40,7 +40,7 @@ export interface BattleStartJson {
   player: Player
   turn: number
   timer: number
-  is_boss: string
+  raid_id: number
   multi_raid_member_info?: MultiRaidMemberInfo[]
   twitter: { battle_id: string }
   summon: Summon[]

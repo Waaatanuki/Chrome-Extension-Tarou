@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import type { Player } from 'myStorage'
+import type { AttackResultJson, Condition } from 'requestData'
 import BattleResultTable from './components/BattleResult.vue'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
+import RaidRecord from './components/RaidRecord.vue'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from './types'
-import type { AttackResultJson, BattleResult, BattleStartJson, BossConditionJson, BossParam, PlayerParam } from '~/logic/types'
+import { raidRecord } from '~/logic'
+import type { BattleResult, BattleStartJson, BossConditionJson } from '~/logic/types'
 
 const props = defineProps<{
   userId: string
@@ -21,11 +25,12 @@ const props = defineProps<{
 const bossInfo = ref<BossInfo>()
 const summonInfo = ref<SummonInfo>()
 const buffInfo = ref<BuffInfo>()
-
+const raidId = ref<number>()
 watch(() => props.battleStartJson, (data) => {
   if (!data)
     return
 
+  raidId.value = data.raid_id
   const boss = data.boss.param[0]
   const player = data.player.param[0]
 
@@ -46,23 +51,24 @@ watch(() => props.battleStartJson, (data) => {
     supporter: data.supporter,
   }
 
-  handleConditionInfo(boss, player)
+  handleConditionInfo(boss.condition, player.condition)
+  recordRaidInfo(data)
 })
 
-function handleConditionInfo(boss: BossParam, player: PlayerParam) {
-  if (!boss || !player)
+function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
+  if (!bossCondition || !playerCondition)
     return
 
-  const bossBuffs = boss.condition.buff || []
-  const bossDebuffs = boss.condition.debuff || []
+  const bossBuffs = bossCondition.buff || []
+  const bossDebuffs = bossCondition.debuff || []
   const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => {
     return index === self.findIndex(t => t.status === item.status)
      && (!item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId)
      && (!item.personal_buff_user_id || item.personal_buff_user_id === props.userId)
   })
 
-  const playerBuffs = player.condition.buff || []
-  const playerDebuffs = player.condition.debuff || []
+  const playerBuffs = playerCondition.buff || []
+  const playerDebuffs = playerCondition.debuff || []
   const totalPlayerBuffs = playerBuffs.concat(playerDebuffs).filter((item, index, self) => {
     return index === self.findIndex(t => t.status === item.status)
   })
@@ -73,6 +79,79 @@ function handleConditionInfo(boss: BossParam, player: PlayerParam) {
   }
 }
 
+function recordRaidInfo(data: BattleStartJson) {
+  const hit = raidRecord.value.find(record => record.raid_id === raidId.value)
+  if (!hit) {
+    const boss = data.boss.param[0]
+
+    const player = data.player.param.reduce<Player[]>((pre, cur) => {
+      pre.push({
+        pid: cur.pid,
+        damage: {
+          total: { comment: '总计', value: 0 },
+          attack: { comment: '通常攻击&反击', value: 0 },
+          ability: { comment: '技能伤害', value: 0 },
+          special: { comment: '奥义伤害', value: 0 },
+          other: { comment: '其他', value: 0 },
+        },
+      })
+      return pre
+    }, [])
+
+    raidRecord.value.unshift({
+      raid_id: raidId.value!,
+      imgId: boss.cjs.split('_').at(-1)!,
+      name: boss.monster,
+      turn: data.turn,
+      timestamp: Date.now(),
+      player,
+    })
+
+    if (raidRecord.value.length > 10)
+      raidRecord.value.pop()
+  }
+}
+
+function handleDamageStatistic(data: AttackResultJson) {
+  const playerPosInfo: { pid: string; pos: number }[] = []
+  Object.values(data.status.ability).forEach((npc) => {
+    playerPosInfo.push({
+      pid: npc.src.split('/').at(-1)!.split('.')[0],
+      pos: npc.pos,
+    })
+  })
+  const currentRaid = raidRecord.value.find(raid => raid.raid_id === raidId.value)
+  if (!currentRaid)
+    return
+
+  data.scenario.forEach((action) => {
+    if (action.cmd === 'special' || action.cmd === 'special_npc') {
+      const hitPlayer = currentRaid.player[action.pos]
+      if (hitPlayer) {
+        hitPlayer.damage.special.value += action.total!.reduce((pre, cur) => {
+          pre += Number(cur.split.join(''))
+          return pre
+        }, 0)
+      }
+    }
+    if (action.cmd === 'attack' && action.from === 'player') {
+      const hitPlayer = currentRaid.player[action.num]
+      if (hitPlayer) {
+        hitPlayer.damage.attack.value += action.damage!.reduce((pre, cur) => {
+          pre += cur.reduce((p, c) => {
+            p += c.value
+            return p
+          }, 0)
+          return pre
+        }, 0)
+      }
+    }
+  })
+  currentRaid.player.forEach((player) => {
+    player.damage.total.value = player.damage.ability.value + player.damage.attack.value + player.damage.other.value + player.damage.special.value
+  })
+}
+
 function handleAttackRusult(data: AttackResultJson) {
   if (!data)
     return
@@ -80,9 +159,9 @@ function handleAttackRusult(data: AttackResultJson) {
   const status = data.status
 
   if (bossGauge && bossInfo.value) {
-    bossInfo.value.name = bossGauge.name.ja
-    bossInfo.value.hp = bossGauge.hp
-    bossInfo.value.hpmax = bossGauge.hpmax
+    bossInfo.value.name = bossGauge.name!.ja
+    bossInfo.value.hp = bossGauge.hp!
+    bossInfo.value.hpmax = bossGauge.hpmax!
     bossInfo.value.hpPercent = Number.parseFloat((Number(bossGauge.hp) / Number(bossGauge.hpmax) * 100).toFixed(2))
     bossInfo.value.timer = status.timer
     bossInfo.value.turn = status.turn
@@ -104,7 +183,8 @@ function handleAttackRusult(data: AttackResultJson) {
 
   const bossBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'boss').at(-1)
   const playerBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0).at(-1)
-  handleConditionInfo(bossBuffs, playerBuffs)
+  handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
+  handleDamageStatistic(data)
 }
 
 function watchMultiple(watchExpressions: (() => AttackResultJson)[], callback: (data: AttackResultJson) => void): void {
@@ -170,6 +250,7 @@ const memberList = computed(() => {
       <BossDashboard :boss-info="bossInfo" />
       <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
     </div>
+    <RaidRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
     <el-descriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
       <el-descriptions-item label="平A结果">
         {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage}` }}
