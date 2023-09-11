@@ -151,7 +151,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
         }, 0)
       }
     }
-    if (action.cmd === 'damage' && action.to === 'boss' && action.is_damage_sync_effect !== '') {
+    if (action.cmd === 'damage' && action.to === 'boss') {
       if (resultType === 'summon')
         getDamageCount(action, currentRaid, 0)
 
@@ -288,13 +288,13 @@ const memberList = computed(() => {
       <BossDashboard :boss-info="bossInfo" />
       <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
     </div>
-    <DamageRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
+    <div flex items-start justify-start gap-2 p-2 flex-wrap>
+      <DamageRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
+      <Summon v-if="summonInfo" :summon-info="summonInfo" />
+    </div>
     <el-descriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
       <el-descriptions-item label="平A结果">
         {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage}` }}
-      </el-descriptions-item>
-      <el-descriptions-item v-if="summonInfo" label="召唤">
-        <Summon :summon-info="summonInfo" />
       </el-descriptions-item>
     </el-descriptions>
 

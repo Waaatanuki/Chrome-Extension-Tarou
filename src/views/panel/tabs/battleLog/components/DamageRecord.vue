@@ -16,7 +16,7 @@ const damageTypeOptions = ref([
 const maxDamage = computed(() =>
   props.raidRecord.player.reduce((pre, cur) =>
     pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value
-  , 0),
+  , 1),
 )
 
 const totalDamage = computed(() =>
