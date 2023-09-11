@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Player } from 'myStorage'
-import type { AttackResultJson, Condition } from 'requestData'
+import type { Player, RaidRecord } from 'myStorage'
+import type { AttackResultJson, Condition, Scenario } from 'requestData'
 import BattleResultTable from './components/BattleResult.vue'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
-import RaidRecord from './components/RaidRecord.vue'
+import DamageRecord from './components/DamageRecord.vue'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from './types'
 import { raidRecord } from '~/logic'
 import type { BattleResult, BattleStartJson, BossConditionJson } from '~/logic/types'
@@ -14,9 +14,7 @@ import type { BattleResult, BattleStartJson, BossConditionJson } from '~/logic/t
 const props = defineProps<{
   userId: string
   battleStartJson: BattleStartJson
-  normalAttackResultJson: AttackResultJson
-  summonResultJson: AttackResultJson
-  abilityResultJson: AttackResultJson
+  resultJson: { type: string; result: AttackResultJson }
   bossConditionJson: BossConditionJson
   lobbyMemberList: Member[]
   battleResultList: BattleResult[]
@@ -26,6 +24,7 @@ const bossInfo = ref<BossInfo>()
 const summonInfo = ref<SummonInfo>()
 const buffInfo = ref<BuffInfo>()
 const raidId = ref<number>()
+
 watch(() => props.battleStartJson, (data) => {
   if (!data)
     return
@@ -53,6 +52,10 @@ watch(() => props.battleStartJson, (data) => {
 
   handleConditionInfo(boss.condition, player.condition)
   recordRaidInfo(data)
+})
+
+watch(() => props.resultJson, (data) => {
+  handleAttackRusult(data.type, data.result)
 })
 
 function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
@@ -112,7 +115,11 @@ function recordRaidInfo(data: BattleStartJson) {
   }
 }
 
-function handleDamageStatistic(data: AttackResultJson) {
+function handleDamageStatistic(resultType: string, data: AttackResultJson) {
+  const currentRaid = raidRecord.value.find(raid => raid.raid_id === raidId.value)
+  if (!currentRaid)
+    return
+
   const playerPosInfo: { pid: string; pos: number }[] = []
   Object.values(data.status.ability).forEach((npc) => {
     playerPosInfo.push({
@@ -120,13 +127,11 @@ function handleDamageStatistic(data: AttackResultJson) {
       pos: npc.pos,
     })
   })
-  const currentRaid = raidRecord.value.find(raid => raid.raid_id === raidId.value)
-  if (!currentRaid)
-    return
+  const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
-  data.scenario.forEach((action) => {
+  data.scenario.forEach((action, idx, array) => {
     if (action.cmd === 'special' || action.cmd === 'special_npc') {
-      const hitPlayer = currentRaid.player[action.pos]
+      const hitPlayer = currentRaid.player[action.num]
       if (hitPlayer) {
         hitPlayer.damage.special.value += action.total!.reduce((pre, cur) => {
           pre += Number(cur.split.join(''))
@@ -146,14 +151,64 @@ function handleDamageStatistic(data: AttackResultJson) {
         }, 0)
       }
     }
+    if (action.cmd === 'damage' && action.to === 'boss' && action.is_damage_sync_effect !== '') {
+      if (resultType === 'summon')
+        getDamageCount(action, currentRaid, 0)
+
+      for (let i = 1; i <= 3; i++) {
+        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd))
+          getDamageCount(action, currentRaid, array[idx - i].num)
+        if (array[idx - i] && array[idx - i].cmd === 'chain_cutin') {
+          const pos0NpcPid = playerPosInfo[0].pid
+          const hitPlayerIndex = currentRaid.player.findIndex(p => p.pid === pos0NpcPid)
+          hitPlayerIndex !== -1 && getDamageCount(action, currentRaid, hitPlayerIndex, 'other')
+        }
+      }
+    }
+    if (action.cmd === 'loop_damage' && action.to === 'boss') {
+      for (let i = 1; i <= 3; i++) {
+        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd))
+          getLoopDamageCount(action, currentRaid, array[idx - i].num)
+      }
+    }
+    if (action.cmd === 'summon' && action.list.length > 0) {
+      currentRaid.player[0].damage.other.value += action.list.reduce((pre, cur) => {
+        pre += cur.damage!.reduce((p, c) => {
+          p += c.value
+          return p
+        }, 0)
+        return pre
+      }, 0)
+    }
   })
+
   currentRaid.player.forEach((player) => {
     player.damage.total.value = player.damage.ability.value + player.damage.attack.value + player.damage.other.value + player.damage.special.value
   })
 }
 
-function handleAttackRusult(data: AttackResultJson) {
-  if (!data)
+function getDamageCount(action: Scenario, raid: RaidRecord, num: number, type: 'ability' | 'other' = 'ability') {
+  const hitPlayer = raid.player[num]
+  if (hitPlayer) {
+    hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
+      pre += cur.value!
+      return pre
+    }, 0)
+  }
+}
+
+function getLoopDamageCount(action: Scenario, raid: RaidRecord, num: number, type: 'ability' | 'other' = 'ability') {
+  const hitPlayer = raid.player[num]
+  if (hitPlayer) {
+    hitPlayer.damage[type].value += action.total.reduce((pre, cur) => {
+      pre += Number(cur.split.join(''))
+      return pre
+    }, 0)
+  }
+}
+
+function handleAttackRusult(type: string, data: AttackResultJson) {
+  if (!type)
     return
   const bossGauge = data.scenario.filter(item => item.cmd === 'boss_gauge').at(-1)
   const status = data.status
@@ -184,31 +239,14 @@ function handleAttackRusult(data: AttackResultJson) {
   const bossBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'boss').at(-1)
   const playerBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0).at(-1)
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
-  handleDamageStatistic(data)
+  handleDamageStatistic(type, data)
 }
-
-function watchMultiple(watchExpressions: (() => AttackResultJson)[], callback: (data: AttackResultJson) => void): void {
-  watchExpressions.forEach((expression) => {
-    watch(expression, callback)
-  })
-}
-
-watchMultiple(
-  [
-    () => props.normalAttackResultJson,
-    () => props.summonResultJson,
-    () => props.abilityResultJson,
-  ],
-  (data) => {
-    handleAttackRusult(data)
-  },
-)
 
 const normalAttackInfo = computed(() => {
-  if (!props.normalAttackResultJson)
+  if (props.resultJson?.type !== 'normal')
     return { hit: 0, damage: 0 }
 
-  const attackList = props.normalAttackResultJson.scenario.filter((item: any) => item.cmd === 'attack' && item.from === 'player')
+  const attackList = props.resultJson.result.scenario.filter((item: any) => item.cmd === 'attack' && item.from === 'player')
   if (attackList.length === 0)
     return { hit: 0, damage: 0 }
   let damageList: any[] = []
@@ -250,7 +288,7 @@ const memberList = computed(() => {
       <BossDashboard :boss-info="bossInfo" />
       <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
     </div>
-    <RaidRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
+    <DamageRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
     <el-descriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
       <el-descriptions-item label="平A结果">
         {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage}` }}

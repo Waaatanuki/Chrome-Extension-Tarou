@@ -63,6 +63,8 @@ declare module 'requestData'{
     condition: Condition
     damage: { value: number }[][]
     total: { split: string[] }[]
+    list: { value?: number; damage?: { value: number }[] }[]
+    is_damage_sync_effect: boolean | string
   }
 
   export interface Condition {

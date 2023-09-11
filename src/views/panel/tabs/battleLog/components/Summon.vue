@@ -3,30 +3,43 @@ import type { SummonInfo } from '../types'
 
 defineProps<{ summonInfo: SummonInfo }>()
 
-function getSummonImg(id: string) {
-  return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/raid_normal/${id || 'empty'}.jpg`
+function getImg(type: string, id: string, size = 'm') {
+  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/${size}/${id}.jpg`
 }
 </script>
 
 <template>
-  <div flex>
-    <div v-for="summon, idx in summonInfo.summon" :key="idx" m-1>
-      <div relative>
-        <div v-if="Number(summon.recast) !== 0" class="absolute w-full h-full bg-black/40" />
-        <img block :src="getSummonImg(summon.image_id)">
+  <el-card v-if="summonInfo">
+    <div h-210px fc>
+      <div relative h-full w-100px bg-slate-300>
+        <img w-full :src="getImg('summon', summonInfo.summon[0].image_id, 'ls')">
+        <div v-if="Number(summonInfo.summon[0].recast) !== 0" absolute h-full w-full fc>
+          <div absolute h-full w-full fc bg-slate-900 opacity-50 />
+          <div z-99 h-50px w-50px fc border-5 border-red-700 rounded-full text-2xl>
+            {{ Number(summonInfo.summon[0].recast) > 100 ? 'X' : summonInfo.summon[0].recast }}
+          </div>
+        </div>
       </div>
-      <div v-if="Number(summon.recast) !== 0" text-center>
-        <span>还差{{ summon.recast }}回合</span>
+      <div w-250px fc flex-wrap gap-5px>
+        <div v-for="idx in 6" :key="idx" relative h-65px w-115px fc bg-slate-300>
+          <img v-if="summonInfo.summon[idx]?.image_id" w-full :src="getImg('summon', summonInfo.summon[idx]?.image_id)">
+          <div v-if="summonInfo.summon[idx]?.image_id && Number(summonInfo.summon[idx]?.recast) !== 0" absolute h-full w-full fc>
+            <div absolute h-full w-full fc bg-slate-900 opacity-50 />
+            <div z-999 h-50px w-50px fc border-5 border-red-700 rounded-full text-2xl>
+              {{ Number(summonInfo.summon[idx]?.recast) > 100 ? 'X' : summonInfo.summon[idx]?.recast }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="summonInfo.supporter.id" h-full w-100px bg-slate-300>
+        <img h-full w-full :src="getImg('summon', summonInfo.supporter.image_id, 'ls')">
+        <div v-if="Number(summonInfo.supporter.recast) !== 0" absolute h-full w-full fc>
+          <div absolute h-full w-full fc bg-slate-900 opacity-50 />
+          <div z-99 h-50px w-50px fc border-5 border-red-700 rounded-full text-2xl>
+            {{ Number(summonInfo.supporter.recast) > 100 ? 'X' : summonInfo.supporter.recast }}
+          </div>
+        </div>
       </div>
     </div>
-    <div v-if="summonInfo.supporter.id" m-1>
-      <div relative>
-        <div v-if="Number(summonInfo.supporter.recast) !== 0" class="absolute w-full h-full bg-black/40" />
-        <img block :src="getSummonImg(summonInfo.supporter.image_id)">
-      </div>
-      <div v-if="Number(summonInfo.supporter.recast) !== 0" text-center>
-        <span>还差{{ summonInfo.supporter.recast }}回合</span>
-      </div>
-    </div>
-  </div>
+  </el-card>
 </template>

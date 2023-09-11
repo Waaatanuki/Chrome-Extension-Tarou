@@ -10,9 +10,7 @@ import type { BattleResult, NpcAbility, NpcInfo } from '~/logic/types'
 
 const userId = ref<string>('')
 const battleStartJson = ref()
-const normalAttackResultJson = ref()
-const summonResultJson = ref()
-const abilityResultJson = ref()
+const resultJson = ref()
 const bossConditionJson = ref()
 
 const lobbyMemberList = ref()
@@ -249,21 +247,21 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   // BattleLog 记录单次攻击日志
   if (request.request.url.includes('rest/raid/normal_attack_result.json') || request.request.url.includes('rest/multiraid/normal_attack_result.json')) {
     request.getContent((content: string) => {
-      normalAttackResultJson.value = JSON.parse(content)
+      resultJson.value = { type: 'normal', result: JSON.parse(content) }
     })
   }
 
   // BattleLog 记录使用召唤日志
   if (request.request.url.includes('rest/raid/summon_result.json') || request.request.url.includes('rest/multiraid/summon_result.json')) {
     request.getContent((content: string) => {
-      summonResultJson.value = JSON.parse(content)
+      resultJson.value = { type: 'summon', result: JSON.parse(content) }
     })
   }
 
   // BattleLog 记录使用技能日志
   if (request.request.url.includes('rest/raid/ability_result.json') || request.request.url.includes('rest/multiraid/ability_result.json')) {
     request.getContent((content: string) => {
-      abilityResultJson.value = JSON.parse(content)
+      resultJson.value = { type: 'ability', result: JSON.parse(content) }
     })
   }
 
@@ -357,9 +355,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       <BattleLog
         :user-id="userId"
         :battle-start-json="battleStartJson"
-        :normal-attack-result-json="normalAttackResultJson"
-        :summon-result-json="summonResultJson"
-        :ability-result-json="abilityResultJson"
+        :result-json="resultJson"
         :boss-condition-json="bossConditionJson"
         :lobby-member-list="lobbyMemberList"
         :battle-result-list="battleResultList"
