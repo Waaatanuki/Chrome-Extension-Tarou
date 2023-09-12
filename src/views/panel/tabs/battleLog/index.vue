@@ -283,14 +283,14 @@ const memberList = computed(() => {
 </script>
 
 <template>
-  <div v-if="bossInfo && buffInfo">
+  <div v-if="bossInfo && buffInfo && summonInfo" fc flex-col gap-10px>
     <div fc gap-2 p-2>
       <BossDashboard :boss-info="bossInfo" />
       <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
+      <Summon :summon-info="summonInfo" />
     </div>
     <div flex items-start justify-start gap-2 p-2 flex-wrap>
       <DamageRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
-      <Summon v-if="summonInfo" :summon-info="summonInfo" />
     </div>
     <el-descriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
       <el-descriptions-item label="平A结果">
