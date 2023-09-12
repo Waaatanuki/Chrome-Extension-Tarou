@@ -6,6 +6,11 @@ declare module 'myStorage' {
     turn: number
     timestamp: number
     player: Player[]
+    actionQueue: {
+      turn: number
+      guard_status: { is_guard_status: number }[]
+      acitonList: Action[]
+    }[]
   }
 
   export interface Player {
@@ -26,6 +31,11 @@ declare module 'myStorage' {
     comment: string
     value: number
   }
+  export interface Action {
+    type: string
+    icon?: string
+    id?: string
+  }
 }
 
 declare module 'requestData'{
@@ -37,6 +47,7 @@ declare module 'requestData'{
       summon: { recast: (null | number | string)[] }
       timer: number
       turn: number
+      is_guard_status: { is_guard_status: number }[]
     }
   }
   export interface Ability {
@@ -45,6 +56,12 @@ declare module 'requestData'{
       pos: number
       alive: number
       src: string
+      list: {
+        [key: string]: {
+          class: string
+          'ability-id': string
+        }[]
+      }
     }
   }
 
@@ -82,5 +99,11 @@ declare module 'requestData'{
     remain?: number
     personal_buff_user_id?: boolean | string
     personal_debuff_user_id?: boolean | string
+  }
+
+  export interface ResultJsonPayload {
+    ability_id: string
+    summon_id: string
+    character_num?: string
   }
 }

@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { Player, RaidRecord } from 'myStorage'
-import type { AttackResultJson, Condition, Scenario } from 'requestData'
+import type { Action, Player, RaidRecord } from 'myStorage'
+import type { AttackResultJson, Condition, ResultJsonPayload, Scenario } from 'requestData'
 import BattleResultTable from './components/BattleResult.vue'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
 import DamageRecord from './components/DamageRecord.vue'
+import ActionList from './components/ActionList.vue'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from './types'
 import { raidRecord } from '~/logic'
 import type { BattleResult, BattleStartJson, BossConditionJson } from '~/logic/types'
@@ -15,6 +16,7 @@ const props = defineProps<{
   userId: string
   battleStartJson: BattleStartJson
   resultJson: { type: string; result: AttackResultJson }
+  resultJsonPayload: ResultJsonPayload
   bossConditionJson: BossConditionJson
   lobbyMemberList: Member[]
   battleResultList: BattleResult[]
@@ -108,6 +110,7 @@ function recordRaidInfo(data: BattleStartJson) {
       turn: data.turn,
       timestamp: Date.now(),
       player,
+      actionQueue: [],
     })
 
     if (raidRecord.value.length > 10)
@@ -207,6 +210,75 @@ function getLoopDamageCount(action: Scenario, raid: RaidRecord, num: number, typ
   }
 }
 
+function handleActionQueue(type: string, data: AttackResultJson) {
+  const currentRaid = raidRecord.value.find(raid => raid.raid_id === raidId.value)
+  if (!currentRaid)
+    return
+
+  const currentTurn = data.status.turn
+
+  if (currentTurn !== currentRaid.actionQueue.at(-1)?.turn) {
+    currentRaid.actionQueue.push({
+      turn: currentTurn,
+      acitonList: [],
+      guard_status: [],
+    })
+  }
+
+  if (type === 'ability') {
+    const prefix = 'ico-ability'
+    const currentAbilityList = Object.values(data.status.ability)
+      .reduce<Action[]>((pre, cur) =>
+        pre.concat(Object.values(cur.list).reduce<Action[]>((p, c) => p.concat([{
+          type: 'ability',
+          icon: c[0].class.split(' ')[0].substring(prefix.length),
+          id: c[0]['ability-id'],
+        }]), []))
+      , [])
+
+    const hit = currentAbilityList.find(ability => ability.id === props.resultJsonPayload.ability_id)
+    if (!hit)
+      return
+
+    currentRaid.actionQueue.at(-1)?.acitonList.push({ ...hit })
+  }
+
+  if (type === 'summon') {
+    const summon_id = props.resultJsonPayload.summon_id
+
+    if (summon_id === 'supporter') {
+      currentRaid.actionQueue.at(-1)?.acitonList.push({
+        type: 'summon',
+        id: summonInfo.value?.supporter.id,
+        icon: summonInfo.value?.supporter.image_id,
+      })
+    }
+    else {
+      currentRaid.actionQueue.at(-1)?.acitonList.push({
+        type: 'summon',
+        id: summonInfo.value?.summon[Number(summon_id) - 1].id,
+        icon: summonInfo.value?.summon[Number(summon_id) - 1].image_id,
+      })
+    }
+  }
+
+  if (type === 'temporary') {
+    currentRaid.actionQueue.at(-1)?.acitonList.push({
+      type: 'temporary',
+      icon: props.resultJsonPayload.character_num ? '1' : '2',
+      id: props.resultJsonPayload.character_num ? currentRaid.player[Number(props.resultJsonPayload.character_num)].pid : '',
+    })
+  }
+
+  if (type === 'recovery')
+    currentRaid.actionQueue.at(-1)?.acitonList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
+
+  if (type === 'normal') {
+    currentRaid.actionQueue.at(-2)!.guard_status = [...data.status.is_guard_status]
+    currentRaid.actionQueue.at(-2)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
+  }
+}
+
 function handleAttackRusult(type: string, data: AttackResultJson) {
   if (!type)
     return
@@ -240,6 +312,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   const playerBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0).at(-1)
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
   handleDamageStatistic(type, data)
+  handleActionQueue(type, data)
 }
 
 const normalAttackInfo = computed(() => {
@@ -283,7 +356,7 @@ const memberList = computed(() => {
 </script>
 
 <template>
-  <div v-if="bossInfo && buffInfo && summonInfo" fc flex-col gap-10px>
+  <div v-if="bossInfo && buffInfo && summonInfo" fc flex-col gap-10px w-full>
     <div fc gap-2 p-2>
       <BossDashboard :boss-info="bossInfo" />
       <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
@@ -291,6 +364,7 @@ const memberList = computed(() => {
     </div>
     <div flex items-start justify-start gap-2 p-2 flex-wrap>
       <DamageRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
+      <ActionList :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
     </div>
     <el-descriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
       <el-descriptions-item label="平A结果">

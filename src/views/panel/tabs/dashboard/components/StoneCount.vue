@@ -24,13 +24,13 @@ function reset() {
     <div fc flex-col>
       <div fc>
         <div class="w-20 flex flex-col p-3">
-          <img :src="getImgSrc('20010', 'ticket')">
+          <img :src="getLocalImg('20010', 'ticket')">
           <span text-center text-sm>
             {{ `${legendticket10}枚` }}
           </span>
         </div>
         <div class="w-20 flex flex-col p-3">
-          <img :src="getImgSrc('20011', 'ticket')">
+          <img :src="getLocalImg('20011', 'ticket')">
           <span text-center text-sm>
             {{ `${legendticket}枚` }}
           </span>
@@ -38,7 +38,7 @@ function reset() {
       </div>
       <div fc>
         <div class="w-20 flex flex-col p-3">
-          <img :src="getImgSrc('gem')">
+          <img :src="getLocalImg('gem')">
           <span text-center text-sm>
             {{ `${stone}個` }}
           </span>

@@ -90,12 +90,12 @@ function exportJSONFile(itemList: any) {
             />
           </template>
           <template #default="{ row }">
-            <img w-full m-auto :src="getImgSrc(row.quest_id, 'raid')">
+            <img w-full m-auto :src="getLocalImg(row.quest_id, 'raid')">
           </template>
         </el-table-column>
         <el-table-column prop="blueChest" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getImgSrc(column.property)">
+            <img w-30px m-auto :src="getLocalImg(column.property)">
           </template>
           <template #default="{ row }">
             <el-tooltip effect="dark" placement="top">
@@ -109,7 +109,7 @@ function exportJSONFile(itemList: any) {
         </el-table-column>
         <el-table-column prop="goldBrick" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getImgSrc(column.property, 'item')">
+            <img w-30px m-auto :src="getLocalImg(column.property, 'item')">
           </template>
           <template #default="{ row }">
             <el-tooltip effect="dark" placement="top">
@@ -124,17 +124,17 @@ function exportJSONFile(itemList: any) {
         </el-table-column>
         <el-table-column prop="ring3" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getImgSrc(column.property, 'item')">
+            <img w-30px m-auto :src="getLocalImg(column.property, 'item')">
           </template>
         </el-table-column>
         <el-table-column prop="ring2" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getImgSrc(column.property, 'item')">
+            <img w-30px m-auto :src="getLocalImg(column.property, 'item')">
           </template>
         </el-table-column>
         <el-table-column prop="ring1" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getImgSrc(column.property, 'item')">
+            <img w-30px m-auto :src="getLocalImg(column.property, 'item')">
           </template>
         </el-table-column>
       </el-table>

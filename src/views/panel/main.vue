@@ -11,6 +11,7 @@ import type { BattleResult, NpcAbility, NpcInfo } from '~/logic/types'
 const userId = ref<string>('')
 const battleStartJson = ref()
 const resultJson = ref()
+const resultJsonPayload = ref()
 const bossConditionJson = ref()
 
 const lobbyMemberList = ref()
@@ -246,6 +247,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 
   // BattleLog 记录单次攻击日志
   if (request.request.url.includes('rest/raid/normal_attack_result.json') || request.request.url.includes('rest/multiraid/normal_attack_result.json')) {
+    resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
     request.getContent((content: string) => {
       resultJson.value = { type: 'normal', result: JSON.parse(content) }
     })
@@ -253,6 +255,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 
   // BattleLog 记录使用召唤日志
   if (request.request.url.includes('rest/raid/summon_result.json') || request.request.url.includes('rest/multiraid/summon_result.json')) {
+    resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
     request.getContent((content: string) => {
       resultJson.value = { type: 'summon', result: JSON.parse(content) }
     })
@@ -260,8 +263,25 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 
   // BattleLog 记录使用技能日志
   if (request.request.url.includes('rest/raid/ability_result.json') || request.request.url.includes('rest/multiraid/ability_result.json')) {
+    resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
     request.getContent((content: string) => {
       resultJson.value = { type: 'ability', result: JSON.parse(content) }
+    })
+  }
+
+  // BattleLog 记录使用蓝绿药日志
+  if (request.request.url.includes('rest/raid/temporary_item_result.json')) {
+    resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
+    request.getContent((content: string) => {
+      resultJson.value = { type: 'temporary', result: JSON.parse(content) }
+    })
+  }
+
+  // BattleLog 记录使用大红日志
+  if (request.request.url.includes('rest/raid/user_recovery.json')) {
+    resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
+    request.getContent((content: string) => {
+      resultJson.value = { type: 'recovery', result: JSON.parse(content) }
     })
   }
 
@@ -356,6 +376,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         :user-id="userId"
         :battle-start-json="battleStartJson"
         :result-json="resultJson"
+        :result-json-payload="resultJsonPayload"
         :boss-condition-json="bossConditionJson"
         :lobby-member-list="lobbyMemberList"
         :battle-result-list="battleResultList"
