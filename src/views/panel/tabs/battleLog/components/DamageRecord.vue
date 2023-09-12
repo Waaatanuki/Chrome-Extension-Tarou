@@ -34,8 +34,8 @@ function getImg(pid: string, index: number) {
 </script>
 
 <template>
-  <el-card w-400px>
-    <div w-full fc flex-col gap-10px pb-10px>
+  <el-card w-400px shrink-0>
+    <div w-full fc flex-col gap-10px pb-10px h-520px>
       <div text-xl font-bold>
         伤害统计
       </div>

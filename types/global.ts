@@ -8,7 +8,7 @@ declare module 'myStorage' {
     player: Player[]
     actionQueue: {
       turn: number
-      guard_status: { is_guard_status: number }[]
+      guard_status: { is_guard_status: number; num: number }[]
       acitonList: Action[]
     }[]
   }
@@ -105,5 +105,15 @@ declare module 'requestData'{
     ability_id: string
     summon_id: string
     character_num?: string
+  }
+
+  export interface GuardSettingJson {
+    raid_id: number
+    guard_status: {
+      [key: string]: {
+        target_num: number
+        is_guard_status: number
+      }
+    }
   }
 }

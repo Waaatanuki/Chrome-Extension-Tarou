@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Action, Player, RaidRecord } from 'myStorage'
-import type { AttackResultJson, Condition, ResultJsonPayload, Scenario } from 'requestData'
+import type { AttackResultJson, Condition, GuardSettingJson, ResultJsonPayload, Scenario } from 'requestData'
 import BattleResultTable from './components/BattleResult.vue'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
@@ -20,6 +20,7 @@ const props = defineProps<{
   bossConditionJson: BossConditionJson
   lobbyMemberList: Member[]
   battleResultList: BattleResult[]
+  guardSettingJson: GuardSettingJson
 }>()
 
 const bossInfo = ref<BossInfo>()
@@ -58,6 +59,17 @@ watch(() => props.battleStartJson, (data) => {
 
 watch(() => props.resultJson, (data) => {
   handleAttackRusult(data.type, data.result)
+})
+
+watch(() => props.guardSettingJson, (data) => {
+  const raid_id = data.raid_id
+  const currentRaid = raidRecord.value.find(raid => raid.raid_id === raid_id)
+
+  Object.values(data.guard_status).forEach((item) => {
+    const hit = currentRaid?.actionQueue.at(-1)?.guard_status.find(i => i.num === item.target_num)
+    if (hit)
+      hit.is_guard_status = item.is_guard_status
+  })
 })
 
 function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
@@ -215,6 +227,8 @@ function handleActionQueue(type: string, data: AttackResultJson) {
   if (!currentRaid)
     return
 
+  if (data.scenario[0].cmd === 'die')
+    return
   const currentTurn = data.status.turn
 
   if (currentTurn !== currentRaid.actionQueue.at(-1)?.turn) {
@@ -224,6 +238,17 @@ function handleActionQueue(type: string, data: AttackResultJson) {
       guard_status: [],
     })
   }
+
+  const guard_status = Object.values(data.status.ability)
+    .reduce< { is_guard_status: number; num: number }[]>((pre, cur) => {
+      pre.push({
+        num: cur.pos,
+        is_guard_status: 0,
+      })
+      return pre
+    }, [])
+
+  currentRaid.actionQueue.at(-1)!.guard_status = guard_status
 
   if (type === 'ability') {
     const prefix = 'ico-ability'
@@ -274,8 +299,8 @@ function handleActionQueue(type: string, data: AttackResultJson) {
     currentRaid.actionQueue.at(-1)?.acitonList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
 
   if (type === 'normal') {
-    currentRaid.actionQueue.at(-2)!.guard_status = [...data.status.is_guard_status]
-    currentRaid.actionQueue.at(-2)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
+    const index = data.scenario.find(action => action.cmd === 'die' && action.to === 'boss') ? -1 : -2
+    currentRaid.actionQueue.at(index)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
   }
 }
 
@@ -362,7 +387,7 @@ const memberList = computed(() => {
       <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
       <Summon :summon-info="summonInfo" />
     </div>
-    <div flex items-start justify-start gap-2 p-2 flex-wrap>
+    <div flex items-start justify-start gap-2 p-2>
       <DamageRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
       <ActionList :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
     </div>

@@ -30,7 +30,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         if (!res?.questName)
           return
         console.log('memo===>', { battle_id, quest_name: res.questName, timestamp: Date.now() })
-        const hit = targetRaid.find(r => r.tweet_name_en === res.questName || r.tweet_name_jp === res.questName)
+        const hit = targetRaid.find(r => r.tweet_name_en.includes(res.questName) || r.tweet_name_jp.includes(res.questName))
         if (!hit)
           return
 

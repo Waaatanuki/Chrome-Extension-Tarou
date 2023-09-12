@@ -12,6 +12,7 @@ const userId = ref<string>('')
 const battleStartJson = ref()
 const resultJson = ref()
 const resultJsonPayload = ref()
+const guardSettingJson = ref()
 const bossConditionJson = ref()
 
 const lobbyMemberList = ref()
@@ -285,6 +286,16 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     })
   }
 
+  // BattleLog 记录切换guard日志
+  if (request.request.url.includes('rest/raid/guard_setting.json') || request.request.url.includes('rest/multiraid/guard_setting.json')) {
+    request.getContent((content: string) => {
+      guardSettingJson.value = {
+        raid_id: JSON.parse(request.request.postData!.text!).raid_id,
+        guard_status: JSON.parse(content).guard_status,
+      }
+    })
+  }
+
   // BattleLog 记录boss buff信息
   if (request.request.url.includes('rest/raid/condition')) {
     request.getContent((content: string) => {
@@ -380,6 +391,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         :boss-condition-json="bossConditionJson"
         :lobby-member-list="lobbyMemberList"
         :battle-result-list="battleResultList"
+        :guard-setting-json="guardSettingJson"
       />
     </el-tab-pane>
     <el-tab-pane label="队伍信息">

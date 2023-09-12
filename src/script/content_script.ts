@@ -9,6 +9,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.todo === 'getRaidName') {
     const start = setInterval(() => {
       if (!raidUrlREG.test(document.URL)) {
+        console.log('战斗开始检测中断', document.URL)
         clearInterval(start)
         sendResponse({})
       }
@@ -25,6 +26,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.todo === 'getBattleResult') {
     const start = setInterval(() => {
       if (!resultUrlREG.test(document.URL)) {
+        console.log('战斗结算检测中断', document.URL)
         clearInterval(start)
         sendResponse({})
       }

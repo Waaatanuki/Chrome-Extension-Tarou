@@ -57,7 +57,7 @@ function timeToSeconds(timeString: string) {
 </script>
 
 <template>
-  <div v-if="buffInfo" w-full p-10px>
+  <div v-if="buffInfo" min-w-450px p-10px>
     <div>
       <div flex justify-end>
         <div rounded-t-5px bg-rose-500 p-5px text-base text-white>
