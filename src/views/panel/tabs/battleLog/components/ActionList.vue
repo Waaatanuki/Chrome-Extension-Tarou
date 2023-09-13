@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Action, RaidRecord } from 'myStorage'
+import type { Action, BattleRecord } from 'myStorage'
 
-defineProps<{ raidRecord: RaidRecord }>()
+defineProps<{ battleRecord: BattleRecord }>()
 
 function getImg(action: Action) {
   if (action.type === 'ability')
@@ -21,12 +21,12 @@ function getNpcImg(action: Action) {
 </script>
 
 <template>
-  <el-card>
+  <el-card min-w-400px>
     <el-scrollbar height="520px">
       <el-descriptions :column="1" border>
-        <el-descriptions-item v-for="list, idx in raidRecord.actionQueue" :key="idx" :label="`第${idx + 1}回合`" label-class-name="action-list-label">
+        <el-descriptions-item v-for="list, idx in battleRecord.actionQueue" :key="idx" :label="`第${idx + 1}回合`" label-class-name="action-list-label">
           <template #label>
-            <div>
+            <div relative>
               <div mb-5px>
                 {{ `第${idx + 1}回合` }}
               </div>
@@ -34,6 +34,11 @@ function getNpcImg(action: Action) {
                 <el-check-tag v-for="index in 4" :key="index" label="G" :checked="!!list.guard_status[index - 1]?.is_guard_status">
                   G
                 </el-check-tag>
+              </div>
+              <div absolute left-0 top-0>
+                <el-tag :type="list.special_skill_flag ? 'danger' : 'success'" effect="dark" size="small">
+                  {{ list.special_skill_flag ? 'OFF' : 'ON' }}
+                </el-tag>
               </div>
             </div>
           </template>

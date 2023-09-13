@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SummonInfo } from '../types'
+import type { SummonInfo } from 'battleLog'
 
 defineProps<{ summonInfo: SummonInfo }>()
 

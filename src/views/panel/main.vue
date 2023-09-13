@@ -1,18 +1,21 @@
 <script setup lang="ts">
+import type { BattleResult, NpcAbility, NpcInfo } from 'requestData'
+import type { Player } from 'myStorage'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import Dashborad from './tabs/dashboard/index.vue'
 import EvokerPage from './tabs/evoker/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
-import { evokerInfo, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
-import type { BattleResult, NpcAbility, NpcInfo } from '~/logic/types'
+import BattleRecord from './tabs/battleRecord/index.vue'
+import { battleRecord, evokerInfo, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
 
 const userId = ref<string>('')
 const battleStartJson = ref()
 const resultJson = ref()
 const resultJsonPayload = ref()
 const guardSettingJson = ref()
+const specialSkillSetting = ref()
 const bossConditionJson = ref()
 
 const lobbyMemberList = ref()
@@ -296,6 +299,10 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     })
   }
 
+  // BattleLog 记录切换奥义温存日志
+  if (request.request.url.includes('rest/raid/special_skill_setting') || request.request.url.includes('rest/multiraid/special_skill_setting'))
+    specialSkillSetting.value = JSON.parse(request.request.postData!.text!)
+
   // BattleLog 记录boss buff信息
   if (request.request.url.includes('rest/raid/condition')) {
     request.getContent((content: string) => {
@@ -307,15 +314,17 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   if (request.request.url.includes('resultmulti/content/detail')) {
     const regex = /\/detail\/(\d+)\?/
     const match = regex.exec(request.request.url) as RegExpExecArray
-    const battleId = match[1]
-    if (!battleResultList.value.some(result => result.battleId === battleId)) {
+    const raid_id = Number(match[1])
+    const hit = battleRecord.value.find(record => record.raid_id === raid_id)
+    if (!hit || !hit.hasResult) {
       request.getContent((content: string) => {
         const resp = JSON.parse(content)
         const htmlString = decodeURIComponent(resp.data)
 
         const $ = load(htmlString)
         const raidName = $('.txt-enemy-name').text()
-        const raidTime = $('.txt-defeat-value').first().text()
+        const endTimesstr = $('.txt-defeat-value').first().text()
+        const endTimestamp = dayjs(endTimesstr, 'MM/DD HH:mm').year(dayjs().year()).valueOf()
         const gainList: string[] = []
 
         $('.txt-gain-value').each((i, elem) => {
@@ -344,8 +353,48 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
           })
         })
 
-        battleResultList.value.push({ battleId, raidTime, raidName, point, turn, time, speed, treasureList })
-        battleResultList.value.sort((a, b) => Number(b.battleId) - Number(a.battleId))
+        const memberList: any[] = resp.option.member_list
+        const player = memberList.reduce<Player[]>((pre, cur) => {
+          pre.push({
+            pid: cur.image_id.split('_')[0],
+            image_id: `${cur.image_id.split('_')[0]}_01`,
+            damage: {
+              total: { comment: '总计', value: Number(cur.damage) },
+              attack: { comment: '通常攻击&反击', value: Number(cur.normal_damage) },
+              ability: { comment: '技能伤害', value: Number(cur.ability_damage) },
+              special: { comment: '奥义伤害', value: Number(cur.special_damage) },
+              other: { comment: '其他', value: Number(cur.other_damage) },
+            },
+          })
+          return pre
+        }, [])
+        if (!hit) {
+          battleRecord.value.push({
+            raid_id,
+            raid_name: raidName,
+            turn: Number(turn),
+            endTimestamp,
+            player,
+            actionQueue: [],
+            hasResult: true,
+            point,
+            duration: time,
+            speed,
+            treasureList,
+          })
+          battleRecord.value.sort((a, b) => Number(b.raid_id) - Number(a.raid_id))
+          if (battleRecord.value.length > 20)
+            battleRecord.value.pop()
+        }
+        else {
+          hit.endTimestamp = endTimestamp
+          hit.player = player
+          hit.hasResult = true
+          hit.point = point
+          hit.duration = point
+          hit.speed = speed
+          hit.treasureList = treasureList
+        }
       })
     }
   }
@@ -382,6 +431,9 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     <el-tab-pane label="贤者素材">
       <EvokerPage />
     </el-tab-pane>
+    <el-tab-pane label="队伍信息">
+      <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
+    </el-tab-pane>
     <el-tab-pane label="战斗日志">
       <BattleLog
         :user-id="userId"
@@ -392,10 +444,11 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         :lobby-member-list="lobbyMemberList"
         :battle-result-list="battleResultList"
         :guard-setting-json="guardSettingJson"
+        :special-skill-setting="specialSkillSetting"
       />
     </el-tab-pane>
-    <el-tab-pane label="队伍信息">
-      <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
+    <el-tab-pane label="战斗历史">
+      <BattleRecord />
     </el-tab-pane>
   </el-tabs>
 </template>

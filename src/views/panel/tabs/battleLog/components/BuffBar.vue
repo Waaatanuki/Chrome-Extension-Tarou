@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { BuffInfo } from '../types'
-import type { BossConditionJson, Buff } from '~/logic/types'
+import type { BuffInfo } from 'battleLog'
+import type { BossConditionJson, Buff } from 'requestData'
 import { specBossBuff, specPlayerBuff } from '~/logic'
 
 const props = defineProps<{ buffInfo: BuffInfo; bossConditionJson: BossConditionJson }>()

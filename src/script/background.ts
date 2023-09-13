@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { load } from 'cheerio'
-import type { BattleMemo, GoldBrickData } from '~/logic/types'
+import type { BattleMemo, GoldBrickData } from 'myStorage'
 import { battleMemo, eternitySandData, goldBrickData, goldBrickTableData } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'

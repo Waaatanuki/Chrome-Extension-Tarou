@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
-import type { RaidRecord } from 'myStorage'
-import type { BattleMemo, MaterialInfo, NpcAbility, NpcInfo, RecoveryItem } from './types'
+import type { BattleMemo, BattleRecord, MaterialInfo, RecoveryItem } from 'myStorage'
+import type { NpcAbility, NpcInfo } from 'requestData'
 import { useStorageLocal } from '~/composables/useStorageLocal'
 import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
 import { defaultEvokerInfo } from '~/constants/evoker'
@@ -19,7 +19,7 @@ export const materialInfo = useStorageLocal<MaterialInfo[]>('materialInfo', [])
 export const evokerInfo = useStorageLocal('evokerInfo', defaultEvokerInfo)
 
 // BattleLog
-export const raidRecord = useStorageLocal<RaidRecord[]>('raidRecord', [])
+export const battleRecord = useStorageLocal<BattleRecord[]>('battleRecord', [])
 export const specBossBuff = useStorageLocal<string[]>('specBossBuff', [])
 export const specPlayerBuff = useStorageLocal<string[]>('specPlayerBuff', [])
 

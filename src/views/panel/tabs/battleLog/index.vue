@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import type { Action, Player, RaidRecord } from 'myStorage'
-import type { AttackResultJson, Condition, GuardSettingJson, ResultJsonPayload, Scenario } from 'requestData'
-import BattleResultTable from './components/BattleResult.vue'
+import type { Action, BattleRecord, Player } from 'myStorage'
+import type { AttackResultJson, BattleStartJson, BossConditionJson, Condition, GuardSettingJson, ResultJsonPayload, Scenario, SpecialSkillSetting } from 'requestData'
+import type { BossInfo, BuffInfo, Member, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
 import DamageRecord from './components/DamageRecord.vue'
 import ActionList from './components/ActionList.vue'
-import type { BossInfo, BuffInfo, Member, SummonInfo } from './types'
-import { raidRecord } from '~/logic'
-import type { BattleResult, BattleStartJson, BossConditionJson } from '~/logic/types'
+import { battleRecord } from '~/logic'
 
 const props = defineProps<{
   userId: string
@@ -19,8 +17,8 @@ const props = defineProps<{
   resultJsonPayload: ResultJsonPayload
   bossConditionJson: BossConditionJson
   lobbyMemberList: Member[]
-  battleResultList: BattleResult[]
   guardSettingJson: GuardSettingJson
+  specialSkillSetting: SpecialSkillSetting
 }>()
 
 const bossInfo = ref<BossInfo>()
@@ -63,13 +61,23 @@ watch(() => props.resultJson, (data) => {
 
 watch(() => props.guardSettingJson, (data) => {
   const raid_id = data.raid_id
-  const currentRaid = raidRecord.value.find(raid => raid.raid_id === raid_id)
+  const currentRaid = battleRecord.value.find(battle => battle.raid_id === raid_id)
 
   Object.values(data.guard_status).forEach((item) => {
     const hit = currentRaid?.actionQueue.at(-1)?.guard_status.find(i => i.num === item.target_num)
     if (hit)
       hit.is_guard_status = item.is_guard_status
   })
+})
+
+watch(() => props.specialSkillSetting, (data) => {
+  const raid_id = data.raid_id
+  const currentRaid = battleRecord.value.find(battle => battle.raid_id === raid_id)
+
+  if (currentRaid) {
+    currentRaid.special_skill_flag = data.value
+    currentRaid.actionQueue.at(-1)!.special_skill_flag = data.value
+  }
 })
 
 function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
@@ -97,13 +105,14 @@ function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condit
 }
 
 function recordRaidInfo(data: BattleStartJson) {
-  const hit = raidRecord.value.find(record => record.raid_id === raidId.value)
+  const hit = battleRecord.value.find(record => record.raid_id === raidId.value)
   if (!hit) {
     const boss = data.boss.param[0]
 
     const player = data.player.param.reduce<Player[]>((pre, cur) => {
       pre.push({
-        pid: cur.pid,
+        pid: cur.pid.split('_')[0],
+        image_id: `${cur.pid.split('_')[0]}_01`,
         damage: {
           total: { comment: '总计', value: 0 },
           attack: { comment: '通常攻击&反击', value: 0 },
@@ -115,30 +124,47 @@ function recordRaidInfo(data: BattleStartJson) {
       return pre
     }, [])
 
-    raidRecord.value.unshift({
-      raid_id: raidId.value!,
-      imgId: boss.cjs.split('_').at(-1)!,
-      name: boss.monster,
+    const guard_status = Object.values(data.ability)
+      .reduce< { is_guard_status: number; num: number }[]>((pre, cur) => {
+        pre.push({
+          num: cur.pos,
+          is_guard_status: 0,
+        })
+        return pre
+      }, [])
+
+    const actionQueue = [{
       turn: data.turn,
-      timestamp: Date.now(),
+      special_skill_flag: Number(data.special_skill_flag),
+      acitonList: [],
+      guard_status,
+    }]
+
+    battleRecord.value.unshift({
+      raid_id: raidId.value!,
+      raid_name: boss.monster,
+      imgId: boss.cjs.split('_').at(-1)!,
+      turn: data.turn,
+      startTimestamp: Date.now(),
       player,
-      actionQueue: [],
+      special_skill_flag: Number(data.special_skill_flag),
+      actionQueue,
     })
 
-    if (raidRecord.value.length > 10)
-      raidRecord.value.pop()
+    if (battleRecord.value.length > 20)
+      battleRecord.value.pop()
   }
 }
 
 function handleDamageStatistic(resultType: string, data: AttackResultJson) {
-  const currentRaid = raidRecord.value.find(raid => raid.raid_id === raidId.value)
+  const currentRaid = battleRecord.value.find(record => record.raid_id === raidId.value)
   if (!currentRaid)
     return
 
   const playerPosInfo: { pid: string; pos: number }[] = []
   Object.values(data.status.ability).forEach((npc) => {
     playerPosInfo.push({
-      pid: npc.src.split('/').at(-1)!.split('.')[0],
+      pid: npc.src.split('/').at(-1)!.split('.')[0].split('_')[0],
       pos: npc.pos,
     })
   })
@@ -196,13 +222,15 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
       }, 0)
     }
   })
-
+  let point = 0
   currentRaid.player.forEach((player) => {
     player.damage.total.value = player.damage.ability.value + player.damage.attack.value + player.damage.other.value + player.damage.special.value
+    point += player.damage.total.value
   })
+  currentRaid.point = point.toLocaleString()
 }
 
-function getDamageCount(action: Scenario, raid: RaidRecord, num: number, type: 'ability' | 'other' = 'ability') {
+function getDamageCount(action: Scenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
   const hitPlayer = raid.player[num]
   if (hitPlayer) {
     hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
@@ -212,7 +240,7 @@ function getDamageCount(action: Scenario, raid: RaidRecord, num: number, type: '
   }
 }
 
-function getLoopDamageCount(action: Scenario, raid: RaidRecord, num: number, type: 'ability' | 'other' = 'ability') {
+function getLoopDamageCount(action: Scenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
   const hitPlayer = raid.player[num]
   if (hitPlayer) {
     hitPlayer.damage[type].value += action.total.reduce((pre, cur) => {
@@ -223,7 +251,7 @@ function getLoopDamageCount(action: Scenario, raid: RaidRecord, num: number, typ
 }
 
 function handleActionQueue(type: string, data: AttackResultJson) {
-  const currentRaid = raidRecord.value.find(raid => raid.raid_id === raidId.value)
+  const currentRaid = battleRecord.value.find(record => record.raid_id === raidId.value)
   if (!currentRaid)
     return
 
@@ -232,23 +260,22 @@ function handleActionQueue(type: string, data: AttackResultJson) {
   const currentTurn = data.status.turn
 
   if (currentTurn !== currentRaid.actionQueue.at(-1)?.turn) {
+    const guard_status = Object.values(data.status.ability)
+      .reduce< { is_guard_status: number; num: number }[]>((pre, cur) => {
+        pre.push({
+          num: cur.pos,
+          is_guard_status: 0,
+        })
+        return pre
+      }, [])
+
     currentRaid.actionQueue.push({
       turn: currentTurn,
+      special_skill_flag: currentRaid.special_skill_flag!,
       acitonList: [],
-      guard_status: [],
+      guard_status,
     })
   }
-
-  const guard_status = Object.values(data.status.ability)
-    .reduce< { is_guard_status: number; num: number }[]>((pre, cur) => {
-      pre.push({
-        num: cur.pos,
-        is_guard_status: 0,
-      })
-      return pre
-    }, [])
-
-  currentRaid.actionQueue.at(-1)!.guard_status = guard_status
 
   if (type === 'ability') {
     const prefix = 'ico-ability'
@@ -388,8 +415,8 @@ const memberList = computed(() => {
       <Summon :summon-info="summonInfo" />
     </div>
     <div flex items-start justify-start gap-2 p-2>
-      <DamageRecord :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
-      <ActionList :raid-record="raidRecord.find(record => record.raid_id === raidId)!" />
+      <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
+      <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
     <el-descriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
       <el-descriptions-item label="平A结果">
@@ -398,7 +425,6 @@ const memberList = computed(() => {
     </el-descriptions>
 
     <MemberList :data="memberList" />
-    <BattleResultTable :table-data="battleResultList" />
   </div>
   <div v-else fc>
     <el-tag type="info" effect="dark" size="large" round>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BossInfo } from '../types'
+import type { BossInfo } from 'battleLog'
 
 const props = defineProps<{ bossInfo: BossInfo }>()
 const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
