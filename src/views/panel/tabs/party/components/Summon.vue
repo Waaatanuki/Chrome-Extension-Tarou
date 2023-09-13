@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DeckSummon } from '~/logic/types'
+import type { DeckSummon } from 'requestData'
 
 defineProps<{
   summons: DeckSummon

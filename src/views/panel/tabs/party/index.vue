@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { CheckboxValueType } from 'element-plus'
+import type { CalculateSetting, DamageInfo, DeckJson, DeckSummon, DeckWeapon, NpcAbility, NpcInfo } from 'requestData'
 import Effect from './components/Effect.vue'
 import Weapon from './components/Weapon.vue'
 import Npc from './components/Npc.vue'
 import Summon from './components/Summon.vue'
 import { jobAbilityList, localNpcList } from '~/logic'
-import type { CalculateSetting, DamageInfo, DeckJson, DeckSummon, DeckWeapon, NpcAbility, NpcInfo } from '~/logic/types'
 
 const props = defineProps<{
   deckJson: DeckJson

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EffectValueInfo } from '~/logic/types'
+import type { EffectValueInfo } from 'requestData'
 
 defineProps<{
   effectValueInfo: EffectValueInfo[]

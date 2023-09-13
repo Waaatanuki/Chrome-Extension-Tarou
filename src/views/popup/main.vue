@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { GoldBrickTableData } from 'myStorage'
 import { eternitySandData, goldBrickData, goldBrickTableData } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
-import type { GoldBrickTableData } from '~/logic/types'
 
 const goldBrickTableShowData = computed(() => goldBrickTableData.value.filter(raid => raid.quest_id !== '303141'))
 

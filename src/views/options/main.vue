@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
+import type { RaidInfo } from 'myStorage'
 import RaidCard from './components/RaidCard.vue'
 import { eternitySandData } from '~/logic/storage'
-import type { RaidInfo } from '~/logic/types'
 
 const filesList = ref([])
 

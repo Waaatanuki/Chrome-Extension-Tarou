@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RaidInfo } from '~/logic/types'
+import type { RaidInfo } from 'myStorage'
 
 withDefaults(
   defineProps<{ collapse?: boolean; data: RaidInfo[] }>(),

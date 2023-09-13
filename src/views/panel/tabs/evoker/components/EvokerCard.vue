@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EvokerInfo } from '~/logic/types'
+import type { EvokerInfo } from 'myStorage'
 import { domainList, evokerList, tarotList, weaponList } from '~/constants/evoker'
 
 const evoker = defineModel<EvokerInfo>({ required: true })

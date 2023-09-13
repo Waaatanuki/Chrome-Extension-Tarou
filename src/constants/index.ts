@@ -1,5 +1,5 @@
+import type { GoldBrickTableData, RaidInfo } from 'myStorage'
 import { Raid_EternitySand, Raid_GoldBrick } from './raid'
-import type { GoldBrickTableData, RaidInfo } from '~/logic/types'
 
 export const defaultTodoList = [
   { done: false, content: '巡岛' },

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DamageInfo, DeckWeapon } from '~/logic/types'
+import type { DamageInfo, DeckWeapon } from 'requestData'
 import { weaponSkill } from '~/constants/skill'
 
 defineProps<{
