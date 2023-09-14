@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Action, BattleRecord, Player } from 'myStorage'
-import type { AttackResultJson, BattleStartJson, BossConditionJson, Condition, GuardSettingJson, ResultJsonPayload, Scenario, SpecialSkillSetting } from 'requestData'
+import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, GuardSettingJson, ResultJsonPayload, Scenario, SpecialSkillSetting } from 'requestData'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
@@ -113,6 +113,7 @@ function recordRaidInfo(data: BattleStartJson) {
     const player = data.player.param.reduce<Player[]>((pre, cur) => {
       pre.push({
         pid: cur.pid.split('_')[0],
+        cjs: cur.cjs,
         image_id: `${cur.pid.split('_')[0]}_01`,
         damage: {
           total: { comment: '总计', value: 0 },
@@ -141,6 +142,8 @@ function recordRaidInfo(data: BattleStartJson) {
       guard_status,
     }]
 
+    const abilityList = getAbilityList(data.ability)
+
     battleRecord.value.unshift({
       raid_id: raidId.value!,
       raid_name: boss.monster,
@@ -151,6 +154,7 @@ function recordRaidInfo(data: BattleStartJson) {
       special_skill_flag: Number(data.special_skill_flag),
       actionQueue,
       reserve: false,
+      abilityList,
     })
 
     if (battleRecord.value.length > props.battleRecordLimit) {
@@ -282,21 +286,26 @@ function handleActionQueue(type: string, data: AttackResultJson) {
   }
 
   if (type === 'ability') {
-    const prefix = 'ico-ability'
-    const currentAbilityList = Object.values(data.status.ability)
-      .reduce<Action[]>((pre, cur) =>
-        pre.concat(Object.values(cur.list).reduce<Action[]>((p, c) => p.concat([{
-          type: 'ability',
-          icon: c[0].class.split(' ')[0].substring(prefix.length),
-          id: c[0]['ability-id'],
-        }]), []))
-      , [])
+    const currentAbilityList = getAbilityList(data.status.ability)
 
-    const hit = currentAbilityList.find(ability => ability.id === props.resultJsonPayload.ability_id)
+    currentAbilityList.forEach((abi) => {
+      if (!currentRaid.abilityList.some(a => a.id === abi.id))
+        currentRaid.abilityList.push({ ...abi })
+    })
+
+    const hit = currentRaid.abilityList?.find(ability => ability.id === props.resultJsonPayload.ability_id)
     if (!hit)
       return
 
-    currentRaid.actionQueue.at(-1)?.acitonList.push({ ...hit })
+    currentRaid.actionQueue.at(-1)?.acitonList.push({
+      ...hit,
+      aim_num: props.resultJsonPayload.ability_aim_num
+        ? currentRaid.player[Number(props.resultJsonPayload.ability_aim_num)].pid
+        : '',
+      aim_cjs: props.resultJsonPayload.ability_aim_num
+        ? currentRaid.player[Number(props.resultJsonPayload.ability_aim_num)].cjs
+        : '',
+    })
   }
 
   if (type === 'summon') {
@@ -322,7 +331,10 @@ function handleActionQueue(type: string, data: AttackResultJson) {
     currentRaid.actionQueue.at(-1)?.acitonList.push({
       type: 'temporary',
       icon: props.resultJsonPayload.character_num ? '1' : '2',
-      id: props.resultJsonPayload.character_num ? currentRaid.player[Number(props.resultJsonPayload.character_num)].pid : '',
+      id: props.resultJsonPayload.character_num ? '1' : '2',
+      aim_num: props.resultJsonPayload.character_num
+        ? currentRaid.player[Number(props.resultJsonPayload.character_num)].pid
+        : '',
     })
   }
 
@@ -369,6 +381,18 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
   handleDamageStatistic(type, data)
   handleActionQueue(type, data)
+}
+
+function getAbilityList(rawAbility: Ability) {
+  const prefix = 'ico-ability'
+  return Object.values(rawAbility)
+    .reduce<Action[]>((pre, cur) =>
+      pre.concat(Object.values(cur.list).reduce<Action[]>((p, c) => p.concat([{
+        type: 'ability',
+        icon: c[0].class.split(' ')[0].substring(prefix.length),
+        id: c[0]['ability-id'],
+      }]), []))
+    , [])
 }
 
 const normalAttackInfo = computed(() => {

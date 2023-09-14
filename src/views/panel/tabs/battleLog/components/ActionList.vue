@@ -15,13 +15,15 @@ function getImg(action: Action) {
   if (action.type === 'attack')
     return getLocalImg('attackBtn')
 }
+
 function getNpcImg(action: Action) {
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/npc/m/${action.id}_01.jpg`
+  const type = action.aim_cjs?.startsWith('npc') ? 'npc' : 'leader'
+  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/m/${action.aim_num}_01.jpg`
 }
 </script>
 
 <template>
-  <el-card min-w-400px>
+  <el-card v-if="battleRecord" min-w-400px>
     <el-scrollbar height="520px">
       <el-descriptions :column="1" border>
         <el-descriptions-item v-for="list, idx in battleRecord.actionQueue" :key="idx" :label="`第${idx + 1}回合`" label-class-name="action-list-label">
@@ -46,7 +48,7 @@ function getNpcImg(action: Action) {
           <div flex flex-wrap items-center justify-start gap-10px>
             <div v-for="action, i in list.acitonList" :key="i" fc>
               <img h-50px :src="getImg(action)">
-              <template v-if="action.type === 'temporary' && action.icon === '1' ">
+              <template v-if="action.aim_num">
                 <div i-carbon:arrow-right text-xl />
                 <img h-50px :src="getNpcImg(action)">
               </template>

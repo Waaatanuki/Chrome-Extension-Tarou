@@ -383,6 +383,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
             speed,
             treasureList,
             reserve: false,
+            abilityList: [],
           })
           battleRecord.value.sort((a, b) => Number(b.raid_id) - Number(a.raid_id))
 

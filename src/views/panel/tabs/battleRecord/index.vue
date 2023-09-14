@@ -30,12 +30,12 @@ function clear() {
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="开始时间" align="center">
+    <el-table-column label="开始时间" align="center" width="120">
       <template #default="{ row }">
         {{ row.startTimestamp ? dayjs(row.startTimestamp).format('MM/DD HH:mm') : '-' }}
       </template>
     </el-table-column>
-    <el-table-column label="结束时间" align="center">
+    <el-table-column label="结束时间" align="center" width="120">
       <template #default="{ row }">
         {{ row.endTimestamp ? dayjs(row.endTimestamp).format('MM/DD HH:mm') : '_' }}
       </template>

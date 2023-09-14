@@ -63,11 +63,13 @@ declare module 'myStorage' {
     duration?: string
     speed?: string
     treasureList?: { src: string; number: string; boxClass: string }[]
+    abilityList: Action[]
     reserve: boolean
   }
 
   export interface Player {
     pid: string
+    cjs?: string
     image_id: string
     pos?: number
     damage: PlayerDamage
@@ -90,6 +92,8 @@ declare module 'myStorage' {
     type: string
     icon?: string
     id?: string
+    aim_num?: string
+    aim_cjs?: string
   }
 
   export interface RaidInfo {
@@ -365,6 +369,7 @@ declare module 'requestData'{
     ability_id: string
     summon_id: string
     character_num?: string
+    ability_aim_num?: string
   }
 
   export interface GuardSettingJson {

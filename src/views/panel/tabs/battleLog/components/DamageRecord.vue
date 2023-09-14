@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BattleRecord } from 'myStorage'
+import type { BattleRecord, Player } from 'myStorage'
 
 const props = defineProps<{ battleRecord: BattleRecord }>()
 
@@ -26,13 +26,14 @@ const totalDamage = computed(() =>
   }, 0),
 )
 
-function getImg(image_id: string, index: number) {
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${index === 0 ? 'leader' : 'npc'}/m/${image_id}.jpg`
+function getImg(player: Player) {
+  const type = player.cjs?.startsWith('npc') ? 'npc' : 'leader'
+  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/m/${player.image_id}.jpg`
 }
 </script>
 
 <template>
-  <el-card w-400px shrink-0>
+  <el-card v-if="battleRecord" w-400px shrink-0>
     <div h-520px>
       <div w-full fc flex-col gap-10px pb-10px>
         <div text-xl font-bold>
@@ -51,8 +52,8 @@ function getImg(image_id: string, index: number) {
       </div>
 
       <div fc flex-col gap-10px>
-        <div v-for="player, idx in battleRecord.player" :key="player.pid" fc gap-10px>
-          <img w-100px :src="getImg(player.image_id, idx)">
+        <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
+          <img w-100px :src="getImg(player)">
           <div w-250px>
             <el-progress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
               <div />
