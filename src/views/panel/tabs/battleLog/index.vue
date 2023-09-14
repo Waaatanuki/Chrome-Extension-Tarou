@@ -137,6 +137,7 @@ function recordRaidInfo(data: BattleStartJson) {
 
     const actionQueue = [{
       turn: data.turn,
+      bossHpPercent: bossInfo.value!.hpPercent,
       special_skill_flag: Number(data.special_skill_flag),
       acitonList: [],
       guard_status,
@@ -279,6 +280,7 @@ function handleActionQueue(type: string, data: AttackResultJson) {
 
     currentRaid.actionQueue.push({
       turn: currentTurn,
+      bossHpPercent: bossInfo.value!.hpPercent,
       special_skill_flag: currentRaid.special_skill_flag!,
       acitonList: [],
       guard_status,
@@ -335,6 +337,9 @@ function handleActionQueue(type: string, data: AttackResultJson) {
       aim_num: props.resultJsonPayload.character_num
         ? currentRaid.player[Number(props.resultJsonPayload.character_num)].pid
         : '',
+      aim_cjs: props.resultJsonPayload.character_num
+        ? currentRaid.player[Number(props.resultJsonPayload.character_num)].cjs
+        : '',
     })
   }
 
@@ -348,7 +353,7 @@ function handleActionQueue(type: string, data: AttackResultJson) {
 }
 
 function handleAttackRusult(type: string, data: AttackResultJson) {
-  if (!type)
+  if (!type || !data)
     return
   const bossGauge = data.scenario.filter(item => item.cmd === 'boss_gauge').at(-1)
   const status = data.status

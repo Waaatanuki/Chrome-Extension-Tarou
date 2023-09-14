@@ -26,9 +26,9 @@ function getNpcImg(action: Action) {
   <el-card v-if="battleRecord" min-w-400px>
     <el-scrollbar height="520px">
       <el-descriptions :column="1" border>
-        <el-descriptions-item v-for="list, idx in battleRecord.actionQueue" :key="idx" :label="`第${idx + 1}回合`" label-class-name="action-list-label">
+        <el-descriptions-item v-for="list, idx in battleRecord.actionQueue" :key="idx" label-class-name="action-list-label">
           <template #label>
-            <div relative>
+            <div relative p-10px h-full>
               <div mb-5px>
                 {{ `第${idx + 1}回合` }}
               </div>
@@ -37,10 +37,13 @@ function getNpcImg(action: Action) {
                   G
                 </el-check-tag>
               </div>
-              <div absolute left-0 top-0>
+              <div absolute left-5px top-5px>
                 <el-tag :type="list.special_skill_flag ? 'danger' : 'success'" effect="dark" size="small">
                   {{ list.special_skill_flag ? 'OFF' : 'ON' }}
                 </el-tag>
+              </div>
+              <div absolute right-5px top-5px text-sm>
+                {{ list.bossHpPercent.toString().split('.')[0] }}
               </div>
             </div>
           </template>
@@ -62,9 +65,10 @@ function getNpcImg(action: Action) {
 
 <style>
 .el-descriptions__label.el-descriptions__cell.is-bordered-label.action-list-label {
-  width: 100px;
-  text-align: center;
+  width: 200px;
   font-size: large;
+  text-align: center;
+  padding: 0px;
   font-weight: 500;
 }
 </style>
