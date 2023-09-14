@@ -17,6 +17,7 @@ const resultJsonPayload = ref()
 const guardSettingJson = ref()
 const specialSkillSetting = ref()
 const bossConditionJson = ref()
+const battleRecordLimit = ref(30)
 
 const lobbyMemberList = ref()
 const battleResultList = ref<BattleResult[]>([])
@@ -369,7 +370,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
           return pre
         }, [])
         if (!hit) {
-          battleRecord.value.push({
+          battleRecord.value.unshift({
             raid_id,
             raid_name: raidName,
             turn: Number(turn),
@@ -381,10 +382,14 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
             duration: time,
             speed,
             treasureList,
+            reserve: false,
           })
           battleRecord.value.sort((a, b) => Number(b.raid_id) - Number(a.raid_id))
-          if (battleRecord.value.length > 20)
-            battleRecord.value.pop()
+
+          if (battleRecord.value.length > battleRecordLimit.value) {
+            const lastIndex = battleRecord.value.findLastIndex(record => !record.reserve)
+            battleRecord.value.splice(lastIndex, 1)
+          }
         }
         else {
           hit.endTimestamp = endTimestamp
@@ -445,10 +450,11 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         :battle-result-list="battleResultList"
         :guard-setting-json="guardSettingJson"
         :special-skill-setting="specialSkillSetting"
+        :battle-record-limit="battleRecordLimit"
       />
     </el-tab-pane>
     <el-tab-pane label="战斗历史">
-      <BattleRecord />
+      <BattleRecord :battle-record-limit="battleRecordLimit" />
     </el-tab-pane>
   </el-tabs>
 </template>

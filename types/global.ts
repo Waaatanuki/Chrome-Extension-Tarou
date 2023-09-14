@@ -63,6 +63,7 @@ declare module 'myStorage' {
     duration?: string
     speed?: string
     treasureList?: { src: string; number: string; boxClass: string }[]
+    reserve: boolean
   }
 
   export interface Player {

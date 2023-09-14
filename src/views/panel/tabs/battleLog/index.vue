@@ -19,6 +19,7 @@ const props = defineProps<{
   lobbyMemberList: Member[]
   guardSettingJson: GuardSettingJson
   specialSkillSetting: SpecialSkillSetting
+  battleRecordLimit: number
 }>()
 
 const bossInfo = ref<BossInfo>()
@@ -149,10 +150,13 @@ function recordRaidInfo(data: BattleStartJson) {
       player,
       special_skill_flag: Number(data.special_skill_flag),
       actionQueue,
+      reserve: false,
     })
 
-    if (battleRecord.value.length > 20)
-      battleRecord.value.pop()
+    if (battleRecord.value.length > props.battleRecordLimit) {
+      const lastIndex = battleRecord.value.findLastIndex(record => !record.reserve)
+      battleRecord.value.splice(lastIndex, 1)
+    }
   }
 }
 

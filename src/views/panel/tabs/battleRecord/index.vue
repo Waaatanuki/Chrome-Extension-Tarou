@@ -1,41 +1,66 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
+import type { BattleRecord } from 'myStorage'
 import DamageRecord from '../battleLog/components/DamageRecord.vue'
 import ActionList from '../battleLog/components/ActionList.vue'
 import { battleRecord } from '~/logic'
+
+const props = defineProps<{ battleRecordLimit: number }>()
+
+function triggerLock(row: BattleRecord) {
+  const lockedNum = battleRecord.value.filter(record => record.reserve).length
+  if (lockedNum + 1 >= props.battleRecordLimit && !row.reserve)
+    ElMessage.info('已达锁定上限')
+  else
+    row.reserve = !row.reserve
+}
+
+function clear() {
+  battleRecord.value = battleRecord.value.filter(record => record.reserve)
+}
 </script>
 
 <template>
-  <div relative>
-    <el-table :data="battleRecord">
-      <el-table-column type="expand">
-        <template #default="{ row } ">
-          <div flex items-start justify-start gap-2 p-2>
-            <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === row.raid_id)!" />
-            <ActionList :battle-record="battleRecord.find(record => record.raid_id === row.raid_id)!" />
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="开始时间" align="center">
-        <template #default="{ row }">
-          {{ row.startTimestamp ? dayjs(row.startTimestamp).format('MM/DD HH:mm') : '-' }}
-        </template>
-      </el-table-column>
-      <el-table-column label="结束时间" align="center">
-        <template #default="{ row }">
-          {{ row.endTimestamp ? dayjs(row.endTimestamp).format('MM/DD HH:mm') : '_' }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="raid_name" label="副本" align="center" />
-      <el-table-column prop="point" label="伤害" align="center" />
-      <el-table-column prop="turn" label="回合数" align="center" width="100" />
-      <el-table-column prop="duration" label="讨伐时间" align="center" width="100" />
-      <el-table-column prop="speed" label="跑速" align="center" width="100" />
-    </el-table>
-    <div absolute bottom-10px right-10px z-99999>
-      <div btn @click="battleRecord.length = 0">
-        清空
-      </div>
+  <el-table :data="battleRecord">
+    <el-table-column type="expand">
+      <template #default="{ row } ">
+        <div flex items-start justify-start gap-2 p-2>
+          <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === row.raid_id)!" />
+          <ActionList :battle-record="battleRecord.find(record => record.raid_id === row.raid_id)!" />
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column label="开始时间" align="center">
+      <template #default="{ row }">
+        {{ row.startTimestamp ? dayjs(row.startTimestamp).format('MM/DD HH:mm') : '-' }}
+      </template>
+    </el-table-column>
+    <el-table-column label="结束时间" align="center">
+      <template #default="{ row }">
+        {{ row.endTimestamp ? dayjs(row.endTimestamp).format('MM/DD HH:mm') : '_' }}
+      </template>
+    </el-table-column>
+    <el-table-column prop="raid_name" label="副本" align="center" />
+    <el-table-column prop="point" label="伤害" align="center" />
+    <el-table-column prop="turn" label="回合数" align="center" width="100" />
+    <el-table-column prop="duration" label="讨伐时间" align="center" width="100" />
+    <el-table-column prop="speed" label="跑速" align="center" width="100" />
+    <el-table-column label="操作" align="center" width="100">
+      <template #default="{ row, $index }">
+        <div w-76px flex items-center justify-start gap-20px p-10px text-xl>
+          <div v-if="row.reserve" i-carbon:locked icon-btn @click="triggerLock(row)" />
+          <div v-else i-carbon:unlocked icon-btn @click="triggerLock(row)" />
+          <div v-show="!row.reserve" i-carbon:trash-can icon-btn @click="battleRecord.splice($index, 1)" />
+        </div>
+      </template>
+    </el-table-column>
+  </el-table>
+  <div flex items-center justify-end gap-10px p-10px text-base>
+    <div>
+      {{ `数量 : ${battleRecord.length}/${battleRecordLimit}` }}
+    </div>
+    <div btn @click="clear">
+      清空列表
     </div>
   </div>
 </template>

@@ -31,8 +31,10 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
           return
         console.log('memo===>', { battle_id, quest_name: res.questName, timestamp: Date.now() })
         const hit = targetRaid.find(r => r.tweet_name_en.includes(res.questName) || r.tweet_name_jp.includes(res.questName))
-        if (!hit)
+        if (!hit) {
+          console.error('没有匹配到设定副本')
           return
+        }
 
         battleMemo.value.push({ battle_id, quest_id: hit.quest_id, quest_name: res.questName, timestamp: Date.now() })
 
