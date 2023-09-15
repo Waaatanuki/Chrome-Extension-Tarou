@@ -270,6 +270,7 @@ function handleActionQueue(type: string, data: AttackResultJson) {
   if (data.scenario[0].cmd === 'die')
     return
   const currentTurn = data.status.turn
+  currentRaid.turn = currentTurn
 
   if (currentTurn !== currentRaid.actionQueue.at(-1)?.turn) {
     const guard_status = Object.values(data.status.ability)

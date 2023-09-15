@@ -10,7 +10,7 @@ function reset() {
 </script>
 
 <template>
-  <el-card m-3 w-56 h-full :body-style="{ padding: '3px' }">
+  <el-card m-3 w-220px h-full>
     <template #header>
       <div flex justify-between items-center>
         <span text-xl>
@@ -21,30 +21,31 @@ function reset() {
         </el-button>
       </div>
     </template>
-    <div fc flex-col>
-      <div fc>
-        <div class="w-20 flex flex-col p-3">
-          <img :src="getLocalImg('20010', 'ticket')">
-          <span text-center text-sm>
-            {{ `${legendticket10}枚` }}
-          </span>
-        </div>
-        <div class="w-20 flex flex-col p-3">
-          <img :src="getLocalImg('20011', 'ticket')">
-          <span text-center text-sm>
-            {{ `${legendticket}枚` }}
-          </span>
-        </div>
+    <div fc flex-wrap gap-10px>
+      <div w-80px fc flex-col>
+        <img :src="getLocalImg('20010', 'ticket')">
+        <span text-center text-sm>
+          {{ `${legendticket10}枚` }}
+        </span>
       </div>
-      <div fc>
-        <div class="w-20 flex flex-col p-3">
-          <img :src="getLocalImg('gem')">
-          <span text-center text-sm>
-            {{ `${stone}個` }}
-          </span>
+      <div w-80px fc flex-col>
+        <img :src="getLocalImg('20011', 'ticket')">
+        <span text-center text-sm>
+          {{ `${legendticket}枚` }}
+        </span>
+      </div>
+      <div w-80px fc flex-col>
+        <img :src="getLocalImg('gem')">
+        <span text-center text-sm>
+          {{ `${stone}個` }}
+        </span>
+      </div>
+      <div w-80px fc flex-col text-center text-base font-bold text-orange-600>
+        <div v-if="totalStone >= 90000">
+          {{ `${Math.floor(totalStone / 90000)}井` }}
         </div>
-        <div class="w-20 font-bold text-orange-600 text-center text-base p-3">
-          {{ `${(totalStone > 90000 ? `${Math.floor(totalStone / 90000)}井` : "") + Math.floor((totalStone % 90000) / 300)}抽` }}
+        <div v-if="Math.floor((totalStone % 90000) / 300) !== 0">
+          {{ `${Math.floor((totalStone % 90000) / 300)}抽` }}
         </div>
       </div>
     </div>

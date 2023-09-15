@@ -38,13 +38,13 @@ function getNpcImg(action: Action) {
               G
             </el-check-tag>
           </div>
-          <div absolute left-5px top-5px>
+          <div absolute left-5px top-5px fc>
             <el-tag :type="list.special_skill_flag ? 'danger' : 'success'" effect="dark" size="small">
               {{ list.special_skill_flag ? 'OFF' : 'ON' }}
             </el-tag>
           </div>
           <div absolute right-5px top-5px text-sm>
-            {{ list.bossHpPercent.toString().split('.')[0] }}
+            {{ Math.ceil(list.bossHpPercent) }}
           </div>
         </div>
 

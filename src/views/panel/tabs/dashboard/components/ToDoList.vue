@@ -52,17 +52,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-card class="m-3 w-52">
+  <el-card m-3 min-w-200px>
     <template #header>
-      <div class="flex justify-between items-center">
-        <span class="text-xl">日常</span>
+      <div flex justify-between items-center>
+        <span text-xl>日常</span>
         <div>
           <el-button type="primary" link @click="addTask">
             增加
           </el-button>
           <el-button
-            type="primary"
-            link
+            type="primary" link
             @click="delBtnVisible = !delBtnVisible"
           >
             {{ delBtnVisible ? "确认" : "编辑" }}
@@ -70,15 +69,15 @@ onMounted(() => {
         </div>
       </div>
     </template>
-    <div class="flex flex-col">
+    <div flex flex-col>
       <el-checkbox
         v-for="task, idx in todoList" :key="idx"
         v-model="task.done" :label="task.content"
       >
         <template #default>
-          <div class="flex justify-between items-center min-w-150">
+          <div flex justify-between items-center>
             <div v-if="delBtnVisible">
-              <el-input v-model="task.content" size="small" w-120px mr-10px />
+              <el-input v-model="task.content" size="small" mr-10px />
               <el-button type="danger" link @click="delTask(idx)">
                 删除
               </el-button>
@@ -91,11 +90,8 @@ onMounted(() => {
       </el-checkbox>
       <el-input
         v-if="inputVisible"
-        ref="InputRef"
-        v-model="inputValue"
-        size="small"
-        @keyup.enter="handleInputConfirm"
-        @blur="handleInputConfirm"
+        ref="InputRef" v-model="inputValue" size="small"
+        @keyup.enter="handleInputConfirm" @blur="handleInputConfirm"
       />
     </div>
   </el-card>
