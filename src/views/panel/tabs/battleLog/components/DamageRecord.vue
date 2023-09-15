@@ -27,8 +27,7 @@ const totalDamage = computed(() =>
 )
 
 function getImg(player: Player) {
-  const type = player.cjs?.startsWith('npc') ? 'npc' : 'leader'
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/m/${player.image_id}.jpg`
+  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${player.is_npc ? 'npc' : 'leader'}/m/${player.image_id}.jpg`
 }
 </script>
 
@@ -54,6 +53,20 @@ function getImg(player: Player) {
       <div fc flex-col gap-10px>
         <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
           <img w-100px :src="getImg(player)">
+          <div fc flex-col gap-5px>
+            <div relative w-60px>
+              <img w-full :src="getLocalImg('ability-count-bg')">
+              <div absolute bottom-0 right-7px top-0 fc text-sm>
+                {{ player.use_ability_count }}
+              </div>
+            </div>
+            <div relative w-60px>
+              <img w-full :src="getLocalImg('special-count-bg')">
+              <div absolute bottom-0 right-7px top-0 fc text-sm>
+                {{ player.use_special_skill_count }}
+              </div>
+            </div>
+          </div>
           <div w-250px>
             <el-progress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
               <div />

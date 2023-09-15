@@ -113,8 +113,10 @@ function recordRaidInfo(data: BattleStartJson) {
     const player = data.player.param.reduce<Player[]>((pre, cur) => {
       pre.push({
         pid: cur.pid.split('_')[0],
-        cjs: cur.cjs,
+        is_npc: cur.cjs.startsWith('npc'),
         image_id: `${cur.pid.split('_')[0]}_01`,
+        use_ability_count: 0,
+        use_special_skill_count: 0,
         damage: {
           total: { comment: '总计', value: 0 },
           attack: { comment: '通常攻击&反击', value: 0 },
@@ -183,6 +185,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
     if (action.cmd === 'special' || action.cmd === 'special_npc') {
       const hitPlayer = currentRaid.player[action.num]
       if (hitPlayer) {
+        hitPlayer.use_special_skill_count++
         hitPlayer.damage.special.value += action.total!.reduce((pre, cur) => {
           pre += Number(cur.split.join(''))
           return pre
@@ -299,14 +302,16 @@ function handleActionQueue(type: string, data: AttackResultJson) {
     if (!hit)
       return
 
+    currentRaid.player[Number(props.resultJsonPayload.ability_character_num)].use_ability_count++
+
     currentRaid.actionQueue.at(-1)?.acitonList.push({
       ...hit,
       aim_num: props.resultJsonPayload.ability_aim_num
         ? currentRaid.player[Number(props.resultJsonPayload.ability_aim_num)].pid
         : '',
-      aim_cjs: props.resultJsonPayload.ability_aim_num
-        ? currentRaid.player[Number(props.resultJsonPayload.ability_aim_num)].cjs
-        : '',
+      aim_is_npc: props.resultJsonPayload.ability_aim_num
+        ? currentRaid.player[Number(props.resultJsonPayload.ability_aim_num)].is_npc
+        : false,
     })
   }
 
@@ -337,9 +342,9 @@ function handleActionQueue(type: string, data: AttackResultJson) {
       aim_num: props.resultJsonPayload.character_num
         ? currentRaid.player[Number(props.resultJsonPayload.character_num)].pid
         : '',
-      aim_cjs: props.resultJsonPayload.character_num
-        ? currentRaid.player[Number(props.resultJsonPayload.character_num)].cjs
-        : '',
+      aim_is_npc: props.resultJsonPayload.character_num
+        ? currentRaid.player[Number(props.resultJsonPayload.character_num)].is_npc
+        : false,
     })
   }
 

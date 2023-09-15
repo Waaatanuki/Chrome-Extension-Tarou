@@ -17,8 +17,7 @@ function getImg(action: Action) {
 }
 
 function getNpcImg(action: Action) {
-  const type = action.aim_cjs?.startsWith('npc') ? 'npc' : 'leader'
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/m/${action.aim_num}_01.jpg`
+  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${action.aim_is_npc ? 'npc' : 'leader'}/m/${action.aim_num}_01.jpg`
 }
 </script>
 

@@ -359,6 +359,9 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
           pre.push({
             pid: cur.image_id.split('_')[0],
             image_id: `${cur.image_id.split('_')[0]}_01`,
+            use_ability_count: Number(cur.use_ability_count),
+            use_special_skill_count: Number(cur.use_special_skill_count),
+            is_npc: cur.is_npc,
             damage: {
               total: { comment: '总计', value: Number(cur.damage) },
               attack: { comment: '通常攻击&反击', value: Number(cur.normal_damage) },

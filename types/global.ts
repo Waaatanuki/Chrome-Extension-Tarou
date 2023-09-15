@@ -70,10 +70,12 @@ declare module 'myStorage' {
 
   export interface Player {
     pid: string
-    cjs?: string
     image_id: string
     pos?: number
+    use_ability_count: number
+    use_special_skill_count: number
     damage: PlayerDamage
+    is_npc: boolean
   }
 
   export interface PlayerDamage {
@@ -94,7 +96,7 @@ declare module 'myStorage' {
     icon?: string
     id?: string
     aim_num?: string
-    aim_cjs?: string
+    aim_is_npc?: boolean
   }
 
   export interface RaidInfo {
@@ -371,6 +373,7 @@ declare module 'requestData'{
     summon_id: string
     character_num?: string
     ability_aim_num?: string
+    ability_character_num: string
   }
 
   export interface GuardSettingJson {
