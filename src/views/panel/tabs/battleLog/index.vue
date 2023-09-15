@@ -186,10 +186,12 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
       const hitPlayer = currentRaid.player[action.num]
       if (hitPlayer) {
         hitPlayer.use_special_skill_count++
-        hitPlayer.damage.special.value += action.total!.reduce((pre, cur) => {
-          pre += Number(cur.split.join(''))
-          return pre
-        }, 0)
+        if (action.total) {
+          hitPlayer.damage.special.value += action.total.reduce((pre, cur) => {
+            pre += Number(cur.split.join(''))
+            return pre
+          }, 0)
+        }
       }
     }
     if (action.cmd === 'attack' && action.from === 'player') {
@@ -254,7 +256,7 @@ function getDamageCount(action: Scenario, raid: BattleRecord, num: number, type:
 
 function getLoopDamageCount(action: Scenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
   const hitPlayer = raid.player[num]
-  if (hitPlayer) {
+  if (hitPlayer && action.total) {
     hitPlayer.damage[type].value += action.total.reduce((pre, cur) => {
       pre += Number(cur.split.join(''))
       return pre

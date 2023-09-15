@@ -363,7 +363,7 @@ declare module 'requestData'{
     to: string
     condition: Condition
     damage: { value: number }[][]
-    total: { split: string[] }[]
+    total?: { split: string[] }[]
     list: { value?: number; damage?: { value: number }[] }[]
     is_damage_sync_effect: boolean | string
   }
