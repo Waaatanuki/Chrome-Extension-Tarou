@@ -275,8 +275,13 @@ function handleActionQueue(type: string, data: AttackResultJson) {
   if (!currentRaid)
     return
 
-  if (data.scenario[0].cmd === 'die')
-    return
+  const dieIndex = data.scenario.findIndex(action => action.cmd === 'die' && action.to === 'boss')
+
+  if (dieIndex !== -1) {
+    currentRaid.endTimestamp = Date.now()
+    if (dieIndex === 0)
+      return
+  }
   const currentTurn = data.status.turn
   currentRaid.turn = currentTurn
 
@@ -361,7 +366,7 @@ function handleActionQueue(type: string, data: AttackResultJson) {
     currentRaid.actionQueue.at(-1)?.acitonList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
 
   if (type === 'normal') {
-    const index = data.scenario.find(action => action.cmd === 'die' && action.to === 'boss') ? -1 : -2
+    const index = dieIndex !== -1 ? -1 : -2
     currentRaid.actionQueue.at(index)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
   }
 }
