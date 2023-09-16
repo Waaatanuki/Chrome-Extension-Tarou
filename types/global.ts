@@ -324,7 +324,7 @@ declare module 'requestData'{
   }
 
   export interface AttackResultJson {
-    scenario: Scenario[]
+    scenario: ScenarioType[]
     status: {
       ability: Ability
       supporter: { recast: null | number | string }
@@ -349,6 +349,8 @@ declare module 'requestData'{
     }
   }
 
+  export type ScenarioType = SummonScenario | DamageScenario | LoopDamageScenario
+
   export interface Scenario {
     cmd: string
     name?: {
@@ -364,8 +366,19 @@ declare module 'requestData'{
     condition: Condition
     damage: { value: number }[][]
     total?: { split: string[] }[]
-    list: { value?: number; damage?: { value: number }[] }[]
     is_damage_sync_effect: boolean | string
+  }
+
+  export interface SummonScenario extends Scenario {
+    list: { damage: { value: number }[] }[]
+  }
+
+  export interface DamageScenario extends Scenario {
+    list: { value?: number; damage?: { value: number }[] }[]
+  }
+
+  export interface LoopDamageScenario extends Scenario {
+    list: { value?: number; damage?: { value: number }[] }[][]
   }
 
   export interface ResultJsonPayload {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Action, BattleRecord, Player } from 'myStorage'
-import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, GuardSettingJson, ResultJsonPayload, Scenario, SpecialSkillSetting } from 'requestData'
+import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialSkillSetting, SummonScenario } from 'requestData'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
@@ -208,33 +208,26 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
     }
     if (action.cmd === 'damage' && action.to === 'boss') {
       if (resultType === 'summon')
-        getDamageCount(action, currentRaid, 0)
+        processDamageScenario(action as DamageScenario, currentRaid, 0)
 
       for (let i = 1; i <= 3; i++) {
         if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd))
-          getDamageCount(action, currentRaid, array[idx - i].num)
+          processDamageScenario(action as DamageScenario, currentRaid, array[idx - i].num)
         if (array[idx - i] && array[idx - i].cmd === 'chain_cutin') {
           const pos0NpcPid = playerPosInfo[0].pid
           const hitPlayerIndex = currentRaid.player.findIndex(p => p.pid === pos0NpcPid)
-          hitPlayerIndex !== -1 && getDamageCount(action, currentRaid, hitPlayerIndex, 'other')
+          hitPlayerIndex !== -1 && processDamageScenario(action as DamageScenario, currentRaid, hitPlayerIndex, 'other')
         }
       }
     }
     if (action.cmd === 'loop_damage' && action.to === 'boss') {
       for (let i = 1; i <= 3; i++) {
         if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd))
-          getLoopDamageCount(action, currentRaid, array[idx - i].num)
+          processLoopDamageScenario(action as LoopDamageScenario, currentRaid, array[idx - i].num)
       }
     }
-    if (action.cmd === 'summon' && action.list.length > 0) {
-      currentRaid.player[0].damage.other.value += action.list.reduce((pre, cur) => {
-        pre += cur.damage!.reduce((p, c) => {
-          p += c.value
-          return p
-        }, 0)
-        return pre
-      }, 0)
-    }
+    if (action.cmd === 'summon' && action.list.length > 0)
+      processSummonScenario(action as SummonScenario, currentRaid)
   })
   let point = 0
   currentRaid.player.forEach((player) => {
@@ -244,7 +237,17 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
   currentRaid.point = point.toLocaleString()
 }
 
-function getDamageCount(action: Scenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
+function processSummonScenario(action: SummonScenario, raid: BattleRecord) {
+  raid.player[0].damage.other.value += action.list.reduce((pre, cur) => {
+    pre += cur.damage!.reduce((p, c) => {
+      p += c.value
+      return p
+    }, 0)
+    return pre
+  }, 0)
+}
+
+function processDamageScenario(action: DamageScenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
   const hitPlayer = raid.player[num]
   if (hitPlayer) {
     hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
@@ -254,11 +257,14 @@ function getDamageCount(action: Scenario, raid: BattleRecord, num: number, type:
   }
 }
 
-function getLoopDamageCount(action: Scenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
+function processLoopDamageScenario(action: LoopDamageScenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
   const hitPlayer = raid.player[num]
-  if (hitPlayer && action.total) {
-    hitPlayer.damage[type].value += action.total.reduce((pre, cur) => {
-      pre += Number(cur.split.join(''))
+  if (hitPlayer) {
+    hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
+      pre += cur.reduce((p, c) => {
+        p += c.value!
+        return p
+      }, 0)
       return pre
     }, 0)
   }
@@ -450,12 +456,12 @@ const memberList = computed(() => {
 
 <template>
   <div v-if="bossInfo && buffInfo && summonInfo" fc flex-col gap-10px w-full>
-    <div fc gap-2 p-2>
+    <div fc gap-2 p-2 w-full>
       <BossDashboard :boss-info="bossInfo" />
       <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
       <Summon :summon-info="summonInfo" />
     </div>
-    <div flex items-start justify-start gap-2 p-2>
+    <div flex items-start justify-start gap-2 p-2 w-full>
       <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
       <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
