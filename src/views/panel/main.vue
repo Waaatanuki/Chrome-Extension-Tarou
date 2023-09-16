@@ -400,7 +400,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
           hit.player = player
           hit.hasResult = true
           hit.point = point
-          hit.duration = point
+          hit.duration = time
           hit.speed = speed
           hit.treasureList = treasureList
         }
