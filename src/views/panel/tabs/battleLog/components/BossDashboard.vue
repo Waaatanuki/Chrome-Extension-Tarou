@@ -59,14 +59,14 @@ function formatTime(seconds: number): string {
         </div>
       </template>
     </el-progress>
+    <el-tag v-if="bossInfo.interrupt_display_text" absolute class="left-1/2 top-1/2 translate-y-85px -translate-x-1/2">
+      {{ bossInfo.interrupt_display_text }}
+    </el-tag>
     <div absolute left-1 top-1 text-lg>
       {{ formatTime(operationSecond) }}
     </div>
     <div absolute right-1 top-1 text-base>
       {{ bossInfo.battleId }}
     </div>
-    <el-text truncated absolute bottom-1 right-1 w-100px text-right size="small">
-      {{ bossInfo.interrupt_display_text }}
-    </el-text>
   </div>
 </template>
