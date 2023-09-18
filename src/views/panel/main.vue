@@ -378,6 +378,8 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
             raid_name: raidName,
             turn: Number(turn),
             endTimestamp,
+            startTimer: 0,
+            endTimer: 0,
             player,
             actionQueue: [],
             hasResult: true,
