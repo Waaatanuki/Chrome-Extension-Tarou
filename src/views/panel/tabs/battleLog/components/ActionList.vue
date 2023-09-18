@@ -7,7 +7,7 @@ const innerRef = ref<HTMLDivElement>()
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
 watch(() => props.battleRecord.actionQueue, () => {
-  scrollbarRef.value!.setScrollTop(innerRef.value!.scrollHeight)
+  scrollbarRef.value?.setScrollTop(innerRef.value?.scrollHeight || 0)
 }, { deep: true })
 
 function getImg(action: Action) {
