@@ -27,7 +27,7 @@ const calculateSetting = ref()
 
 chrome.devtools.network.onRequestFinished.addListener((request) => {
   // Dashboard 抽卡数据
-  if (request.request.url.includes('game.granbluefantasy.jp/gacha/list')) {
+  if (request.request.url.includes('/gacha/list')) {
     request.getContent((content: string) => {
       const gachaInfo = JSON.parse(content)
       stone.value = Number(gachaInfo.stone_num)
@@ -240,7 +240,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   }
 
   // BattleLog 记录副本start信息
-  if (request.request.url.includes('rest/raid/start.json') || request.request.url.includes('rest/multiraid/start.json')) {
+  if (/\/rest\/(raid|multiraid)\/start\.json/.test(request.request.url)) {
     request.request.queryString.forEach((param) => {
       if (param.name === 'uid')
         userId.value = param.value
@@ -251,7 +251,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   }
 
   // BattleLog 记录单次攻击日志
-  if (request.request.url.includes('rest/raid/normal_attack_result.json') || request.request.url.includes('rest/multiraid/normal_attack_result.json')) {
+  if (/\/rest\/(raid|multiraid)\/normal_attack_result\.json/.test(request.request.url)) {
     resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
     request.getContent((content: string) => {
       resultJson.value = { type: 'normal', result: JSON.parse(content) }
@@ -259,7 +259,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   }
 
   // BattleLog 记录使用召唤日志
-  if (request.request.url.includes('rest/raid/summon_result.json') || request.request.url.includes('rest/multiraid/summon_result.json')) {
+  if (/\/rest\/(raid|multiraid)\/summon_result\.json/.test(request.request.url)) {
     resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
     request.getContent((content: string) => {
       resultJson.value = { type: 'summon', result: JSON.parse(content) }
@@ -267,7 +267,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   }
 
   // BattleLog 记录使用技能日志
-  if (request.request.url.includes('rest/raid/ability_result.json') || request.request.url.includes('rest/multiraid/ability_result.json')) {
+  if (/\/rest\/(raid|multiraid)\/ability_result\.json/.test(request.request.url)) {
     resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
     request.getContent((content: string) => {
       resultJson.value = { type: 'ability', result: JSON.parse(content) }
@@ -275,7 +275,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   }
 
   // BattleLog 记录使用蓝绿药日志
-  if (request.request.url.includes('rest/raid/temporary_item_result.json')) {
+  if (/\/rest\/(raid|multiraid)\/temporary_item_result\.json/.test(request.request.url)) {
     resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
     request.getContent((content: string) => {
       resultJson.value = { type: 'temporary', result: JSON.parse(content) }
@@ -283,7 +283,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   }
 
   // BattleLog 记录使用大红日志
-  if (request.request.url.includes('rest/raid/user_recovery.json')) {
+  if (/\/rest\/(raid|multiraid)\/user_recovery\.json/.test(request.request.url)) {
     resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
     request.getContent((content: string) => {
       resultJson.value = { type: 'recovery', result: JSON.parse(content) }
@@ -291,7 +291,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   }
 
   // BattleLog 记录切换guard日志
-  if (request.request.url.includes('rest/raid/guard_setting.json') || request.request.url.includes('rest/multiraid/guard_setting.json')) {
+  if (/\/rest\/(raid|multiraid)\/guard_setting\.json/.test(request.request.url)) {
     request.getContent((content: string) => {
       guardSettingJson.value = {
         raid_id: JSON.parse(request.request.postData!.text!).raid_id,
@@ -301,11 +301,11 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   }
 
   // BattleLog 记录切换奥义温存日志
-  if (request.request.url.includes('rest/raid/special_skill_setting') || request.request.url.includes('rest/multiraid/special_skill_setting'))
+  if (/\/rest\/(raid|multiraid)\/special_skill_setting\.json/.test(request.request.url))
     specialSkillSetting.value = JSON.parse(request.request.postData!.text!)
 
   // BattleLog 记录boss buff信息
-  if (request.request.url.includes('rest/raid/condition')) {
+  if (/\/rest\/(raid|multiraid)\/condition/.test(request.request.url)) {
     request.getContent((content: string) => {
       bossConditionJson.value = JSON.parse(content).condition
     })
