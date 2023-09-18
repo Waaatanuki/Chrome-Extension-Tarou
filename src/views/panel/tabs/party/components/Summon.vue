@@ -28,8 +28,8 @@ function getImg(type: string, id: string, size = 'm') {
         <img v-if="subSummons[idx ]?.param?.image_id" w-full :src="getImg('summon', subSummons[idx ]?.param?.image_id)">
       </div>
     </div>
-    <div h-full w-100px bg-slate-300>
-      <img v-if="calculateSetting && calculateSetting.image_id" h-full w-full :src="getImg('summon', calculateSetting.image_id, 'ls')">
+    <div v-if="calculateSetting && calculateSetting.image_id" h-full w-100px bg-slate-300>
+      <img h-full w-full :src="getImg('summon', calculateSetting.image_id, 'ls')">
     </div>
   </div>
 </template>
