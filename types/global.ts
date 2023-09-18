@@ -51,6 +51,8 @@ declare module 'myStorage' {
     turn: number
     startTimestamp?: number
     endTimestamp?: number
+    startTimer: number
+    endTimer: number
     player: Player[]
     actionQueue: {
       turn: number
@@ -156,6 +158,10 @@ declare module 'requestData'{
     user_id: string
     ability: Ability
     special_skill_flag: string
+    special_skill_indicate: { interrupt_display_text: string }[]
+    status?: {
+      special_skill_indicate: { interrupt_display_text: string }[]
+    }
   }
 
   export interface Boss {
@@ -332,6 +338,7 @@ declare module 'requestData'{
       timer: number
       turn: number
       is_guard_status: { is_guard_status: number }[]
+      special_skill_indicate: { interrupt_display_text: string }[]
     }
   }
   export interface Ability {
@@ -584,6 +591,7 @@ declare module 'battleLog'{
     turn: number
     timer: number
     remainderSecond: number
+    interrupt_display_text?: string
   }
 
   export interface BuffInfo {

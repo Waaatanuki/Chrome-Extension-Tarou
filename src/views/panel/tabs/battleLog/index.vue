@@ -47,6 +47,11 @@ watch(() => props.battleStartJson, (data) => {
     remainderSecond: data.timer,
   }
 
+  if (data.special_skill_indicate?.length > 0)
+    bossInfo.value.interrupt_display_text = data.special_skill_indicate[0].interrupt_display_text
+  if (data.status?.special_skill_indicate?.length && data.status?.special_skill_indicate?.length > 0)
+    bossInfo.value.interrupt_display_text = data.status.special_skill_indicate[0].interrupt_display_text
+
   summonInfo.value = {
     summon: [...data.summon],
     supporter: data.supporter,
@@ -153,6 +158,8 @@ function recordRaidInfo(data: BattleStartJson) {
       imgId: boss.cjs.split('_').at(-1)!,
       turn: data.turn,
       startTimestamp: Date.now(),
+      startTimer: data.timer || 0,
+      endTimer: data.timer || 0,
       player,
       special_skill_flag: Number(data.special_skill_flag),
       actionQueue,
@@ -172,6 +179,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
   if (!currentRaid)
     return
 
+  currentRaid.endTimer = data.status.timer
   const playerPosInfo: { pid: string; pos: number }[] = []
   Object.values(data.status.ability).forEach((npc) => {
     playerPosInfo.push({
@@ -377,6 +385,9 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   const bossGauge = data.scenario.filter(item => item.cmd === 'boss_gauge').at(-1)
   const status = data.status
 
+  if (bossInfo.value)
+    bossInfo.value.interrupt_display_text = status.special_skill_indicate?.length > 0 ? status.special_skill_indicate[0].interrupt_display_text : ''
+
   if (bossGauge && bossInfo.value) {
     bossInfo.value.name = bossGauge.name!.ja
     bossInfo.value.hp = bossGauge.hp!
@@ -462,7 +473,7 @@ const memberList = computed(() => {
 <template>
   <div v-if="bossInfo && buffInfo && summonInfo" fc flex-col gap-10px w-full>
     <div fc gap-2 p-2 w-full>
-      <BossDashboard :boss-info="bossInfo" />
+      <BossDashboard :boss-info="bossInfo" :raid-id="raidId" />
       <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
       <Summon :summon-info="summonInfo" />
     </div>

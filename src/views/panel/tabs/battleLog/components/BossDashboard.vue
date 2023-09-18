@@ -1,19 +1,36 @@
 <script setup lang="ts">
 import type { BossInfo } from 'battleLog'
+import { battleRecord } from '~/logic'
 
-const props = defineProps<{ bossInfo: BossInfo }>()
+const props = defineProps<{ bossInfo: BossInfo; raidId?: number }>()
 const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
 const bossImgSrc = computed(() => `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/${props.bossInfo.imgId}.png`)
 
-function formatSecondsToHHMMSS(seconds: number) {
-  const date = new Date(0)
-  date.setSeconds(seconds)
+const operationSecond = computed(() => {
+  const hit = battleRecord.value.find(record => record.raid_id === props.raidId)
+  if (hit)
+    return hit.startTimer - hit.endTimer
+  else
+    return 0
+})
 
-  const hours = date.getUTCHours().toString().padStart(2, '0')
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0')
-  const remainingSeconds = date.getSeconds().toString().padStart(2, '0')
+function formatTime(seconds: number): string {
+  if (seconds === 0)
+    return ''
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const remainingSeconds = seconds % 60
 
-  return `${hours}:${minutes}:${remainingSeconds}`
+  const formattedMinutes = minutes.toString().padStart(2, '0')
+  const formattedSeconds = remainingSeconds.toString().padStart(2, '0')
+
+  if (hours > 0) {
+    const formattedHours = hours.toString().padStart(2, '0')
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+  }
+  else {
+    return `${formattedMinutes}:${formattedSeconds}`
+  }
 }
 </script>
 
@@ -25,7 +42,7 @@ function formatSecondsToHHMMSS(seconds: number) {
           <div fc gap-5 text-xl>
             {{ `TURN ${bossInfo.turn}` }}
             <div v-if="bossInfo.hp === 0">
-              {{ formatSecondsToHHMMSS(bossInfo.remainderSecond) }}
+              {{ formatTime(bossInfo.remainderSecond) }}
             </div>
             <el-countdown v-else :value="timerValue" />
           </div>
@@ -42,8 +59,14 @@ function formatSecondsToHHMMSS(seconds: number) {
         </div>
       </template>
     </el-progress>
-    <div absolute right-1 top-1>
+    <div absolute left-1 top-1 text-lg>
+      {{ formatTime(operationSecond) }}
+    </div>
+    <div absolute right-1 top-1 text-base>
       {{ bossInfo.battleId }}
     </div>
+    <el-text truncated absolute bottom-1 right-1 w-100px text-right size="small">
+      {{ bossInfo.interrupt_display_text }}
+    </el-text>
   </div>
 </template>
