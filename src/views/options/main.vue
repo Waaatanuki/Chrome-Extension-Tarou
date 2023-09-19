@@ -55,7 +55,7 @@ function handleExport() {
 </script>
 
 <template>
-  <main font-sans>
+  <main>
     <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between bg-violet px-4 text-base>
       <div fc gap-2>
         <div

@@ -4,3 +4,7 @@ body,
   margin: 0;
   padding: 0;
 }
+
+body {
+  font-family: 'LXGW WenKai Screen', sans-serif;
+}

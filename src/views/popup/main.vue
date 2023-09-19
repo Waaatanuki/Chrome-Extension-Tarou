@@ -79,7 +79,7 @@ function exportJSONFile(itemList: any) {
 </script>
 
 <template>
-  <main font-sans>
+  <main>
     <div w-500px>
       <el-table :data="goldBrickTableShowData">
         <el-table-column prop="name" align="center">

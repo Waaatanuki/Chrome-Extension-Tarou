@@ -435,32 +435,34 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 </script>
 
 <template>
-  <el-tabs type="border-card">
-    <el-tab-pane label="主页">
-      <Dashborad />
-    </el-tab-pane>
-    <el-tab-pane label="贤者素材">
-      <EvokerPage />
-    </el-tab-pane>
-    <el-tab-pane label="队伍信息">
-      <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
-    </el-tab-pane>
-    <el-tab-pane label="战斗日志">
-      <BattleLog
-        :user-id="userId"
-        :battle-start-json="battleStartJson"
-        :result-json="resultJson"
-        :result-json-payload="resultJsonPayload"
-        :boss-condition-json="bossConditionJson"
-        :lobby-member-list="lobbyMemberList"
-        :battle-result-list="battleResultList"
-        :guard-setting-json="guardSettingJson"
-        :special-skill-setting="specialSkillSetting"
-        :battle-record-limit="battleRecordLimit"
-      />
-    </el-tab-pane>
-    <el-tab-pane label="战斗历史">
-      <BattleRecord :battle-record-limit="battleRecordLimit" />
-    </el-tab-pane>
-  </el-tabs>
+  <main>
+    <el-tabs type="border-card">
+      <el-tab-pane label="主页">
+        <Dashborad />
+      </el-tab-pane>
+      <el-tab-pane label="贤者素材">
+        <EvokerPage />
+      </el-tab-pane>
+      <el-tab-pane label="队伍信息">
+        <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
+      </el-tab-pane>
+      <el-tab-pane label="战斗日志">
+        <BattleLog
+          :user-id="userId"
+          :battle-start-json="battleStartJson"
+          :result-json="resultJson"
+          :result-json-payload="resultJsonPayload"
+          :boss-condition-json="bossConditionJson"
+          :lobby-member-list="lobbyMemberList"
+          :battle-result-list="battleResultList"
+          :guard-setting-json="guardSettingJson"
+          :special-skill-setting="specialSkillSetting"
+          :battle-record-limit="battleRecordLimit"
+        />
+      </el-tab-pane>
+      <el-tab-pane label="战斗历史">
+        <BattleRecord :battle-record-limit="battleRecordLimit" />
+      </el-tab-pane>
+    </el-tabs>
+  </main>
 </template>
