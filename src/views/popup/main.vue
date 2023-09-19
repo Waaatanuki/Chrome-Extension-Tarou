@@ -90,7 +90,7 @@ function exportJSONFile(itemList: any) {
             />
           </template>
           <template #default="{ row }">
-            <img w-full m-auto :src="getLocalImg(row.quest_id, 'raid')">
+            <img w-full m-auto :src="getQuestImg(row.quest_id)">
           </template>
         </el-table-column>
         <el-table-column prop="blueChest" align="center">
