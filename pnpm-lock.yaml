@@ -52,9 +52,6 @@ devDependencies:
   fast-glob:
     specifier: ^3.3.1
     version: 3.3.1
-  lxgw-wenkai-screen-webfont:
-    specifier: ^1.7.0
-    version: 1.7.0
   npm-run-all:
     specifier: ^4.1.5
     version: 4.1.5
@@ -3318,10 +3315,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
-    dev: true
-
-  /lxgw-wenkai-screen-webfont@1.7.0:
-    resolution: {integrity: sha512-xvfF4V26Mb335xKg3uxljz+V2nq4F5ek0ku9pmyKgT0Dzo/d2rHi7WpnqgvM9mlXAcAKOrxrcDmUZiIs/ZQ9bQ==}
     dev: true
 
   /magic-string@0.30.2:
