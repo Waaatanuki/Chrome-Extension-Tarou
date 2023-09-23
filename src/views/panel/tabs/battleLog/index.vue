@@ -431,7 +431,7 @@ function getAbilityList(rawAbility: Ability) {
 }
 
 const normalAttackInfo = computed(() => {
-  if (!props.resultJson || props.resultJson?.type !== 'normal')
+  if (!props.resultJson?.result || props.resultJson?.type !== 'normal')
     return { hit: 0, damage: 0 }
 
   const attackList = props.resultJson.result.scenario.filter((item: any) => item.cmd === 'attack' && item.from === 'player')
