@@ -6,7 +6,7 @@ const props = defineProps<{ battleRecord: BattleRecord }>()
 const innerRef = ref<HTMLDivElement>()
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
-watch(() => props.battleRecord.actionQueue, () => {
+watch(() => props.battleRecord, () => {
   scrollbarRef.value?.setScrollTop(innerRef.value?.scrollHeight || 0)
 }, { deep: true })
 

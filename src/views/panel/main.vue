@@ -27,7 +27,7 @@ const calculateSetting = ref()
 
 chrome.devtools.network.onRequestFinished.addListener((request) => {
   // Dashboard 抽卡数据
-  if (request.request.url.includes('/gacha/list')) {
+  if (request.request.url.includes('game.granbluefantasy.jp/gacha/list')) {
     request.getContent((content: string) => {
       const gachaInfo = JSON.parse(content)
       stone.value = Number(gachaInfo.stone_num)
