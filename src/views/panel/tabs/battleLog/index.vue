@@ -28,7 +28,7 @@ const buffInfo = ref<BuffInfo>()
 const raidId = ref<number>()
 
 watch(() => props.battleStartJson, (data) => {
-  if (!data)
+  if (!data || !data.raid_id)
     return
 
   raidId.value = data.raid_id
