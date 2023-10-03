@@ -223,8 +223,8 @@ declare module 'requestData'{
   }
 
   export interface Condition {
-    buff: Buff[]
-    debuff: Buff[]
+    buff?: Buff[]
+    debuff?: Buff[]
     num?: number
   }
 

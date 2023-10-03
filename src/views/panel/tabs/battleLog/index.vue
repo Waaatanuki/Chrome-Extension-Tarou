@@ -90,12 +90,16 @@ function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condit
   if (!bossCondition || !playerCondition)
     return
 
-  const bossBuffs = bossCondition.buff || []
-  const bossDebuffs = bossCondition.debuff || []
+  const bossBuffs = bossCondition.buff?.filter((item) => {
+    return !item.personal_buff_user_id || item.personal_buff_user_id === props.userId
+  }) || []
+
+  const bossDebuffs = bossCondition.debuff?.filter((item) => {
+    return !item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId
+  }) || []
+
   const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => {
     return index === self.findIndex(t => t.status === item.status)
-     && (!item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId)
-     && (!item.personal_buff_user_id || item.personal_buff_user_id === props.userId)
   })
 
   const playerBuffs = playerCondition.buff || []
