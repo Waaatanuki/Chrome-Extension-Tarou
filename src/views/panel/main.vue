@@ -121,7 +121,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       const npcDetail = JSON.parse(content)
       const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(npcDetail.master.id))
       if (hitEvoker)
-        hitEvoker.isAbility4Release = !!(npcDetail.action_ability4 && npcDetail.action_ability4.quest.is_clear)
+        hitEvoker.isAbility4Release = !!(npcDetail.ability[4] && npcDetail.ability[4].quest?.is_clear)
 
       // 记录角色信息
       const npcInfo: NpcInfo = {
@@ -135,7 +135,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       }
 
       for (let i = 1; i <= 4; i++) {
-        const currentAbility = npcDetail[`action_ability${i}`]
+        const currentAbility = npcDetail.ability[i]
         if (currentAbility) {
           npcInfo.action_ability.push({
             action_id: currentAbility.action_id,
