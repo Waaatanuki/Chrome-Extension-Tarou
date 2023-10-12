@@ -46,7 +46,7 @@ function getSkillAlias(description: string) {
         </div>
       </div>
     </div>
-    <div v-show="simpleChecked" w-full flex items-center justify-between p-10px text-lg>
+    <div v-show="simpleChecked" w-full flex items-center justify-between p-10px text-base>
       <div>预测伤害：{{ damageInfo.assumed_normal_damage.toLocaleString() }}</div>
       <div>克属伤害：{{ damageInfo.assumed_advantage_damage.toLocaleString() }}</div>
     </div>

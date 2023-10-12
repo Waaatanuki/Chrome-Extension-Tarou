@@ -260,6 +260,8 @@ function processSummonScenario(action: SummonScenario, raid: BattleRecord) {
 }
 
 function processDamageScenario(action: DamageScenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
+  if (!action.name)
+    return
   const hitPlayer = raid.player[num]
   if (hitPlayer) {
     hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
@@ -270,6 +272,8 @@ function processDamageScenario(action: DamageScenario, raid: BattleRecord, num: 
 }
 
 function processLoopDamageScenario(action: LoopDamageScenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
+  if (!action.name)
+    return
   const hitPlayer = raid.player[num]
   if (hitPlayer) {
     hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
