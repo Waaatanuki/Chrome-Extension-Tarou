@@ -159,9 +159,8 @@ declare module 'requestData'{
     ability: Ability
     special_skill_flag: string
     special_skill_indicate: { interrupt_display_text: string }[]
-    status?: {
-      special_skill_indicate: { interrupt_display_text: string }[]
-    }
+    scenario?: ScenarioType[]
+    status?: StatusInfo
   }
 
   export interface Boss {
@@ -331,16 +330,19 @@ declare module 'requestData'{
 
   export interface AttackResultJson {
     scenario: ScenarioType[]
-    status: {
-      ability: Ability
-      supporter: { recast: null | number | string }
-      summon: { recast: (null | number | string)[] }
-      timer: number
-      turn: number
-      is_guard_status: { is_guard_status: number }[]
-      special_skill_indicate: { interrupt_display_text: string }[]
-    }
+    status: StatusInfo
   }
+
+  export interface StatusInfo {
+    ability: Ability
+    supporter: { recast: null | number | string }
+    summon: { recast: (null | number | string)[] }
+    timer: number
+    turn: number
+    is_guard_status: { is_guard_status: number }[]
+    special_skill_indicate: { interrupt_display_text: string }[]
+  }
+
   export interface Ability {
     [key: string]: {
       mode: string
