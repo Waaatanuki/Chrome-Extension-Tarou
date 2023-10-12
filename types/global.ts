@@ -78,6 +78,12 @@ declare module 'myStorage' {
     use_special_skill_count: number
     damage: PlayerDamage
     is_npc: boolean
+    attackInfo?: {
+      total: number
+      sa: number
+      da: number
+      ta: number
+    }
   }
 
   export interface PlayerDamage {
@@ -376,6 +382,7 @@ declare module 'requestData'{
     damage: { value: number }[][]
     total?: { split: string[] }[]
     is_damage_sync_effect: boolean | string
+    effect?: string
   }
 
   export interface SummonScenario extends Scenario {

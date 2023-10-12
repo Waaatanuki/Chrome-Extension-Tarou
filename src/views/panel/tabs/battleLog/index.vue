@@ -219,6 +219,17 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
           }, 0)
           return pre
         }, 0)
+
+        // 记录连击数据
+        if (!action.effect) {
+          hitPlayer.attackInfo = hitPlayer.attackInfo || { total: 1, sa: 0, da: 0, ta: 0 }
+          if (action.damage.length === 1)
+            hitPlayer.attackInfo.sa++
+          else if (action.damage.length === 2)
+            hitPlayer.attackInfo.da++
+          else
+            hitPlayer.attackInfo.ta++
+        }
       }
     }
     if (action.cmd === 'damage' && action.to === 'boss') {
