@@ -165,10 +165,10 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   if (request.request.url.includes('/party/job_equipped')) {
     request.getContent((content: string) => {
       const jobInfo = JSON.parse(content).job
-      const job_param_id = jobInfo.param.id
+      const job_param_id = String(jobInfo.param.id)
 
       for (let i = 1; i <= 4; i++) {
-        const actionAbility = jobInfo.action_ability[i]
+        const actionAbility = jobInfo.ability[i]
         if (actionAbility) {
           const ab: NpcAbility = {
             action_id: String(actionAbility.action_id),

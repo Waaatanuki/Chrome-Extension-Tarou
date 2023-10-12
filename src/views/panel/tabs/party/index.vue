@@ -78,7 +78,7 @@ watch(() => props.deckJson, (value) => {
       leader: value.pc.param,
       leaderAbilityList,
       npcs: newNpcs,
-      setAction: value.pc.set_action,
+      setAction: value.pc.set_action.filter(a => a.set_action_id),
       weapons: value.pc.weapons,
       summons: value.pc.summons,
       quickSummoniId: String(value.pc.quick_user_summon_id),
