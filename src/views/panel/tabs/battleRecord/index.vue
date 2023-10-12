@@ -15,6 +15,34 @@ function triggerLock(row: BattleRecord) {
     row.reserve = !row.reserve
 }
 
+function getRealTimeSpeed(row: BattleRecord) {
+  const seconds = row.startTimer - row.endTimer
+  if (!seconds)
+    return '-'
+  const point = Number(row.point?.split(',').join(''))
+
+  return `${formatTime(seconds)} / ${(point / (seconds / 60) / 1000000).toFixed(0)}`
+}
+
+function getFullTimeSpeed(row: BattleRecord) {
+  if (!row.duration)
+    return '-'
+
+  const point = Number(row.point?.split(',').join(''))
+
+  let formatted_time = row.duration
+
+  if (row.duration.split(':').length === 2)
+    formatted_time = `00:${formatted_time}`
+
+  const hour = Number(formatted_time.split(':')[0])
+  const minute = Number(formatted_time.split(':')[1])
+  const second = Number(formatted_time.split(':')[2])
+  const seconds = hour * 3600 + minute * 60 + second
+
+  return `${row.duration} / ${(point / (seconds / 60) / 1000000).toFixed(0)}`
+}
+
 function clear() {
   battleRecord.value = battleRecord.value.filter(record => record.reserve)
 }
@@ -37,14 +65,22 @@ function clear() {
     </el-table-column>
     <el-table-column label="结束时间" align="center" width="120">
       <template #default="{ row }">
-        {{ row.endTimestamp ? dayjs(row.endTimestamp).format('MM/DD HH:mm') : '_' }}
+        {{ row.endTimestamp ? dayjs(row.endTimestamp).format('MM/DD HH:mm') : '-' }}
       </template>
     </el-table-column>
     <el-table-column prop="raid_name" label="副本" align="center" />
     <el-table-column prop="point" label="伤害" align="center" />
     <el-table-column prop="turn" label="回合数" align="center" width="100" />
-    <el-table-column prop="duration" label="讨伐时间" align="center" width="100" />
-    <el-table-column prop="speed" label="跑速" align="center" width="100" />
+    <el-table-column label="操作时长/跑速" align="center" width="120">
+      <template #default="{ row }">
+        {{ getRealTimeSpeed(row) }}
+      </template>
+    </el-table-column>
+    <el-table-column label="讨伐时间/跑速" align="center" width="120">
+      <template #default="{ row }">
+        {{ getFullTimeSpeed(row) }}
+      </template>
+    </el-table-column>
     <el-table-column label="操作" align="center" width="100">
       <template #default="{ row, $index }">
         <div w-76px flex items-center justify-start gap-20px p-10px text-xl>

@@ -335,15 +335,6 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         const turn = gainList[3]
         const time = gainList[4]
 
-        function getSpeed(point: string, time: string): string {
-          const _point = Number(point.split(',').join(''))
-          const minute = Number(time.split(':')[0])
-          const second = Number(time.split(':')[1])
-          return (_point / (second / 60 + minute) / 1000000).toFixed(0)
-        }
-
-        const speed = getSpeed(point, time)
-
         const treasureList: { src: string; number: string; boxClass: string }[] = []
 
         $('.lis-treasure').each((i, elem) => {
@@ -385,7 +376,6 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
             hasResult: true,
             point,
             duration: time,
-            speed,
             treasureList,
             reserve: false,
             abilityList: [],
@@ -403,7 +393,6 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
           hit.hasResult = true
           hit.point = point
           hit.duration = time
-          hit.speed = speed
           hit.treasureList = treasureList
         }
       })
