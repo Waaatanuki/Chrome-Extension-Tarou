@@ -59,7 +59,7 @@ const evokerPageResult = computed(() => {
 </script>
 
 <template>
-  <div flex flex-col text-sm>
+  <div flex flex-col text-sm mb-2>
     <div flex justify-around items-center my-2>
       <div v-for=" idx in 5" :key="idx">
         <EvokerCard v-model="evokerInfo[idx - 1]" />
@@ -71,44 +71,33 @@ const evokerPageResult = computed(() => {
       </div>
     </div>
   </div>
-  <div v-if="evokerPageResult.length === 0">
-    <h1 text-center>
+  <div v-if="materialInfo.length === 0" fc>
+    <el-tag type="warning" size="large" effect="dark" round>
       请先去游戏的素材界面读取素材信息
-    </h1>
+    </el-tag>
   </div>
   <div v-else>
-    <el-scrollbar max-height="210">
-      <div class="showBox">
-        <div
-          v-for="item in evokerPageResult.filter(item => item.need > 0)"
-          :key="item.id"
-          class="item"
-        >
-          <el-tooltip :content="`${item.name} 总需${item.total}`" placement="top">
-            <img w-full :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${item.id}.jpg`">
-          </el-tooltip>
-          <label>{{ item.need }}</label>
+    <div v-if="evokerPageResult.filter(item => item.need > 0).length === 0" fc>
+      <el-tag type="success" size="large" effect="dark" round>
+        恭喜你已出狱！
+      </el-tag>
+    </div>
+    <div v-else>
+      <el-scrollbar max-height="210">
+        <div fc flex-wrap>
+          <div
+            v-for="item in evokerPageResult.filter(item => item.need > 0)" :key="item.id"
+            fc flex-col w-50px gap-5px
+          >
+            <el-tooltip :content="`${item.name} 总需${item.total}`" placement="top">
+              <img w-full :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${item.id}.jpg`">
+            </el-tooltip>
+            <label>{{ item.need }}</label>
+          </div>
         </div>
-      </div>
-    </el-scrollbar>
+      </el-scrollbar>
+    </div>
   </div>
+
   <BossTriggers />
 </template>
-
-<style lang="scss" scoped>
-.showBox {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-
-  .item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    margin: 5px;
-  }
-}
-</style>
