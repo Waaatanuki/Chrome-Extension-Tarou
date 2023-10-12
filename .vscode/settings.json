@@ -24,7 +24,7 @@
   "eslint.format.enable": true,
   "git.enableSmartCommit": true,
   "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[vue]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
@@ -32,7 +32,7 @@
   "[typescript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
-  "[jsonc]": {
+  "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "editor.formatOnSave": true,
