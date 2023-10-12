@@ -389,7 +389,6 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         }
         else {
           hit.endTimestamp = endTimestamp
-          hit.player = player
           hit.hasResult = true
           hit.point = point
           hit.duration = time

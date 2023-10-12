@@ -29,10 +29,14 @@ const totalDamage = computed(() =>
 function getImg(player: Player) {
   return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${player.is_npc ? 'npc' : 'leader'}/m/${player.image_id}.jpg`
 }
+
+function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number; da: number; ta: number }) {
+  return `${Math.floor(info[type] / info.total * 100)}%`
+}
 </script>
 
 <template>
-  <el-card v-if="battleRecord" w-400px shrink-0>
+  <el-card v-if="battleRecord" w-420px shrink-0>
     <div h-520px>
       <div w-full fc flex-col gap-10px pb-10px>
         <div text-xl font-bold>
@@ -71,8 +75,21 @@ function getImg(player: Player) {
             <el-progress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
               <div />
             </el-progress>
-            <div mr-5px mt-10px text-end text-xl>
-              {{ player.damage[damageType].value.toLocaleString() }}
+            <div mx-5px mt-10px flex justify-between items-center>
+              <div>
+                <el-tooltip
+                  v-if="player.attackInfo"
+                  :content="`总次数: ${player.attackInfo.total} TA: ${getRengeki('ta', player.attackInfo)} DA: ${getRengeki('da', player.attackInfo)}  SA: ${getRengeki('sa', player.attackInfo)}`"
+                  placement="top" effect="dark"
+                >
+                  <div text-xs>
+                    {{ `TA: ${getRengeki('ta', player.attackInfo)}` }}
+                  </div>
+                </el-tooltip>
+              </div>
+              <div text-base>
+                {{ player.damage[damageType].value.toLocaleString() }}
+              </div>
             </div>
           </div>
         </div>
