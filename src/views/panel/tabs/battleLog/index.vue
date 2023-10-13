@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Action, BattleRecord, Player } from 'myStorage'
-import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialSkillSetting, SummonScenario } from 'requestData'
+import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialSkillSetting, SummonScenario, SuperScenario } from 'requestData'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
@@ -137,6 +137,12 @@ function recordRaidInfo(data: BattleStartJson) {
           special: { comment: '奥义伤害', value: 0 },
           other: { comment: '其他', value: 0 },
         },
+        damageTaken: {
+          total: { comment: '总计', value: 0 },
+          attack: { comment: '通常攻击&反击', value: 0 },
+          super: { comment: '特动', value: 0 },
+          other: { comment: '其他', value: 0 },
+        },
       })
       return pre
     }, [])
@@ -267,10 +273,30 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
       const hitPlayer = currentRaid.player[Number(action.index)]
       hitPlayer && (hitPlayer.is_dead = false)
     }
+
+    // 统计承伤
+    if (action.cmd === 'super' && action.target === 'player')
+      processSuperScenario(action as SuperScenario, currentRaid)
+    if (action.cmd === 'attack' && action.from === 'boss') {
+      Object.values(action.damage).forEach((item) => {
+        item.forEach((hit) => {
+          const hitPlayer = currentRaid.player.find(player => player.pid === playerPosInfo.find(p => p.pos === hit.pos)!.pid)
+          hitPlayer && (hitPlayer.damageTaken.attack.value += hit.value)
+        })
+      },
+      )
+    }
+    if (action.cmd === 'damage' && action.to === 'player') {
+      action.list.forEach((_hit) => {
+        const hit = _hit as { num: number; value: number }
+        currentRaid.player[hit.num].damageTaken.other.value += hit.value
+      })
+    }
   })
   let point = 0
   currentRaid.player.forEach((player) => {
     player.damage.total.value = player.damage.ability.value + player.damage.attack.value + player.damage.other.value + player.damage.special.value
+    player.damageTaken.total.value = player.damageTaken.super.value + player.damageTaken.attack.value + player.damageTaken.other.value
     point += player.damage.total.value
   })
   currentRaid.point = point.toLocaleString()
@@ -307,6 +333,14 @@ function processLoopDamageScenario(action: LoopDamageScenario, raid: BattleRecor
       return pre
     }, 0)
   }
+}
+
+function processSuperScenario(action: SuperScenario, raid: BattleRecord) {
+  action.list.forEach((item) => {
+    item.damage.forEach((hit) => {
+      raid.player[hit.pos].damageTaken.super.value += hit.value
+    })
+  })
 }
 
 function handleActionQueue(type: string, data: AttackResultJson) {

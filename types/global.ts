@@ -77,6 +77,7 @@ declare module 'myStorage' {
     use_ability_count: number
     use_special_skill_count: number
     damage: PlayerDamage
+    damageTaken: PlayerDamageTaken
     is_npc: boolean
     is_dead: boolean
     attackInfo?: {
@@ -92,6 +93,13 @@ declare module 'myStorage' {
     attack: PlayerDamageDetail
     ability: PlayerDamageDetail
     special: PlayerDamageDetail
+    other: PlayerDamageDetail
+  }
+
+  export interface PlayerDamageTaken {
+    total: PlayerDamageDetail
+    attack: PlayerDamageDetail
+    super: PlayerDamageDetail
     other: PlayerDamageDetail
   }
 
@@ -380,11 +388,12 @@ declare module 'requestData'{
     from: string
     to: string
     condition: Condition
-    damage: { value: number; hp: number }[][]
+    damage: { value: number; hp: number; pos: number }[][]
     total?: { split: string[] }[]
     is_damage_sync_effect: boolean | string
     effect?: string
     index?: number | string
+    target?: string
   }
 
   export interface SummonScenario extends Scenario {
@@ -392,11 +401,15 @@ declare module 'requestData'{
   }
 
   export interface DamageScenario extends Scenario {
-    list: { value?: number; damage?: { value: number }[] }[]
+    list: { num: number; value?: number; damage?: { value: number }[] }[]
   }
 
   export interface LoopDamageScenario extends Scenario {
     list: { value?: number; damage?: { value: number }[] }[][]
+  }
+
+  export interface SuperScenario extends Scenario {
+    list: { damage: { pos: number; value: number }[] }[]
   }
 
   export interface ResultJsonPayload {

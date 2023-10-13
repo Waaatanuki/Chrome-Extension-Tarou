@@ -30,7 +30,7 @@ function getNpcImg(action: Action) {
 
 <template>
   <el-card v-if="battleRecord" min-w-400px>
-    <ElScrollbar ref="scrollbarRef" height="520px">
+    <ElScrollbar ref="scrollbarRef" height="554px">
       <div ref="innerRef">
         <el-card
           v-for="list, idx in battleRecord.actionQueue" :key="idx"

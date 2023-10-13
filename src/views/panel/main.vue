@@ -361,6 +361,12 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
               special: { comment: '奥义伤害', value: Number(cur.special_damage) },
               other: { comment: '其他', value: Number(cur.other_damage) },
             },
+            damageTaken: {
+              total: { comment: '总计', value: 0 },
+              attack: { comment: '通常攻击&反击', value: 0 },
+              super: { comment: '特动', value: 0 },
+              other: { comment: '其他', value: 0 },
+            },
           })
           return pre
         }, [])
