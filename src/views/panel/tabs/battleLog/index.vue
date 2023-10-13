@@ -222,14 +222,17 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
 
         // 记录连击数据
         if (!action.effect) {
-          hitPlayer.attackInfo = hitPlayer.attackInfo || { total: 0, sa: 0, da: 0, ta: 0 }
-          hitPlayer.attackInfo.total++
-          if (action.damage.length === 1)
-            hitPlayer.attackInfo.sa++
-          else if (action.damage.length === 2)
-            hitPlayer.attackInfo.da++
-          else
-            hitPlayer.attackInfo.ta++
+          // 致死普攻如果不是ta就不记录
+          if (!(action.damage.length < 3 && action.damage.some(attack => attack.some(hit => hit.hp === 0)))) {
+            hitPlayer.attackInfo = hitPlayer.attackInfo || { total: 0, sa: 0, da: 0, ta: 0 }
+            hitPlayer.attackInfo.total++
+            if (action.damage.length === 1)
+              hitPlayer.attackInfo.sa++
+            else if (action.damage.length === 2)
+              hitPlayer.attackInfo.da++
+            else
+              hitPlayer.attackInfo.ta++
+          }
         }
       }
     }
