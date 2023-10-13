@@ -56,7 +56,12 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
 
       <div fc flex-col gap-10px>
         <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
-          <img w-100px :src="getImg(player)">
+          <div w-100px relative>
+            <div v-if="player.is_dead" class="absolute w-full h-full bg-black/40 fc">
+              <span text-red text-base font-bold>Dead</span>
+            </div>
+            <img w-full :src="getImg(player)">
+          </div>
           <div fc flex-col gap-5px>
             <div relative w-60px>
               <img w-full :src="getLocalImg('ability-count-bg')">
@@ -71,7 +76,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
               </div>
             </div>
           </div>
-          <div w-250px>
+          <div w-200px>
             <el-progress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
               <div />
             </el-progress>

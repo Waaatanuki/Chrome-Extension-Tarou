@@ -353,6 +353,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
             use_ability_count: Number(cur.use_ability_count),
             use_special_skill_count: Number(cur.use_special_skill_count),
             is_npc: cur.is_npc,
+            is_dead: false,
             damage: {
               total: { comment: '总计', value: Number(cur.damage) },
               attack: { comment: '通常攻击&反击', value: Number(cur.normal_damage) },

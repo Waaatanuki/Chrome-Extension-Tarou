@@ -125,6 +125,7 @@ function recordRaidInfo(data: BattleStartJson) {
     const player = data.player.param.reduce<Player[]>((pre, cur) => {
       pre.push({
         pid: cur.pid.split('_')[0],
+        is_dead: !cur.alive,
         is_npc: cur.cjs.startsWith('npc'),
         image_id: `${cur.pid.split('_')[0]}_01`,
         use_ability_count: 0,
@@ -258,6 +259,14 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
     }
     if (action.cmd === 'summon' && action.list.length > 0)
       processSummonScenario(action as SummonScenario, currentRaid)
+    if ((action.cmd === 'die' || action.cmd === 'die_back') && action.to === 'player') {
+      const hitPlayer = currentRaid.player[Number(action.index)]
+      hitPlayer && (hitPlayer.is_dead = true)
+    }
+    if (action.cmd === 'resurrection') {
+      const hitPlayer = currentRaid.player[Number(action.index)]
+      hitPlayer && (hitPlayer.is_dead = false)
+    }
   })
   let point = 0
   currentRaid.player.forEach((player) => {
