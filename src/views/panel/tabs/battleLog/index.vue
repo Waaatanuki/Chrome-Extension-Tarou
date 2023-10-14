@@ -203,6 +203,16 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
   })
   const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
+  const playerPosNum: { pos: number; num: number }[] = []
+  const firstWaitIndex = data.scenario!.findIndex(action => action.cmd === 'wait')
+  for (let i = 0; i < 4; i++) {
+    const posIndex = data.scenario!.findIndex(action => action.cmd === 'condition' && action.pos === i)
+    if (posIndex !== -1 && posIndex < firstWaitIndex) {
+      const currentAction = data.scenario![posIndex]
+      playerPosNum.push({ pos: currentAction.pos, num: currentAction.condition.num! })
+    }
+  }
+
   data.scenario!.forEach((action, idx, array) => {
     if (action.cmd === 'special' || action.cmd === 'special_npc') {
       const hitPlayer = currentRaid.player[action.num]
@@ -276,12 +286,12 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
 
     // 统计承伤
     if (action.cmd === 'super' && action.target === 'player')
-      processSuperScenario(action as SuperScenario, currentRaid)
+      processSuperScenario(action as SuperScenario, currentRaid, playerPosNum)
     if (action.cmd === 'attack' && action.from === 'boss') {
       Object.values(action.damage).forEach((item) => {
         item.forEach((hit) => {
-          const hitPlayer = currentRaid.player.find(player => player.pid === playerPosInfo.find(p => p.pos === hit.pos)!.pid)
-          hitPlayer && (hitPlayer.damageTaken.attack.value += hit.value)
+          const playerNum = playerPosNum.find(item => item.pos === hit.pos)!.num
+          currentRaid.player[playerNum].damageTaken.attack.value += hit.value
         })
       },
       )
@@ -335,10 +345,11 @@ function processLoopDamageScenario(action: LoopDamageScenario, raid: BattleRecor
   }
 }
 
-function processSuperScenario(action: SuperScenario, raid: BattleRecord) {
+function processSuperScenario(action: SuperScenario, raid: BattleRecord, playerPosNum: { pos: number; num: number }[]) {
   action.list.forEach((item) => {
     item.damage.forEach((hit) => {
-      raid.player[hit.pos].damageTaken.super.value += hit.value
+      const playerNum = playerPosNum.find(item => item.pos === hit.pos)!.num
+      raid.player[playerNum].damageTaken.super.value += hit.value
     })
   })
 }
