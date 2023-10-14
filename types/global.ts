@@ -53,6 +53,7 @@ declare module 'myStorage' {
     endTimestamp?: number
     startTimer: number
     endTimer: number
+    formation: number[]
     player: Player[]
     actionQueue: {
       turn: number
@@ -350,6 +351,7 @@ declare module 'requestData'{
 
   export interface StatusInfo {
     ability: Ability
+    formation: string[]
     supporter: { recast: null | number | string }
     summon: { recast: (null | number | string)[] }
     timer: number

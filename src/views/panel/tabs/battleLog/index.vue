@@ -147,6 +147,8 @@ function recordRaidInfo(data: BattleStartJson) {
       return pre
     }, [])
 
+    const formation = Object.values(data.ability).map(a => a.pos)
+
     const guard_status = Object.values(data.ability)
       .reduce< { is_guard_status: number; num: number }[]>((pre, cur) => {
         pre.push({
@@ -175,6 +177,7 @@ function recordRaidInfo(data: BattleStartJson) {
       startTimer: data.timer || 0,
       endTimer: data.timer || 0,
       player,
+      formation,
       special_skill_flag: Number(data.special_skill_flag),
       actionQueue,
       reserve: false,
@@ -194,24 +197,8 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
     return
 
   currentRaid.endTimer = data.status!.timer
-  const playerPosInfo: { pid: string; pos: number }[] = []
-  Object.values(data.status!.ability).forEach((npc) => {
-    playerPosInfo.push({
-      pid: npc.src.split('/').at(-1)!.split('.')[0].split('_')[0],
-      pos: npc.pos,
-    })
-  })
-  const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
-  const playerPosNum: { pos: number; num: number }[] = []
-  const firstWaitIndex = data.scenario!.findIndex(action => action.cmd === 'wait')
-  for (let i = 0; i < 4; i++) {
-    const posIndex = data.scenario!.findIndex(action => action.cmd === 'condition' && action.pos === i)
-    if (posIndex !== -1 && posIndex < firstWaitIndex) {
-      const currentAction = data.scenario![posIndex]
-      playerPosNum.push({ pos: currentAction.pos, num: currentAction.condition.num! })
-    }
-  }
+  const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
   data.scenario!.forEach((action, idx, array) => {
     if (action.cmd === 'special' || action.cmd === 'special_npc') {
@@ -261,9 +248,8 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
         if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && array[idx - i].comment)
           processDamageScenario(action as DamageScenario, currentRaid, array[idx - i].num)
         if (array[idx - i] && array[idx - i].cmd === 'chain_cutin') {
-          const pos0NpcPid = playerPosInfo[0].pid
-          const hitPlayerIndex = currentRaid.player.findIndex(p => p.pid === pos0NpcPid)
-          hitPlayerIndex !== -1 && processDamageScenario(action as DamageScenario, currentRaid, hitPlayerIndex, 'other')
+          const pos0NpcNum = currentRaid.formation[0]
+          processDamageScenario(action as DamageScenario, currentRaid, pos0NpcNum, 'other')
         }
       }
     }
@@ -286,11 +272,11 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
 
     // 统计承伤
     if (action.cmd === 'super' && action.target === 'player')
-      processSuperScenario(action as SuperScenario, currentRaid, playerPosNum)
+      processSuperScenario(action as SuperScenario, currentRaid)
     if (action.cmd === 'attack' && action.from === 'boss') {
       Object.values(action.damage).forEach((item) => {
         item.forEach((hit) => {
-          const playerNum = playerPosNum.find(item => item.pos === hit.pos)!.num
+          const playerNum = currentRaid.formation[hit.pos]
           currentRaid.player[playerNum].damageTaken.attack.value += hit.value
         })
       },
@@ -298,8 +284,9 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
     }
     if (action.cmd === 'damage' && action.to === 'player') {
       action.list.forEach((_hit) => {
-        const hit = _hit as { num: number; value: number }
-        currentRaid.player[hit.num].damageTaken.other.value += hit.value
+        const hit: { pos: number; value: number } = _hit as any
+        const playerNum = currentRaid.formation[hit.pos]
+        currentRaid.player[playerNum].damageTaken.other.value += hit.value
       })
     }
   })
@@ -310,6 +297,10 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
     point += player.damage.total.value
   })
   currentRaid.point = point.toLocaleString()
+
+  // 更新前排角色位置信息
+  if (data.status?.formation)
+    currentRaid.formation = data.status.formation.map(num => Number(num))
 }
 
 function processSummonScenario(action: SummonScenario, raid: BattleRecord) {
@@ -345,10 +336,10 @@ function processLoopDamageScenario(action: LoopDamageScenario, raid: BattleRecor
   }
 }
 
-function processSuperScenario(action: SuperScenario, raid: BattleRecord, playerPosNum: { pos: number; num: number }[]) {
+function processSuperScenario(action: SuperScenario, raid: BattleRecord) {
   action.list.forEach((item) => {
     item.damage.forEach((hit) => {
-      const playerNum = playerPosNum.find(item => item.pos === hit.pos)!.num
+      const playerNum = raid.formation[hit.pos]
       raid.player[playerNum].damageTaken.super.value += hit.value
     })
   })

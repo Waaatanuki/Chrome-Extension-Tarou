@@ -378,6 +378,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
             endTimestamp,
             startTimer: 0,
             endTimer: 0,
+            formation: [0, 1, 2, 3],
             player,
             actionQueue: [],
             hasResult: true,
