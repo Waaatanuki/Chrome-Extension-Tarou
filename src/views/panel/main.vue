@@ -397,6 +397,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         }
         else {
           hit.endTimestamp = endTimestamp
+          hit.player[0].image_id = player[0].image_id
           hit.hasResult = true
           hit.point = point
           hit.duration = time
