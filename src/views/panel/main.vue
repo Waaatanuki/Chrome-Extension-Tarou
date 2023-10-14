@@ -27,7 +27,7 @@ const calculateSetting = ref()
 
 chrome.devtools.network.onRequestFinished.addListener((request) => {
   // Dashboard 抽卡数据
-  if (request.request.url.includes('/gacha/list')) {
+  if (request.request.url.includes('game.granbluefantasy.jp/gacha/list')) {
     request.getContent((content: string) => {
       const gachaInfo = JSON.parse(content)
       stone.value = Number(gachaInfo.stone_num)
@@ -121,7 +121,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       const npcDetail = JSON.parse(content)
       const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(npcDetail.master.id))
       if (hitEvoker)
-        hitEvoker.isAbility4Release = !!(npcDetail.action_ability4 && npcDetail.action_ability4.quest.is_clear)
+        hitEvoker.isAbility4Release = !!(npcDetail.ability[4] && npcDetail.ability[4].quest?.is_clear)
 
       // 记录角色信息
       const npcInfo: NpcInfo = {
@@ -135,7 +135,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
       }
 
       for (let i = 1; i <= 4; i++) {
-        const currentAbility = npcDetail[`action_ability${i}`]
+        const currentAbility = npcDetail.ability[i]
         if (currentAbility) {
           npcInfo.action_ability.push({
             action_id: currentAbility.action_id,
@@ -165,10 +165,10 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   if (request.request.url.includes('/party/job_equipped')) {
     request.getContent((content: string) => {
       const jobInfo = JSON.parse(content).job
-      const job_param_id = jobInfo.param.id
+      const job_param_id = String(jobInfo.param.id)
 
       for (let i = 1; i <= 4; i++) {
-        const actionAbility = jobInfo.action_ability[i]
+        const actionAbility = jobInfo.ability[i]
         if (actionAbility) {
           const ab: NpcAbility = {
             action_id: String(actionAbility.action_id),
@@ -335,15 +335,6 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         const turn = gainList[3]
         const time = gainList[4]
 
-        function getSpeed(point: string, time: string): string {
-          const _point = Number(point.split(',').join(''))
-          const minute = Number(time.split(':')[0])
-          const second = Number(time.split(':')[1])
-          return (_point / (second / 60 + minute) / 1000000).toFixed(0)
-        }
-
-        const speed = getSpeed(point, time)
-
         const treasureList: { src: string; number: string; boxClass: string }[] = []
 
         $('.lis-treasure').each((i, elem) => {
@@ -362,12 +353,19 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
             use_ability_count: Number(cur.use_ability_count),
             use_special_skill_count: Number(cur.use_special_skill_count),
             is_npc: cur.is_npc,
+            is_dead: false,
             damage: {
               total: { comment: '总计', value: Number(cur.damage) },
               attack: { comment: '通常攻击&反击', value: Number(cur.normal_damage) },
               ability: { comment: '技能伤害', value: Number(cur.ability_damage) },
               special: { comment: '奥义伤害', value: Number(cur.special_damage) },
               other: { comment: '其他', value: Number(cur.other_damage) },
+            },
+            damageTaken: {
+              total: { comment: '总计', value: 0 },
+              attack: { comment: '通常攻击&反击', value: 0 },
+              super: { comment: '特动', value: 0 },
+              other: { comment: '其他', value: 0 },
             },
           })
           return pre
@@ -385,7 +383,6 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
             hasResult: true,
             point,
             duration: time,
-            speed,
             treasureList,
             reserve: false,
             abilityList: [],
@@ -399,11 +396,9 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         }
         else {
           hit.endTimestamp = endTimestamp
-          hit.player = player
           hit.hasResult = true
           hit.point = point
           hit.duration = time
-          hit.speed = speed
           hit.treasureList = treasureList
         }
       })

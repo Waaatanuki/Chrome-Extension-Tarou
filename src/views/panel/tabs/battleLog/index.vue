@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Action, BattleRecord, Player } from 'myStorage'
-import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialSkillSetting, SummonScenario } from 'requestData'
+import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialSkillSetting, SummonScenario, SuperScenario } from 'requestData'
 import type { BossInfo, BuffInfo, Member, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
@@ -28,7 +28,7 @@ const buffInfo = ref<BuffInfo>()
 const raidId = ref<number>()
 
 watch(() => props.battleStartJson, (data) => {
-  if (!data)
+  if (!data || !data.raid_id)
     return
 
   raidId.value = data.raid_id
@@ -59,6 +59,9 @@ watch(() => props.battleStartJson, (data) => {
 
   handleConditionInfo(boss.condition, player.condition)
   recordRaidInfo(data)
+  // 处理开幕特动情况
+  if (data.scenario)
+    handleStartAttackRusult(data)
 })
 
 watch(() => props.resultJson, (data) => {
@@ -90,12 +93,16 @@ function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condit
   if (!bossCondition || !playerCondition)
     return
 
-  const bossBuffs = bossCondition.buff || []
-  const bossDebuffs = bossCondition.debuff || []
+  const bossBuffs = bossCondition.buff?.filter((item) => {
+    return !item.personal_buff_user_id || item.personal_buff_user_id === props.userId
+  }) || []
+
+  const bossDebuffs = bossCondition.debuff?.filter((item) => {
+    return !item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId
+  }) || []
+
   const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => {
     return index === self.findIndex(t => t.status === item.status)
-     && (!item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId)
-     && (!item.personal_buff_user_id || item.personal_buff_user_id === props.userId)
   })
 
   const playerBuffs = playerCondition.buff || []
@@ -118,6 +125,7 @@ function recordRaidInfo(data: BattleStartJson) {
     const player = data.player.param.reduce<Player[]>((pre, cur) => {
       pre.push({
         pid: cur.pid.split('_')[0],
+        is_dead: !cur.alive,
         is_npc: cur.cjs.startsWith('npc'),
         image_id: `${cur.pid.split('_')[0]}_01`,
         use_ability_count: 0,
@@ -127,6 +135,12 @@ function recordRaidInfo(data: BattleStartJson) {
           attack: { comment: '通常攻击&反击', value: 0 },
           ability: { comment: '技能伤害', value: 0 },
           special: { comment: '奥义伤害', value: 0 },
+          other: { comment: '其他', value: 0 },
+        },
+        damageTaken: {
+          total: { comment: '总计', value: 0 },
+          attack: { comment: '通常攻击&反击', value: 0 },
+          super: { comment: '特动', value: 0 },
           other: { comment: '其他', value: 0 },
         },
       })
@@ -174,14 +188,14 @@ function recordRaidInfo(data: BattleStartJson) {
   }
 }
 
-function handleDamageStatistic(resultType: string, data: AttackResultJson) {
+function handleDamageStatistic(resultType: string, data: AttackResultJson | BattleStartJson) {
   const currentRaid = battleRecord.value.find(record => record.raid_id === raidId.value)
   if (!currentRaid)
     return
 
-  currentRaid.endTimer = data.status.timer
+  currentRaid.endTimer = data.status!.timer
   const playerPosInfo: { pid: string; pos: number }[] = []
-  Object.values(data.status.ability).forEach((npc) => {
+  Object.values(data.status!.ability).forEach((npc) => {
     playerPosInfo.push({
       pid: npc.src.split('/').at(-1)!.split('.')[0].split('_')[0],
       pos: npc.pos,
@@ -189,7 +203,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
   })
   const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
-  data.scenario.forEach((action, idx, array) => {
+  data.scenario!.forEach((action, idx, array) => {
     if (action.cmd === 'special' || action.cmd === 'special_npc') {
       const hitPlayer = currentRaid.player[action.num]
       if (hitPlayer) {
@@ -212,6 +226,21 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
           }, 0)
           return pre
         }, 0)
+
+        // 记录连击数据
+        if (!action.effect) {
+          // 致死普攻如果不是ta就不记录
+          if (!(action.damage.length < 3 && action.damage.some(attack => attack.some(hit => hit.hp === 0)))) {
+            hitPlayer.attackInfo = hitPlayer.attackInfo || { total: 0, sa: 0, da: 0, ta: 0 }
+            hitPlayer.attackInfo.total++
+            if (action.damage.length === 1)
+              hitPlayer.attackInfo.sa++
+            else if (action.damage.length === 2)
+              hitPlayer.attackInfo.da++
+            else
+              hitPlayer.attackInfo.ta++
+          }
+        }
       }
     }
     if (action.cmd === 'damage' && action.to === 'boss') {
@@ -219,7 +248,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
         processDamageScenario(action as DamageScenario, currentRaid, 0)
 
       for (let i = 1; i <= 3; i++) {
-        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd))
+        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && array[idx - i].name)
           processDamageScenario(action as DamageScenario, currentRaid, array[idx - i].num)
         if (array[idx - i] && array[idx - i].cmd === 'chain_cutin') {
           const pos0NpcPid = playerPosInfo[0].pid
@@ -230,16 +259,44 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson) {
     }
     if (action.cmd === 'loop_damage' && action.to === 'boss') {
       for (let i = 1; i <= 3; i++) {
-        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd))
+        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && array[idx - i].name)
           processLoopDamageScenario(action as LoopDamageScenario, currentRaid, array[idx - i].num)
       }
     }
     if (action.cmd === 'summon' && action.list.length > 0)
       processSummonScenario(action as SummonScenario, currentRaid)
+    if ((action.cmd === 'die' || action.cmd === 'die_back') && action.to === 'player') {
+      const hitPlayer = currentRaid.player[Number(action.index)]
+      hitPlayer && (hitPlayer.is_dead = true)
+    }
+    if (action.cmd === 'resurrection') {
+      const hitPlayer = currentRaid.player[Number(action.index)]
+      hitPlayer && (hitPlayer.is_dead = false)
+    }
+
+    // 统计承伤
+    if (action.cmd === 'super' && action.target === 'player')
+      processSuperScenario(action as SuperScenario, currentRaid)
+    if (action.cmd === 'attack' && action.from === 'boss') {
+      Object.values(action.damage).forEach((item) => {
+        item.forEach((hit) => {
+          const hitPlayer = currentRaid.player.find(player => player.pid === playerPosInfo.find(p => p.pos === hit.pos)!.pid)
+          hitPlayer && (hitPlayer.damageTaken.attack.value += hit.value)
+        })
+      },
+      )
+    }
+    if (action.cmd === 'damage' && action.to === 'player') {
+      action.list.forEach((_hit) => {
+        const hit = _hit as { num: number; value: number }
+        currentRaid.player[hit.num].damageTaken.other.value += hit.value
+      })
+    }
   })
   let point = 0
   currentRaid.player.forEach((player) => {
     player.damage.total.value = player.damage.ability.value + player.damage.attack.value + player.damage.other.value + player.damage.special.value
+    player.damageTaken.total.value = player.damageTaken.super.value + player.damageTaken.attack.value + player.damageTaken.other.value
     point += player.damage.total.value
   })
   currentRaid.point = point.toLocaleString()
@@ -276,6 +333,14 @@ function processLoopDamageScenario(action: LoopDamageScenario, raid: BattleRecor
       return pre
     }, 0)
   }
+}
+
+function processSuperScenario(action: SuperScenario, raid: BattleRecord) {
+  action.list.forEach((item) => {
+    item.damage.forEach((hit) => {
+      raid.player[hit.pos].damageTaken.super.value += hit.value
+    })
+  })
 }
 
 function handleActionQueue(type: string, data: AttackResultJson) {
@@ -377,6 +442,31 @@ function handleActionQueue(type: string, data: AttackResultJson) {
     const index = dieIndex !== -1 ? -1 : -2
     currentRaid.actionQueue.at(index)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
   }
+}
+
+function handleStartAttackRusult(data: BattleStartJson) {
+  const scenario = data.scenario!
+  const status = data.status!
+
+  const isBossDie = scenario.find((item: any) => item.cmd === 'die' && item.to === 'boss')
+
+  if (isBossDie && bossInfo.value) {
+    bossInfo.value.hp = 0
+    bossInfo.value.hpPercent = 0
+    bossInfo.value.remainderSecond = status.timer
+  }
+
+  if (summonInfo.value) {
+    status.summon.recast.forEach((value, idx) => {
+      summonInfo.value!.summon[idx].recast = value
+    })
+    summonInfo.value.supporter.recast = status.supporter.recast
+  }
+
+  const bossBuffs = scenario.filter(item => item.cmd === 'condition' && item.to === 'boss').at(-1)
+  const playerBuffs = scenario.filter(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0).at(-1)
+  handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
+  handleDamageStatistic('start', data)
 }
 
 function handleAttackRusult(type: string, data: AttackResultJson) {

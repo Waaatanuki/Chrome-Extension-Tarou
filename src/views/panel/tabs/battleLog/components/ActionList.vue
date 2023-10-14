@@ -14,7 +14,7 @@ function getImg(action: Action) {
   if (action.type === 'ability')
     return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/${action.icon}.png`
   if (action.type === 'summon')
-    return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/m/${action.icon}.jpg`
+    return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/m/${action.icon}.jpg`
   if (action.type === 'temporary')
     return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/temporary/m/${action.icon}.jpg`
   if (action.type === 'recovery')
@@ -24,13 +24,13 @@ function getImg(action: Action) {
 }
 
 function getNpcImg(action: Action) {
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${action.aim_is_npc ? 'npc' : 'leader'}/m/${action.aim_num}_01.jpg`
+  return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/${action.aim_is_npc ? 'npc' : 'leader'}/m/${action.aim_num}_01.jpg`
 }
 </script>
 
 <template>
   <el-card v-if="battleRecord" min-w-400px>
-    <ElScrollbar ref="scrollbarRef" height="520px">
+    <ElScrollbar ref="scrollbarRef" height="554px">
       <div ref="innerRef">
         <el-card
           v-for="list, idx in battleRecord.actionQueue" :key="idx"
@@ -39,7 +39,7 @@ function getNpcImg(action: Action) {
         >
           <div relative w-200px fc shrink-0 flex-col gap-10px p-10px class="bg-#f5f7fa dark:bg-#262727">
             <div text-base font-bold>
-              {{ `第${idx + 1}回合` }}
+              {{ `第${list.turn}回合` }}
             </div>
             <div fc gap-2px>
               <el-check-tag v-for="index in 4" :key="index" label="G" :checked="!!list.guard_status[index - 1]?.is_guard_status">

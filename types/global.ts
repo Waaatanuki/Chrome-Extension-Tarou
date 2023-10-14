@@ -77,7 +77,15 @@ declare module 'myStorage' {
     use_ability_count: number
     use_special_skill_count: number
     damage: PlayerDamage
+    damageTaken: PlayerDamageTaken
     is_npc: boolean
+    is_dead: boolean
+    attackInfo?: {
+      total: number
+      sa: number
+      da: number
+      ta: number
+    }
   }
 
   export interface PlayerDamage {
@@ -85,6 +93,13 @@ declare module 'myStorage' {
     attack: PlayerDamageDetail
     ability: PlayerDamageDetail
     special: PlayerDamageDetail
+    other: PlayerDamageDetail
+  }
+
+  export interface PlayerDamageTaken {
+    total: PlayerDamageDetail
+    attack: PlayerDamageDetail
+    super: PlayerDamageDetail
     other: PlayerDamageDetail
   }
 
@@ -159,9 +174,8 @@ declare module 'requestData'{
     ability: Ability
     special_skill_flag: string
     special_skill_indicate: { interrupt_display_text: string }[]
-    status?: {
-      special_skill_indicate: { interrupt_display_text: string }[]
-    }
+    scenario?: ScenarioType[]
+    status?: StatusInfo
   }
 
   export interface Boss {
@@ -223,8 +237,8 @@ declare module 'requestData'{
   }
 
   export interface Condition {
-    buff: Buff[]
-    debuff: Buff[]
+    buff?: Buff[]
+    debuff?: Buff[]
     num?: number
   }
 
@@ -331,16 +345,19 @@ declare module 'requestData'{
 
   export interface AttackResultJson {
     scenario: ScenarioType[]
-    status: {
-      ability: Ability
-      supporter: { recast: null | number | string }
-      summon: { recast: (null | number | string)[] }
-      timer: number
-      turn: number
-      is_guard_status: { is_guard_status: number }[]
-      special_skill_indicate: { interrupt_display_text: string }[]
-    }
+    status: StatusInfo
   }
+
+  export interface StatusInfo {
+    ability: Ability
+    supporter: { recast: null | number | string }
+    summon: { recast: (null | number | string)[] }
+    timer: number
+    turn: number
+    is_guard_status: { is_guard_status: number }[]
+    special_skill_indicate: { interrupt_display_text: string }[]
+  }
+
   export interface Ability {
     [key: string]: {
       mode: string
@@ -371,9 +388,12 @@ declare module 'requestData'{
     from: string
     to: string
     condition: Condition
-    damage: { value: number }[][]
+    damage: { value: number; hp: number; pos: number }[][]
     total?: { split: string[] }[]
     is_damage_sync_effect: boolean | string
+    effect?: string
+    index?: number | string
+    target?: string
   }
 
   export interface SummonScenario extends Scenario {
@@ -381,11 +401,15 @@ declare module 'requestData'{
   }
 
   export interface DamageScenario extends Scenario {
-    list: { value?: number; damage?: { value: number }[] }[]
+    list: { num: number; value?: number; damage?: { value: number }[] }[]
   }
 
   export interface LoopDamageScenario extends Scenario {
     list: { value?: number; damage?: { value: number }[] }[][]
+  }
+
+  export interface SuperScenario extends Scenario {
+    list: { damage: { pos: number; value: number }[] }[]
   }
 
   export interface ResultJsonPayload {
@@ -567,6 +591,58 @@ declare module 'requestData'{
     raid_id: number
   }
 
+  interface AssistRaidsData {
+    chapter_name: string
+    cjs_id: string
+    raid: Raid
+    boss_hp_width: number
+    remaining_time: string
+    member_count: number
+    assist_user_limit: number
+    called_user_name: string
+    'data-raid-type': number
+    used_battle_point: number
+    is_same_guild: boolean
+    is_friend: boolean
+    is_semi: any
+    is_special_battle: boolean
+    owner_job_id: string
+    is_complete_perfection_proof: boolean
+    is_lottery_rare_enemy: boolean
+    is_trial_multi: boolean
+    boss_image: string
+    is_adddrop: boolean
+    exskill_cp_type: number
+    is_half: boolean
+    boss_count_alive: number
+    boss_count: number
+    used_battle_point_max: string
+    is_unpopular: boolean
+    bp_select_type: number
+    buff_name: string
+    is_defendorder: boolean
+    is_restrict_assist: boolean
+    is_beginner: boolean
+  }
+
+  interface Raid {
+    multi_raid_id: string
+    multi_raid_timeline_id: string
+    quest_id: string
+    quest_detail_id: string
+    quest_type: string
+    action_type: string
+    is_trial: string
+    user_id: string
+    guild_id: string
+    member_num: string
+    battle_key: string
+    cleared_at: any
+    created_at: string
+    updated_at: string
+    deleted_at: string
+    location_id: string
+  }
 }
 
 declare module 'battleLog'{
