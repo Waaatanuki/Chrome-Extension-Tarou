@@ -394,6 +394,7 @@ declare module 'requestData'{
     effect?: string
     index?: number | string
     target?: string
+    comment?: string
   }
 
   export interface SummonScenario extends Scenario {
