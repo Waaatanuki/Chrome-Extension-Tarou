@@ -57,7 +57,7 @@ function timeToSeconds(timeString: string) {
 </script>
 
 <template>
-  <div v-if="buffInfo" min-w-450px p-10px>
+  <div v-if="buffInfo" min-w-540px p-10px>
     <div>
       <div flex justify-end>
         <div rounded-t-5px bg-rose-500 p-5px text-base text-white>
@@ -74,7 +74,7 @@ function timeToSeconds(timeString: string) {
     </div>
     <div v-if="importantBossBuffs.length === 0 && importantPlayerBuffs.length === 0" m-8px border-t-1 border-slate-500 />
     <div v-else my-8px border-2 border-slate-500>
-      <div flex flex-wrap justify-center items-start>
+      <div flex flex-wrap items-start justify-center>
         <div v-for="buff in bossTimeBuff.filter(item => item.visiable && specBossBuff.some(b => item.status.startsWith(b)))" :key="buff.status" w-60px fc flex-col p-2px>
           <img w-full cursor-pointer :src="getBuffIcon(buff.status)" @click="toggleImage(specBossBuff, buff.status.split('_')[0])">
           <el-countdown
@@ -89,7 +89,7 @@ function timeToSeconds(timeString: string) {
       </div>
       <div border-t-1 border-slate-500 />
       <div fc flex-wrap>
-        <div v-for="buff, idx in importantPlayerBuffs" :key="idx" w-60px p-2px cursor-pointer>
+        <div v-for="buff, idx in importantPlayerBuffs" :key="idx" w-60px cursor-pointer p-2px>
           <img
             w-full :src="getBuffIcon(buff.status)"
             @click="toggleImage(specPlayerBuff, buff.status.split('_')[0])"

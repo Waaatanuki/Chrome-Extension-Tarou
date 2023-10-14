@@ -572,13 +572,15 @@ const memberList = computed(() => {
 </script>
 
 <template>
-  <div v-if="bossInfo && buffInfo && summonInfo" fc flex-col gap-10px w-full>
-    <div fc gap-2 p-2 w-full>
+  <div v-if="bossInfo && buffInfo && summonInfo" w-full fc flex-col gap-10px>
+    <div w-full fc gap-2 p-2>
       <BossDashboard :boss-info="bossInfo" :raid-id="raidId" />
-      <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
-      <Summon :summon-info="summonInfo" />
+      <div w-full flex flex-col items-center justify-start>
+        <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
+        <Summon :summon-info="summonInfo" />
+      </div>
     </div>
-    <div flex items-start justify-start gap-2 p-2 w-full>
+    <div w-full flex items-start justify-start gap-2 p-2>
       <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
       <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
