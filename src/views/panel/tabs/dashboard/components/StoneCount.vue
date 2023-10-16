@@ -10,9 +10,9 @@ function reset() {
 </script>
 
 <template>
-  <el-card m-3 w-220px h-full>
+  <el-card m-3 h-full w-220px>
     <template #header>
-      <div flex justify-between items-center>
+      <div flex items-center justify-between>
         <span text-xl>
           {{ `攒井第${dayjs().diff(dayjs.unix(saveStoneDate), "day")}天` }}
         </span>

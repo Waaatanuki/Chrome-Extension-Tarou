@@ -59,13 +59,13 @@ const evokerPageResult = computed(() => {
 </script>
 
 <template>
-  <div flex flex-col text-sm mb-2>
-    <div flex justify-around items-center my-2>
+  <div mb-2 flex flex-col text-sm>
+    <div my-2 flex items-center justify-around>
       <div v-for=" idx in 5" :key="idx">
         <EvokerCard v-model="evokerInfo[idx - 1]" />
       </div>
     </div>
-    <div flex justify-around items-center my-2>
+    <div my-2 flex items-center justify-around>
       <div v-for=" idx in 5" :key="idx">
         <EvokerCard v-model="evokerInfo[idx + 4]" />
       </div>
@@ -87,7 +87,7 @@ const evokerPageResult = computed(() => {
         <div fc flex-wrap>
           <div
             v-for="item in evokerPageResult.filter(item => item.need > 0)" :key="item.id"
-            fc flex-col w-50px gap-5px
+            w-50px fc flex-col gap-5px
           >
             <el-tooltip :content="`${item.name} 总需${item.total}`" placement="top">
               <img w-full :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${item.id}.jpg`">

@@ -64,17 +64,15 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
     <el-tabs v-model="tabName" stretch>
       <el-tab-pane label="伤害统计" name="damage">
         <div h-500px>
-          <div w-full fc flex-col gap-10px pb-10px>
-            <div>
-              <el-select v-model="damageType" w-150px>
-                <el-option
-                  v-for="item in damageTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </div>
+          <div fc pb-20px pt-5px>
+            <el-select v-model="damageType" w-150px>
+              <el-option
+                v-for="item in damageTypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </div>
 
           <div fc flex-col gap-10px>
@@ -129,17 +127,15 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
       </el-tab-pane>
       <el-tab-pane label="承伤统计" name="damageTaken">
         <div h-500px>
-          <div w-full fc flex-col gap-10px pb-10px>
-            <div>
-              <el-select v-model="damageTakenType" w-150px>
-                <el-option
-                  v-for="item in damageTakenTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </div>
+          <div fc pb-20px pt-5px>
+            <el-select v-model="damageTakenType" w-150px>
+              <el-option
+                v-for="item in damageTakenTypeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </div>
 
           <div v-if="hasDamageTaken" fc flex-col gap-10px>

@@ -32,7 +32,7 @@ function getMsg(item: RaidInfo) {
     <div v-if="collapse" i-carbon:checkmark-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
     <div v-else i-carbon:close-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
     <div flex justify-evenly gap-5>
-      <div fc w-150px shrink-0>
+      <div w-150px fc shrink-0>
         <img w-full :src="getQuestImg(item.quest_id)">
       </div>
       <div w-full fc flex-col gap-4>

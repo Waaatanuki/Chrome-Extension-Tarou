@@ -16,7 +16,7 @@ function getImg(id: string, type = 'npc') {
 
 <template>
   <div h-210px w-380px fc flex-col justify-start>
-    <div w-full flex justify-start items-start gap-4px>
+    <div w-full flex items-start justify-start gap-4px>
       <div h-122px w-60px>
         <img w-full :src="getImg(leader.image, 'leader')">
         <div mt-1px h-12px flex items-center justify-start>

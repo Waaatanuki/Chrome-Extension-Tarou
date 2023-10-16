@@ -106,7 +106,7 @@ function triggerSimpleModel(value: CheckboxValueType) {
 </script>
 
 <template>
-  <div flex justify-between items-center mb-2>
+  <div mb-2 flex items-center justify-between>
     <div pl-5>
       <el-checkbox-button v-model="simpleChecked" @change="triggerSimpleModel">
         简略模式
@@ -139,7 +139,7 @@ function triggerSimpleModel(value: CheckboxValueType) {
       进入编成界面读取队伍信息
     </el-tag>
     <el-card v-for="deck, idx in deckList" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
-      <div fc flex-col gap-2 relative>
+      <div relative fc flex-col gap-2>
         <div fc flex-wrap gap-2>
           <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
           <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />

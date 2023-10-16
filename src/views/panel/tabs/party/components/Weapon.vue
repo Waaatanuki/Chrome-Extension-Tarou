@@ -24,7 +24,7 @@ function getSkillAlias(description: string) {
 <template>
   <div fc flex-col>
     <div h-210px fc>
-      <div w-100px relative>
+      <div relative w-100px>
         <img w-full :src="getImg('weapon', weapons[1].master.id, 'ls')">
         <el-tag
           v-if="(weapons[1]?.master?.series_id === '3' || weapons[1]?.master?.series_id === '13') && weapons[1]?.skill3"
@@ -34,7 +34,7 @@ function getSkillAlias(description: string) {
         </el-tag>
       </div>
       <div w-275px fc flex-wrap gap-5px>
-        <div v-for="idx in 12" :key="idx" h-48px w-85px fc bg-slate-300 relative>
+        <div v-for="idx in 12" :key="idx" relative h-48px w-85px fc bg-slate-300>
           <img v-if="weapons[idx + 1]?.master?.id" w-full :src="getImg('weapon', weapons[idx + 1]?.master?.id)">
           <img v-if="weapons[idx + 1]?.param?.arousal.is_arousal_weapon" class="ico-arousal-type" :src="getArousalType(weapons[idx + 1]?.param?.arousal.form)">
           <el-tag

@@ -85,17 +85,17 @@ function exportJSONFile(itemList: any) {
         <el-table-column prop="name" align="center">
           <template #header>
             <div
-              class="icon-btn" m-auto dark:i-carbon-moon i-carbon-sun
+              class="icon-btn" i-carbon-sun dark:i-carbon-moon m-auto
               @click="toggleDark()"
             />
           </template>
           <template #default="{ row }">
-            <img w-full m-auto :src="getQuestImg(row.quest_id)">
+            <img m-auto w-full :src="getQuestImg(row.quest_id)">
           </template>
         </el-table-column>
         <el-table-column prop="blueChest" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getLocalImg(column.property)">
+            <img m-auto w-30px :src="getLocalImg(column.property)">
           </template>
           <template #default="{ row }">
             <el-tooltip effect="dark" placement="top">
@@ -109,7 +109,7 @@ function exportJSONFile(itemList: any) {
         </el-table-column>
         <el-table-column prop="goldBrick" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getLocalImg(column.property, 'item')">
+            <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
           </template>
           <template #default="{ row }">
             <el-tooltip effect="dark" placement="top">
@@ -124,17 +124,17 @@ function exportJSONFile(itemList: any) {
         </el-table-column>
         <el-table-column prop="ring3" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getLocalImg(column.property, 'item')">
+            <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
           </template>
         </el-table-column>
         <el-table-column prop="ring2" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getLocalImg(column.property, 'item')">
+            <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
           </template>
         </el-table-column>
         <el-table-column prop="ring1" align="center">
           <template #header="{ column }">
-            <img w-30px m-auto :src="getLocalImg(column.property, 'item')">
+            <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
           </template>
         </el-table-column>
       </el-table>
@@ -142,7 +142,7 @@ function exportJSONFile(itemList: any) {
         <div>
           <el-dropdown @command="handleReset">
             <el-button m-2 size="small" type="danger">
-              <div mr-1 i-carbon:reset />
+              <div i-carbon:reset mr-1 />
               重置
             </el-button>
             <template #dropdown>
@@ -162,15 +162,15 @@ function exportJSONFile(itemList: any) {
         </div>
         <div>
           <el-button m-2 size="small" type="primary" @click="importData">
-            <div mr-1 i-carbon:document-import />
+            <div i-carbon:document-import mr-1 />
             导入至APP
           </el-button>
           <el-button m-2 size="small" type="primary" @click="exportData">
-            <div mr-1 i-carbon:document-export />
+            <div i-carbon:document-export mr-1 />
             导出
           </el-button>
           <el-button m-2 size="small" type="primary" @click="openOptionsPage">
-            <div mr-1 i-carbon:notebook />
+            <div i-carbon:notebook mr-1 />
             更多
           </el-button>
         </div>

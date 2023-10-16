@@ -11,7 +11,7 @@ function getTriggerNumber(id: string) {
 <template>
   <div class="sand-box-boss" mt-5>
     <div v-for="area, idx in sandBoxBossInfo" :key="idx">
-      <el-descriptions :column="2" border mb-2>
+      <el-descriptions :column="2" mb-2 border>
         <div v-for="boss, index in area" :key="index">
           <el-descriptions-item label-class-name="bossLabelClass">
             <template #label>
@@ -20,7 +20,7 @@ function getTriggerNumber(id: string) {
               </div>
             </template>
             <div fc>
-              <div v-for="img, index2 in boss.itemList" :key="index2" fc flex-col mx-2>
+              <div v-for="img, index2 in boss.itemList" :key="index2" mx-2 fc flex-col>
                 <img w-10 :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${img}.jpg`">
                 <label>{{ getTriggerNumber(img) }}</label>
               </div>

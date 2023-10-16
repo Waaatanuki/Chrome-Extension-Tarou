@@ -64,14 +64,14 @@ function handleExport() {
         />沙漏掉落统计
       </div>
       <div fc gap-2>
-        <div fc btn text-xs @click="handleExport">
-          <div mr-1 i-carbon:document-export />
+        <div fc text-xs btn @click="handleExport">
+          <div i-carbon:document-export mr-1 />
           导出
         </div>
         <el-upload v-model:file-list="filesList" :on-change="handleUploadChange" :show-file-list="false" :limit="1" :auto-upload="false" accept=".json">
           <template #trigger>
-            <div fc btn text-xs @click="filesList = []">
-              <div mr-1 i-carbon:document-import />
+            <div fc text-xs btn @click="filesList = []">
+              <div i-carbon:document-import mr-1 />
               导入
             </div>
           </template>

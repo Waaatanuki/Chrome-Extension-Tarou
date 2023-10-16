@@ -54,7 +54,7 @@ onMounted(() => {
 <template>
   <el-card m-3 min-w-200px>
     <template #header>
-      <div flex justify-between items-center>
+      <div flex items-center justify-between>
         <span text-xl>日常</span>
         <div>
           <el-button type="primary" link @click="addTask">
@@ -75,7 +75,7 @@ onMounted(() => {
         v-model="task.done" :label="task.content"
       >
         <template #default>
-          <div flex justify-between items-center>
+          <div flex items-center justify-between>
             <div v-if="delBtnVisible">
               <el-input v-model="task.content" size="small" mr-10px />
               <el-button type="danger" link @click="delTask(idx)">
