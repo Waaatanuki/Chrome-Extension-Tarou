@@ -477,7 +477,7 @@ function handleStartAttackRusult(data: BattleStartJson) {
 }
 
 function handleAttackRusult(type: string, data: AttackResultJson) {
-  if (!type || !data)
+  if (!type || !data?.scenario)
     return
   const bossGauge = data.scenario.filter(item => item.cmd === 'boss_gauge').at(-1)
   const status = data.status
