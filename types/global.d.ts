@@ -1,12 +1,12 @@
 declare module 'myStorage' {
-  export interface BattleMemo {
+  interface BattleMemo {
     battle_id: string
     quest_id: string
     quest_name: string
     timestamp: number
   }
 
-  export interface RecoveryItem {
+  interface RecoveryItem {
     timeStamp: number
     fullElixir: number
     fullElixirDiff: number
@@ -18,7 +18,7 @@ declare module 'myStorage' {
     soulBerryDiff: number
   }
 
-  export interface MaterialInfo {
+  interface MaterialInfo {
     item_id: string
     image: string
     name: string
@@ -30,7 +30,7 @@ declare module 'myStorage' {
     is_display_select_item: boolean
   }
 
-  export interface EvokerInfo {
+  interface EvokerInfo {
     npcId: number
     no: number
     name: string
@@ -43,7 +43,7 @@ declare module 'myStorage' {
     isAbility4Release: boolean
   }
 
-  export interface BattleRecord {
+  interface BattleRecord {
     raid_id: number
     raid_name: string
     special_skill_flag?: number
@@ -71,7 +71,7 @@ declare module 'myStorage' {
     reserve: boolean
   }
 
-  export interface Player {
+  interface Player {
     pid: string
     image_id: string
     pos?: number
@@ -89,7 +89,7 @@ declare module 'myStorage' {
     }
   }
 
-  export interface PlayerDamage {
+  interface PlayerDamage {
     total: PlayerDamageDetail
     attack: PlayerDamageDetail
     ability: PlayerDamageDetail
@@ -97,19 +97,19 @@ declare module 'myStorage' {
     other: PlayerDamageDetail
   }
 
-  export interface PlayerDamageTaken {
+  interface PlayerDamageTaken {
     total: PlayerDamageDetail
     attack: PlayerDamageDetail
     super: PlayerDamageDetail
     other: PlayerDamageDetail
   }
 
-  export interface PlayerDamageDetail {
+  interface PlayerDamageDetail {
     comment: string
     value: number
   }
 
-  export interface Action {
+  interface Action {
     type: string
     icon?: string
     id?: string
@@ -117,7 +117,7 @@ declare module 'myStorage' {
     aim_is_npc?: boolean
   }
 
-  export interface RaidInfo {
+  interface RaidInfo {
     quest_id: string
     level: string
     element: string
@@ -139,7 +139,7 @@ declare module 'myStorage' {
     lastDropTake?: number
   }
 
-  export interface GoldBrickTableData {
+  interface GoldBrickTableData {
     quest_id: string
     total: number
     blueChest: number
@@ -151,7 +151,7 @@ declare module 'myStorage' {
     lastBlueChestTake?: number
   }
 
-  export interface GoldBrickData {
+  interface GoldBrickData {
     timestamp: number
     raidName: string
     battleId: string
@@ -161,7 +161,7 @@ declare module 'myStorage' {
 }
 
 declare module 'requestData'{
-  export interface BattleStartJson {
+  interface BattleStartJson {
     boss: Boss
     player: Player
     turn: number
@@ -179,7 +179,7 @@ declare module 'requestData'{
     status?: StatusInfo
   }
 
-  export interface Boss {
+  interface Boss {
     type: string
     number: number
     modechange: string
@@ -188,7 +188,7 @@ declare module 'requestData'{
     param: BossParam[]
   }
 
-  export interface BossParam {
+  interface BossParam {
     type: string
     name: Name
     cjs: string
@@ -232,18 +232,18 @@ declare module 'requestData'{
     motion_link_list: any[]
   }
 
-  export interface Name {
+  interface Name {
     ja: string
     en: string
   }
 
-  export interface Condition {
+  interface Condition {
     buff?: Buff[]
     debuff?: Buff[]
     num?: number
   }
 
-  export interface Buff {
+  interface Buff {
     status: string
     is_unusable_harb: boolean
     detail?: string
@@ -254,19 +254,19 @@ declare module 'requestData'{
     personal_debuff_user_id?: boolean | string
   }
 
-  export interface Timing {
+  interface Timing {
     effect: string
     damage: string
   }
 
-  export interface Player {
+  interface Player {
     type: string
     number: number
     param: PlayerParam[]
     job_is_formchange: string
   }
 
-  export interface PlayerParam {
+  interface PlayerParam {
     name: string
     cjs: string
     pid: string
@@ -299,7 +299,7 @@ declare module 'requestData'{
     no_result_thumbnail: boolean
   }
 
-  export interface Summon {
+  interface Summon {
     id: string
     image_id: string
     name: string
@@ -326,7 +326,7 @@ declare module 'requestData'{
     available_skill?: boolean
   }
 
-  export interface MultiRaidMemberInfo {
+  interface MultiRaidMemberInfo {
     max_hp: number[]
     total_max_hp: number
     pc_image: string
@@ -344,12 +344,12 @@ declare module 'requestData'{
     hp_ratio: number
   }
 
-  export interface AttackResultJson {
+  interface AttackResultJson {
     scenario: ScenarioType[]
     status: StatusInfo
   }
 
-  export interface StatusInfo {
+  interface StatusInfo {
     ability: Ability
     formation: string[]
     supporter: { recast: null | number | string }
@@ -360,7 +360,7 @@ declare module 'requestData'{
     special_skill_indicate: { interrupt_display_text: string }[]
   }
 
-  export interface Ability {
+  interface Ability {
     [key: string]: {
       mode: string
       pos: number
@@ -375,283 +375,283 @@ declare module 'requestData'{
     }
   }
 
-  export type ScenarioType = SummonScenario | DamageScenario | LoopDamageScenario
+   type ScenarioType = SummonScenario | DamageScenario | LoopDamageScenario
 
-  export interface Scenario {
-    cmd: string
-    name?: {
-      ja: string
-      en: string
-    }
-    hp?: number
-    hpmax?: number
-    pos: number
-    num: number
-    from: string
-    to: string
-    condition: Condition
-    damage: { value: number; hp: number; pos: number }[][]
-    total?: { split: string[] }[]
-    is_damage_sync_effect: boolean | string
-    effect?: string
-    index?: number | string
-    target?: string
-    comment?: string
-  }
+   interface Scenario {
+     cmd: string
+     name?: {
+       ja: string
+       en: string
+     }
+     hp?: number
+     hpmax?: number
+     pos: number
+     num: number
+     from: string
+     to: string
+     condition: Condition
+     damage: { value: number; hp: number; pos: number }[][]
+     total?: { split: string[] }[]
+     is_damage_sync_effect: boolean | string
+     effect?: string
+     index?: number | string
+     target?: string
+     comment?: string
+   }
 
-  export interface SummonScenario extends Scenario {
-    list: { damage: { value: number }[] }[]
-  }
+   interface SummonScenario extends Scenario {
+     list: { damage: { value: number }[] }[]
+   }
 
-  export interface DamageScenario extends Scenario {
-    list: { num: number; value?: number; damage?: { value: number }[] }[]
-  }
+   interface DamageScenario extends Scenario {
+     list: { num: number; value?: number; damage?: { value: number }[] }[]
+   }
 
-  export interface LoopDamageScenario extends Scenario {
-    list: { value?: number; damage?: { value: number }[] }[][]
-  }
+   interface LoopDamageScenario extends Scenario {
+     list: { value?: number; damage?: { value: number }[] }[][]
+   }
 
-  export interface SuperScenario extends Scenario {
-    list: { damage: { pos: number; value: number }[] }[]
-  }
+   interface SuperScenario extends Scenario {
+     list: { damage: { pos: number; value: number }[] }[]
+   }
 
-  export interface ResultJsonPayload {
-    ability_id: string
-    summon_id: string
-    character_num?: string
-    ability_aim_num?: string
-    ability_character_num: string
-  }
+   interface ResultJsonPayload {
+     ability_id: string
+     summon_id: string
+     character_num?: string
+     ability_aim_num?: string
+     ability_character_num: string
+   }
 
-  export interface GuardSettingJson {
-    raid_id: number
-    guard_status: {
-      [key: string]: {
-        target_num: number
-        is_guard_status: number
-      }
-    }
-  }
+   interface GuardSettingJson {
+     raid_id: number
+     guard_status: {
+       [key: string]: {
+         target_num: number
+         is_guard_status: number
+       }
+     }
+   }
 
-  export interface BossConditionJson {
-    buff: BossCondition[]
-    debuff: BossCondition[]
-  }
+   interface BossConditionJson {
+     buff: BossCondition[]
+     debuff: BossCondition[]
+   }
 
-  export interface BossCondition {
-    status: string
-    class: string
-    remain: string | number
-    name: string
-    detail: string
-  }
+   interface BossCondition {
+     status: string
+     class: string
+     remain: string | number
+     name: string
+     detail: string
+   }
 
-  export interface DeckJson {
-    group_name: string
-    combination_group_id: number
-    combination_id: number
-    name: string
-    order_no: number
-    priority: number
-    pc: Pc
-    npc: DeckNpc
-  }
+   interface DeckJson {
+     group_name: string
+     combination_group_id: number
+     combination_id: number
+     name: string
+     order_no: number
+     priority: number
+     pc: Pc
+     npc: DeckNpc
+   }
 
-  export interface DeckNpc {
-    [key: string]: {
-      param: NpcParam
-      master: NpcMaster
-    }
-  }
+   interface DeckNpc {
+     [key: string]: {
+       param: NpcParam
+       master: NpcMaster
+     }
+   }
 
-  export interface NpcParam {
-    image_id_3: string
-    id: number
-  }
+   interface NpcParam {
+     image_id_3: string
+     id: number
+   }
 
-  export interface NpcMaster {
-    id: string
-    name: string
-  }
+   interface NpcMaster {
+     id: string
+     name: string
+   }
 
-  export interface Pc {
-    param: { image: string; id: number }
-    summons: DeckSummon
-    sub_summons: DeckSummon
-    weapons: DeckWeapon
-    damage_info: DamageInfo
-    after_damage_info: DamageInfo
-    set_action: { name: string; set_action_id: string }[]
-    quick_user_summon_id: number
-    job: {
-      param: {
-        id: string
-      }
-    }
-  }
+   interface Pc {
+     param: { image: string; id: number }
+     summons: DeckSummon
+     sub_summons: DeckSummon
+     weapons: DeckWeapon
+     damage_info: DamageInfo
+     after_damage_info: DamageInfo
+     set_action: { name: string; set_action_id: string }[]
+     quick_user_summon_id: number
+     job: {
+       param: {
+         id: string
+       }
+     }
+   }
 
-  export interface DeckSummon {
-    [key: string]: {
-      param: SummonParam
-    }
-  }
+   interface DeckSummon {
+     [key: string]: {
+       param: SummonParam
+     }
+   }
 
-  export interface SummonParam {
-    id: string
-    image_id: string
-    level: string
-    attack: string
-    hp: string
-    quality: string
-    evolution_flag: string
-    evolution: string
-    is_mypage: boolean
-  }
+   interface SummonParam {
+     id: string
+     image_id: string
+     level: string
+     attack: string
+     hp: string
+     quality: string
+     evolution_flag: string
+     evolution: string
+     is_mypage: boolean
+   }
 
-  export interface DeckWeapon {
-    [key: string]: {
-      master: WeaponMaster
-      param: WeaponParam
-      skill1: WeaponSkill
-      skill2: WeaponSkill
-      skill3: WeaponSkill
-    }
-  }
+   interface DeckWeapon {
+     [key: string]: {
+       master: WeaponMaster
+       param: WeaponParam
+       skill1: WeaponSkill
+       skill2: WeaponSkill
+       skill3: WeaponSkill
+     }
+   }
 
-  export interface WeaponMaster {
-    id: string
-    name: string
-    attribute: string
-    series_id: string
-  }
+   interface WeaponMaster {
+     id: string
+     name: string
+     attribute: string
+     series_id: string
+   }
 
-  export interface WeaponParam {
-    arousal: {
-      is_arousal_weapon: boolean
-      form: number
-    }
-  }
-  export interface WeaponSkill {
-    id: string
-    description: string
-    image: string
-    attribute: string
-    name: string
-  }
+   interface WeaponParam {
+     arousal: {
+       is_arousal_weapon: boolean
+       form: number
+     }
+   }
+   interface WeaponSkill {
+     id: string
+     description: string
+     image: string
+     attribute: string
+     name: string
+   }
 
-  export interface DamageInfo {
-    assumed_advantage_damage_attribute: number
-    assumed_normal_damage_attribute: number
-    assumed_advantage_damage: number
-    assumed_normal_damage: number
-    hp: number
-    effect_value_info: EffectValueInfo[]
-  }
+   interface DamageInfo {
+     assumed_advantage_damage_attribute: number
+     assumed_normal_damage_attribute: number
+     assumed_advantage_damage: number
+     assumed_normal_damage: number
+     hp: number
+     effect_value_info: EffectValueInfo[]
+   }
 
-  export interface EffectValueInfo {
-    icon_img: string
-    value: string
-    is_max: boolean
-  }
+   interface EffectValueInfo {
+     icon_img: string
+     value: string
+     is_max: boolean
+   }
 
-  export interface CalculateSetting {
-    image_id: string
-    group_priority?: string
-    priority?: string
-  }
+   interface CalculateSetting {
+     image_id: string
+     group_priority?: string
+     priority?: string
+   }
 
-  export interface NpcInfo {
-    id: number
-    image_id_3: string
-    master: {
-      id: string
-      name: string
-    }
-    action_ability: NpcAbility[]
-  }
+   interface NpcInfo {
+     id: number
+     image_id_3: string
+     master: {
+       id: string
+       name: string
+     }
+     action_ability: NpcAbility[]
+   }
 
-  export interface NpcAbility {
-    action_id: string
-    name: string
-    icon_type: string
-    user_full_auto_setting_flag: number
-    job_param_id?: string
-  }
+   interface NpcAbility {
+     action_id: string
+     name: string
+     icon_type: string
+     user_full_auto_setting_flag: number
+     job_param_id?: string
+   }
 
-  export interface BattleResult {
-    raid_id: number
-    endTimestr: string
-    name: string
-    point: string
-    turn: string
-    duration: string
-    speed: string
-    treasureList: { src: string; number: string; boxClass: string }[]
-  }
+   interface BattleResult {
+     raid_id: number
+     endTimestr: string
+     name: string
+     point: string
+     turn: string
+     duration: string
+     speed: string
+     treasureList: { src: string; number: string; boxClass: string }[]
+   }
 
-  export interface SpecialSkillSetting {
-    value: number
-    raid_id: number
-  }
+   interface SpecialSkillSetting {
+     value: number
+     raid_id: number
+   }
 
-  interface AssistRaidsData {
-    chapter_name: string
-    cjs_id: string
-    raid: Raid
-    boss_hp_width: number
-    remaining_time: string
-    member_count: number
-    assist_user_limit: number
-    called_user_name: string
-    'data-raid-type': number
-    used_battle_point: number
-    is_same_guild: boolean
-    is_friend: boolean
-    is_semi: any
-    is_special_battle: boolean
-    owner_job_id: string
-    is_complete_perfection_proof: boolean
-    is_lottery_rare_enemy: boolean
-    is_trial_multi: boolean
-    boss_image: string
-    is_adddrop: boolean
-    exskill_cp_type: number
-    is_half: boolean
-    boss_count_alive: number
-    boss_count: number
-    used_battle_point_max: string
-    is_unpopular: boolean
-    bp_select_type: number
-    buff_name: string
-    is_defendorder: boolean
-    is_restrict_assist: boolean
-    is_beginner: boolean
-  }
+   interface AssistRaidsData {
+     chapter_name: string
+     cjs_id: string
+     raid: Raid
+     boss_hp_width: number
+     remaining_time: string
+     member_count: number
+     assist_user_limit: number
+     called_user_name: string
+     'data-raid-type': number
+     used_battle_point: number
+     is_same_guild: boolean
+     is_friend: boolean
+     is_semi: any
+     is_special_battle: boolean
+     owner_job_id: string
+     is_complete_perfection_proof: boolean
+     is_lottery_rare_enemy: boolean
+     is_trial_multi: boolean
+     boss_image: string
+     is_adddrop: boolean
+     exskill_cp_type: number
+     is_half: boolean
+     boss_count_alive: number
+     boss_count: number
+     used_battle_point_max: string
+     is_unpopular: boolean
+     bp_select_type: number
+     buff_name: string
+     is_defendorder: boolean
+     is_restrict_assist: boolean
+     is_beginner: boolean
+   }
 
-  interface Raid {
-    multi_raid_id: string
-    multi_raid_timeline_id: string
-    quest_id: string
-    quest_detail_id: string
-    quest_type: string
-    action_type: string
-    is_trial: string
-    user_id: string
-    guild_id: string
-    member_num: string
-    battle_key: string
-    cleared_at: any
-    created_at: string
-    updated_at: string
-    deleted_at: string
-    location_id: string
-  }
+   interface Raid {
+     multi_raid_id: string
+     multi_raid_timeline_id: string
+     quest_id: string
+     quest_detail_id: string
+     quest_type: string
+     action_type: string
+     is_trial: string
+     user_id: string
+     guild_id: string
+     member_num: string
+     battle_key: string
+     cleared_at: any
+     created_at: string
+     updated_at: string
+     deleted_at: string
+     location_id: string
+   }
 }
 
 declare module 'battleLog'{
   import type { Buff, Summon } from 'requestData'
 
-  export interface Member {
+  interface Member {
     nickname: string
     userId: string
     userRank: string
@@ -660,7 +660,7 @@ declare module 'battleLog'{
     is_dead: boolean
   }
 
-  export interface BossInfo {
+  interface BossInfo {
     battleId?: string
     imgId: string
     name: string
@@ -673,12 +673,12 @@ declare module 'battleLog'{
     interrupt_display_text?: string
   }
 
-  export interface BuffInfo {
+  interface BuffInfo {
     bossBuffs: Buff[]
     playerBuffs: Buff[]
   }
 
-  export interface SummonInfo {
+  interface SummonInfo {
     summon: Summon[]
     supporter: Summon
   }

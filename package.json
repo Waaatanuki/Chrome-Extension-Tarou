@@ -1,7 +1,6 @@
 {
   "name": "chrome-extension-tarou",
   "version": "0.0.1",
-  "keyword": "Chrome extension, Vite, Vue, Vue3, GBF",
   "packageManager": "pnpm@8.9.2",
   "watch": {
     "build": {
@@ -23,7 +22,7 @@
     "lint": "eslint --cache ."
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.43.1",
+    "@antfu/eslint-config": "^1.0.0-beta.25",
     "@iconify-json/carbon": "^1.1.21",
     "@types/archiver": "^5.3.3",
     "@types/chrome": "^0.0.246",
