@@ -115,6 +115,12 @@ declare module 'myStorage' {
     id?: string
     aim_num?: string
     aim_is_npc?: boolean
+    isSub?: boolean
+    subAbility?: {
+      icon: string
+      id: string
+      index: string
+    }[]
   }
 
   interface RaidInfo {
@@ -421,6 +427,7 @@ declare module 'requestData'{
      character_num?: string
      ability_aim_num?: string
      ability_character_num: string
+     ability_sub_param: number[]
    }
 
    interface GuardSettingJson {

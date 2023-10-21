@@ -385,13 +385,6 @@ function handleActionQueue(type: string, data: AttackResultJson) {
   }
 
   if (type === 'ability') {
-    const currentAbilityList = getAbilityList(data.status.ability)
-
-    currentAbilityList.forEach((abi) => {
-      if (!currentRaid.abilityList.some(a => a.id === abi.id))
-        currentRaid.abilityList.push({ ...abi })
-    })
-
     const hit = currentRaid.abilityList?.find(ability => ability.id === props.resultJsonPayload.ability_id)
     if (!hit)
       return
@@ -400,6 +393,9 @@ function handleActionQueue(type: string, data: AttackResultJson) {
 
     currentRaid.actionQueue.at(-1)?.acitonList.push({
       ...hit,
+      icon: hit.subAbility ? hit.subAbility.find(a => a.index === String(props.resultJsonPayload.ability_sub_param[0]))?.icon : hit.icon,
+      id: hit.subAbility ? hit.subAbility.find(a => a.index === String(props.resultJsonPayload.ability_sub_param[0]))?.id : hit.id,
+      isSub: !!hit.subAbility,
       aim_num: props.resultJsonPayload.ability_aim_num
         ? currentRaid.player[Number(props.resultJsonPayload.ability_aim_num)].pid
         : '',
@@ -449,6 +445,16 @@ function handleActionQueue(type: string, data: AttackResultJson) {
     const index = dieIndex !== -1 ? -1 : -2
     currentRaid.actionQueue.at(index)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
   }
+
+  // 更新技能列表
+  const currentAbilityList = getAbilityList(data.status.ability)
+  currentAbilityList.forEach((abi) => {
+    const hit = currentRaid.abilityList.find(a => a.id === abi.id)
+    if (hit)
+      hit.icon = abi.icon
+    else
+      currentRaid.abilityList.push({ ...abi })
+  })
 }
 
 function handleStartAttackRusult(data: BattleStartJson) {
@@ -518,13 +524,11 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
 function getAbilityList(rawAbility: Ability) {
   const prefix = 'ico-ability'
   return Object.values(rawAbility)
-    .reduce<Action[]>((pre, cur) =>
-      pre.concat(Object.values(cur.list).reduce<Action[]>((p, c) => p.concat([{
-        type: 'ability',
-        icon: c[0].class.split(' ')[0].substring(prefix.length),
-        id: c[0]['ability-id'],
-      }]), []))
-    , [])
+    .reduce<Action[]>((pre, cur) => pre.concat(Object.values(cur.list).reduce<Action[]>((p, c) => p.concat([{
+      type: 'ability',
+      icon: c[0].class.split(' ')[0].substring(prefix.length),
+      id: c[0]['ability-id'],
+    }]), [])), [])
 }
 
 const normalAttackInfo = computed(() => {

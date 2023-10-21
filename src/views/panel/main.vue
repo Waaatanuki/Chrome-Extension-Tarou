@@ -274,6 +274,25 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     })
   }
 
+  // BattleLog 记录子技能日志
+  if (/\/rest\/(raid|multiraid)\/get_select_if\.json/.test(request.request.url)) {
+    const paylaod = JSON.parse(request.request.postData!.text!)
+    request.getContent((content: string) => {
+      const data = JSON.parse(content)
+      const hit = battleRecord.value.find(record => record.raid_id === paylaod.raid_id)
+      if (!hit)
+        return
+      const hitAbility = hit.abilityList.find(ability => ability.id === paylaod.ability_id)
+      if (!hitAbility)
+        return
+      hitAbility.subAbility = Object.values(data.select_ability_info).map((item: any) => ({
+        icon: item.image,
+        id: item.action_id,
+        index: item.index,
+      }))
+    })
+  }
+
   // BattleLog 记录使用蓝绿药日志
   if (/\/rest\/(raid|multiraid)\/temporary_item_result\.json/.test(request.request.url)) {
     resultJsonPayload.value = JSON.parse(request.request.postData!.text!)

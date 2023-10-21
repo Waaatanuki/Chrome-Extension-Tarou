@@ -11,8 +11,11 @@ watch(() => props.battleRecord, () => {
 }, { deep: true })
 
 function getImg(action: Action) {
-  if (action.type === 'ability')
-    return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/${action.icon}.png`
+  if (action.type === 'ability') {
+    return action.isSub
+      ? `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/ability/s/${action.icon}.jpg`
+      : `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/${action.icon}.png`
+  }
   if (action.type === 'summon')
     return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/m/${action.icon}.jpg`
   if (action.type === 'temporary')
