@@ -342,7 +342,7 @@ function processLoopDamageScenario(action: LoopDamageScenario, raid: BattleRecor
 }
 
 function processSuperScenario(action: SuperScenario, raid: BattleRecord) {
-  action.list.forEach((item) => {
+  action.list?.forEach((item) => {
     item.damage.forEach((hit) => {
       const playerNum = raid.formation[hit.pos]
       raid.player[playerNum].damageTaken.super.value += hit.value
