@@ -131,7 +131,6 @@ declare module 'myStorage' {
     tweet_name_jp: string
     quest_name_en: string
     quest_name_jp: string
-    impossible: number
     difficulty: string
     stage_id: string
     thumbnail_image: string
