@@ -3,7 +3,8 @@ import type { RaidInfo } from 'myStorage'
 
 withDefaults(
   defineProps<{ collapse?: boolean; data: RaidInfo[] }>(),
-  { collapse: false })
+  { collapse: false },
+)
 
 function getRatio(a = 0, b = 0) {
   if (b === 0)

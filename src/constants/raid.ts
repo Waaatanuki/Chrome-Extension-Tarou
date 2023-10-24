@@ -354,7 +354,7 @@ export const Raid_EternitySand = [
     level: '200',
     element: 'normal',
     tweet_name_en: 'foo Lvl 300 Super Ultimate Bahamut',
-    tweet_name_jp: 'foo Lv300 スーパーアルティメットバハムート',
+    tweet_name_jp: ['Lv325 六竜の「白」と「黒」', 'Lv325 六竜の「碧」と「金」', 'Lv325 六竜の「朱」と「翠」', 'Lv325 天元たる六色の理'],
     quest_name_en: 'Hexachromatic Hierarch',
     quest_name_jp: '天元たる六色の理',
     difficulty: '8',
