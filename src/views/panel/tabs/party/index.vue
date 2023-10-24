@@ -43,7 +43,7 @@ watch(() => props.deckJson, (value) => {
     const newNpcs: NpcInfo[] = []
     for (let i = 1; i <= 5; i++) {
       const npc = npcs[i]
-      if (npc.param) {
+      if (npc?.param) {
         const newNpc: NpcInfo = {
           id: npc.param.id,
           image_id_3: npc.param.image_id_3,
