@@ -391,6 +391,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         }, [])
         if (!hit) {
           battleRecord.value.unshift({
+            quest_id: '',
             raid_id,
             raid_name: raidName,
             turn: Number(turn),

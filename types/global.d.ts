@@ -44,6 +44,7 @@ declare module 'myStorage' {
   }
 
   interface BattleRecord {
+    quest_id: string
     raid_id: number
     raid_name: string
     special_skill_flag?: number
@@ -127,8 +128,8 @@ declare module 'myStorage' {
     quest_id: string
     level: string
     element: string
-    tweet_name_en: string
-    tweet_name_jp: string
+    tweet_name_en: string | string[]
+    tweet_name_jp: string | string[]
     quest_name_en: string
     quest_name_jp: string
     difficulty: string
@@ -171,6 +172,7 @@ declare module 'requestData'{
     player: Player
     turn: number
     timer: number
+    quest_id: string
     raid_id: number
     multi_raid_member_info?: MultiRaidMemberInfo[]
     twitter: { battle_id: string }

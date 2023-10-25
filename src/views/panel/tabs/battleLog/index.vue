@@ -8,6 +8,7 @@ import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
 import DamageRecord from './components/DamageRecord.vue'
 import ActionList from './components/ActionList.vue'
+import Dbm from './dbm/index.vue'
 import { battleRecord } from '~/logic'
 
 const props = defineProps<{
@@ -169,6 +170,7 @@ function recordRaidInfo(data: BattleStartJson) {
     const abilityList = getAbilityList(data.ability)
 
     battleRecord.value.unshift({
+      quest_id: data.quest_id,
       raid_id: raidId.value!,
       raid_name: boss.monster,
       imgId: boss.cjs.split('_').at(-1)!,
@@ -579,6 +581,9 @@ const memberList = computed(() => {
         <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
         <Summon :summon-info="summonInfo" />
       </div>
+    </div>
+    <div w-full fc gap-2 p-2>
+      <Dbm :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
     <div w-full flex items-start justify-start gap-2 p-2>
       <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
