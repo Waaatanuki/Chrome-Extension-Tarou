@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { BattleRecord } from 'myStorage'
+import type { AttackResultJson } from 'requestData'
 
-const props = defineProps<{ battleRecord: BattleRecord }>()
+const props = defineProps<{ battleRecord: BattleRecord; resultJson: { type: string; result: AttackResultJson } }>()
 
 const modules = import.meta.glob('./*.vue')
 const currentQuestDBM = computed(() => {
@@ -12,5 +13,5 @@ const currentQuestDBM = computed(() => {
 </script>
 
 <template>
-  <component :is="currentQuestDBM" :battle-record="battleRecord" />
+  <component :is="currentQuestDBM" :battle-record="battleRecord" :result-json="resultJson" />
 </template>

@@ -2,7 +2,7 @@
 import type { BattleRecord } from 'myStorage'
 import type { AttackResultJson } from 'requestData'
 
-// 天元六龙
+// 不动-水木桩
 const props = defineProps<{ battleRecord: BattleRecord; resultJson: { type: string; result: AttackResultJson } }>()
 
 // 奥义或技能每造成5kw伤害下一回合就会触发特动
@@ -63,17 +63,21 @@ watch(() => props.resultJson, (data) => {
             </ElProgress>
           </div>
         </ElCard>
-        <ElCard w-250px fc>
-          <div>使用技能数：<span text-2xl>{{ abilityCount }}</span></div>
-          <div mt-10px btn @click="abilityCount = 0">
-            重置
+        <ElCard w-200px fc>
+          <div fc flex-col>
+            <div text-base>
+              使用技能数：<span text-2xl>{{ abilityCount }}</span>
+            </div>
+            <div mt-10px btn @click="abilityCount = 0">
+              重置
+            </div>
           </div>
         </ElCard>
       </div>
 
       <div mt-10px flex gap-10px>
         <ElCard w-500px>
-          <div text-start>
+          <div text-start text-base>
             <div font-bold>
               前9回合(只打2c 快速叠满巴尔被动 优先主+愚者)
             </div>
@@ -89,7 +93,7 @@ watch(() => props.resultJson, (data) => {
           </div>
         </ElCard>
         <ElCard w-500px>
-          <div text-start>
+          <div text-start text-base>
             <div>火风: 奥义👉36hit, 技能👉5次奥义</div>
             <div>水土: 奥义👉4回TA, 技能👉FC</div>
             <div>光暗: 奥义👉5回技能, 技能👉10回弱体</div>
