@@ -99,7 +99,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
     let hitRaid = eternitySandData.value.find(raid => raid.quest_id === hitMemo.quest_id)
     if (!hitRaid) {
-      hitRaid = { ...raid, total: 0, blueChest: 0, eternitySand: 0 }
+      hitRaid = { ...raid, visiable: true, total: 0, blueChest: 0, eternitySand: 0 }
       eternitySandData.value.push(hitRaid)
     }
 
