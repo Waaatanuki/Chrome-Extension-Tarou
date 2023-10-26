@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BossInfo } from 'battleLog'
+import Tips from '../tips/index.vue'
 import { battleRecord } from '~/logic'
 
 const props = defineProps<{ bossInfo: BossInfo; raidId?: number }>()
@@ -48,6 +49,9 @@ const operationSecond = computed(() => {
     </div>
     <div absolute right-1 top-1 text-base>
       {{ bossInfo.battleId }}
+    </div>
+    <div absolute bottom-1 left-1 text-base>
+      <Tips :quest-id="props.bossInfo.questId" />
     </div>
   </div>
 </template>

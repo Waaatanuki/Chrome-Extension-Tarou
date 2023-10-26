@@ -669,6 +669,7 @@ declare module 'battleLog'{
   }
 
   interface BossInfo {
+    questId: string
     battleId?: string
     imgId: string
     name: string

@@ -8,7 +8,6 @@ import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
 import DamageRecord from './components/DamageRecord.vue'
 import ActionList from './components/ActionList.vue'
-import DBM from './dbm/index.vue'
 import { battleRecord } from '~/logic'
 
 const props = defineProps<{
@@ -37,6 +36,7 @@ watch(() => props.battleStartJson, (data) => {
   const player = data.player.param[0]
 
   bossInfo.value = {
+    questId: data.quest_id,
     battleId: data.twitter?.battle_id,
     imgId: boss.cjs.split('_').at(-1)!,
     name: boss.monster,
@@ -581,9 +581,6 @@ const memberList = computed(() => {
         <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
         <Summon :summon-info="summonInfo" />
       </div>
-    </div>
-    <div w-full fc gap-2 p-2>
-      <DBM :battle-record="battleRecord.find(record => record.raid_id === raidId)!" :result-json="resultJson" />
     </div>
     <div w-full flex items-start justify-start gap-2 p-2>
       <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
