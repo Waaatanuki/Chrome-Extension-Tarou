@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { BattleMemo, BattleRecord, MaterialInfo, RecoveryItem } from 'myStorage'
+import type { BattleMemo, BattleRecord, GachaRecord, MaterialInfo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
 import { useStorageLocal } from '~/composables/useStorageLocal'
 import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
@@ -9,6 +9,7 @@ import { defaultEvokerInfo } from '~/constants/evoker'
 export const stone = useStorageLocal('stone', 0)
 export const legendticket10 = useStorageLocal('legendticket10', 0)
 export const legendticket = useStorageLocal('legendticket', 0)
+export const gachaRecord = useStorageLocal<GachaRecord[]>('gachaRecord', [])
 export const saveStoneDate = useStorageLocal('saveStoneDate', dayjs().unix())
 export const lastUpdateTodo = useStorageLocal('lastUpdateTodo', dayjs().unix())
 export const todoList = useStorageLocal('todoList', defaultTodoList)

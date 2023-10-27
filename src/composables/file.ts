@@ -8,3 +8,7 @@ export function getQuestImg(quest_id: string) {
     id = `${id}_shade`
   return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/quest/assets/lobby/${id}.png`
 }
+
+export function getGachaItemImg(type: string, id: string) {
+  return `http://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/m/${id}.jpg`
+}

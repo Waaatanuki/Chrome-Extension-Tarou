@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BattleResult, NpcAbility, NpcInfo } from 'requestData'
+import type { BattleResult, GachaResult, NpcAbility, NpcInfo } from 'requestData'
 import type { Player } from 'myStorage'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
@@ -8,7 +8,7 @@ import EvokerPage from './tabs/evoker/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
-import { battleRecord, evokerInfo, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
 
 const userId = ref<string>('')
 const battleStartJson = ref()
@@ -44,6 +44,39 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
           .find((item: any) => item.text_btn_image === 'text_legend')
           .legend_gacha_ticket_list.find((ticket: any) => Number(ticket.ticket_id) === 20011).ticket_num,
       )
+    })
+  }
+
+  // Dashboard 抽卡记录
+  if (request.request.url.includes('gacha/result//legend')) {
+    request.getContent((content: string) => {
+      const RawData: GachaResult = JSON.parse(content)
+      const legend10Info = RawData.gacha.find(item => item.text_btn_image === 'text_legend10')
+      if (!legend10Info)
+        return
+      const gacha_id = String(legend10Info.id)
+
+      let hit = gachaRecord.value.find(pool => pool.gacha_id === gacha_id)
+      if (!hit) {
+        hit = {
+          gacha_id,
+          service_start: legend10Info.service_start,
+          service_end: legend10Info.service_end,
+          count: 0,
+          ssrList: [],
+        }
+        gachaRecord.value.unshift(hit)
+      }
+      RawData.result.forEach((item) => {
+        hit!.count++
+        if (item.reward_rare_val === '4') {
+          hit!.ssrList.push({
+            id: item.reward_id,
+            type: item.reward_type,
+            is_new: item.is_new,
+          })
+        }
+      })
     })
   }
 

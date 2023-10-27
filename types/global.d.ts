@@ -6,6 +6,18 @@ declare module 'myStorage' {
     timestamp: number
   }
 
+  interface GachaRecord {
+    gacha_id: string
+    service_start: string
+    service_end: string
+    count: number
+    ssrList: {
+      id: string
+      type: string
+      is_new: boolean
+    }[]
+  }
+
   interface RecoveryItem {
     timeStamp: number
     fullElixir: number
@@ -167,6 +179,28 @@ declare module 'myStorage' {
 }
 
 declare module 'requestData'{
+
+  interface GachaResult {
+    stone_num: string
+    result: {
+      reward_type_val?: string
+      reward_type: string
+      reward_rare_val: string
+      reward_rare: string
+      reward_name: string
+      reward_id: string
+      is_new: boolean
+    }[]
+    type: string
+    count: number
+    gacha: {
+      id: string
+      text_btn_image: string
+      service_start: string
+      service_end: string
+    }[]
+  }
+
   interface BattleStartJson {
     boss: Boss
     player: Player
