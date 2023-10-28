@@ -26,7 +26,7 @@ const bossInfo = ref<BossInfo>()
 const summonInfo = ref<SummonInfo>()
 const buffInfo = ref<BuffInfo>()
 const raidId = ref<number>()
-
+const leaderAttr = ref('')
 watch(() => props.battleStartJson, (data) => {
   if (!data || !data.raid_id)
     return
@@ -34,6 +34,7 @@ watch(() => props.battleStartJson, (data) => {
   raidId.value = data.raid_id
   const boss = data.boss.param[0]
   const player = data.player.param[0]
+  leaderAttr.value = player.attr
 
   bossInfo.value = {
     questId: data.quest_id,
@@ -323,6 +324,8 @@ function processSummonScenario(action: SummonScenario, raid: BattleRecord) {
 function processDamageScenario(action: DamageScenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
   const hitPlayer = raid.player[num]
   if (hitPlayer) {
+    if (props.resultJson.type === 'fc')
+      type = 'other'
     hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
       pre += cur.value!
       return pre
@@ -404,6 +407,14 @@ function handleActionQueue(type: string, data: AttackResultJson) {
       aim_is_npc: props.resultJsonPayload.ability_aim_num
         ? currentRaid.player[Number(props.resultJsonPayload.ability_aim_num)].is_npc
         : false,
+    })
+  }
+
+  if (type === 'fc') {
+    currentRaid.actionQueue.at(-1)?.acitonList.push({
+      type: 'fc',
+      id: leaderAttr.value,
+      icon: leaderAttr.value,
     })
   }
 

@@ -299,6 +299,14 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     })
   }
 
+  // BattleLog 记录使用FC日志
+  if (/\/rest\/(raid|multiraid)\/fatal_chain_result\.json/.test(request.request.url)) {
+    resultJsonPayload.value = JSON.parse(request.request.postData!.text!)
+    request.getContent((content: string) => {
+      resultJson.value = { type: 'fc', result: JSON.parse(content) }
+    })
+  }
+
   // BattleLog 记录使用技能日志
   if (/\/rest\/(raid|multiraid)\/ability_result\.json/.test(request.request.url)) {
     resultJsonPayload.value = JSON.parse(request.request.postData!.text!)

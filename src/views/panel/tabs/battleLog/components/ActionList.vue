@@ -16,6 +16,8 @@ function getImg(action: Action) {
       ? `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/ability/s/${action.icon}.jpg`
       : `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/${action.icon}.png`
   }
+  if (action.type === 'fc')
+    return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/fatal_chain_${action.icon}.png`
   if (action.type === 'summon')
     return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/m/${action.icon}.jpg`
   if (action.type === 'temporary')
