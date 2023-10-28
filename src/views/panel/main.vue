@@ -51,17 +51,16 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   if (request.request.url.includes('gacha/result//legend')) {
     request.getContent((content: string) => {
       const RawData: GachaResult = JSON.parse(content)
-      const legend10Info = RawData.gacha.find(item => item.text_btn_image === 'text_legend10')
-      if (!legend10Info)
+      const legendInfo = RawData.gacha.find(item => item.text_btn_image.includes('text_legend'))
+      if (!legendInfo)
         return
-      const gacha_id = String(legend10Info.id)
 
-      let hit = gachaRecord.value.find(pool => pool.gacha_id === gacha_id)
+      let hit = gachaRecord.value.find(pool => pool.random_key === RawData.random_key)
       if (!hit) {
         hit = {
-          gacha_id,
-          service_start: legend10Info.service_start,
-          service_end: legend10Info.service_end,
+          random_key: RawData.random_key,
+          service_start: legendInfo.service_start,
+          service_end: legendInfo.service_end,
           count: 0,
           ssrList: [],
         }

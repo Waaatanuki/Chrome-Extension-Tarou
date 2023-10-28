@@ -36,15 +36,16 @@ const summary = computed(() =>
       </ElTag>
     </div>
     <ElScrollbar :max-height="height - 300">
-      <div v-for="data in gachaRecord" :key="data.gacha_id" mb-15px>
+      <div v-for="data in gachaRecord" :key="data.random_key" mb-15px>
         <ElCard>
           <template #header>
             <div flex items-center justify-between>
               <div>
-                {{ `卡池时间：${data.service_start} - ${data.service_end}` }}
+                <img w-200px :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/banner/gacha/banner_${data.random_key}_1.png`">
               </div>
-              <div>
-                {{ `已抽: ${data.count}(${data.ssrList.length}) SSR率: ${(data.ssrList.length / data.count * 100).toFixed(1)}%` }}
+              <div flex flex-col items-end justify-center gap-10px>
+                <div>{{ `${data.service_start} - ${data.service_end}` }}</div>
+                <div>{{ `已抽: ${data.count}(${data.ssrList.length}) SSR率: ${(data.ssrList.length / data.count * 100).toFixed(1)}%` }}</div>
               </div>
             </div>
           </template>
@@ -56,6 +57,11 @@ const summary = computed(() =>
               <img :src="getGachaItemImg(item.type, item.id)">
               <ElTag v-if="item.is_new" absolute right--8px top--8px type="warning" size="small">
                 NEW
+              </ElTag>
+            </div>
+            <div w-full fc>
+              <ElTag v-if="data.ssrList.length === 0" type="info" effect="dark" round>
+                未抽到SSR
               </ElTag>
             </div>
           </div>

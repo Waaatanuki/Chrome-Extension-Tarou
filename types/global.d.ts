@@ -7,7 +7,7 @@ declare module 'myStorage' {
   }
 
   interface GachaRecord {
-    gacha_id: string
+    random_key: string
     service_start: string
     service_end: string
     count: number
@@ -182,6 +182,7 @@ declare module 'requestData'{
 
   interface GachaResult {
     stone_num: string
+    random_key: string
     result: {
       reward_type_val?: string
       reward_type: string

@@ -17,8 +17,8 @@ function reset() {
         <span text-xl>
           {{ `攒井第${dayjs().diff(dayjs.unix(saveStoneDate), "day")}天` }}
         </span>
-        <div fc gap-10px>
-          <div i-carbon:book icon-btn title="查看抽卡记录" @click="recordVisiable = true" />
+        <div fc gap-10px text-lg>
+          <div i-carbon:document icon-btn title="查看抽卡记录" @click="recordVisiable = true" />
           <div i-carbon:reset icon-btn title="重置天数" @click="reset" />
         </div>
       </div>
