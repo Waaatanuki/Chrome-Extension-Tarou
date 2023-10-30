@@ -19,6 +19,7 @@ const specialSkillSetting = ref()
 const bossConditionJson = ref()
 const battleRecordLimit = ref(30)
 
+const inLobby = ref(false)
 const lobbyMemberList = ref()
 const battleResultList = ref<BattleResult[]>([])
 
@@ -253,6 +254,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
   // BattleLog 查询房间成员
   if (request.request.url.includes('/lobby/content/room_member')) {
     request.getContent((content: string) => {
+      inLobby.value = true
       lobbyMemberList.value = []
       const resp = JSON.parse(content)
       const htmlString = decodeURIComponent(resp.data)
@@ -278,6 +280,7 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
         userId.value = param.value
     })
     request.getContent((content: string) => {
+      inLobby.value = false
       battleStartJson.value = JSON.parse(content)
     })
   }
@@ -493,33 +496,34 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
 
 <template>
   <main>
-    <el-tabs type="border-card">
-      <el-tab-pane label="主页">
+    <ElTabs type="border-card">
+      <ElTabPane label="主页">
         <Dashborad />
-      </el-tab-pane>
-      <el-tab-pane label="贤者素材">
+      </ElTabPane>
+      <ElTabPane label="贤者素材">
         <EvokerPage />
-      </el-tab-pane>
-      <el-tab-pane label="队伍信息">
+      </ElTabPane>
+      <ElTabPane label="队伍信息">
         <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
-      </el-tab-pane>
-      <el-tab-pane label="战斗日志">
+      </ElTabPane>
+      <ElTabPane label="战斗日志">
         <BattleLog
           :user-id="userId"
           :battle-start-json="battleStartJson"
           :result-json="resultJson"
           :result-json-payload="resultJsonPayload"
           :boss-condition-json="bossConditionJson"
+          :in-lobby="inLobby"
           :lobby-member-list="lobbyMemberList"
           :battle-result-list="battleResultList"
           :guard-setting-json="guardSettingJson"
           :special-skill-setting="specialSkillSetting"
           :battle-record-limit="battleRecordLimit"
         />
-      </el-tab-pane>
-      <el-tab-pane label="战斗历史">
+      </ElTabPane>
+      <ElTabPane label="战斗历史">
         <BattleRecord :battle-record-limit="battleRecordLimit" />
-      </el-tab-pane>
-    </el-tabs>
+      </ElTabPane>
+    </ElTabs>
   </main>
 </template>

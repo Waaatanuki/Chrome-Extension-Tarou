@@ -16,6 +16,7 @@ const props = defineProps<{
   resultJson: { type: string; result: AttackResultJson }
   resultJsonPayload: ResultJsonPayload
   bossConditionJson: BossConditionJson
+  inLobby: boolean
   lobbyMemberList: Member[]
   guardSettingJson: GuardSettingJson
   specialSkillSetting: SpecialSkillSetting
@@ -27,6 +28,7 @@ const summonInfo = ref<SummonInfo>()
 const buffInfo = ref<BuffInfo>()
 const raidId = ref<number>()
 const leaderAttr = ref('')
+
 watch(() => props.battleStartJson, (data) => {
   if (!data || !data.raid_id)
     return
@@ -566,22 +568,16 @@ const normalAttackInfo = computed(() => {
   return { hit: data.length, damage }
 })
 
-const memberList = computed(() => {
-  if (!props.battleStartJson?.multi_raid_member_info)
-    return props.lobbyMemberList || []
-
-  return props.battleStartJson.multi_raid_member_info.reduce<Member[]>((pre, cur) => {
-    pre.push({
-      nickname: cur.nickname,
-      userId: cur.user_id,
-      userRank: cur.level,
-      jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${cur.job_id}.png`,
-      attributeClass: `ico-attribute ico-attribute-${cur.pc_attribute}`,
-      is_dead: cur.is_dead,
-    })
-    return pre
-  }, [])
-})
+const memberList = computed(() =>
+  props.battleStartJson?.multi_raid_member_info?.map(cur => ({
+    nickname: cur.nickname,
+    userId: cur.user_id,
+    userRank: cur.level,
+    jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${cur.job_id}.png`,
+    attributeClass: `ico-attribute ico-attribute-${cur.pc_attribute}`,
+    is_dead: cur.is_dead,
+  })),
+)
 </script>
 
 <template>
@@ -597,17 +593,20 @@ const memberList = computed(() => {
       <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
       <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
-    <el-descriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
-      <el-descriptions-item label="平A结果">
+    <ElDescriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
+      <ElDescriptionsItem label="平A结果">
         {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage}` }}
-      </el-descriptions-item>
-    </el-descriptions>
+      </ElDescriptionsItem>
+    </ElDescriptions>
 
     <MemberList :data="memberList" />
   </div>
   <div v-else fc>
-    <el-tag type="info" effect="dark" size="large" round>
+    <ElTag type="info" effect="dark" size="large" round>
       进入战斗时将会读取相关信息
-    </el-tag>
+    </ElTag>
+  </div>
+  <div v-if="props.inLobby" mt-10px>
+    <MemberList :data="props.lobbyMemberList" />
   </div>
 </template>
