@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { Action, BattleRecord } from 'myStorage'
-import { ElScrollbar } from 'element-plus'
 
 const props = defineProps<{ battleRecord: BattleRecord }>()
 const innerRef = ref<HTMLDivElement>()
-const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+const scrollbarRef = ref()
 
 watch(() => props.battleRecord, () => {
-  scrollbarRef.value?.setScrollTop(innerRef.value?.scrollHeight || 0)
+  nextTick(() => {
+    scrollbarRef.value?.setScrollTop(innerRef.value?.scrollHeight || 0)
+  })
 }, { deep: true })
 
 function getImg(action: Action) {
@@ -34,10 +35,10 @@ function getNpcImg(action: Action) {
 </script>
 
 <template>
-  <el-card v-if="battleRecord" min-w-400px>
+  <ElCard v-if="battleRecord" min-w-400px>
     <ElScrollbar ref="scrollbarRef" height="554px">
       <div ref="innerRef">
-        <el-card
+        <ElCard
           v-for="list, idx in battleRecord.actionQueue" :key="idx"
           :body-style="{ padding: '0px', display: 'flex' }"
           shadow="hover"
@@ -47,14 +48,14 @@ function getNpcImg(action: Action) {
               {{ `第${list.turn}回合` }}
             </div>
             <div fc gap-2px>
-              <el-check-tag v-for="index in 4" :key="index" label="G" :checked="!!list.guard_status[index - 1]?.is_guard_status">
+              <ElCheckTag v-for="index in 4" :key="index" label="G" :checked="!!list.guard_status[index - 1]?.is_guard_status">
                 G
-              </el-check-tag>
+              </ElCheckTag>
             </div>
             <div absolute left-5px top-5px fc>
-              <el-tag :type="list.special_skill_flag ? 'danger' : 'success'" effect="dark" size="small">
+              <ElTag :type="list.special_skill_flag ? 'danger' : 'success'" effect="dark" size="small">
                 {{ list.special_skill_flag ? 'OFF' : 'ON' }}
-              </el-tag>
+              </ElTag>
             </div>
             <div absolute right-5px top-5px text-sm>
               {{ Math.ceil(list.bossHpPercent) }}
@@ -70,8 +71,8 @@ function getNpcImg(action: Action) {
               </template>
             </div>
           </div>
-        </el-card>
+        </ElCard>
       </div>
     </ElScrollbar>
-  </el-card>
+  </ElCard>
 </template>
