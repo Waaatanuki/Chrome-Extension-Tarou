@@ -68,28 +68,28 @@ function handleExport() {
           <div i-carbon:document-export mr-1 />
           导出
         </div>
-        <el-upload v-model:file-list="filesList" :on-change="handleUploadChange" :show-file-list="false" :limit="1" :auto-upload="false" accept=".json">
+        <ElUpload v-model:file-list="filesList" :on-change="handleUploadChange" :show-file-list="false" :limit="1" :auto-upload="false" accept=".json">
           <template #trigger>
             <div fc text-xs btn @click="filesList = []">
               <div i-carbon:document-import mr-1 />
               导入
             </div>
           </template>
-        </el-upload>
+        </ElUpload>
       </div>
     </div>
     <RaidCard :data="eternitySandData.filter(i => i.visiable)" />
-    <el-collapse>
-      <el-collapse-item>
+    <ElCollapse>
+      <ElCollapseItem>
         <template #title>
           <div ml-5>
-            <el-text size="large">
+            <ElText size="large">
               隐藏副本
-            </el-text>
+            </ElText>
           </div>
         </template>
         <RaidCard collapse :data="eternitySandData.filter(i => !i.visiable)" />
-      </el-collapse-item>
-    </el-collapse>
+      </ElCollapseItem>
+    </ElCollapse>
   </main>
 </template>

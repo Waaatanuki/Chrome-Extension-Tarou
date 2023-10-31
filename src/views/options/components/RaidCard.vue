@@ -29,7 +29,7 @@ function getMsg(item: RaidInfo) {
 </script>
 
 <template>
-  <el-card v-for="item in data" :key="item.quest_id" relative>
+  <ElCard v-for="item in data" :key="item.quest_id" relative>
     <div v-if="collapse" i-carbon:checkmark-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
     <div v-else i-carbon:close-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
     <div flex justify-evenly gap-5>
@@ -39,33 +39,33 @@ function getMsg(item: RaidInfo) {
       <div w-full fc flex-col gap-4>
         <div flex justify-between gap-10>
           <div max-w-120px flex items-start justify-center>
-            <el-statistic :value="item.total" title="总次数" />
+            <ElStatistic :value="item.total" title="总次数" />
           </div>
           <div v-if="item.is_blue_treasure" max-w-120px flex flex-col items-center justify-start>
-            <el-statistic :value="item.blueChest" title="蓝箱" />
-            <el-text size="small">
+            <ElStatistic :value="item.blueChest" title="蓝箱" />
+            <ElText size="small">
               蓝箱率： {{ getRatio(item.blueChest, item.total) }}%
-            </el-text>
+            </ElText>
           </div>
           <div max-w-120px flex flex-col items-center justify-start>
-            <el-statistic :value="item.eternitySand" title="沙漏" />
-            <el-tooltip placement="bottom-start">
+            <ElStatistic :value="item.eternitySand" title="沙漏" />
+            <ElTooltip placement="bottom-start">
               <template #content>
                 蓝箱掉落沙漏的副本，计算沙漏率时分母为蓝箱数，否则为总次数
               </template>
-              <el-text size="small">
+              <ElText size="small">
                 沙漏率： {{ getEternitySandRatio(item) }}%
-              </el-text>
-            </el-tooltip>
+              </ElText>
+            </ElTooltip>
           </div>
         </div>
-        <el-text v-if="item.eternitySand === 0" type="warning">
+        <ElText v-if="item.eternitySand === 0" type="warning">
           还未出过沙漏
-        </el-text>
-        <el-text v-else type="info">
+        </ElText>
+        <ElText v-else type="info">
           {{ getMsg(item) }}
-        </el-text>
+        </ElText>
       </div>
     </div>
-  </el-card>
+  </ElCard>
 </template>

@@ -6,10 +6,10 @@ const evoker = defineModel<EvokerInfo>({ required: true })
 </script>
 
 <template>
-  <el-card class="evoker-card w-130px" :body-style="{ padding: '0px' }" shadow="hover">
+  <ElCard class="evoker-card w-130px" :body-style="{ padding: '0px' }" shadow="hover">
     <img w-130px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/npc/m/${evoker.npcId}_01.jpg`">
     <div class="h-170px flex flex-col items-center justify-evenly">
-      <el-select
+      <ElSelect
         v-model="evoker.tarotLevel"
         class="w-100px"
         :class="{ completed: evoker.tarotLevel === tarotList.at(-1)?.value }"
@@ -17,15 +17,15 @@ const evoker = defineModel<EvokerInfo>({ required: true })
         placeholder="塔罗牌进度"
         placement="bottom"
       >
-        <el-option
+        <ElOption
           v-for="item, idx in tarotList"
           :key="idx"
           :label="item.label"
           :value="item.value"
         />
-      </el-select>
+      </ElSelect>
 
-      <el-select
+      <ElSelect
         v-model="evoker.evokerLevel"
         class="w-100px"
         :class="{ completed: evoker.evokerLevel === evokerList.at(-1)?.value }"
@@ -33,15 +33,15 @@ const evoker = defineModel<EvokerInfo>({ required: true })
         placeholder="贤者进度"
         placement="bottom"
       >
-        <el-option
+        <ElOption
           v-for="item, idx in evokerList"
           :key="idx"
           :label="item.label"
           :value="item.value"
         />
-      </el-select>
+      </ElSelect>
 
-      <el-select
+      <ElSelect
         v-model="evoker.weaponLevel"
         class="w-100px"
         :class="{
@@ -51,15 +51,15 @@ const evoker = defineModel<EvokerInfo>({ required: true })
         placeholder="贤武进度"
         placement="bottom"
       >
-        <el-option
+        <ElOption
           v-for="item, idx in weaponList"
           :key="idx"
           :label="item.label"
           :value="item.value"
         />
-      </el-select>
+      </ElSelect>
 
-      <el-select
+      <ElSelect
         v-model="evoker.domainLevel"
         class="w-100px"
         :class="{
@@ -69,16 +69,16 @@ const evoker = defineModel<EvokerInfo>({ required: true })
         placeholder="领域进度"
         placement="bottom"
       >
-        <el-option
+        <ElOption
           v-for="item, idx in domainList"
           :key="idx"
           :label="item.label"
           :value="item.value"
         />
-      </el-select>
+      </ElSelect>
 
       <div>
-        <el-checkbox
+        <ElCheckbox
           v-model="evoker.isAbility4Release"
           label="四技能解锁"
           size="small"
@@ -86,10 +86,10 @@ const evoker = defineModel<EvokerInfo>({ required: true })
       </div>
 
       <div>
-        <el-checkbox v-model="evoker.target" label="目标" size="small" />
+        <ElCheckbox v-model="evoker.target" label="目标" size="small" />
       </div>
     </div>
-  </el-card>
+  </ElCard>
 </template>
 
 <style lang="scss">

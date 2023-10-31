@@ -36,81 +36,81 @@ function handleOpen() {
 </script>
 
 <template>
-  <el-card m-3 w-full>
+  <ElCard m-3 w-full>
     <template #header>
       <div flex justify-between>
         <div text-xl>
           回复道具记录
         </div>
         <div>
-          <el-button type="danger" link @click="reset">
+          <ElButton type="danger" link @click="reset">
             重置
-          </el-button>
-          <el-button type="primary" link @click="handleCopy">
+          </ElButton>
+          <ElButton type="primary" link @click="handleCopy">
             复制
-          </el-button>
+          </ElButton>
         </div>
       </div>
     </template>
-    <el-table :data="recoveryItemList" cell-class-name="cell-class-name">
-      <el-table-column prop="timeStamp" label="日期" align="center">
+    <ElTable :data="recoveryItemList" cell-class-name="cell-class-name">
+      <ElTableColumn prop="timeStamp" label="日期" align="center">
         <template #default="{ row }">
           {{ dayjs(row.timeStamp).format("YYYY-MM-DD") }}
         </template>
-      </el-table-column>
-      <el-table-column label="大红" align="center">
+      </ElTableColumn>
+      <ElTableColumn label="大红" align="center">
         <template #default="{ row }">
-          <el-badge
+          <ElBadge
             :value="(row.fullElixirDiff >= 0 ? '+' : '') + row.fullElixirDiff"
             :type="row.fullElixirDiff >= 0 ? 'success' : 'danger'"
           >
             <div w-15>
               {{ row.fullElixir }}
             </div>
-          </el-badge>
+          </ElBadge>
         </template>
-      </el-table-column>
-      <el-table-column label="半红" align="center">
+      </ElTableColumn>
+      <ElTableColumn label="半红" align="center">
         <template #default="{ row }">
-          <el-badge
+          <ElBadge
             :value="(row.halfElixirDiff >= 0 ? '+' : '') + row.halfElixirDiff"
             :type="row.halfElixirDiff >= 0 ? 'success' : 'danger'"
           >
             <div w-15>
               {{ row.halfElixir }}
             </div>
-          </el-badge>
+          </ElBadge>
         </template>
-      </el-table-column>
-      <el-table-column label="粉盒" align="center">
+      </ElTableColumn>
+      <ElTableColumn label="粉盒" align="center">
         <template #default="{ row }">
-          <el-badge
+          <ElBadge
             :value="(row.soulBalmDiff >= 0 ? '+' : '') + row.soulBalmDiff"
             :type="row.soulBalmDiff >= 0 ? 'success' : 'danger'"
           >
             <div w-15>
               {{ row.soulBalm }}
             </div>
-          </el-badge>
+          </ElBadge>
         </template>
-      </el-table-column>
-      <el-table-column label="豆子" align="center">
+      </ElTableColumn>
+      <ElTableColumn label="豆子" align="center">
         <template #default="{ row }">
-          <el-badge
+          <ElBadge
             :value="(row.soulBerryDiff >= 0 ? '+' : '') + row.soulBerryDiff"
             :type="row.soulBerryDiff >= 0 ? 'success' : 'danger'"
           >
             <div w-15>
               {{ row.soulBerry }}
             </div>
-          </el-badge>
+          </ElBadge>
         </template>
-      </el-table-column>
-    </el-table>
-  </el-card>
-  <el-dialog v-model="dialogVisible" @opened="handleOpen">
-    <el-input ref="inputRef" v-model="textarea" :rows="4" type="textarea" />
-  </el-dialog>
+      </ElTableColumn>
+    </ElTable>
+  </ElCard>
+  <ElDialog v-model="dialogVisible" @opened="handleOpen">
+    <ElInput ref="inputRef" v-model="textarea" :rows="4" type="textarea" />
+  </ElDialog>
 </template>
 
 <style lang="scss">

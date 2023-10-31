@@ -72,30 +72,30 @@ const evokerPageResult = computed(() => {
     </div>
   </div>
   <div v-if="materialInfo.length === 0" fc>
-    <el-tag type="warning" size="large" effect="dark" round>
+    <ElTag type="warning" size="large" effect="dark" round>
       请先去游戏的素材界面读取素材信息
-    </el-tag>
+    </ElTag>
   </div>
   <div v-else>
     <div v-if="evokerPageResult.filter(item => item.need > 0).length === 0" fc>
-      <el-tag type="success" size="large" effect="dark" round>
+      <ElTag type="success" size="large" effect="dark" round>
         恭喜你已出狱！
-      </el-tag>
+      </ElTag>
     </div>
     <div v-else>
-      <el-scrollbar max-height="210">
+      <ElScrollbar max-height="210">
         <div fc flex-wrap>
           <div
             v-for="item in evokerPageResult.filter(item => item.need > 0)" :key="item.id"
             w-50px fc flex-col gap-5px
           >
-            <el-tooltip :content="`${item.name} 总需${item.total}`" placement="top">
+            <ElTooltip :content="`${item.name} 总需${item.total}`" placement="top">
               <img w-full :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${item.id}.jpg`">
-            </el-tooltip>
+            </ElTooltip>
             <label>{{ item.need }}</label>
           </div>
         </div>
-      </el-scrollbar>
+      </ElScrollbar>
     </div>
   </div>
 

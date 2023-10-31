@@ -9,7 +9,7 @@ function getImg(type: string, id: string, size = 'm') {
 </script>
 
 <template>
-  <el-card :body-style="{ padding: '10px' }">
+  <ElCard :body-style="{ padding: '10px' }">
     <div fc gap-5px>
       <div v-for="idx in 5" :key="idx" relative h-46px w-80px fc bg-slate-300>
         <img v-if="summonInfo.summon[idx - 1]?.image_id" w-full :src="getImg('summon', summonInfo.summon[idx - 1]?.image_id)">
@@ -30,5 +30,5 @@ function getImg(type: string, id: string, size = 'm') {
         </div>
       </div>
     </div>
-  </el-card>
+  </ElCard>
 </template>

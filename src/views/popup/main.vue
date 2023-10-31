@@ -81,8 +81,8 @@ function exportJSONFile(itemList: any) {
 <template>
   <main>
     <div w-500px>
-      <el-table :data="goldBrickTableShowData">
-        <el-table-column prop="name" align="center">
+      <ElTable :data="goldBrickTableShowData">
+        <ElTableColumn prop="name" align="center">
           <template #header>
             <div
               class="icon-btn" i-carbon-sun dark:i-carbon-moon m-auto
@@ -92,87 +92,87 @@ function exportJSONFile(itemList: any) {
           <template #default="{ row }">
             <img m-auto w-full :src="getQuestImg(row.quest_id)">
           </template>
-        </el-table-column>
-        <el-table-column prop="blueChest" align="center">
+        </ElTableColumn>
+        <ElTableColumn prop="blueChest" align="center">
           <template #header="{ column }">
             <img m-auto w-30px :src="getLocalImg(column.property)">
           </template>
           <template #default="{ row }">
-            <el-tooltip effect="dark" placement="top">
+            <ElTooltip effect="dark" placement="top">
               <template #content>
                 总次数：{{ row.total }}<br>
                 蓝箱率：{{ ((row.blueChest / row.total || 0) * 100).toFixed(1) }}%
               </template>
               {{ row.blueChest }}
-            </el-tooltip>
+            </ElTooltip>
           </template>
-        </el-table-column>
-        <el-table-column prop="goldBrick" align="center">
+        </ElTableColumn>
+        <ElTableColumn prop="goldBrick" align="center">
           <template #header="{ column }">
             <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
           </template>
           <template #default="{ row }">
-            <el-tooltip effect="dark" placement="top">
+            <ElTooltip effect="dark" placement="top">
               <template #content>
                 蓝箱金率：{{ ((row.goldBrick / row.blueChest || 0) * 100).toFixed(1) }}%
                 <br>
                 {{ getMsg(row) }}
               </template>
               {{ row.goldBrick }}
-            </el-tooltip>
+            </ElTooltip>
           </template>
-        </el-table-column>
-        <el-table-column prop="ring3" align="center">
+        </ElTableColumn>
+        <ElTableColumn prop="ring3" align="center">
           <template #header="{ column }">
             <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
           </template>
-        </el-table-column>
-        <el-table-column prop="ring2" align="center">
+        </ElTableColumn>
+        <ElTableColumn prop="ring2" align="center">
           <template #header="{ column }">
             <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
           </template>
-        </el-table-column>
-        <el-table-column prop="ring1" align="center">
+        </ElTableColumn>
+        <ElTableColumn prop="ring1" align="center">
           <template #header="{ column }">
             <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
           </template>
-        </el-table-column>
-      </el-table>
+        </ElTableColumn>
+      </ElTable>
       <div flex justify-between>
         <div>
-          <el-dropdown @command="handleReset">
-            <el-button m-2 size="small" type="danger">
+          <ElDropdown @command="handleReset">
+            <ElButton m-2 size="small" type="danger">
               <div i-carbon:reset mr-1 />
               重置
-            </el-button>
+            </ElButton>
             <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="all">
+              <ElDropdownMenu>
+                <ElDropdownItem command="all">
                   全部重置
-                </el-dropdown-item>
-                <el-dropdown-item command="goldBrick">
+                </ElDropdownItem>
+                <ElDropdownItem command="goldBrick">
                   仅金本
-                </el-dropdown-item>
-                <el-dropdown-item command="eternitySand">
+                </ElDropdownItem>
+                <ElDropdownItem command="eternitySand">
                   仅沙漏本
-                </el-dropdown-item>
-              </el-dropdown-menu>
+                </ElDropdownItem>
+              </ElDropdownMenu>
             </template>
-          </el-dropdown>
+          </ElDropdown>
         </div>
         <div>
-          <el-button m-2 size="small" type="primary" @click="importData">
+          <ElButton m-2 size="small" type="primary" @click="importData">
             <div i-carbon:document-import mr-1 />
             导入至APP
-          </el-button>
-          <el-button m-2 size="small" type="primary" @click="exportData">
+          </ElButton>
+          <ElButton m-2 size="small" type="primary" @click="exportData">
             <div i-carbon:document-export mr-1 />
             导出
-          </el-button>
-          <el-button m-2 size="small" type="primary" @click="openOptionsPage">
+          </ElButton>
+          <ElButton m-2 size="small" type="primary" @click="openOptionsPage">
             <div i-carbon:notebook mr-1 />
             更多
-          </el-button>
+          </ElButton>
         </div>
       </div>
     </div>

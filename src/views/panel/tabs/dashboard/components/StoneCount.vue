@@ -11,7 +11,7 @@ function reset() {
 </script>
 
 <template>
-  <el-card m-3 h-full w-220px>
+  <ElCard m-3 h-full w-220px>
     <template #header>
       <div flex items-center justify-between>
         <span text-xl>
@@ -54,5 +54,5 @@ function reset() {
     <ElDialog v-model="recordVisiable" width="780" top="5vh">
       <GachaInfo />
     </ElDialog>
-  </el-card>
+  </ElCard>
 </template>

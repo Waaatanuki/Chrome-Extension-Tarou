@@ -25,9 +25,7 @@ const damageTakenTypeOptions = ref([
 ])
 
 const maxDamage = computed(() =>
-  props.battleRecord.player.reduce((pre, cur) =>
-    pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value
-  , 1),
+  props.battleRecord.player.reduce((pre, cur) => pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value, 1),
 )
 
 const totalDamage = computed(() =>
@@ -38,9 +36,7 @@ const totalDamage = computed(() =>
 )
 
 const maxDamageTaken = computed(() =>
-  props.battleRecord.player.reduce((pre, cur) =>
-    pre > cur.damageTaken[damageTakenType.value].value ? pre : cur.damageTaken[damageTakenType.value].value
-  , 1),
+  props.battleRecord.player.reduce((pre, cur) => pre > cur.damageTaken[damageTakenType.value].value ? pre : cur.damageTaken[damageTakenType.value].value, 1),
 )
 
 const totalDamageTaken = computed(() =>
@@ -60,19 +56,19 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
 </script>
 
 <template>
-  <el-card v-if="battleRecord" w-420px shrink-0>
-    <el-tabs v-model="tabName" stretch>
-      <el-tab-pane label="伤害统计" name="damage">
+  <ElCard v-if="battleRecord" w-420px shrink-0>
+    <ElTabs v-model="tabName" stretch>
+      <ElTabPane label="伤害统计" name="damage">
         <div h-500px>
           <div fc pb-20px pt-5px>
-            <el-select v-model="damageType" w-150px>
-              <el-option
+            <ElSelect v-model="damageType" w-150px>
+              <ElOption
                 v-for="item in damageTypeOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
-            </el-select>
+            </ElSelect>
           </div>
 
           <div fc flex-col gap-10px>
@@ -98,12 +94,12 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
                 </div>
               </div>
               <div w-200px>
-                <el-progress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
+                <ElProgress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
                   <div />
-                </el-progress>
+                </ElProgress>
                 <div mx-5px mt-10px flex items-center justify-between>
                   <div>
-                    <el-tooltip
+                    <ElTooltip
                       v-if="player.attackInfo"
                       :content="`总次数: ${player.attackInfo.total} TA: ${getRengeki('ta', player.attackInfo)} DA: ${getRengeki('da', player.attackInfo)}  SA: ${getRengeki('sa', player.attackInfo)}`"
                       placement="top" effect="dark"
@@ -111,7 +107,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
                       <div text-xs>
                         {{ `TA: ${getRengeki('ta', player.attackInfo)}` }}
                       </div>
-                    </el-tooltip>
+                    </ElTooltip>
                   </div>
                   <div text-base>
                     {{ player.damage[damageType].value.toLocaleString() }}
@@ -124,18 +120,18 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
             </div>
           </div>
         </div>
-      </el-tab-pane>
-      <el-tab-pane label="承伤统计" name="damageTaken">
+      </ElTabPane>
+      <ElTabPane label="承伤统计" name="damageTaken">
         <div h-500px>
           <div fc pb-20px pt-5px>
-            <el-select v-model="damageTakenType" w-150px>
-              <el-option
+            <ElSelect v-model="damageTakenType" w-150px>
+              <ElOption
                 v-for="item in damageTakenTypeOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
-            </el-select>
+            </ElSelect>
           </div>
 
           <div v-if="hasDamageTaken" fc flex-col gap-10px>
@@ -161,9 +157,9 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
                 </div>
               </div>
               <div w-200px>
-                <el-progress :percentage=" player.damageTaken[damageTakenType].value / maxDamageTaken * 100" color="#be123c" text-inside>
+                <ElProgress :percentage=" player.damageTaken[damageTakenType].value / maxDamageTaken * 100" color="#be123c" text-inside>
                   <div />
-                </el-progress>
+                </ElProgress>
                 <div mx-5px mt-10px flex items-center justify-between>
                   <div />
                   <div text-base>
@@ -177,7 +173,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
             </div>
           </div>
         </div>
-      </el-tab-pane>
-    </el-tabs>
-  </el-card>
+      </ElTabPane>
+    </ElTabs>
+  </ElCard>
 </template>

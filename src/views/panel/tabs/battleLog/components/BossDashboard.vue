@@ -18,7 +18,7 @@ const operationSecond = computed(() => {
 
 <template>
   <div relative w-350px>
-    <el-progress type="circle" :percentage="bossInfo.hpPercent" :stroke-width="15" status="exception" :width="350">
+    <ElProgress type="circle" :percentage="bossInfo.hpPercent" :stroke-width="15" status="exception" :width="350">
       <template #default="{ percentage }">
         <div flex flex-col gap-2>
           <div fc gap-5 text-xl>
@@ -26,7 +26,7 @@ const operationSecond = computed(() => {
             <div v-if="bossInfo.hp === 0">
               {{ formatTime(bossInfo.remainderSecond) }}
             </div>
-            <el-countdown v-else :value="timerValue" />
+            <ElCountdown v-else :value="timerValue" />
           </div>
           <div fc>
             <img :src="bossImgSrc">
@@ -40,10 +40,10 @@ const operationSecond = computed(() => {
           </div>
         </div>
       </template>
-    </el-progress>
-    <el-tag v-if="bossInfo.interrupt_display_text" absolute class="left-1/2 top-1/2 translate-y-85px -translate-x-1/2">
+    </ElProgress>
+    <ElTag v-if="bossInfo.interrupt_display_text" absolute class="left-1/2 top-1/2 translate-y-85px -translate-x-1/2">
       {{ bossInfo.interrupt_display_text }}
-    </el-tag>
+    </ElTag>
     <div absolute left-1 top-1 text-lg>
       {{ formatTime(operationSecond) }}
     </div>

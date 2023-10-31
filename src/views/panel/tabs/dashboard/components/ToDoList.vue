@@ -52,47 +52,47 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-card m-3 min-w-200px>
+  <ElCard m-3 min-w-200px>
     <template #header>
       <div flex items-center justify-between>
         <span text-xl>日常</span>
         <div>
-          <el-button type="primary" link @click="addTask">
+          <ElButton type="primary" link @click="addTask">
             增加
-          </el-button>
-          <el-button
+          </ElButton>
+          <ElButton
             type="primary" link
             @click="delBtnVisible = !delBtnVisible"
           >
             {{ delBtnVisible ? "确认" : "编辑" }}
-          </el-button>
+          </ElButton>
         </div>
       </div>
     </template>
     <div flex flex-col>
-      <el-checkbox
+      <ElCheckbox
         v-for="task, idx in todoList" :key="idx"
         v-model="task.done" :label="task.content"
       >
         <template #default>
           <div flex items-center justify-between>
             <div v-if="delBtnVisible">
-              <el-input v-model="task.content" size="small" mr-10px />
-              <el-button type="danger" link @click="delTask(idx)">
+              <ElInput v-model="task.content" size="small" mr-10px />
+              <ElButton type="danger" link @click="delTask(idx)">
                 删除
-              </el-button>
+              </ElButton>
             </div>
             <div v-else>
               {{ task.content }}
             </div>
           </div>
         </template>
-      </el-checkbox>
-      <el-input
+      </ElCheckbox>
+      <ElInput
         v-if="inputVisible"
         ref="InputRef" v-model="inputValue" size="small"
         @keyup.enter="handleInputConfirm" @blur="handleInputConfirm"
       />
     </div>
-  </el-card>
+  </ElCard>
 </template>

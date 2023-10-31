@@ -77,7 +77,7 @@ function timeToSeconds(timeString: string) {
       <div flex flex-wrap items-start justify-center>
         <div v-for="buff in bossTimeBuff.filter(item => item.visiable && specBossBuff.some(b => item.status.startsWith(b)))" :key="buff.status" w-60px fc flex-col p-2px>
           <img w-full cursor-pointer :src="getBuffIcon(buff.status)" @click="toggleImage(specBossBuff, buff.status.split('_')[0])">
-          <el-countdown
+          <ElCountdown
             format="mm:ss"
             :value="buff.remain"
             @finish="buff.visiable = false"

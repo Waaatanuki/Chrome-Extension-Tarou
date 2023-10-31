@@ -51,9 +51,9 @@ function getImg(id: string, type = 'npc') {
         <div>克属伤害：{{ damageInfo.assumed_advantage_damage.toLocaleString() }}</div>
       </div>
       <div flex flex-col gap-5px px-2 text-sm>
-        <el-tag v-for="action in setAction " :key="action.name" type="info" effect="plain">
+        <ElTag v-for="action in setAction " :key="action.name" type="info" effect="plain">
           {{ action.name }}
-        </el-tag>
+        </ElTag>
       </div>
     </div>
   </div>

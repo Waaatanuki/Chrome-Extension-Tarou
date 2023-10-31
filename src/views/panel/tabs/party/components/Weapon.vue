@@ -16,7 +16,6 @@ function getArousalType(form: number) {
   return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/arousal_type/type_${form}.png`
 }
 
-// 武器系列 3法武 13U武 27龙武 40真化龙武
 function getSkillAlias(weapon: WeaponDetail) {
   const series_id = weapon?.master?.series_id
   const hit = weaponSkill.find(category => category.series_id.includes(series_id))
