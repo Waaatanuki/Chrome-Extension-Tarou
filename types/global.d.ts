@@ -552,13 +552,15 @@ declare module 'requestData'{
    }
 
    interface DeckWeapon {
-     [key: string]: {
-       master: WeaponMaster
-       param: WeaponParam
-       skill1: WeaponSkill
-       skill2: WeaponSkill
-       skill3: WeaponSkill
-     }
+     [key: string]: WeaponDetail
+   }
+
+   interface WeaponDetail {
+     master: WeaponMaster
+     param: WeaponParam
+     skill1: WeaponSkill
+     skill2: WeaponSkill
+     skill3: WeaponSkill
    }
 
    interface WeaponMaster {

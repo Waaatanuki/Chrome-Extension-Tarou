@@ -108,25 +108,25 @@ function triggerSimpleModel(value: CheckboxValueType) {
 <template>
   <div mb-2 flex items-center justify-between>
     <div pl-5>
-      <el-checkbox-button v-model="simpleChecked" @change="triggerSimpleModel">
+      <ElCheckboxButton v-model="simpleChecked" @change="triggerSimpleModel">
         简略模式
-      </el-checkbox-button>
+      </ElCheckboxButton>
 
-      <el-checkbox-button v-model="weaponChecked" :disabled="simpleChecked">
+      <ElCheckboxButton v-model="weaponChecked" :disabled="simpleChecked">
         武器
-      </el-checkbox-button>
+      </ElCheckboxButton>
 
-      <el-checkbox-button v-model="summonChecked" :disabled="simpleChecked">
+      <ElCheckboxButton v-model="summonChecked" :disabled="simpleChecked">
         召唤
-      </el-checkbox-button>
+      </ElCheckboxButton>
 
-      <el-checkbox-button v-model="npcChecked" :disabled="simpleChecked">
+      <ElCheckboxButton v-model="npcChecked" :disabled="simpleChecked">
         队伍
-      </el-checkbox-button>
+      </ElCheckboxButton>
 
-      <el-checkbox-button v-model="effectChecked" :disabled="simpleChecked">
+      <ElCheckboxButton v-model="effectChecked" :disabled="simpleChecked">
         效果量
-      </el-checkbox-button>
+      </ElCheckboxButton>
     </div>
     <div pr-5>
       <div btn @click="deckList = []">
@@ -135,10 +135,10 @@ function triggerSimpleModel(value: CheckboxValueType) {
     </div>
   </div>
   <div fc flex-col gap-2 :class="{ simpleMode: simpleChecked }">
-    <el-tag v-if="deckList.length === 0" type="info" effect="dark" size="large" round>
+    <ElTag v-if="deckList.length === 0" type="info" effect="dark" size="large" round>
       进入编成界面读取队伍信息
-    </el-tag>
-    <el-card v-for="deck, idx in deckList" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
+    </ElTag>
+    <ElCard v-for="deck, idx in deckList" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
       <div relative fc flex-col gap-2>
         <div fc flex-wrap gap-2>
           <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
@@ -150,7 +150,7 @@ function triggerSimpleModel(value: CheckboxValueType) {
         </div>
         <div i-carbon:close-outline absolute bottom--8px right--8px text-sm icon-btn @click="deckList.splice(idx, 1)" />
       </div>
-    </el-card>
+    </ElCard>
   </div>
 </template>
 

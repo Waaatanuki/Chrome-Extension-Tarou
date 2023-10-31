@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DamageInfo, DeckWeapon } from 'requestData'
+import type { DamageInfo, DeckWeapon, WeaponDetail } from 'requestData'
 import { weaponSkill } from '~/constants/skill'
 
 defineProps<{
@@ -16,8 +16,18 @@ function getArousalType(form: number) {
   return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/arousal_type/type_${form}.png`
 }
 
-function getSkillAlias(description: string) {
-  return weaponSkill.find(skill => description.includes(skill.comment) || description.includes(skill.comment_en))?.alias
+// 武器系列 3法武 13U武 27龙武 40真化龙武
+function getSkillAlias(weapon: WeaponDetail) {
+  const series_id = weapon?.master?.series_id
+  const hit = weaponSkill.find(category => category.series_id.includes(series_id))
+  if (!hit)
+    return
+
+  const description = weapon[hit.type as 'skill2' | 'skill3']?.description
+  if (!description)
+    return
+
+  return hit.list.find(skill => description.includes(skill.comment) || description.includes(skill.comment_en))?.alias
 }
 </script>
 
@@ -26,23 +36,17 @@ function getSkillAlias(description: string) {
     <div h-210px fc>
       <div relative w-100px>
         <img w-full :src="getImg('weapon', weapons[1].master.id, 'ls')">
-        <el-tag
-          v-if="(weapons[1]?.master?.series_id === '3' || weapons[1]?.master?.series_id === '13') && weapons[1]?.skill3"
-          type="danger" size="small" class="skill-tag"
-        >
-          {{ getSkillAlias (weapons[1]?.skill3?.description) }}
-        </el-tag>
+        <ElTag v-if="getSkillAlias (weapons[1])" type="danger" size="small" class="skill-tag">
+          {{ getSkillAlias (weapons[1]) }}
+        </ElTag>
       </div>
       <div w-275px fc flex-wrap gap-5px>
         <div v-for="idx in 12" :key="idx" relative h-48px w-85px fc bg-slate-300>
           <img v-if="weapons[idx + 1]?.master?.id" w-full :src="getImg('weapon', weapons[idx + 1]?.master?.id)">
           <img v-if="weapons[idx + 1]?.param?.arousal.is_arousal_weapon" class="ico-arousal-type" :src="getArousalType(weapons[idx + 1]?.param?.arousal.form)">
-          <el-tag
-            v-if="(weapons[idx + 1]?.master?.series_id === '3' || weapons[idx + 1]?.master?.series_id === '13') && weapons[idx + 1]?.skill3"
-            type="danger" size="small" class="skill-tag"
-          >
-            {{ getSkillAlias (weapons[idx + 1]?.skill3?.description) }}
-          </el-tag>
+          <ElTag v-if="getSkillAlias (weapons[idx + 1])" type="danger" size="small" class="skill-tag">
+            {{ getSkillAlias (weapons[idx + 1]) }}
+          </ElTag>
         </div>
       </div>
     </div>
