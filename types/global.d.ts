@@ -287,7 +287,6 @@ declare module 'requestData'{
 
   interface Buff {
     status: string
-    is_unusable_harb: boolean
     detail?: string
     effect?: string
     help_flag?: string

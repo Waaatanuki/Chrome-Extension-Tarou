@@ -25,7 +25,7 @@ const props = defineProps<{
 
 const bossInfo = ref<BossInfo>()
 const summonInfo = ref<SummonInfo>()
-const buffInfo = ref<BuffInfo>()
+const buffInfo = ref<BuffInfo>({ bossBuffs: [], playerBuffs: [] })
 const raidId = ref<number>()
 const leaderAttr = ref('')
 
@@ -93,31 +93,36 @@ watch(() => props.specialSkillSetting, (data) => {
   }
 })
 
+watch(() => props.bossConditionJson, (data) => {
+  const totalBossBuffs = data.buff?.concat(data.debuff).filter((item, index, self) => {
+    return index === self.findIndex(t => t.status === item.status)
+  })
+  buffInfo.value.bossBuffs = totalBossBuffs.map(buff => ({ status: buff.status }))
+})
+
 function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
-  if (!bossCondition || !playerCondition)
-    return
+  if (bossCondition) {
+    const bossBuffs = bossCondition.buff?.filter((item) => {
+      return !item.personal_buff_user_id || item.personal_buff_user_id === props.userId
+    }) || []
 
-  const bossBuffs = bossCondition.buff?.filter((item) => {
-    return !item.personal_buff_user_id || item.personal_buff_user_id === props.userId
-  }) || []
+    const bossDebuffs = bossCondition.debuff?.filter((item) => {
+      return !item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId
+    }) || []
 
-  const bossDebuffs = bossCondition.debuff?.filter((item) => {
-    return !item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId
-  }) || []
+    const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => {
+      return index === self.findIndex(t => t.status === item.status)
+    })
+    buffInfo.value.bossBuffs = totalBossBuffs
+  }
 
-  const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => {
-    return index === self.findIndex(t => t.status === item.status)
-  })
-
-  const playerBuffs = playerCondition.buff || []
-  const playerDebuffs = playerCondition.debuff || []
-  const totalPlayerBuffs = playerBuffs.concat(playerDebuffs).filter((item, index, self) => {
-    return index === self.findIndex(t => t.status === item.status)
-  })
-
-  buffInfo.value = {
-    bossBuffs: totalBossBuffs,
-    playerBuffs: totalPlayerBuffs,
+  if (playerCondition) {
+    const playerBuffs = playerCondition.buff || []
+    const playerDebuffs = playerCondition.debuff || []
+    const totalPlayerBuffs = playerBuffs.concat(playerDebuffs).filter((item, index, self) => {
+      return index === self.findIndex(t => t.status === item.status)
+    })
+    buffInfo.value.playerBuffs = totalPlayerBuffs
   }
 }
 
@@ -152,15 +157,7 @@ function recordRaidInfo(data: BattleStartJson) {
     }, [])
 
     const formation = Object.values(data.ability).map(a => a.pos)
-
-    const guard_status = Object.values(data.ability)
-      .reduce< { is_guard_status: number; num: number }[]>((pre, cur) => {
-        pre.push({
-          num: cur.pos,
-          is_guard_status: 0,
-        })
-        return pre
-      }, [])
+    const guard_status = Object.values(data.ability).map(a => ({ num: a.pos, is_guard_status: 0 }))
 
     const actionQueue = [{
       turn: data.turn,
@@ -514,7 +511,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
     bossInfo.value.timer = status.timer
     bossInfo.value.turn = status.turn
   }
-  const isBossDie = data.scenario.find((item: any) => item.cmd === 'die' && item.to === 'boss')
+  const isBossDie = data.scenario.find(item => item.cmd === 'die' && item.to === 'boss')
 
   if (isBossDie && bossInfo.value) {
     bossInfo.value.hp = 0
@@ -538,12 +535,17 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
 
 function getAbilityList(rawAbility: Ability) {
   const prefix = 'ico-ability'
-  return Object.values(rawAbility)
-    .reduce<Action[]>((pre, cur) => pre.concat(Object.values(cur.list).reduce<Action[]>((p, c) => p.concat([{
-      type: 'ability',
-      icon: c[0].class.split(' ')[0].substring(prefix.length),
-      id: c[0]['ability-id'],
-    }]), [])), [])
+  return Object.values(rawAbility).reduce<Action[]>(
+    (pre, cur) => pre.concat(Object.values(cur.list).reduce<Action[]>(
+      (p, c) => p.concat([{
+        type: 'ability',
+        icon: c[0].class.split(' ')[0].substring(prefix.length),
+        id: c[0]['ability-id'],
+      }]),
+      [],
+    )),
+    [],
+  )
 }
 
 const normalAttackInfo = computed(() => {
@@ -581,7 +583,7 @@ const memberList = computed(() =>
 </script>
 
 <template>
-  <div v-if="bossInfo && buffInfo && summonInfo" w-full fc flex-col gap-10px>
+  <div v-if="bossInfo && summonInfo" w-full fc flex-col gap-10px>
     <div w-full fc gap-2 p-2>
       <BossDashboard :boss-info="bossInfo" :raid-id="raidId" />
       <div w-full flex flex-col items-center justify-start>
@@ -593,7 +595,7 @@ const memberList = computed(() =>
       <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
       <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
-    <ElDescriptions v-if="battleStartJson && bossInfo && buffInfo" border :column="1">
+    <ElDescriptions v-if="battleStartJson && bossInfo " border :column="1">
       <ElDescriptionsItem label="平A结果">
         {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage}` }}
       </ElDescriptionsItem>

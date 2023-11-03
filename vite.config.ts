@@ -39,7 +39,7 @@ export default defineConfig({
     }),
     Components({
       resolvers: [ElementPlusResolver(), IconsResolver({ prefix: '' })],
-      dts: r('types/components.d.ts'),
+      dts: r('components.d.ts'),
     }),
     Icons(),
     Unocss(),

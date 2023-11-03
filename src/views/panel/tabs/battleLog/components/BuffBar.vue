@@ -12,16 +12,13 @@ const bossTimeBuff = ref<{ status: string; remain: number; visiable: boolean }[]
 watch(() => props.bossConditionJson, (data) => {
   if (!data)
     return []
-  const bossCondition = data.buff.concat(data.debuff) || []
-  const timeConfition = bossCondition.filter(b => b.class === 'time' && b.remain !== 0)
-  bossTimeBuff.value = timeConfition.reduce<{ status: string; remain: number; visiable: boolean }[]>((pre, cur) => {
-    pre.push({
-      status: cur.status,
-      remain: Date.now() + 1000 * timeToSeconds(String(cur.remain)),
-      visiable: true,
-    })
-    return pre
-  }, [])
+  const bossCondition = data.buff.concat(data.debuff)
+  const timeCondition = bossCondition.filter(b => b.class === 'time' && b.remain !== 0)
+  bossTimeBuff.value = timeCondition.map(condition => ({
+    status: condition.status,
+    remain: Date.now() + 1000 * timeToSeconds(String(condition.remain)),
+    visiable: true,
+  }))
 })
 
 watchEffect(() => {
