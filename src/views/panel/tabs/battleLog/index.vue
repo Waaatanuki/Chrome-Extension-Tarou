@@ -488,7 +488,7 @@ function handleStartAttackRusult(data: BattleStartJson) {
     summonInfo.value.supporter.recast = status.supporter.recast
   }
 
-  const bossBuffs = scenario.filter(item => item.cmd === 'condition' && item.to === 'boss').at(-1)
+  const bossBuffs = scenario.filter(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0).at(-1)
   const playerBuffs = scenario.filter(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0).at(-1)
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
   handleDamageStatistic('start', data)
@@ -497,7 +497,7 @@ function handleStartAttackRusult(data: BattleStartJson) {
 function handleAttackRusult(type: string, data: AttackResultJson) {
   if (!type || !data?.scenario)
     return
-  const bossGauge = data.scenario.filter(item => item.cmd === 'boss_gauge').at(-1)
+  const bossGauge = data.scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)
   const status = data.status
 
   if (bossInfo.value)
@@ -526,7 +526,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
     summonInfo.value.supporter.recast = status.supporter.recast
   }
 
-  const bossBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'boss').at(-1)
+  const bossBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0).at(-1)
   const playerBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0).at(-1)
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
   handleDamageStatistic(type, data)
