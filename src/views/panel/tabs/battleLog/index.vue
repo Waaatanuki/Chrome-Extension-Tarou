@@ -102,26 +102,16 @@ watch(() => props.bossConditionJson, (data) => {
 
 function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
   if (bossCondition) {
-    const bossBuffs = bossCondition.buff?.filter((item) => {
-      return !item.personal_buff_user_id || item.personal_buff_user_id === props.userId
-    }) || []
-
-    const bossDebuffs = bossCondition.debuff?.filter((item) => {
-      return !item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId
-    }) || []
-
-    const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => {
-      return index === self.findIndex(t => t.status === item.status)
-    })
+    const bossBuffs = bossCondition.buff?.filter(item => !item.personal_buff_user_id || item.personal_buff_user_id === props.userId) || []
+    const bossDebuffs = bossCondition.debuff?.filter(item => !item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId) || []
+    const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => index === self.findIndex(t => t.status === item.status))
     buffInfo.value.bossBuffs = totalBossBuffs
   }
 
   if (playerCondition) {
     const playerBuffs = playerCondition.buff || []
     const playerDebuffs = playerCondition.debuff || []
-    const totalPlayerBuffs = playerBuffs.concat(playerDebuffs).filter((item, index, self) => {
-      return index === self.findIndex(t => t.status === item.status)
-    })
+    const totalPlayerBuffs = playerBuffs.concat(playerDebuffs).filter((item, index, self) => index === self.findIndex(t => t.status === item.status))
     buffInfo.value.playerBuffs = totalPlayerBuffs
   }
 }
@@ -583,6 +573,9 @@ const memberList = computed(() =>
 </script>
 
 <template>
+  <div v-if="inLobby" mb-10px>
+    <MemberList :data="lobbyMemberList" />
+  </div>
   <div v-if="bossInfo && summonInfo" w-full fc flex-col gap-10px>
     <div w-full fc gap-2 p-2>
       <BossDashboard :boss-info="bossInfo" :raid-id="raidId" />
@@ -607,8 +600,5 @@ const memberList = computed(() =>
     <ElTag type="info" effect="dark" size="large" round>
       进入战斗时将会读取相关信息
     </ElTag>
-  </div>
-  <div v-if="props.inLobby" mt-10px>
-    <MemberList :data="props.lobbyMemberList" />
   </div>
 </template>
