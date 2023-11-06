@@ -1,0 +1,78 @@
+<script setup lang="ts">
+import type { DamageInfo, NpcAbility, NpcInfo } from 'requestData'
+
+defineProps<{
+  leader: any
+  leaderAbilityList: NpcAbility[]
+  npcs: NpcInfo[]
+  setAction: { name: string; set_action_id: string }[]
+  damageInfo: DamageInfo
+}>()
+
+function getImg(id: string, type = 'npc') {
+  return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/quest/${id}.jpg`
+}
+</script>
+
+<template>
+  <div h-210px w-380px fc flex-col justify-start>
+    <div w-full flex items-start justify-start gap-4px>
+      <div h-122px w-60px>
+        <img w-full :src="getImg(leader.image, 'leader')">
+        <div mt-1px h-12px flex items-center justify-start>
+          <div v-for=" i in 4" :key="i" relative w-15px fc>
+            <div v-if="leaderAbilityList[i - 1]" :class="`ability_icon_type_${leaderAbilityList[i - 1].icon_type}`" h-12px w-12px border-1 rounded-sm />
+            <CarbonClose
+              v-if="leaderAbilityList[i - 1] && !leaderAbilityList[i - 1].user_full_auto_setting_flag"
+              absolute bottom-0 left-0 right-0 top-0 m-auto text-13px text-black
+            />
+          </div>
+        </div>
+      </div>
+      <div v-for="npc in npcs" :key="npc.id" h-122px w-60px>
+        <img h-109px w-full :src="getImg(npc.image_id_3)">
+        <div mt-1px h-12px flex items-center justify-start>
+          <div v-for="ability in npc.action_ability" :key="ability.action_id" relative w-15px fc>
+            <div
+              :class="`ability_icon_type_${ability.icon_type}`"
+              h-12px w-12px border-1 rounded-sm
+            />
+            <CarbonClose
+              v-if=" !ability.user_full_auto_setting_flag"
+              absolute bottom-0 left-0 right-0 top-0 m-auto text-13px text-black
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div h-full w-full flex items-center justify-between>
+      <div flex flex-col items-start px-2 text-lg>
+        <div>预测伤害：{{ damageInfo.assumed_normal_damage.toLocaleString() }}</div>
+        <div>克属伤害：{{ damageInfo.assumed_advantage_damage.toLocaleString() }}</div>
+      </div>
+      <div flex flex-col gap-5px px-2 text-sm>
+        <ElTag v-for="action in setAction " :key="action.name" type="info" effect="plain">
+          {{ action.name }}
+        </ElTag>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.ability_icon_type_1{
+  background-color: rgb(251, 113, 133);
+}
+.ability_icon_type_2{
+  background-color: rgb(74, 222, 128);
+}
+.ability_icon_type_3{
+  background-color: rgb(250, 204, 21);
+}
+.ability_icon_type_4{
+  background-color: rgb(96, 165, 250);
+}
+.ability_icon_type_5{
+  background-color: rgb(192, 132, 252);
+}
+</style>

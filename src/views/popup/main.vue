@@ -9,6 +9,25 @@ function openOptionsPage() {
   chrome.runtime.openOptionsPage()
 }
 
+async function openDashboard() {
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
+  if (tab) {
+    chrome.debugger.attach({ tabId: tab.id }, '1.0', () => {
+      chrome.debugger.sendCommand(
+        { tabId: tab.id },
+        'Network.enable',
+        {},
+        () => {
+          const WINDOW_SIZE = { height: 978, width: 768 }
+          chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...WINDOW_SIZE })
+          if (chrome.runtime.lastError)
+            console.log(chrome.runtime.lastError)
+        },
+      )
+    })
+  }
+}
+
 function handleReset(command: string) {
   switch (command) {
     case 'all':
@@ -170,8 +189,12 @@ function exportJSONFile(itemList: any) {
             导出
           </ElButton>
           <ElButton m-2 size="small" type="primary" @click="openOptionsPage">
-            <div i-carbon:notebook mr-1 />
-            更多
+            <div i-carbon:document mr-1 />
+            沙漏统计
+          </ElButton>
+          <ElButton m-2 size="small" type="primary" @click="openDashboard">
+            <div i-carbon:dashboard mr-1 />
+            仪表盘
           </ElButton>
         </div>
       </div>

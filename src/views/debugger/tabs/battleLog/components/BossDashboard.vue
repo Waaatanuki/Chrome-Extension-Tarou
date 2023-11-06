@@ -1,0 +1,57 @@
+<script setup lang="ts">
+import type { BossInfo } from 'battleLog'
+import Tips from '../tips/index.vue'
+import { battleRecord } from '~/logic'
+
+const props = defineProps<{ bossInfo: BossInfo; raidId?: number }>()
+const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
+const bossImgSrc = computed(() => `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/${props.bossInfo.imgId}.png`)
+
+const operationSecond = computed(() => {
+  const hit = battleRecord.value.find(record => record.raid_id === props.raidId)
+  if (hit)
+    return hit.startTimer - hit.endTimer
+  else
+    return 0
+})
+</script>
+
+<template>
+  <div relative w-350px>
+    <ElProgress type="circle" :percentage="bossInfo.hpPercent" :stroke-width="15" status="exception" :width="350">
+      <template #default="{ percentage }">
+        <div flex flex-col gap-2>
+          <div fc gap-5 text-xl>
+            {{ `TURN ${bossInfo.turn}` }}
+            <div v-if="bossInfo.hp === 0">
+              {{ formatTime(bossInfo.remainderSecond) }}
+            </div>
+            <ElCountdown v-else :value="timerValue" />
+          </div>
+          <div fc>
+            <img :src="bossImgSrc">
+            <span>{{ percentage }}%</span>
+          </div>
+          <div text-base>
+            {{ bossInfo.name }}
+          </div>
+          <div text-base>
+            {{ `${bossInfo.hp.toLocaleString()}/${bossInfo.hpmax.toLocaleString()}` }}
+          </div>
+        </div>
+      </template>
+    </ElProgress>
+    <ElTag v-if="bossInfo.interrupt_display_text" absolute class="left-1/2 top-1/2 translate-y-85px -translate-x-1/2">
+      {{ bossInfo.interrupt_display_text }}
+    </ElTag>
+    <div absolute left-1 top-1 text-lg>
+      {{ formatTime(operationSecond) }}
+    </div>
+    <div absolute right-1 top-1 text-base>
+      {{ bossInfo.battleId }}
+    </div>
+    <div absolute bottom-1 left-1 text-base>
+      <Tips :quest-id="props.bossInfo.questId" />
+    </div>
+  </div>
+</template>
