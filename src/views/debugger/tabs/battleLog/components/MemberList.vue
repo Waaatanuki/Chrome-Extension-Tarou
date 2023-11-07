@@ -29,7 +29,7 @@ const data = computed(() =>
       <div
         v-for="member, idx in data" :key="idx"
         :class="{ target: member.userId === userId }"
-        relative h-65px w-160px flex cursor-pointer select-none items-center rounded-md bg-gray-2 p-5px transition-all hover:scale-105 dark:bg-gray-7
+        relative h-65px w-160px flex cursor-pointer select-none items-center rounded-md bg-gray-2 transition-all hover:scale-105 dark:bg-gray-7
         @click="goProfilePage(member.userId)"
       >
         <div v-if="member.is_dead" class="absolute h-full w-full fc bg-black/40">

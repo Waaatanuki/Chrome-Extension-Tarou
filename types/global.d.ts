@@ -719,7 +719,10 @@ declare module 'requestData'{
          rank: number
        }[]
      }
-
+     battleFinish?: {
+       timestamp: string
+       user_id: string
+     }
    }
 }
 

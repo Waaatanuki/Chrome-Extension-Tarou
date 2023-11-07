@@ -115,8 +115,15 @@ watch(() => props.bossConditionJson, (data) => {
 watch(() => props.wsPayloadData, (data) => {
   if (data.bossUpdate && bossInfo.value) {
     bossInfo.value.hp = data.bossUpdate.param.boss1_hp
+    bossInfo.value.hpPercent = Number.parseFloat((Number(bossInfo.value.hp) / Number(bossInfo.value.hpmax) * 100).toFixed(2))
     handleConditionInfo(data.bossUpdate.param.boss1_condition)
   }
+
+  if (data.battleFinish && bossInfo.value) {
+    bossInfo.value.hp = 0
+    bossInfo.value.hpPercent = 0
+  }
+
   if (data.memberJoin) {
     const member = data.memberJoin.member
     if (memberInfo.value?.some(m => m.userId === member.user_id))
