@@ -690,19 +690,41 @@ declare module 'requestData'{
      deleted_at: string
      location_id: string
    }
+
+   interface WsPayloadData {
+     bossUpdate?: {
+       param: {
+         boss1_hp: numebr
+         boss1_condition: Condition
+       }
+     }
+     mvpUpdate?: {
+       mvpList: {
+         point: string
+         user_id: string
+         rank: number
+       }[]
+     }
+     memberJoin?: {
+       member: {
+         nickname: string
+         user_id: string
+         level: number
+         job_id: number
+         pc_attribute: number
+       }
+       mvpList: {
+         point: string
+         user_id: string
+         rank: number
+       }[]
+     }
+
+   }
 }
 
 declare module 'battleLog'{
   import type { Buff, Summon } from 'requestData'
-
-  interface Member {
-    nickname: string
-    userId: string
-    userRank: string
-    jobIcon: string
-    attributeClass: string
-    is_dead: boolean
-  }
 
   interface BossInfo {
     questId: string
@@ -728,4 +750,14 @@ declare module 'battleLog'{
     supporter: Summon
   }
 
+  interface MemberInfo {
+    nickname: string
+    userId: string
+    userRank: string
+    jobIcon: string
+    attributeClass: string
+    is_dead: boolean
+    point?: number
+    rank?: number
+  }
 }

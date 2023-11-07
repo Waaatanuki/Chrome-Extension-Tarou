@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Action, BattleRecord, Player } from 'myStorage'
-import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialSkillSetting, SummonScenario, SuperScenario } from 'requestData'
-import type { BossInfo, BuffInfo, Member, SummonInfo } from 'battleLog'
+import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'requestData'
+import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
@@ -17,17 +17,20 @@ const props = defineProps<{
   resultJsonPayload: ResultJsonPayload
   bossConditionJson: BossConditionJson
   inLobby: boolean
-  lobbyMemberList: Member[]
+  lobbyMemberList: MemberInfo[]
   guardSettingJson: GuardSettingJson
   specialSkillSetting: SpecialSkillSetting
   battleRecordLimit: number
+  wsPayloadData: WsPayloadData
 }>()
 
 const bossInfo = ref<BossInfo>()
 const summonInfo = ref<SummonInfo>()
 const buffInfo = ref<BuffInfo>({ bossBuffs: [], playerBuffs: [] })
+const memberInfo = ref<MemberInfo[]>()
 const raidId = ref<number>()
 const leaderAttr = ref('')
+const mvpInfo = ref<{ userId: string; rank: number;point: number }[]>()
 
 watch(() => props.battleStartJson, (data) => {
   if (!data || !data.raid_id)
@@ -60,6 +63,15 @@ watch(() => props.battleStartJson, (data) => {
     summon: [...data.summon],
     supporter: data.supporter,
   }
+
+  memberInfo.value = data.multi_raid_member_info?.map(cur => ({
+    nickname: cur.nickname,
+    userId: cur.user_id,
+    userRank: cur.level,
+    jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${cur.job_id}.png`,
+    attributeClass: `ico-attribute ico-attribute-${cur.pc_attribute}`,
+    is_dead: cur.is_dead,
+  }))
 
   handleConditionInfo(boss.condition, player.condition)
   recordRaidInfo(data)
@@ -98,6 +110,30 @@ watch(() => props.bossConditionJson, (data) => {
     return index === self.findIndex(t => t.status === item.status)
   })
   buffInfo.value.bossBuffs = totalBossBuffs.map(buff => ({ status: buff.status }))
+})
+
+watch(() => props.wsPayloadData, (data) => {
+  if (data.bossUpdate && bossInfo.value) {
+    bossInfo.value.hp = data.bossUpdate.param.boss1_hp
+    handleConditionInfo(data.bossUpdate.param.boss1_condition)
+  }
+  if (data.memberJoin) {
+    const member = data.memberJoin.member
+    if (memberInfo.value?.some(m => m.userId === member.user_id))
+      return
+    memberInfo.value?.push({
+      nickname: member.nickname,
+      userId: member.user_id,
+      userRank: String(member.level),
+      jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${member.job_id}.png`,
+      attributeClass: `ico-attribute ico-attribute-${member.pc_attribute}`,
+      is_dead: false,
+    })
+    mvpInfo.value = data.memberJoin.mvpList.map(mvp => ({ userId: mvp.user_id, rank: mvp.rank, point: Number(mvp.point) }))
+  }
+
+  if (data.mvpUpdate)
+    mvpInfo.value = data.mvpUpdate.mvpList.map(mvp => ({ userId: mvp.user_id, rank: mvp.rank, point: Number(mvp.point) }))
 })
 
 function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
@@ -559,22 +595,11 @@ const normalAttackInfo = computed(() => {
   const damage = data.reduce<number>((pre, cur) => pre + Number(cur.value), 0)
   return { hit: data.length, damage }
 })
-
-const memberList = computed(() =>
-  props.battleStartJson?.multi_raid_member_info?.map(cur => ({
-    nickname: cur.nickname,
-    userId: cur.user_id,
-    userRank: cur.level,
-    jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${cur.job_id}.png`,
-    attributeClass: `ico-attribute ico-attribute-${cur.pc_attribute}`,
-    is_dead: cur.is_dead,
-  })),
-)
 </script>
 
 <template>
   <div v-if="inLobby" mb-10px>
-    <MemberList :data="lobbyMemberList" />
+    <MemberList :member-info="lobbyMemberList" />
   </div>
   <div v-if="bossInfo && summonInfo" w-full fc flex-col gap-10px>
     <div w-full fc gap-2 p-2>
@@ -594,7 +619,7 @@ const memberList = computed(() =>
       </ElDescriptionsItem>
     </ElDescriptions>
 
-    <MemberList :data="memberList" />
+    <MemberList :member-info="memberInfo" :mvp-info="mvpInfo" :user-id="userId" />
   </div>
   <div v-else fc>
     <ElTag type="info" effect="dark" size="large" round>

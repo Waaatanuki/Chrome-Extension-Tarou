@@ -5,6 +5,8 @@ import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
 
 const goldBrickTableShowData = computed(() => goldBrickTableData.value.filter(raid => raid.quest_id !== '303141'))
 
+const tabId = ref()
+const windowId = ref()
 function openOptionsPage() {
   chrome.runtime.openOptionsPage()
 }
@@ -12,14 +14,23 @@ function openOptionsPage() {
 async function openDashboard() {
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
   if (tab) {
+    const result = await chrome.debugger.getTargets()
+    const hit = result.find(t => t.tabId === tabId.value)
+    if (hit?.attached)
+      return ElMessage.warning('已开启仪表盘')
+
     chrome.debugger.attach({ tabId: tab.id }, '1.2', () => {
       chrome.debugger.sendCommand(
         { tabId: tab.id },
         'Network.enable',
         {},
         () => {
+          tabId.value = tab.id
           const WINDOW_SIZE = { height: 978, width: 768 }
-          chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...WINDOW_SIZE })
+          chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...WINDOW_SIZE }, (window) => {
+            windowId.value = window?.id
+            console.log(windowId.value)
+          })
           if (chrome.runtime.lastError)
             console.log(chrome.runtime.lastError)
         },
@@ -27,6 +38,13 @@ async function openDashboard() {
     })
   }
 }
+
+chrome.windows.onRemoved.addListener(
+  (wId: number) => {
+    if (wId === windowId.value)
+      chrome.debugger.detach({ tabId: tabId.value })
+  },
+)
 
 function handleReset(command: string) {
   switch (command) {

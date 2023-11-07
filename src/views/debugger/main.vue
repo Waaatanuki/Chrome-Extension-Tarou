@@ -27,6 +27,7 @@ const deckJson = ref()
 const calculateSetting = ref()
 
 const paylaod = ref<any>()
+const wsPayloadData = ref<any>()
 
 async function getResponse(tabId: number, requestId: string, cb: (resp: any) => void) {
   let count = 0
@@ -545,10 +546,13 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
   }
 
   //   getResponse(tabId, requestId, (resp) => {
-  if (method === 'Network.webSocketFrameReceived')
+  if (method === 'Network.webSocketFrameReceived') {
     console.log(params)
-},
-)
+    const payloadData: string = params.response?.payloadData || ''
+    if (payloadData.substring(0, 2) === '42')
+      wsPayloadData.value = JSON.parse(payloadData.substring(2))[1]
+  }
+})
 </script>
 
 <template>
@@ -576,6 +580,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           :guard-setting-json="guardSettingJson"
           :special-skill-setting="specialSkillSetting"
           :battle-record-limit="battleRecordLimit"
+          :ws-payload-data="wsPayloadData"
         />
       </ElTabPane>
       <ElTabPane label="战斗历史">
