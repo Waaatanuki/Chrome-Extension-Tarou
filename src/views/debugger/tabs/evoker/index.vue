@@ -84,10 +84,10 @@ const evokerPageResult = computed(() => {
     </div>
     <div v-else>
       <ElScrollbar max-height="210">
-        <div fc flex-wrap>
+        <div fc flex-wrap gap-5px>
           <div
             v-for="item in evokerPageResult.filter(item => item.need > 0)" :key="item.id"
-            w-50px fc flex-col gap-5px
+            w-50px fc flex-col
           >
             <ElTooltip :content="`${item.name} 总需${item.total}`" placement="top">
               <img w-full :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${item.id}.jpg`">

@@ -43,6 +43,5 @@
     }
   },
   "options_page": "src/views/options/main.html",
-  "devtools_page": "src/views/devtools/main.html",
   "minimum_chrome_version": "99"
 }

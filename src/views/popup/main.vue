@@ -12,7 +12,7 @@ function openOptionsPage() {
 async function openDashboard() {
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
   if (tab) {
-    chrome.debugger.attach({ tabId: tab.id }, '1.0', () => {
+    chrome.debugger.attach({ tabId: tab.id }, '1.2', () => {
       chrome.debugger.sendCommand(
         { tabId: tab.id },
         'Network.enable',
