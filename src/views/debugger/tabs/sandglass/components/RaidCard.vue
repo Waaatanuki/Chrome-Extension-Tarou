@@ -29,9 +29,9 @@ function getMsg(item: RaidInfo) {
 </script>
 
 <template>
-  <ElCard v-for="item in data" :key="item.quest_id" relative>
-    <div v-if="collapse" i-carbon:checkmark-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
-    <div v-else i-carbon:close-outline absolute right-2 top-2 text-sm icon-btn @click="item.visiable = !item.visiable" />
+  <ElCard v-for="item in data" :key="item.quest_id" relative w-520px>
+    <div v-if="collapse" i-carbon:star absolute right-2 top-2 text-sm hover:scale-120 @click="item.visiable = !item.visiable" />
+    <div v-else i-carbon:star-filled absolute right-2 top-2 text-sm text-amber hover:scale-120 @click="item.visiable = !item.visiable" />
     <div flex justify-evenly gap-5>
       <div w-150px fc shrink-0>
         <img w-full :src="getQuestImg(item.quest_id)">

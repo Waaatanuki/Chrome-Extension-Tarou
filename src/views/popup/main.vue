@@ -7,9 +7,6 @@ const goldBrickTableShowData = computed(() => goldBrickTableData.value.filter(ra
 
 const tabId = ref()
 const windowId = ref()
-function openOptionsPage() {
-  chrome.runtime.openOptionsPage()
-}
 
 async function openDashboard() {
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
@@ -17,7 +14,7 @@ async function openDashboard() {
     const result = await chrome.debugger.getTargets()
     const hit = result.find(t => t.tabId === tabId.value)
     if (hit?.attached)
-      return ElMessage.warning('已开启仪表盘')
+      return ElMessage.warning('已开启详细面板')
 
     chrome.debugger.attach({ tabId: tab.id }, '1.2', () => {
       chrome.debugger.sendCommand(
@@ -206,13 +203,9 @@ function exportJSONFile(itemList: any) {
             <div i-carbon:document-export mr-1 />
             导出
           </ElButton>
-          <ElButton m-2 size="small" type="primary" @click="openOptionsPage">
-            <div i-carbon:document mr-1 />
-            沙漏统计
-          </ElButton>
           <ElButton m-2 size="small" type="primary" @click="openDashboard">
             <div i-carbon:dashboard mr-1 />
-            仪表盘
+            详细面板
           </ElButton>
         </div>
       </div>

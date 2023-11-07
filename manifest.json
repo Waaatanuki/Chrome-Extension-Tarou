@@ -42,6 +42,5 @@
       "128": "./assets/icon-128.png"
     }
   },
-  "options_page": "src/views/options/main.html",
   "minimum_chrome_version": "99"
 }

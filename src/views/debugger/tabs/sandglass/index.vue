@@ -56,13 +56,7 @@ function handleExport() {
 
 <template>
   <main>
-    <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between bg-violet px-4 text-base>
-      <div fc gap-2>
-        <div
-          i-carbon-sun dark:i-carbon-moon icon-btn
-          @click="toggleDark()"
-        />沙漏掉落统计
-      </div>
+    <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-end bg-violet px-4 text-base>
       <div fc gap-2>
         <div fc text-xs btn @click="handleExport">
           <div i-carbon:document-export mr-1 />
@@ -78,17 +72,21 @@ function handleExport() {
         </ElUpload>
       </div>
     </div>
-    <RaidCard :data="eternitySandData.filter(i => i.visiable)" />
+    <div mt-10px fc flex-wrap gap-10px>
+      <RaidCard :data="eternitySandData.filter(i => i.visiable)" />
+    </div>
     <ElCollapse>
       <ElCollapseItem>
         <template #title>
           <div ml-5>
             <ElText size="large">
-              隐藏副本
+              未收藏副本
             </ElText>
           </div>
         </template>
-        <RaidCard collapse :data="eternitySandData.filter(i => !i.visiable)" />
+        <div flex flex-wrap gap-10px>
+          <RaidCard collapse :data="eternitySandData.filter(i => !i.visiable)" />
+        </div>
       </ElCollapseItem>
     </ElCollapse>
   </main>

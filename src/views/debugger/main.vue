@@ -5,6 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import Dashborad from './tabs/dashboard/index.vue'
 import EvokerPage from './tabs/evoker/index.vue'
+import Sandglass from './tabs/sandglass/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
@@ -563,6 +564,9 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
       </ElTabPane>
       <ElTabPane label="贤者素材">
         <EvokerPage />
+      </ElTabPane>
+      <ElTabPane label="沙漏统计">
+        <Sandglass />
       </ElTabPane>
       <ElTabPane label="队伍信息">
         <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
