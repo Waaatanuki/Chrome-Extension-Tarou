@@ -216,7 +216,7 @@ declare module 'requestData'{
     user_id: string
     ability: Ability
     special_skill_flag: string
-    special_skill_indicate: { interrupt_display_text: string }[]
+    special_skill_indicate?: { interrupt_display_text: string }[]
     scenario?: ScenarioType[]
     status?: StatusInfo
   }
@@ -398,7 +398,7 @@ declare module 'requestData'{
     timer: number
     turn: number
     is_guard_status: { is_guard_status: number }[]
-    special_skill_indicate: { interrupt_display_text: string }[]
+    special_skill_indicate?: { interrupt_display_text: string }[]
   }
 
   interface Ability {

@@ -53,9 +53,9 @@ watch(() => props.battleStartJson, (data) => {
     turn: data.turn,
   }
 
-  if (data.special_skill_indicate?.length > 0)
+  if (data.special_skill_indicate && data.special_skill_indicate.length > 0)
     bossInfo.value.interrupt_display_text = data.special_skill_indicate[0].interrupt_display_text
-  if (data.status?.special_skill_indicate?.length && data.status?.special_skill_indicate?.length > 0)
+  if (data.status?.special_skill_indicate && data.status.special_skill_indicate.length > 0)
     bossInfo.value.interrupt_display_text = data.status.special_skill_indicate[0].interrupt_display_text
 
   summonInfo.value = {
@@ -531,8 +531,8 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   const bossGauge = data.scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)
   const status = data.status
 
-  if (bossInfo.value)
-    bossInfo.value.interrupt_display_text = status.special_skill_indicate?.length > 0 ? status.special_skill_indicate[0].interrupt_display_text : ''
+  if (bossInfo.value && status.special_skill_indicate)
+    bossInfo.value.interrupt_display_text = status.special_skill_indicate.length > 0 ? status.special_skill_indicate[0].interrupt_display_text : ''
 
   if (bossGauge && bossInfo.value) {
     bossInfo.value.name = bossGauge.name!.ja
