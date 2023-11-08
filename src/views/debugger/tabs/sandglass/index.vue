@@ -27,18 +27,15 @@ function handleUploadChange(uploadFile: any) {
 }
 
 function handleExport() {
-  const exportData = eternitySandData.value.reduce<any[]>((pre, cur) => {
-    pre.push({
-      quest_id: cur.quest_id,
-      quest_name_en: cur.quest_name_en,
-      quest_name_jp: cur.quest_name_jp,
-      total: cur.total,
-      blueChest: cur.blueChest,
-      eternitySand: cur.eternitySand,
-      lastDropCount: cur.lastDropCount,
-    })
-    return pre
-  }, [])
+  const exportData = eternitySandData.value.map(cur => ({
+    quest_id: cur.quest_id,
+    quest_name_en: cur.quest_name_en,
+    quest_name_jp: cur.quest_name_jp,
+    total: cur.total,
+    blueChest: cur.blueChest,
+    eternitySand: cur.eternitySand,
+    lastDropCount: cur.lastDropCount,
+  }))
 
   const data = JSON.stringify(exportData, null, 2)
   const timeStr = dayjs().format('YYYY-MM-DD')
@@ -52,6 +49,11 @@ function handleExport() {
   urlObject.revokeObjectURL(url)
   ElMessage.success('导出成功')
 }
+
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.eternitySandData)
+    eternitySandData.value = JSON.parse(changes.eternitySandData.newValue)
+})
 </script>
 
 <template>

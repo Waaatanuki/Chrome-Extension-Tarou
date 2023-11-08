@@ -8,7 +8,7 @@ withDefaults(
 
 function getRatio(a = 0, b = 0) {
   if (b === 0)
-    return 0
+    return '0.00'
 
   return ((a / b) * 100).toFixed(2)
 }

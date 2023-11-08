@@ -55,7 +55,6 @@ async function getResponse(tabId: number, requestId: string, cb: (resp: any) => 
   }, 100)
 }
 
-// 待检测 抽卡记录
 chrome.debugger.onEvent.addListener((source, method, params: any) => {
   if (method === 'Network.responseReceived' && source.tabId) {
     const responseUrl = params.response.url
