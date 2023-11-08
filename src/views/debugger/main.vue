@@ -565,10 +565,7 @@ chrome.windows.onBoundsChanged.addListener(
 )
 
 window.addEventListener('beforeunload', () => {
-  chrome.debugger.getTargets().then((result) => {
-    const hit = result.find(item => item.url.includes('granbluefantasy') && item.attached)
-    hit && chrome.debugger.detach({ tabId: hit.tabId })
-  })
+  chrome.debugger.detach({ tabId: Number(document.URL.split('?')[1]) })
 })
 </script>
 

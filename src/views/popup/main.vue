@@ -13,7 +13,7 @@ async function openDashboard() {
       ElMessage.warning('已开启详细面板')
     }
     catch (error) {
-      const windowInfo = await chrome.windows.create({ url: `src/views/debugger/main.html`, type: 'popup', ...windowSize.value })
+      const windowInfo = await chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...windowSize.value })
       tabId.value = tab.id
       windowId.value = windowInfo.id
 
