@@ -548,10 +548,11 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
 
   //   getResponse(tabId, requestId, (resp) => {
   if (method === 'Network.webSocketFrameReceived') {
-    console.log(params)
     const payloadData: string = params.response?.payloadData || ''
-    if (payloadData.substring(0, 2) === '42')
+    if (payloadData.substring(0, 2) === '42') {
+      console.log(JSON.parse(payloadData.substring(2))[1])
       wsPayloadData.value = JSON.parse(payloadData.substring(2))[1]
+    }
   }
 })
 </script>

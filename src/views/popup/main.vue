@@ -26,7 +26,6 @@ async function openDashboard() {
           const WINDOW_SIZE = { height: 1360, width: 1150 }
           chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...WINDOW_SIZE }, (window) => {
             windowId.value = window?.id
-            console.log(windowId.value)
           })
           if (chrome.runtime.lastError)
             console.log(chrome.runtime.lastError)

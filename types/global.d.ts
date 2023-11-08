@@ -739,7 +739,6 @@ declare module 'battleLog'{
     hpPercent: number
     turn: number
     timer: number
-    remainderSecond: number
     interrupt_display_text?: string
   }
 

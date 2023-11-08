@@ -4,6 +4,7 @@ import Tips from '../tips/index.vue'
 import { battleRecord } from '~/logic'
 
 const props = defineProps<{ bossInfo: BossInfo; raidId?: number }>()
+const remainderSecond = ref<number>(0)
 const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
 const bossImgSrc = computed(() => `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/${props.bossInfo.imgId}.png`)
 
@@ -14,6 +15,10 @@ const operationSecond = computed(() => {
   else
     return 0
 })
+
+function handleTimeChange(millisecond: number) {
+  remainderSecond.value = Math.round(millisecond / 1000)
+}
 </script>
 
 <template>
@@ -24,9 +29,9 @@ const operationSecond = computed(() => {
           <div fc gap-5 text-xl>
             {{ `TURN ${bossInfo.turn}` }}
             <div v-if="bossInfo.hp === 0">
-              {{ formatTime(bossInfo.remainderSecond) }}
+              {{ formatTime(remainderSecond) }}
             </div>
-            <ElCountdown v-else :value="timerValue" />
+            <ElCountdown v-else :value="timerValue" @change="handleTimeChange" />
           </div>
           <div fc>
             <img :src="bossImgSrc">

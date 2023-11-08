@@ -51,7 +51,6 @@ watch(() => props.battleStartJson, (data) => {
     hpPercent: Number.parseFloat((Number(boss.hp) / Number(boss.hpmax) * 100).toFixed(2)),
     timer: data.timer,
     turn: data.turn,
-    remainderSecond: data.timer,
   }
 
   if (data.special_skill_indicate?.length > 0)
@@ -511,7 +510,6 @@ function handleStartAttackRusult(data: BattleStartJson) {
   if (isBossDie && bossInfo.value) {
     bossInfo.value.hp = 0
     bossInfo.value.hpPercent = 0
-    bossInfo.value.remainderSecond = status.timer
   }
 
   if (summonInfo.value) {
@@ -549,7 +547,6 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   if (isBossDie && bossInfo.value) {
     bossInfo.value.hp = 0
     bossInfo.value.hpPercent = 0
-    bossInfo.value.remainderSecond = status.timer
   }
 
   if (summonInfo.value) {
