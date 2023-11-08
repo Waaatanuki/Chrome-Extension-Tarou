@@ -9,7 +9,7 @@ import Sandglass from './tabs/sandglass/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
-import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone } from '~/logic'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, windowSize } from '~/logic'
 
 const userId = ref<string>('')
 const battleStartJson = ref()
@@ -553,6 +553,22 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
       wsPayloadData.value = JSON.parse(payloadData.substring(2))[1]
     }
   }
+})
+
+chrome.windows.onBoundsChanged.addListener(
+  (windowInfo) => {
+    windowSize.value.left = windowInfo.left ?? 300
+    windowSize.value.top = windowInfo.top ?? 0
+    windowSize.value.width = windowInfo.height ?? 800
+    windowSize.value.height = windowInfo.width ?? 600
+  },
+)
+
+window.addEventListener('beforeunload', () => {
+  chrome.debugger.getTargets().then((result) => {
+    const hit = result.find(item => item.url.includes('granbluefantasy') && item.attached)
+    hit && chrome.debugger.detach({ tabId: hit.tabId })
+  })
 })
 </script>
 

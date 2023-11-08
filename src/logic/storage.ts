@@ -5,6 +5,11 @@ import { useStorageLocal } from '~/composables/useStorageLocal'
 import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
 import { defaultEvokerInfo } from '~/constants/evoker'
 
+// Debugger
+export const tabId = useStorageLocal('tabId', 0)
+export const windowId = useStorageLocal('tabId', 0)
+export const windowSize = useStorageLocal('windowSize', { left: 300, top: 0, width: 800, height: 600 })
+
 // Dashboard
 export const stone = useStorageLocal('stone', 0)
 export const legendticket10 = useStorageLocal('legendticket10', 0)

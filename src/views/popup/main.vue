@@ -1,46 +1,35 @@
 <script setup lang="ts">
 import type { GoldBrickTableData } from 'myStorage'
-import { eternitySandData, goldBrickData, goldBrickTableData } from '~/logic/storage'
+import { eternitySandData, goldBrickData, goldBrickTableData, tabId, windowId, windowSize } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
 
 const goldBrickTableShowData = computed(() => goldBrickTableData.value.filter(raid => raid.quest_id !== '303141'))
 
-const tabId = ref()
-const windowId = ref()
-
 async function openDashboard() {
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
-  if (tab) {
-    const result = await chrome.debugger.getTargets()
-    const hit = result.find(t => t.tabId === tabId.value)
-    if (hit?.attached)
-      return ElMessage.warning('已开启详细面板')
+  if (tab && tab.url?.includes('game.granbluefantasy.jp')) {
+    try {
+      await chrome.windows.get(windowId.value)
+      ElMessage.warning('已开启详细面板')
+    }
+    catch (error) {
+      const windowInfo = await chrome.windows.create({ url: `src/views/debugger/main.html`, type: 'popup', ...windowSize.value })
+      tabId.value = tab.id
+      windowId.value = windowInfo.id
 
-    chrome.debugger.attach({ tabId: tab.id }, '1.2', () => {
-      chrome.debugger.sendCommand(
-        { tabId: tab.id },
-        'Network.enable',
-        {},
-        () => {
-          tabId.value = tab.id
-          const WINDOW_SIZE = { height: 1360, width: 1150 }
-          chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...WINDOW_SIZE }, (window) => {
-            windowId.value = window?.id
-          })
-          if (chrome.runtime.lastError)
-            console.log(chrome.runtime.lastError)
-        },
-      )
-    })
+      const result = await chrome.debugger.getTargets()
+      const hit = result.find(item => item.tabId === tabId.value)
+      if (hit?.attached)
+        await chrome.debugger.detach({ tabId: tabId.value })
+
+      await chrome.debugger.attach({ tabId: tabId.value }, '1.2')
+      await chrome.debugger.sendCommand({ tabId: tabId.value }, 'Network.enable')
+    }
+  }
+  else {
+    ElMessage.warning('请先进入游戏页面')
   }
 }
-
-chrome.windows.onRemoved.addListener(
-  (wId: number) => {
-    if (wId === windowId.value)
-      chrome.debugger.detach({ tabId: tabId.value })
-  },
-)
 
 function handleReset(command: string) {
   switch (command) {
