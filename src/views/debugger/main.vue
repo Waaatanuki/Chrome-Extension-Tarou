@@ -555,14 +555,12 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
   }
 })
 
-chrome.windows.onBoundsChanged.addListener(
-  (windowInfo) => {
-    windowSize.value.left = windowInfo.left ?? 300
-    windowSize.value.top = windowInfo.top ?? 0
-    windowSize.value.width = windowInfo.height ?? 800
-    windowSize.value.height = windowInfo.width ?? 600
-  },
-)
+chrome.windows.onBoundsChanged.addListener((windowInfo) => {
+  windowSize.value.left = windowInfo.left ?? 300
+  windowSize.value.top = windowInfo.top ?? 0
+  windowSize.value.width = windowInfo.width ?? 800
+  windowSize.value.height = windowInfo.height ?? 600
+})
 
 window.addEventListener('beforeunload', () => {
   chrome.debugger.detach({ tabId: Number(document.URL.split('?')[1]) })
