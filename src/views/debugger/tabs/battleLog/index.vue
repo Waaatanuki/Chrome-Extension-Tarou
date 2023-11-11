@@ -531,7 +531,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   const bossGauge = data.scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)
   const status = data.status
 
-  if (bossInfo.value && status.special_skill_indicate)
+  if (bossInfo.value && status?.special_skill_indicate)
     bossInfo.value.interrupt_display_text = status.special_skill_indicate.length > 0 ? status.special_skill_indicate[0].interrupt_display_text : ''
 
   if (bossGauge && bossInfo.value) {
@@ -539,8 +539,8 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
     bossInfo.value.hp = bossGauge.hp!
     bossInfo.value.hpmax = bossGauge.hpmax!
     bossInfo.value.hpPercent = Number.parseFloat((Number(bossGauge.hp) / Number(bossGauge.hpmax) * 100).toFixed(2))
-    bossInfo.value.timer = status.timer
-    bossInfo.value.turn = status.turn
+    bossInfo.value.timer = status ? status.timer : bossInfo.value.timer
+    bossInfo.value.turn = status ? status.turn : bossInfo.value.turn
   }
   const isBossDie = data.scenario.find(item => item.cmd === 'die' && item.to === 'boss')
 
@@ -550,10 +550,10 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   }
 
   if (summonInfo.value) {
-    status.summon.recast.forEach((value, idx) => {
+    status?.summon.recast.forEach((value, idx) => {
       summonInfo.value!.summon[idx].recast = value
     })
-    summonInfo.value.supporter.recast = status.supporter.recast
+    summonInfo.value.supporter.recast = status ? status.supporter.recast : summonInfo.value.supporter.recast
   }
 
   const bossBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0).at(-1)
