@@ -759,6 +759,7 @@ declare module 'battleLog'{
     jobIcon: string
     attributeClass: string
     is_dead: boolean
+    is_host?: boolean
     point?: number
     rank?: number
   }

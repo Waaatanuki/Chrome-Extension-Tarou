@@ -70,6 +70,7 @@ watch(() => props.battleStartJson, (data) => {
     jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${cur.job_id}.png`,
     attributeClass: `ico-attribute ico-attribute-${cur.pc_attribute}`,
     is_dead: cur.is_dead,
+    is_host: cur.is_host,
   }))
 
   handleConditionInfo(boss.condition, player.condition)

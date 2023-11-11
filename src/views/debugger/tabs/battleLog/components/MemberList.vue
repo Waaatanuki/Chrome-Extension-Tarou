@@ -28,7 +28,7 @@ const data = computed(() =>
     <div flex flex-wrap gap-20px text-base>
       <div
         v-for="member, idx in data" :key="idx"
-        :class="{ target: member.userId === userId }"
+        :class="{ me: member.userId === userId, host: member.is_host }"
         relative h-65px w-160px flex cursor-pointer select-none items-center rounded-md bg-gray-2 transition-all hover:scale-105 dark:bg-gray-7
         @click="goProfilePage(member.userId)"
       >
@@ -58,7 +58,11 @@ const data = computed(() =>
 </template>
 
 <style  scoped>
-.target {
+.me {
   box-shadow: 0 0 3px 3px rgba(255, 0, 0, 0.8);
+}
+
+.host {
+  box-shadow: 0 0 3px 3px rgba(77, 230, 97, 0.8);
 }
 </style>
