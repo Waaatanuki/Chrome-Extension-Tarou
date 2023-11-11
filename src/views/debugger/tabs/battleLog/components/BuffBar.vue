@@ -42,7 +42,7 @@ function toggleImage(specBuff: string[], buffId: string) {
 }
 
 function getBuffIcon(status: string) {
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${status}.png`
+  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/status/x64/status_${status.replace(/-/g, '')}.png`
 }
 
 function timeToSeconds(timeString: string) {
