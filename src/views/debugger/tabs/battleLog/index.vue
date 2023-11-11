@@ -344,10 +344,10 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
 
 function processSummonScenario(action: SummonScenario, raid: BattleRecord) {
   raid.player[0].damage.other.value += action.list.reduce((pre, cur) => {
-    pre += cur.damage!.reduce((p, c) => {
+    pre += cur.damage?.reduce((p, c) => {
       p += c.value
       return p
-    }, 0)
+    }, 0) ?? 0
     return pre
   }, 0)
 }
