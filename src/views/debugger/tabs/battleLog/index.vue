@@ -230,7 +230,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
   if (!currentRaid)
     return
 
-  currentRaid.endTimer = data.status!.timer
+  currentRaid.endTimer = data.status?.timer ?? currentRaid.endTimer
 
   const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
@@ -539,8 +539,8 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
     bossInfo.value.hp = bossGauge.hp!
     bossInfo.value.hpmax = bossGauge.hpmax!
     bossInfo.value.hpPercent = Number.parseFloat((Number(bossGauge.hp) / Number(bossGauge.hpmax) * 100).toFixed(2))
-    bossInfo.value.timer = status ? status.timer : bossInfo.value.timer
-    bossInfo.value.turn = status ? status.turn : bossInfo.value.turn
+    bossInfo.value.timer = status?.timer ?? bossInfo.value.timer
+    bossInfo.value.turn = status?.turn ?? bossInfo.value.turn
   }
   const isBossDie = data.scenario.find(item => item.cmd === 'die' && item.to === 'boss')
 
@@ -553,7 +553,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
     status?.summon.recast.forEach((value, idx) => {
       summonInfo.value!.summon[idx].recast = value
     })
-    summonInfo.value.supporter.recast = status ? status.supporter.recast : summonInfo.value.supporter.recast
+    summonInfo.value.supporter.recast = status?.supporter?.recast ?? summonInfo.value.supporter.recast
   }
 
   const bossBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0).at(-1)
