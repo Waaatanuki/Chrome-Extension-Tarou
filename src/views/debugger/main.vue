@@ -532,6 +532,10 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     if (/\/rest\/(raid|multiraid)\/get_select_if\.json/.test(requestUrl))
       paylaod.value = JSON.parse(params.request.postData)
 
+    // BattleLog 记录切换Guard日志
+    if (/\/rest\/(raid|multiraid)\/guard_setting\.json/.test(requestUrl))
+      paylaod.value = JSON.parse(params.request.postData)
+
     // BattleLog 记录使用蓝绿药日志
     if (/\/rest\/(raid|multiraid)\/temporary_item_result\.json/.test(requestUrl))
       resultJsonPayload.value = JSON.parse(params.request.postData)

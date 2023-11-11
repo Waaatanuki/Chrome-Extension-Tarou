@@ -583,7 +583,7 @@ const normalAttackInfo = computed(() => {
   if (!props.resultJson?.result || props.resultJson?.type !== 'normal')
     return { hit: 0, damage: 0 }
 
-  const attackList = props.resultJson.result.scenario.filter((item: any) => item.cmd === 'attack' && item.from === 'player')
+  const attackList = props.resultJson.result.scenario?.filter((item: any) => item.cmd === 'attack' && item.from === 'player') || []
   if (attackList.length === 0)
     return { hit: 0, damage: 0 }
   let damageList: any[] = []
