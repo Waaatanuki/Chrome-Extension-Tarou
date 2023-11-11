@@ -113,7 +113,7 @@ watch(() => props.bossConditionJson, (data) => {
 
 watch(() => props.wsPayloadData, (data) => {
   if (data.bossUpdate && bossInfo.value) {
-    bossInfo.value.hp = data.bossUpdate.param.boss1_hp
+    bossInfo.value.hp = Number(data.bossUpdate.param.boss1_hp)
     bossInfo.value.hpPercent = Number.parseFloat((Number(bossInfo.value.hp) / Number(bossInfo.value.hpmax) * 100).toFixed(2))
     handleConditionInfo(data.bossUpdate.param.boss1_condition)
   }
