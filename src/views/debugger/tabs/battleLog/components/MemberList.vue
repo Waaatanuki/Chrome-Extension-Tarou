@@ -24,11 +24,11 @@ const data = computed(() =>
 </script>
 
 <template>
-  <ElCard v-if="data" :body-style="{ padding: '15px' }">
-    <div flex flex-wrap gap-20px text-base>
+  <ElCard v-if="data" :body-style="{ padding: '20px' }">
+    <div flex flex-wrap gap-25px text-base>
       <div
         v-for="member, idx in data" :key="idx"
-        :class="{ me: member.userId === userId, host: member.is_host }"
+        :class="{ myself: member.userId === userId, host: member.is_host }"
         relative h-65px w-160px flex cursor-pointer select-none items-center rounded-md bg-gray-2 transition-all hover:scale-105 dark:bg-gray-7
         @click="goProfilePage(member.userId)"
       >
@@ -58,7 +58,7 @@ const data = computed(() =>
 </template>
 
 <style  scoped>
-.me {
+.myself {
   box-shadow: 0 0 3px 3px rgba(255, 0, 0, 0.8);
 }
 
