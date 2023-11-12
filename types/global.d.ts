@@ -443,6 +443,10 @@ declare module 'requestData'{
      comment?: string
    }
 
+   interface SpecialScenario extends Scenario {
+     list: { damage: { value: number }[] }[]
+   }
+
    interface SummonScenario extends Scenario {
      list: { damage: { value: number }[] }[]
    }

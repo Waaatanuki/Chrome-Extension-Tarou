@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Action, BattleRecord, Player } from 'myStorage'
-import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'requestData'
+import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'requestData'
 import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
@@ -240,12 +240,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
       const hitPlayer = currentRaid.player[action.num]
       if (hitPlayer) {
         hitPlayer.use_special_skill_count++
-        if (action.total) {
-          hitPlayer.damage.special.value += action.total.reduce((pre, cur) => {
-            pre += Number(cur.split.join(''))
-            return pre
-          }, 0)
-        }
+        processSpecialScenario(action as SpecialScenario, hitPlayer)
       }
     }
     if (action.cmd === 'attack' && action.from === 'player') {
@@ -341,6 +336,16 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
   // 更新前排角色位置信息
   if (data.status?.formation)
     currentRaid.formation = data.status.formation.map(num => Number(num))
+}
+
+function processSpecialScenario(action: SpecialScenario, player: Player) {
+  player.damage.special.value += action.list.reduce((pre, cur) => {
+    pre += cur.damage?.reduce((p, c) => {
+      p += c.value
+      return p
+    }, 0) ?? 0
+    return pre
+  }, 0)
 }
 
 function processSummonScenario(action: SummonScenario, raid: BattleRecord) {
