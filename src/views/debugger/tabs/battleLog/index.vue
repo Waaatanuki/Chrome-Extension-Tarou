@@ -277,12 +277,15 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
       for (let i = 1; i <= 3; i++) {
         if (array[idx - i]?.cmd === 'wait')
           break
-        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].comment || array[idx - i].name))
+        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].comment || array[idx - i].name)) {
           processDamageScenario(action as DamageScenario, currentRaid, array[idx - i].num)
+          break
+        }
 
         if (array[idx - i] && array[idx - i].cmd === 'chain_cutin') {
           const pos0NpcNum = currentRaid.formation[0]
           processDamageScenario(action as DamageScenario, currentRaid, pos0NpcNum, 'other')
+          break
         }
       }
     }
