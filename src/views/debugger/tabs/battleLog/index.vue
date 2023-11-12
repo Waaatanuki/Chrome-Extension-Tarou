@@ -610,7 +610,7 @@ const normalAttackInfo = computed(() => {
     <div w-full fc gap-2 p-2>
       <BossDashboard :boss-info="bossInfo" :raid-id="raidId" />
       <div w-full flex flex-col items-center justify-start>
-        <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" />
+        <BuffBar :buff-info="buffInfo" :boss-condition-json="bossConditionJson" :turn="bossInfo.turn" />
         <Summon :summon-info="summonInfo" />
       </div>
     </div>

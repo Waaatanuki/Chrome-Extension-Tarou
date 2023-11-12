@@ -293,6 +293,9 @@ declare module 'requestData'{
     remain?: number
     personal_buff_user_id?: boolean | string
     personal_debuff_user_id?: boolean | string
+    personal_status?: string
+    personal_buff_end_turn?: number | string
+    personal_debuff_end_turn?: number | string
   }
 
   interface Timing {
