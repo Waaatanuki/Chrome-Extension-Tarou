@@ -108,7 +108,7 @@ watch(() => props.specialSkillSetting, (data) => {
 watch(() => props.bossConditionJson, (data) => {
   const totalBossBuffs = data.buff?.concat(data.debuff).filter((item, index, self) => {
     return index === self.findIndex(t => t.status === item.status)
-  })
+  }) || []
   buffInfo.value.bossBuffs = totalBossBuffs.map(buff => ({ status: buff.status }))
 })
 
