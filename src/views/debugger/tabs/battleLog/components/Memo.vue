@@ -7,6 +7,11 @@ const props = defineProps<{ questId: string; questName: string }>()
 const dialogVisiable = ref(false)
 const textarea = ref('')
 const currentQuest = ref<QuestMemo>()
+const trigger = ref<'hover' | 'click'>('hover')
+
+function toggleTrigger(type: 'hover' | 'click') {
+  trigger.value = type
+}
 
 watch(() => props.questId, (id) => {
   currentQuest.value = questMemo.value.find(m => m.questId === id)
@@ -34,27 +39,30 @@ function submit() {
 </script>
 
 <template>
-  <ElTooltip effect="light" placement="bottom-start">
-    <div i-carbon:information text-lg />
-    <template #content>
-      <div text-base>
-        <div v-if="currentQuest">
-          <ElScrollbar :max-height="500">
-            <div relative max-w-422px min-w-150px whitespace-pre-wrap text-start>
-              {{ currentQuest.memo }}
-              <div i-carbon:edit absolute right-1 top-1 text-lg icon-btn @click="handleEdit" />
-            </div>
-          </ElScrollbar>
-        </div>
-        <div v-else h-200px w-200px fc flex-col gap-10px>
-          <div>当前副本没有笔记</div>
-          <div btn @click="dialogVisiable = true">
-            创建
+  <ElPopover placement="bottom-start" :width="currentQuest ? 422 : 200" :trigger="trigger" @after-leave="toggleTrigger('hover')">
+    <template #reference>
+      <div i-carbon:information text-lg />
+    </template>
+
+    <div text-base>
+      <div v-if="currentQuest">
+        <ElScrollbar :max-height="500">
+          <div relative whitespace-pre-wrap text-start>
+            {{ currentQuest.memo }}
+            <div v-if="trigger === 'hover'" i-carbon:pin absolute right-10 top-1 text-lg icon-btn @click="toggleTrigger('click')" />
+            <div v-else i-carbon:pin-filled absolute right-10 top-1 text-lg icon-btn @click="toggleTrigger('hover')" />
+            <div i-carbon:edit absolute right-1 top-1 text-lg icon-btn @click="handleEdit" />
           </div>
+        </ElScrollbar>
+      </div>
+      <div v-else h-200px fc flex-col gap-10px>
+        <div>当前副本没有笔记</div>
+        <div btn @click="dialogVisiable = true">
+          创建
         </div>
       </div>
-    </template>
-  </ElTooltip>
+    </div>
+  </ElPopover>
 
   <ElDialog v-model="dialogVisiable" width="440">
     <div w-400px>
