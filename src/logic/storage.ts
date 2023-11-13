@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { BattleMemo, BattleRecord, GachaRecord, MaterialInfo, RecoveryItem } from 'myStorage'
+import type { BattleMemo, BattleRecord, GachaRecord, MaterialInfo, QuestMemo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
 import { useStorageLocal } from '~/composables/useStorageLocal'
 import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
@@ -28,6 +28,7 @@ export const evokerInfo = useStorageLocal('evokerInfo', defaultEvokerInfo)
 export const battleRecord = useStorageLocal<BattleRecord[]>('battleRecord', [])
 export const specBossBuff = useStorageLocal<string[]>('specBossBuff', [])
 export const specPlayerBuff = useStorageLocal<string[]>('specPlayerBuff', [])
+export const questMemo = useStorageLocal<QuestMemo[]>('questMemo', [])
 
 // 掉落统计
 export const goldBrickData = useStorageLocal<GoldBrickData[]>('goldBrickData', [])

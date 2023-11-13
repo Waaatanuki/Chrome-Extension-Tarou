@@ -6,6 +6,11 @@ declare module 'myStorage' {
     timestamp: number
   }
 
+  interface QuestMemo {
+    questId: string
+    questName: string
+    memo: string
+  }
   interface GachaRecord {
     random_key: string
     service_start: string
@@ -483,8 +488,8 @@ declare module 'requestData'{
    }
 
    interface BossConditionJson {
-     buff: BossCondition[]
-     debuff: BossCondition[]
+     buff?: BossCondition[]
+     debuff?: BossCondition[]
    }
 
    interface BossCondition {

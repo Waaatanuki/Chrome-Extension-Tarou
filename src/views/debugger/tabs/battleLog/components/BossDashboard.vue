@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { BossInfo } from 'battleLog'
-import Tips from '../tips/index.vue'
+import Memo from './Memo.vue'
 import { battleRecord } from '~/logic'
 
 const props = defineProps<{ bossInfo: BossInfo; raidId?: number }>()
@@ -55,8 +55,8 @@ function handleTimeChange(millisecond: number) {
     <div absolute right-1 top-1 text-base>
       {{ bossInfo.battleId }}
     </div>
-    <div absolute bottom-1 left-1 text-base>
-      <Tips :quest-id="props.bossInfo.questId" />
+    <div absolute bottom-1 left-1>
+      <Memo :quest-id="props.bossInfo.questId" :quest-name="props.bossInfo.name" />
     </div>
   </div>
 </template>
