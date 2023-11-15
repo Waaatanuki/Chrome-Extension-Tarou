@@ -12,3 +12,7 @@ export function getQuestImg(quest_id: string) {
 export function getGachaItemImg(type: string, id: string) {
   return `http://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/m/${id}.jpg`
 }
+
+export function getSkillIcon(id: string) {
+  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/weapon_skill_label/${id}`
+}

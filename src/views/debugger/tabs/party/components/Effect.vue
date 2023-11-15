@@ -4,10 +4,6 @@ import type { EffectValueInfo } from 'requestData'
 defineProps<{
   effectValueInfo: EffectValueInfo[]
 }>()
-
-function getSkillIcon(id: string) {
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/weapon_skill_label/${id}`
-}
 </script>
 
 <template>

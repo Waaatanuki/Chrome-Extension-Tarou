@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { CheckboxValueType } from 'element-plus'
-import type { CalculateSetting, DamageInfo, DeckJson, DeckSummon, DeckWeapon, NpcAbility, NpcInfo } from 'requestData'
+import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'requestData'
+import type { Deck } from 'party'
 import Effect from './components/Effect.vue'
 import Weapon from './components/Weapon.vue'
 import Npc from './components/Npc.vue'
 import Summon from './components/Summon.vue'
+import BuildCompare from './components/BuildCompare.vue'
 import { jobAbilityList, localNpcList } from '~/logic'
 
 const props = defineProps<{
@@ -12,26 +14,13 @@ const props = defineProps<{
   calculateSetting: CalculateSetting
 }>()
 
-interface Deck {
-  priority: string
-  leader: { image: string }
-  leaderAbilityList: NpcAbility[]
-  npcs: NpcInfo[]
-  setAction: { name: string; set_action_id: string }[]
-  weapons: DeckWeapon
-  summons: DeckSummon
-  quickSummoniId: string
-  subSummons: DeckSummon
-  damageInfo: DamageInfo
-  calculateSetting?: CalculateSetting
-}
-
 const deckList = ref<Deck[]>([])
 const simpleChecked = ref(false)
 const weaponChecked = ref(true)
 const summonChecked = ref(true)
 const npcChecked = ref(true)
 const effectChecked = ref(true)
+const dialogVisiable = ref(false)
 
 watch(() => props.deckJson, (value) => {
   if (value) {
@@ -106,8 +95,8 @@ function triggerSimpleModel(value: CheckboxValueType) {
 </script>
 
 <template>
-  <div mb-2 flex items-center justify-between>
-    <div pl-5>
+  <div mb-2 flex items-center justify-between px-5>
+    <div fc>
       <ElCheckboxButton v-model="simpleChecked" @change="triggerSimpleModel">
         简略模式
       </ElCheckboxButton>
@@ -127,11 +116,13 @@ function triggerSimpleModel(value: CheckboxValueType) {
       <ElCheckboxButton v-model="effectChecked" :disabled="simpleChecked">
         效果量
       </ElCheckboxButton>
-    </div>
-    <div pr-5>
-      <div btn @click="deckList = []">
-        清空队伍
+
+      <div ml-30px btn @click="dialogVisiable = true">
+        队伍比较
       </div>
+    </div>
+    <div btn @click="deckList = []">
+      清空队伍
     </div>
   </div>
   <div fc flex-col gap-2 :class="{ simpleMode: simpleChecked }">
@@ -152,6 +143,10 @@ function triggerSimpleModel(value: CheckboxValueType) {
       </div>
     </ElCard>
   </div>
+
+  <ElDialog v-model="dialogVisiable" width="1300">
+    <BuildCompare :last-deck="deckList[0]" />
+  </ElDialog>
 </template>
 
 <style scoped>

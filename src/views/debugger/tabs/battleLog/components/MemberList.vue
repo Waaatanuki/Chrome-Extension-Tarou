@@ -59,10 +59,10 @@ const data = computed(() =>
 
 <style  scoped>
 .myself {
-  box-shadow: 0 0 3px 3px rgba(255, 0, 0, 0.8);
+  box-shadow: 0 0 3px 3px #dc2626;
 }
 
 .host {
-  box-shadow: 0 0 3px 3px rgba(77, 230, 97, 0.8);
+  box-shadow: 0 0 3px 3px #059669;
 }
 </style>

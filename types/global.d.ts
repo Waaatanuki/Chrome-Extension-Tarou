@@ -776,3 +776,21 @@ declare module 'battleLog'{
     rank?: number
   }
 }
+
+declare module 'party'{
+  import type { CalculateSetting, DamageInfo, DeckSummon, DeckWeapon, NpcAbility, NpcInfo } from 'requestData'
+
+  interface Deck {
+    priority: string
+    leader: { image: string }
+    leaderAbilityList: NpcAbility[]
+    npcs: NpcInfo[]
+    setAction: { name: string; set_action_id: string }[]
+    weapons: DeckWeapon
+    summons: DeckSummon
+    quickSummoniId: string
+    subSummons: DeckSummon
+    damageInfo: DamageInfo
+    calculateSetting?: CalculateSetting
+  }
+}
