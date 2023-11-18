@@ -17,7 +17,8 @@ function goProfilePage(userId: string) {
 const data = computed(() =>
   props.memberInfo?.reduce<MemberInfo[]>((pre, cur) => {
     const hit = props.mvpInfo?.find(m => m.userId === cur.userId)
-    pre.push({ ...cur, ...hit })
+    const info = hit ? { rank: hit.rank, point: hit.point } : { rank: 999 }
+    pre.push({ ...cur, ...info })
     return pre
   }, []).sort((a, b) => Number(a.rank) - Number(b.rank)),
 )
