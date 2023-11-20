@@ -48,7 +48,7 @@ const data = computed(() =>
         <ElTag effect="dark" size="small" :type="member.userRank === '350' ? 'warning' : 'info'" absolute right--1px top--10px>
           {{ `Lv${member.userRank}` }}
         </ElTag>
-        <ElTag v-if="member.rank" effect="dark" size="small" type="danger" absolute left--15px my-auto>
+        <ElTag v-if="member.rank && member.rank !== 999" effect="dark" size="small" type="danger" absolute left--15px my-auto>
           {{ `#${member.rank}` }}
         </ElTag>
         <img :src="member.jobIcon" absolute left-5px top--12px h-24px>
