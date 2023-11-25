@@ -309,6 +309,8 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
       const hitPlayer = currentRaid.player[Number(action.index)]
       hitPlayer && (hitPlayer.is_dead = false)
     }
+    if (action.cmd === 'rematch')
+      currentRaid.player.forEach(p => p.is_dead = false)
 
     // 统计承伤
     if (action.cmd === 'super' && action.target === 'player')
