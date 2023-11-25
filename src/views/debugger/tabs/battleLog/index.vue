@@ -277,7 +277,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
       for (let i = 1; i <= 3; i++) {
         if (array[idx - i]?.cmd === 'wait')
           break
-        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].comment || array[idx - i].name)) {
+        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].to !== 'boss')) {
           processDamageScenario(action as DamageScenario, currentRaid, array[idx - i].num)
           break
         }
@@ -293,7 +293,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
       for (let i = 1; i <= 3; i++) {
         if (array[idx - i]?.cmd === 'wait')
           break
-        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].comment || array[idx - i].name)) {
+        if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].to !== 'boss')) {
           processLoopDamageScenario(action as LoopDamageScenario, currentRaid, array[idx - i].num)
           break
         }
