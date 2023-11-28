@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Deck } from 'party'
+import { cloneDeep } from 'lodash-es'
 import Weapon from './Weapon.vue'
 import Summon from './Summon.vue'
 
@@ -33,10 +34,19 @@ watch(() => props.lastDeck, (data) => {
 }, { immediate: true })
 
 function toggleLock() {
-  if (!deck1.value)
-    ElMessage.warning('请先设定队伍1')
-  else
+  if (!isLock.value) {
+    if (!deck1.value) {
+      ElMessage.warning('请先设定队伍1')
+    }
+    else {
+      deck1.value = cloneDeep(deck1.value)
+      isLock.value = !isLock.value
+    }
+  }
+  else {
+    deck2.value = cloneDeep(deck2.value)
     isLock.value = !isLock.value
+  }
 }
 
 const compareResult = computed<Result[]>(() => {

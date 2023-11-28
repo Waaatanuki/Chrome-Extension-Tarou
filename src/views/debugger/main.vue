@@ -250,7 +250,10 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // Party 记录伤害计算设置
     if (responseUrl.includes('party/calculate_setting')) {
       getResponse(tabId, requestId, (resp) => {
-        calculateSetting.value = resp
+        const regex = /calculate_setting\/(\d+)\/(\d+)/
+        const matches = responseUrl.match(regex)
+        const priority = matches ? matches.slice(1).join('') : null
+        calculateSetting.value = { priority, setting: resp }
       })
     }
 
@@ -409,7 +412,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           const turn = gainList[3]
           const time = gainList[4]
 
-          const treasureList: { src: string; number: string; boxClass: string }[] = []
+          const treasureList: { src: string, number: string, boxClass: string }[] = []
 
           $('.lis-treasure').each((i, elem) => {
             treasureList.push({
@@ -503,8 +506,10 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     }
 
     // Party 记录更改伤害计算设置
-    if (requestUrl.includes('party/save_calculate_setting'))
-      calculateSetting.value = JSON.parse(params.request.postData)
+    if (requestUrl.includes('party/save_calculate_setting')) {
+      const setting = JSON.parse(params.request.postData)
+      calculateSetting.value = { priority: String(setting.group_priority) + String(setting.priority), setting }
+    }
 
     // BattleLog 记录副本start信息
     if (/\/rest\/(raid|multiraid)\/start\.json/.test(requestUrl)) {

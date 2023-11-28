@@ -2,6 +2,7 @@
 import type { CheckboxValueType } from 'element-plus'
 import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'requestData'
 import type { Deck } from 'party'
+import { cloneDeep } from 'lodash-es'
 import Effect from './components/Effect.vue'
 import Weapon from './components/Weapon.vue'
 import Npc from './components/Npc.vue'
@@ -21,13 +22,10 @@ const summonChecked = ref(true)
 const npcChecked = ref(true)
 const effectChecked = ref(true)
 const dialogVisiable = ref(false)
+const calculateSettingList = ref<CalculateSetting[]>([])
 
 watch(() => props.deckJson, (value) => {
   if (value) {
-    let lastCalculateSetting
-    if (deckList.value.length > 0 && deckList.value[0].priority === String(value.priority))
-      lastCalculateSetting = deckList.value[0].calculateSetting
-
     const npcs = value.npc
     const newNpcs: NpcInfo[] = []
     for (let i = 1; i <= 5; i++) {
@@ -62,6 +60,9 @@ watch(() => props.deckJson, (value) => {
           leaderAbilityList[idx + 1] = { ...hitAb }
       })
     }
+
+    const hitSetting = calculateSettingList.value.find(item => item.priority === String(value.priority))
+
     deckList.value.unshift({
       priority: String(value.priority),
       leader: value.pc.param,
@@ -72,8 +73,8 @@ watch(() => props.deckJson, (value) => {
       summons: value.pc.summons,
       quickSummoniId: String(value.pc.quick_user_summon_id),
       subSummons: value.pc.sub_summons,
-      damageInfo: value.pc.damage_info,
-      calculateSetting: lastCalculateSetting,
+      damageInfo: Object.keys(value.pc.after_damage_info || []).length === 0 ? value.pc.damage_info : value.pc.after_damage_info,
+      calculateSetting: cloneDeep(hitSetting),
     })
 
     if (deckList.value.length > 10)
@@ -81,9 +82,12 @@ watch(() => props.deckJson, (value) => {
   }
 })
 
-watch(() => props.calculateSetting, (value) => {
-  if (deckList.value.length > 0 && value)
-    deckList.value[0].calculateSetting = value
+watch(() => props.calculateSetting, (data) => {
+  const hit = calculateSettingList.value.find(item => item.priority === data?.priority)
+  if (hit)
+    hit.setting = { ...data.setting }
+  else
+    calculateSettingList.value.push(cloneDeep(data))
 })
 
 function triggerSimpleModel(value: CheckboxValueType) {

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { DeckSummon } from 'requestData'
+import type { CalculateSetting, DeckSummon } from 'requestData'
 
 defineProps<{
   summons: DeckSummon
   subSummons: DeckSummon
-  calculateSetting: any
+  calculateSetting?: CalculateSetting
   quickSummoniId?: string
 }>()
 
@@ -28,8 +28,8 @@ function getImg(type: string, id: string, size = 'm') {
         <img v-if="subSummons[idx ]?.param?.image_id" w-full :src="getImg('summon', subSummons[idx ]?.param?.image_id)">
       </div>
     </div>
-    <div v-if="calculateSetting && calculateSetting.image_id" h-full w-100px bg-slate-300>
-      <img h-full w-full :src="getImg('summon', calculateSetting.image_id, 'ls')">
+    <div v-if="calculateSetting?.setting.image_id" h-full w-100px bg-slate-300>
+      <img h-full w-full :src="getImg('summon', calculateSetting.setting.image_id, 'ls')">
     </div>
   </div>
 </template>

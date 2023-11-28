@@ -77,14 +77,14 @@ declare module 'myStorage' {
       turn: number
       bossHpPercent: number
       special_skill_flag: number
-      guard_status: { is_guard_status: number; num: number }[]
+      guard_status: { is_guard_status: number, num: number }[]
       acitonList: Action[]
     }[]
     hasResult?: boolean
     point?: string
     duration?: string
     speed?: string
-    treasureList?: { src: string; number: string; boxClass: string }[]
+    treasureList?: { src: string, number: string, boxClass: string }[]
     abilityList: Action[]
     reserve: boolean
   }
@@ -439,7 +439,7 @@ declare module 'requestData'{
      from: string
      to: string
      condition: Condition
-     damage: { value: number; hp: number; pos: number }[][]
+     damage: { value: number, hp: number, pos: number }[][]
      total?: { split: string[] }[]
      is_damage_sync_effect: boolean | string
      effect?: string
@@ -457,15 +457,15 @@ declare module 'requestData'{
    }
 
    interface DamageScenario extends Scenario {
-     list: { num: number; value?: number; damage?: { value: number }[] }[]
+     list: { num: number, value?: number, damage?: { value: number }[] }[]
    }
 
    interface LoopDamageScenario extends Scenario {
-     list: { value?: number; damage?: { value: number }[] }[][]
+     list: { value?: number, damage?: { value: number }[] }[][]
    }
 
    interface SuperScenario extends Scenario {
-     list: { damage: { pos: number; value: number }[] }[]
+     list: { damage: { pos: number, value: number }[] }[]
    }
 
    interface ResultJsonPayload {
@@ -529,13 +529,13 @@ declare module 'requestData'{
    }
 
    interface Pc {
-     param: { image: string; id: number }
+     param: { image: string, id: number }
      summons: DeckSummon
      sub_summons: DeckSummon
      weapons: DeckWeapon
      damage_info: DamageInfo
      after_damage_info: DamageInfo
-     set_action: { name: string; set_action_id: string }[]
+     set_action: { name: string, set_action_id: string }[]
      quick_user_summon_id: number
      job: {
        param: {
@@ -611,9 +611,12 @@ declare module 'requestData'{
    }
 
    interface CalculateSetting {
-     image_id: string
-     group_priority?: string
-     priority?: string
+     priority: string
+     setting: {
+       image_id: string
+       group_priority?: string
+       priority?: string
+     }
    }
 
    interface NpcInfo {
@@ -642,7 +645,7 @@ declare module 'requestData'{
      turn: string
      duration: string
      speed: string
-     treasureList: { src: string; number: string; boxClass: string }[]
+     treasureList: { src: string, number: string, boxClass: string }[]
    }
 
    interface SpecialSkillSetting {
@@ -785,7 +788,7 @@ declare module 'party'{
     leader: { image: string }
     leaderAbilityList: NpcAbility[]
     npcs: NpcInfo[]
-    setAction: { name: string; set_action_id: string }[]
+    setAction: { name: string, set_action_id: string }[]
     weapons: DeckWeapon
     summons: DeckSummon
     quickSummoniId: string
