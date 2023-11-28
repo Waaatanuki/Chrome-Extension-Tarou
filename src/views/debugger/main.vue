@@ -9,7 +9,7 @@ import Sandglass from './tabs/sandglass/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
-import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, windowSize } from '~/logic'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, windowId, windowSize } from '~/logic'
 
 const userId = ref<string>('')
 const battleStartJson = ref()
@@ -565,6 +565,8 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
 })
 
 chrome.windows.onBoundsChanged.addListener((windowInfo) => {
+  if (windowId.value !== windowInfo.id)
+    return
   windowSize.value.left = windowInfo.left ?? 300
   windowSize.value.top = windowInfo.top ?? 0
   windowSize.value.width = windowInfo.width ?? 800

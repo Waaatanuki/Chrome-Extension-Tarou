@@ -46,6 +46,10 @@ function handleReset(command: string) {
       eternitySandData.value = defaultEternitySandData
       ElMessage.success('沙漏本数据已重置')
       break
+    case 'windowSize':
+      windowSize.value = { left: 300, top: 0, width: 800, height: 600 }
+      ElMessage.success('详细面板位置已重置')
+      break
   }
 }
 
@@ -177,6 +181,9 @@ function exportJSONFile(itemList: any) {
                 </ElDropdownItem>
                 <ElDropdownItem command="eternitySand">
                   仅沙漏本
+                </ElDropdownItem>
+                <ElDropdownItem command="windowSize">
+                  面板位置
                 </ElDropdownItem>
               </ElDropdownMenu>
             </template>
