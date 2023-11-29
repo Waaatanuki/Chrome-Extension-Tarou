@@ -2,7 +2,7 @@
 import type { RaidInfo } from 'myStorage'
 
 withDefaults(
-  defineProps<{ collapse?: boolean; data: RaidInfo[] }>(),
+  defineProps<{ collapse?: boolean, data: RaidInfo[] }>(),
   { collapse: false },
 )
 
@@ -22,7 +22,7 @@ function getEternitySandRatio(item: RaidInfo) {
 
 function getMsg(item: RaidInfo) {
   if (item.lastDropTake)
-    return `上次出沙漏经历了${item.lastDropTake}场，已经有${item.lastDropCount}场没出过沙漏了`
+    return `上次出沙漏经历${item.lastDropTake}场，已经${item.lastDropCount}场没出过了`
   else
     return `距离上次出沙漏已经过去了${item.lastDropCount}场`
 }
