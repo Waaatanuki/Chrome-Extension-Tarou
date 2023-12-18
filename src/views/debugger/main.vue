@@ -84,16 +84,13 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     if (responseUrl.includes('gacha/result//legend')) {
       getResponse(tabId, requestId, (resp) => {
         const RawData: GachaResult = resp
-        const legendInfo = RawData.gacha.find(item => item.text_btn_image.includes('text_legend'))
-        if (!legendInfo)
-          return
 
         let hit = gachaRecord.value.find(pool => pool.random_key === RawData.random_key)
         if (!hit) {
           hit = {
             random_key: RawData.random_key,
-            service_start: legendInfo.service_start,
-            service_end: legendInfo.service_end,
+            service_start: RawData.ceiling.start,
+            service_end: RawData.ceiling.end,
             count: 0,
             ssrList: [],
           }

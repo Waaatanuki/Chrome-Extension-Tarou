@@ -205,6 +205,10 @@ declare module 'requestData'{
       service_start: string
       service_end: string
     }[]
+    ceiling: {
+      start: string
+      end: string
+    }
   }
 
   interface BattleStartJson {
