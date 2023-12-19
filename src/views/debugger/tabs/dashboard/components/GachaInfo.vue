@@ -7,7 +7,7 @@ const resultFilter = reactive({
 })
 
 const summary = computed(() =>
-  gachaRecord.value.reduce< { count: number; ssrNum: number }>((pre, cur) => {
+  gachaRecord.value.reduce< { count: number, ssrNum: number }>((pre, cur) => {
     pre.count += cur.count
     pre.ssrNum += cur.ssrList.length
     return pre

@@ -363,6 +363,20 @@ export const Raid_EternitySand = [
     is_blue_treasure: false,
     is_blue_eternitySand: false,
   },
+  {
+    quest_id: '305571',
+    level: '170',
+    element: 'normal',
+    tweet_name_en: ['Lvl 250 The World'],
+    tweet_name_jp: ['Lv250 ザ・ワールド'],
+    quest_name_en: 'The World (Impossible)',
+    quest_name_jp: 'ザ・ワールドＨＬ',
+    difficulty: '7',
+    stage_id: '12071',
+    thumbnail_image: '305571',
+    is_blue_treasure: true,
+    is_blue_eternitySand: true,
+  },
 ]
 
 export const Raid_GoldBrick = [
