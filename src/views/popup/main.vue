@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GoldBrickTableData } from 'myStorage'
+import type { GoldBrickTableData, RaidInfo } from 'myStorage'
 import { eternitySandData, goldBrickData, goldBrickTableData, tabId, windowId, windowSize } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
 
@@ -60,6 +60,30 @@ function getMsg(item: GoldBrickTableData) {
     return `距离上次出金已经打了${item.lastBlueChestCount}蓝箱`
 }
 
+function getRatio(a = 0, b = 0) {
+  if (b === 0)
+    return '0.00'
+
+  return ((a / b) * 100).toFixed(2)
+}
+
+function getEternitySandRatio(item: RaidInfo) {
+  if (item.is_blue_eternitySand)
+    return getRatio(item.eternitySand, item.blueChest)
+  else
+    return getRatio(item.eternitySand, item.total)
+}
+
+function getEternitySandMsg(item: RaidInfo) {
+  if (item.eternitySand === 0)
+    return '还未出过沙漏'
+
+  if (item.lastDropTake)
+    return `上次出沙漏经历${item.lastDropTake}场，已经${item.lastDropCount}场没出过了`
+  else
+    return `距离上次出沙漏已经过去了${item.lastDropCount}场`
+}
+
 function importData() {
   const re = /waaatanuki.[a-zA-Z]+.io\/gbf-app/
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -106,71 +130,101 @@ function exportJSONFile(itemList: any) {
 
 <template>
   <main>
-    <div w-500px>
-      <ElTable :data="goldBrickTableShowData">
-        <ElTableColumn prop="name" align="center">
-          <template #header>
-            <div
-              class="icon-btn" i-carbon-sun dark:i-carbon-moon m-auto
-              @click="toggleDark()"
-            />
-          </template>
-          <template #default="{ row }">
-            <img m-auto w-full :src="getQuestImg(row.quest_id)">
-          </template>
-        </ElTableColumn>
-        <ElTableColumn prop="blueChest" align="center">
-          <template #header="{ column }">
-            <img m-auto w-30px :src="getLocalImg(column.property)">
-          </template>
-          <template #default="{ row }">
-            <ElTooltip effect="dark" placement="top">
+    <div w-340px>
+      <ElScrollbar max-height="400px">
+        <div flex flex-col>
+          <div v-for="item in goldBrickTableShowData" :key="item.quest_id">
+            <ElTooltip placement="left">
               <template #content>
-                总次数：{{ row.total }}<br>
-                蓝箱率：{{ ((row.blueChest / row.total || 0) * 100).toFixed(1) }}%
+                {{ getMsg(item) }}
               </template>
-              {{ row.blueChest }}
+
+              <ElCard :body-style="{ padding: '5px' }">
+                <div h-80px w-325px flex items-center justify-start text-sm>
+                  <div shrink-0>
+                    <img w-100px :src="getQuestImg(item.quest_id)">
+                  </div>
+                  <div class="desc-item">
+                    <div>
+                      总次数
+                    </div>
+                    <div text-xs>
+                      {{ item.total }}
+                    </div>
+                  </div>
+                  <div class="desc-item">
+                    <div>蓝箱</div>
+                    <div text-xs>
+                      {{ item.blueChest }}
+                    </div>
+                    <div text-xs>
+                      {{ getRatio(item.blueChest, item.total) }}%
+                    </div>
+                  </div>
+                  <div class="desc-item">
+                    <div>绯绯金</div>
+                    <div text-xs>
+                      {{ item.goldBrick }}
+                    </div>
+                    <div text-xs>
+                      {{ getRatio(item.goldBrick, item.blueChest) }}%
+                    </div>
+                  </div>
+                </div>
+              </ElCard>
             </ElTooltip>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn prop="goldBrick" align="center">
-          <template #header="{ column }">
-            <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
-          </template>
-          <template #default="{ row }">
-            <ElTooltip effect="dark" placement="top">
+          </div>
+          <div v-for="item in eternitySandData.filter(i => i.visiable)" :key="item.quest_id">
+            <ElTooltip placement="left">
               <template #content>
-                蓝箱金率：{{ ((row.goldBrick / row.blueChest || 0) * 100).toFixed(1) }}%
-                <br>
-                {{ getMsg(row) }}
+                {{ getEternitySandMsg(item) }}
               </template>
-              {{ row.goldBrick }}
+
+              <ElCard :body-style="{ padding: '5px' }">
+                <div h-80px w-325px flex items-center justify-start text-sm>
+                  <div shrink-0>
+                    <img w-100px :src="getQuestImg(item.quest_id)">
+                  </div>
+                  <div class="desc-item">
+                    <div>
+                      总次数
+                    </div>
+                    <div text-xs>
+                      {{ item.total }}
+                    </div>
+                  </div>
+                  <div v-if="item.is_blue_treasure" class="desc-item">
+                    <div>蓝箱</div>
+                    <div text-xs>
+                      {{ item.blueChest }}
+                    </div>
+                    <div text-xs>
+                      {{ getRatio(item.blueChest, item.total) }}%
+                    </div>
+                  </div>
+                  <div class="desc-item">
+                    <div>沙漏</div>
+                    <div text-xs>
+                      {{ item.eternitySand }}
+                    </div>
+                    <div text-xs>
+                      {{ getEternitySandRatio(item) }}%
+                    </div>
+                  </div>
+                </div>
+              </ElCard>
             </ElTooltip>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn prop="ring3" align="center">
-          <template #header="{ column }">
-            <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
-          </template>
-        </ElTableColumn>
-        <ElTableColumn prop="ring2" align="center">
-          <template #header="{ column }">
-            <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
-          </template>
-        </ElTableColumn>
-        <ElTableColumn prop="ring1" align="center">
-          <template #header="{ column }">
-            <img m-auto w-30px :src="getLocalImg(column.property, 'item')">
-          </template>
-        </ElTableColumn>
-      </ElTable>
-      <div flex justify-between>
+          </div>
+        </div>
+      </ElScrollbar>
+
+      <div flex items-center justify-between>
         <div>
           <ElDropdown @command="handleReset">
-            <ElButton m-2 size="small" type="danger">
+            <div m-2 flex btn size="small" type="danger">
               <div i-carbon:reset mr-1 />
               重置
-            </ElButton>
+            </div>
             <template #dropdown>
               <ElDropdownMenu>
                 <ElDropdownItem command="all">
@@ -189,21 +243,32 @@ function exportJSONFile(itemList: any) {
             </template>
           </ElDropdown>
         </div>
-        <div>
-          <ElButton m-2 size="small" type="primary" @click="importData">
-            <div i-carbon:document-import mr-1 />
-            导入至APP
-          </ElButton>
-          <ElButton m-2 size="small" type="primary" @click="exportData">
-            <div i-carbon:document-export mr-1 />
-            导出
-          </ElButton>
-          <ElButton m-2 size="small" type="primary" @click="openDashboard">
-            <div i-carbon:dashboard mr-1 />
-            详细面板
-          </ElButton>
+        <div mr-15px flex gap-10px>
+          <el-tooltip content="切换模式" placement="bottom">
+            <div i-carbon-sun dark:i-carbon-moon icon-btn @click="toggleDark()" />
+          </el-tooltip>
+          <el-tooltip content="导入至APP" placement="bottom">
+            <div i-carbon:document-import icon-btn @click="importData" />
+          </el-tooltip>
+          <el-tooltip content="导出" placement="bottom">
+            <div i-carbon:document-export icon-btn @click="exportData" />
+          </el-tooltip>
+          <el-tooltip content="详细面板" placement="bottom">
+            <div i-carbon:dashboard icon-btn @click="openDashboard" />
+          </el-tooltip>
         </div>
       </div>
     </div>
   </main>
 </template>
+
+<style scoped>
+.desc-item{
+  width: 70px;
+  height: 60px;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: flex-end;
+}
+</style>
