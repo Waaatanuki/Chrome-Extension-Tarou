@@ -134,8 +134,8 @@ function handleClose(raid: RaidInfo, type: number) {
 
 <template>
   <main>
-    <div w-340px>
-      <ElScrollbar max-height="430px">
+    <div w-370px>
+      <ElScrollbar max-height="450px">
         <div flex flex-col>
           <div v-for="item in goldBrickCardData.filter(i => i.visiable)" :key="item.quest_id">
             <RaidCard :raid-info="item" :type="1" @close="handleClose" />

@@ -45,48 +45,49 @@ function getMsg(item: RaidInfo) {
 
 <template>
   <ElCard :body-style="{ padding: '5px' }">
-    <div h-75px fc gap-10px text-sm>
+    <div h-100px fc gap-10px text-sm>
       <div relative shrink-0 @mouseenter="closeBtnVisible = true" @mouseleave="closeBtnVisible = false">
         <img w-100px :src="getQuestImg(raidInfo.quest_id)">
+
         <div v-if="closeBtnVisible" absolute left-0 top-0 h-full w-full fc @click="$emit('close', raidInfo, type)">
           <div absolute h-full w-full bg-slate-900 opacity-50 />
           <div i-carbon:close-outline text-3xl />
         </div>
+        <div mt-2px fc gap-2px>
+          <div i-game-icons:crossed-swords />
+          {{ raidInfo.total?.toLocaleString() }}
+          <div i-game-icons:crossed-swords />
+        </div>
       </div>
-
       <div fc flex-col>
-        <div w-210px flex items-center justify-start>
-          <div class="desc-item">
-            <div>
-              总次数
-            </div>
-            <div text-xs>
-              {{ raidInfo.total }}
-            </div>
-          </div>
+        <div w-230px flex items-center justify-around>
           <div v-if="raidInfo.is_blue_treasure" class="desc-item">
-            <div>蓝箱</div>
-            <div text-xs>
-              {{ raidInfo.blueChest }}
-            </div>
+            <el-badge :value="raidInfo.blueChest" type="danger" :max="999999">
+              <img w-40px :src="getLocalImg('blueChest')">
+            </el-badge>
+
             <div text-xs>
               {{ getRatio(raidInfo.blueChest, raidInfo.total) }}%
             </div>
           </div>
+
+          <div v-else class="desc-item">
+            <img w-40px brightness-40 :src="getLocalImg('blueChest')">
+          </div>
           <div v-if="type === 1" class="desc-item">
-            <div>绯绯金</div>
-            <div text-xs>
-              {{ raidInfo.goldBrick }}
-            </div>
-            <div text-xs>
+            <el-badge :value="raidInfo.goldBrick" type="danger" :max="999999">
+              <img w-40px :src="getLocalImg('goldBrick', 'item')">
+            </el-badge>
+
+            <div v-if="raidInfo.quest_id !== '303141'" text-xs>
               {{ getRatio(raidInfo.goldBrick, raidInfo.blueChest) }}%
             </div>
           </div>
           <div v-if="type === 2" class="desc-item">
-            <div>沙漏</div>
-            <div text-xs>
-              {{ raidInfo.eternitySand }}
-            </div>
+            <el-badge :value="raidInfo.eternitySand" type="danger" :max="999999">
+              <img w-40px :src="getLocalImg('eternitySand', 'item')">
+            </el-badge>
+
             <div text-xs>
               {{ getEternitySandRatio(raidInfo) }}%
             </div>
@@ -102,11 +103,11 @@ function getMsg(item: RaidInfo) {
 
 <style scoped>
 .desc-item{
-  width: 70px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
 }
 </style>

@@ -25,6 +25,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^2.4.6",
     "@iconify-json/carbon": "^1.1.27",
+    "@iconify-json/game-icons": "^1.1.7",
     "@types/archiver": "^6.0.2",
     "@types/chrome": "^0.0.254",
     "@types/lodash-es": "^4.17.12",
