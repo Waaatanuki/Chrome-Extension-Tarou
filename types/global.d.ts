@@ -157,6 +157,7 @@ declare module 'myStorage' {
     is_blue_eternitySand?: boolean
     total?: number
     blueChest?: number
+    goldBrick?: number
     eternitySand?: number
     lastDropCount?: number
     lastDropTake?: number
@@ -172,6 +173,7 @@ declare module 'myStorage' {
     ring3: number
     lastBlueChestCount: number
     lastBlueChestTake?: number
+    visiable?: boolean
   }
 
   interface GoldBrickData {

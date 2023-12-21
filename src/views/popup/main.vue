@@ -1,9 +1,30 @@
 <script setup lang="ts">
-import type { GoldBrickTableData, RaidInfo } from 'myStorage'
+import type { RaidInfo } from 'myStorage'
+import RaidCard from './components/RaidCard.vue'
 import { eternitySandData, goldBrickData, goldBrickTableData, tabId, windowId, windowSize } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
 
-const goldBrickTableShowData = computed(() => goldBrickTableData.value.filter(raid => raid.quest_id !== '303141'))
+const goldBrickCardData = computed<RaidInfo[]>(() =>
+  goldBrickTableData.value.map(raid => ({
+    quest_id: raid.quest_id,
+    level: '',
+    element: '',
+    tweet_name_en: '',
+    tweet_name_jp: '',
+    quest_name_en: '',
+    quest_name_jp: '',
+    difficulty: '',
+    stage_id: '',
+    thumbnail_image: '',
+    is_blue_treasure: !(raid.quest_id === '303141'),
+    visiable: Object.hasOwn(raid, 'visiable') ? raid.visiable : true,
+    total: raid.total,
+    blueChest: raid.blueChest,
+    goldBrick: raid.goldBrick,
+    lastDropCount: raid.lastBlueChestCount,
+    lastDropTake: raid.lastBlueChestTake,
+  })),
+)
 
 async function openDashboard() {
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
@@ -50,38 +71,11 @@ function handleReset(command: string) {
       windowSize.value = { left: 300, top: 0, width: 800, height: 600 }
       ElMessage.success('详细面板位置已重置')
       break
+    case 'cardShow':
+      goldBrickTableData.value.forEach(raid => raid.visiable = true)
+      ElMessage.success('金本全部展示')
+      break
   }
-}
-
-function getMsg(item: GoldBrickTableData) {
-  if (item.lastBlueChestTake)
-    return `上次出金打了${item.lastBlueChestTake}蓝箱，已经有${item.lastBlueChestCount}蓝箱没出过金了`
-  else
-    return `距离上次出金已经打了${item.lastBlueChestCount}蓝箱`
-}
-
-function getRatio(a = 0, b = 0) {
-  if (b === 0)
-    return '0.00'
-
-  return ((a / b) * 100).toFixed(2)
-}
-
-function getEternitySandRatio(item: RaidInfo) {
-  if (item.is_blue_eternitySand)
-    return getRatio(item.eternitySand, item.blueChest)
-  else
-    return getRatio(item.eternitySand, item.total)
-}
-
-function getEternitySandMsg(item: RaidInfo) {
-  if (item.eternitySand === 0)
-    return '还未出过沙漏'
-
-  if (item.lastDropTake)
-    return `上次出沙漏经历${item.lastDropTake}场，已经${item.lastDropCount}场没出过了`
-  else
-    return `距离上次出沙漏已经过去了${item.lastDropCount}场`
 }
 
 function importData() {
@@ -126,94 +120,28 @@ function exportJSONFile(itemList: any) {
   el.click()
   urlObject.revokeObjectURL(url)
 }
+
+function handleClose(raid: RaidInfo, type: number) {
+  if (type === 1) {
+    const hit = goldBrickTableData.value.find(r => r.quest_id === raid.quest_id)
+    if (hit)
+      hit.visiable = false
+  }
+  if (type === 2)
+    raid.visiable = false
+}
 </script>
 
 <template>
   <main>
     <div w-340px>
-      <ElScrollbar max-height="400px">
+      <ElScrollbar max-height="430px">
         <div flex flex-col>
-          <div v-for="item in goldBrickTableShowData" :key="item.quest_id">
-            <ElTooltip placement="left">
-              <template #content>
-                {{ getMsg(item) }}
-              </template>
-
-              <ElCard :body-style="{ padding: '5px' }">
-                <div h-80px w-325px flex items-center justify-start text-sm>
-                  <div shrink-0>
-                    <img w-100px :src="getQuestImg(item.quest_id)">
-                  </div>
-                  <div class="desc-item">
-                    <div>
-                      总次数
-                    </div>
-                    <div text-xs>
-                      {{ item.total }}
-                    </div>
-                  </div>
-                  <div class="desc-item">
-                    <div>蓝箱</div>
-                    <div text-xs>
-                      {{ item.blueChest }}
-                    </div>
-                    <div text-xs>
-                      {{ getRatio(item.blueChest, item.total) }}%
-                    </div>
-                  </div>
-                  <div class="desc-item">
-                    <div>绯绯金</div>
-                    <div text-xs>
-                      {{ item.goldBrick }}
-                    </div>
-                    <div text-xs>
-                      {{ getRatio(item.goldBrick, item.blueChest) }}%
-                    </div>
-                  </div>
-                </div>
-              </ElCard>
-            </ElTooltip>
+          <div v-for="item in goldBrickCardData.filter(i => i.visiable)" :key="item.quest_id">
+            <RaidCard :raid-info="item" :type="1" @close="handleClose" />
           </div>
           <div v-for="item in eternitySandData.filter(i => i.visiable)" :key="item.quest_id">
-            <ElTooltip placement="left">
-              <template #content>
-                {{ getEternitySandMsg(item) }}
-              </template>
-
-              <ElCard :body-style="{ padding: '5px' }">
-                <div h-80px w-325px flex items-center justify-start text-sm>
-                  <div shrink-0>
-                    <img w-100px :src="getQuestImg(item.quest_id)">
-                  </div>
-                  <div class="desc-item">
-                    <div>
-                      总次数
-                    </div>
-                    <div text-xs>
-                      {{ item.total }}
-                    </div>
-                  </div>
-                  <div v-if="item.is_blue_treasure" class="desc-item">
-                    <div>蓝箱</div>
-                    <div text-xs>
-                      {{ item.blueChest }}
-                    </div>
-                    <div text-xs>
-                      {{ getRatio(item.blueChest, item.total) }}%
-                    </div>
-                  </div>
-                  <div class="desc-item">
-                    <div>沙漏</div>
-                    <div text-xs>
-                      {{ item.eternitySand }}
-                    </div>
-                    <div text-xs>
-                      {{ getEternitySandRatio(item) }}%
-                    </div>
-                  </div>
-                </div>
-              </ElCard>
-            </ElTooltip>
+            <RaidCard :raid-info="item" :type="2" @close="handleClose" />
           </div>
         </div>
       </ElScrollbar>
@@ -239,6 +167,9 @@ function exportJSONFile(itemList: any) {
                 <ElDropdownItem command="windowSize">
                   面板位置
                 </ElDropdownItem>
+                <ElDropdownItem command="cardShow">
+                  金本显隐
+                </ElDropdownItem>
               </ElDropdownMenu>
             </template>
           </ElDropdown>
@@ -261,14 +192,3 @@ function exportJSONFile(itemList: any) {
     </div>
   </main>
 </template>
-
-<style scoped>
-.desc-item{
-  width: 70px;
-  height: 60px;
-  display: flex;
-  flex-shrink: 0;
-  flex-direction: column;
-  align-items: flex-end;
-}
-</style>
