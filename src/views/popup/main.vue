@@ -174,7 +174,7 @@ function handleClose(raid: RaidInfo, type: number) {
             </template>
           </ElDropdown>
         </div>
-        <div mr-15px flex gap-10px>
+        <div mr-15px flex gap-20px text-lg>
           <el-tooltip content="切换模式" placement="bottom">
             <div i-carbon-sun dark:i-carbon-moon icon-btn @click="toggleDark()" />
           </el-tooltip>
