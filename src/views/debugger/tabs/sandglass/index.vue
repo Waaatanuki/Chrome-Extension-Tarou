@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import type { RaidInfo } from 'myStorage'
-import RaidCard from './components/RaidCard.vue'
 import { eternitySandData } from '~/logic/storage'
 
 const filesList = ref([])
@@ -38,7 +36,7 @@ function handleExport() {
   }))
 
   const data = JSON.stringify(exportData, null, 2)
-  const timeStr = dayjs().format('YYYY-MM-DD')
+  const timeStr = useDateFormat(new Date(), 'YYYY-MM-DD').value
   const content = new Blob([data])
   const urlObject = window.URL || window.webkitURL || window
   const url = urlObject.createObjectURL(content)
@@ -54,6 +52,11 @@ chrome.storage.onChanged.addListener((changes) => {
   if (changes.eternitySandData)
     eternitySandData.value = JSON.parse(changes.eternitySandData.newValue)
 })
+
+function toggleVisible(raid: RaidInfo, type: number) {
+  if (type === 2)
+    raid.visiable = !raid.visiable
+}
 </script>
 
 <template>
@@ -75,7 +78,9 @@ chrome.storage.onChanged.addListener((changes) => {
       </div>
     </div>
     <div mt-10px fc flex-wrap gap-10px>
-      <RaidCard :data="eternitySandData.filter(i => i.visiable)" />
+      <div v-for="item in eternitySandData.filter(i => i.visiable)" :key="item.quest_id">
+        <RaidCard :raid-info="item" :type="2" @toggle-visible="toggleVisible" />
+      </div>
     </div>
     <ElCollapse>
       <ElCollapseItem>
@@ -87,7 +92,9 @@ chrome.storage.onChanged.addListener((changes) => {
           </div>
         </template>
         <div flex flex-wrap gap-10px>
-          <RaidCard collapse :data="eternitySandData.filter(i => !i.visiable)" />
+          <div v-for="item in eternitySandData.filter(i => !i.visiable)" :key="item.quest_id">
+            <RaidCard :raid-info="item" :type="2" @toggle-visible="toggleVisible" />
+          </div>
         </div>
       </ElCollapseItem>
     </ElCollapse>

@@ -3,8 +3,7 @@ import type { RaidInfo } from 'myStorage'
 
 // type 1绯绯金 2为沙漏
 const props = defineProps<{ raidInfo: RaidInfo, type: number }>()
-defineEmits(['close'])
-const closeBtnVisible = ref(false)
+defineEmits(['toggleVisible'])
 
 function getRatio(a = 0, b = 0) {
   if (b === 0)
@@ -45,17 +44,16 @@ function getMsg(item: RaidInfo) {
 
 <template>
   <ElCard :body-style="{ padding: '5px' }">
-    <div h-100px fc gap-10px text-sm>
-      <div relative shrink-0 @mouseenter="closeBtnVisible = true" @mouseleave="closeBtnVisible = false">
+    <div relative h-100px fc gap-10px text-sm>
+      <div v-if="raidInfo.visiable" i-carbon:star-filled absolute right-0 top-0 text-sm text-amber hover:scale-120 @click="$emit('toggleVisible', raidInfo, type)" />
+      <div v-else i-carbon:star absolute right-0 top-0 text-sm hover:scale-120 @click="$emit('toggleVisible', raidInfo, type)" />
+      <div relative shrink-0>
         <img w-100px :src="getQuestImg(raidInfo.quest_id)">
-
-        <div v-if="closeBtnVisible" absolute left-0 top-0 h-full w-full fc @click="$emit('close', raidInfo, type)">
-          <div absolute h-full w-full bg-slate-900 opacity-50 />
-          <div i-carbon:close-outline text-3xl />
-        </div>
         <div mt-2px fc gap-2px>
           <div i-game-icons:crossed-swords />
-          {{ raidInfo.total?.toLocaleString() }}
+          <div text-orange font-black>
+            {{ raidInfo.total?.toLocaleString() }}
+          </div>
           <div i-game-icons:crossed-swords />
         </div>
       </div>

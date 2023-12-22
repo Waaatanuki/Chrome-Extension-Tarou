@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { RaidInfo } from 'myStorage'
-import RaidCard from './components/RaidCard.vue'
 import { eternitySandData, goldBrickData, goldBrickTableData, tabId, windowId, windowSize } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
 
@@ -121,14 +120,14 @@ function exportJSONFile(itemList: any) {
   urlObject.revokeObjectURL(url)
 }
 
-function handleClose(raid: RaidInfo, type: number) {
+function toggleVisible(raid: RaidInfo, type: number) {
   if (type === 1) {
     const hit = goldBrickTableData.value.find(r => r.quest_id === raid.quest_id)
     if (hit)
-      hit.visiable = false
+      hit.visiable = !hit.visiable
   }
   if (type === 2)
-    raid.visiable = false
+    raid.visiable = !raid.visiable
 }
 </script>
 
@@ -138,10 +137,10 @@ function handleClose(raid: RaidInfo, type: number) {
       <ElScrollbar max-height="450px">
         <div flex flex-col>
           <div v-for="item in goldBrickCardData.filter(i => i.visiable)" :key="item.quest_id">
-            <RaidCard :raid-info="item" :type="1" @close="handleClose" />
+            <RaidCard :raid-info="item" :type="1" @toggle-visible="toggleVisible" />
           </div>
           <div v-for="item in eternitySandData.filter(i => i.visiable)" :key="item.quest_id">
-            <RaidCard :raid-info="item" :type="2" @close="handleClose" />
+            <RaidCard :raid-info="item" :type="2" @toggle-visible="toggleVisible" />
           </div>
         </div>
       </ElScrollbar>
