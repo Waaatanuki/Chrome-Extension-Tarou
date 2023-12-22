@@ -1,8 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tarou",
-  "version": "1.2.5",
-  "version_name": "1.2.6 beta",
+  "version": "1.2.6",
   "description": "extension for gbf",
   "icons": {
     "16": "./assets/icon-16.png",
