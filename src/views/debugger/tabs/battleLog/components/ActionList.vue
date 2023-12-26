@@ -26,7 +26,7 @@ function getImg(action: Action) {
   if (action.type === 'recovery')
     return 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/normal/s/1.jpg'
   if (action.type === 'attack')
-    return getLocalImg('attackBtn')
+    return 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/normal_attack.png'
 }
 
 function getNpcImg(action: Action) {

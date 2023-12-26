@@ -3,11 +3,11 @@ import type { BuffInfo } from 'battleLog'
 import type { BossConditionJson, Buff } from 'requestData'
 import { specBossBuff, specPlayerBuff } from '~/logic'
 
-const props = defineProps<{ buffInfo: BuffInfo; bossConditionJson: BossConditionJson; turn: number }>()
+const props = defineProps<{ buffInfo: BuffInfo, bossConditionJson: BossConditionJson, turn: number }>()
 
 const importantBossBuffs = ref<Buff[]>([])
 const importantPlayerBuffs = ref<Buff[]>([])
-const bossTimeBuff = ref<{ status: string; remain: number; visiable: boolean }[]>([])
+const bossTimeBuff = ref<{ status: string, remain: number, visible: boolean }[]>([])
 
 watch(() => props.bossConditionJson, (data) => {
   if (!data)
@@ -17,7 +17,7 @@ watch(() => props.bossConditionJson, (data) => {
   bossTimeBuff.value = timeCondition.map(condition => ({
     status: condition.status,
     remain: Date.now() + 1000 * timeToSeconds(String(condition.remain)),
-    visiable: true,
+    visible: true,
   }))
 })
 
@@ -77,12 +77,12 @@ function timeToSeconds(timeString: string) {
     <div v-if="importantBossBuffs.length === 0 && importantPlayerBuffs.length === 0" m-8px border-t-1 border-slate-500 />
     <div v-else my-8px border-2 border-slate-500>
       <div flex flex-wrap items-start justify-center>
-        <div v-for="buff in bossTimeBuff.filter(item => item.visiable && specBossBuff.some(b => item.status.startsWith(b)))" :key="buff.status" w-60px fc flex-col p-2px>
+        <div v-for="buff in bossTimeBuff.filter(item => item.visible && specBossBuff.some(b => item.status.startsWith(b)))" :key="buff.status" w-60px fc flex-col p-2px>
           <img w-full cursor-pointer :src="getBuffIcon(buff)" @click="toggleImage(specBossBuff, buff.status.split('_')[0])">
           <ElCountdown
             format="mm:ss"
             :value="buff.remain"
-            @finish="buff.visiable = false"
+            @finish="buff.visible = false"
           />
         </div>
         <div v-for="buff in importantBossBuffs.filter(item => !bossTimeBuff.some(b => item.status === b.status))" :key="buff.status" w-60px fc flex-col p-2px>
