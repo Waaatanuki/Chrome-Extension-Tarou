@@ -64,7 +64,7 @@ function handleOpen() {
             :value="(row.fullElixirDiff >= 0 ? '+' : '') + row.fullElixirDiff"
             :type="row.fullElixirDiff >= 0 ? 'success' : 'danger'"
           >
-            <div w-15>
+            <div w-70px>
               {{ row.fullElixir }}
             </div>
           </ElBadge>
@@ -76,7 +76,7 @@ function handleOpen() {
             :value="(row.halfElixirDiff >= 0 ? '+' : '') + row.halfElixirDiff"
             :type="row.halfElixirDiff >= 0 ? 'success' : 'danger'"
           >
-            <div w-15>
+            <div w-70px>
               {{ row.halfElixir }}
             </div>
           </ElBadge>
@@ -88,7 +88,7 @@ function handleOpen() {
             :value="(row.soulBalmDiff >= 0 ? '+' : '') + row.soulBalmDiff"
             :type="row.soulBalmDiff >= 0 ? 'success' : 'danger'"
           >
-            <div w-15>
+            <div w-70px>
               {{ row.soulBalm }}
             </div>
           </ElBadge>
@@ -100,7 +100,7 @@ function handleOpen() {
             :value="(row.soulBerryDiff >= 0 ? '+' : '') + row.soulBerryDiff"
             :type="row.soulBerryDiff >= 0 ? 'success' : 'danger'"
           >
-            <div w-15>
+            <div w-70px>
               {{ row.soulBerry }}
             </div>
           </ElBadge>
