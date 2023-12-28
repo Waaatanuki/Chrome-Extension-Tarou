@@ -526,8 +526,8 @@ function handleStartAttackRusult(data: BattleStartJson) {
   }
 
   if (summonInfo.value) {
-    status.summon.recast.forEach((value, idx) => {
-      summonInfo.value!.summon[idx].recast = value
+    status.summon.forEach((summon, idx) => {
+      summonInfo.value!.summon[idx].recast = summon.recast
     })
     summonInfo.value.supporter.recast = status.supporter.recast
   }
@@ -563,8 +563,8 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   }
 
   if (summonInfo.value) {
-    status?.summon.recast.forEach((value, idx) => {
-      summonInfo.value!.summon[idx].recast = value
+    status?.summon.forEach((summon, idx) => {
+      summonInfo.value!.summon[idx].recast = summon.recast
     })
     summonInfo.value.supporter.recast = status?.supporter?.recast ?? summonInfo.value.supporter.recast
   }

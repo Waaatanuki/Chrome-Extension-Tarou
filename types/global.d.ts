@@ -408,7 +408,16 @@ declare module 'requestData'{
     ability: Ability
     formation: string[]
     supporter: { recast: null | number | string }
-    summon: { recast: (null | number | string)[] }
+    summon: {
+      skill: string
+      comment: string
+      protection_name: string
+      protection: string
+      recast: string | number
+      is_full_auto_quick_summon: boolean
+      start_recast: string | number
+      require: string | number
+    }[]
     timer: number
     turn: number
     is_guard_status: { is_guard_status: number }[]
