@@ -40,7 +40,7 @@ function getSkillAlias(weapon: WeaponDetail) {
         </ElTag>
       </div>
       <div w-275px fc flex-wrap gap-5px>
-        <div v-for="idx in 12" :key="idx" relative h-48px w-85px fc bg-slate-300>
+        <div v-for="idx in 12" :key="idx" class="party_weapon_wrapper">
           <img v-if="weapons[idx + 1]?.master?.id" w-full :src="getImg('weapon', weapons[idx + 1]?.master?.id)">
           <img v-if="weapons[idx + 1]?.param?.arousal.is_arousal_weapon" class="ico-arousal-type" :src="getArousalType(weapons[idx + 1]?.param?.arousal.form)">
           <ElTag v-if="getSkillAlias (weapons[idx + 1])" type="danger" size="small" class="skill-tag">

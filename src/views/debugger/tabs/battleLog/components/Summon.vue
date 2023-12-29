@@ -11,7 +11,7 @@ function getImg(type: string, id: string, size = 'm') {
 <template>
   <ElCard :body-style="{ padding: '10px' }">
     <div fc gap-5px>
-      <div v-for="idx in 5" :key="idx" relative h-45px w-80px fc bg-slate-300>
+      <div v-for="idx in 5" :key="idx" class="party_weapon_wrapper">
         <img v-if="summonInfo.summon[idx - 1]?.image_id" w-full :src="getImg('summon', summonInfo.summon[idx - 1]?.image_id)">
         <div v-if="summonInfo.summon[idx - 1]?.image_id && Number(summonInfo.summon[idx - 1]?.recast) !== 0" absolute h-full w-full fc>
           <div absolute h-full w-full bg-slate-900 opacity-50 />
@@ -20,7 +20,7 @@ function getImg(type: string, id: string, size = 'm') {
           </div>
         </div>
       </div>
-      <div v-if="summonInfo.supporter?.id" relative h-45px w-80px fc bg-slate-300>
+      <div v-if="summonInfo.supporter?.id" class="party_weapon_wrapper">
         <img w-full :src="getImg('summon', summonInfo.supporter.image_id)">
         <div v-if=" Number(summonInfo.supporter.recast) !== 0" absolute h-full w-full fc>
           <div absolute h-full w-full bg-slate-900 opacity-50 />

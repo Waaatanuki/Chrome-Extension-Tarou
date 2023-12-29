@@ -15,20 +15,20 @@ function getImg(type: string, id: string, size = 'm') {
 
 <template>
   <div h-210px fc>
-    <div relative h-full w-100px bg-slate-300>
+    <div relative h-full w-100px>
       <img w-full :src="getImg('summon', summons[1].param.image_id, 'ls')">
       <div v-if="quickSummoniId === summons[1].param.id" class="ico-summon-quick" absolute left-1 top-1 />
     </div>
     <div w-250px fc flex-wrap gap-5px>
-      <div v-for="idx in 4" :key="idx" relative h-65px w-115px fc bg-slate-300>
+      <div v-for="idx in 4" :key="idx" class="party_summon_wrapper">
         <img v-if="summons[idx + 1]?.param?.image_id" w-full :src="getImg('summon', summons[idx + 1]?.param?.image_id)">
         <div v-if="quickSummoniId === summons[idx + 1]?.param?.id" class="ico-summon-quick" absolute left-1 top-1 />
       </div>
-      <div v-for="idx in 2" :key="idx" h-65px w-115px fc bg-slate-300>
+      <div v-for="idx in 2" :key="idx" class="party_summon_wrapper">
         <img v-if="subSummons[idx ]?.param?.image_id" w-full :src="getImg('summon', subSummons[idx ]?.param?.image_id)">
       </div>
     </div>
-    <div v-if="calculateSetting?.setting.image_id" h-full w-100px bg-slate-300>
+    <div v-if="calculateSetting?.setting.image_id" h-full w-100px>
       <img h-full w-full :src="getImg('summon', calculateSetting.setting.image_id, 'ls')">
     </div>
   </div>

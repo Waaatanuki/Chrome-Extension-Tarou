@@ -8,3 +8,25 @@ body,
 body {
   font-family: 'LXGW WenKai Screen', sans-serif;
 }
+
+.party_weapon_wrapper{
+  background: url("../assets/image/common/base_empty.png") ;
+  background-size: 85px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 85px;
+  height: 48px;
+  position: relative;
+}
+
+.party_summon_wrapper{
+  background: url("../assets/image/common/base_empty.png") ;
+  background-size: 115px 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 115px;
+  height: 65px;
+  position: relative;
+}
