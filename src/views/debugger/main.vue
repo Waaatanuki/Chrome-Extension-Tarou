@@ -92,10 +92,17 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
             service_start: RawData.ceiling.start,
             service_end: RawData.ceiling.end,
             count: 0,
+            use_count: 0,
             ssrList: [],
           }
           gachaRecord.value.unshift(hit)
         }
+
+        // 避免刷新结果重复计算
+        if (hit.use_count === Number(RawData.ceiling.use_count))
+          return
+        hit.use_count = Number(RawData.ceiling.use_count)
+
         RawData.result.forEach((item) => {
           hit!.count++
           if (item.reward_rare_val === '4') {

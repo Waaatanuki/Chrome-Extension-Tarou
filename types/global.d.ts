@@ -16,6 +16,7 @@ declare module 'myStorage' {
     service_start: string
     service_end: string
     count: number
+    use_count: number
     ssrList: {
       id: string
       type: string
@@ -210,6 +211,7 @@ declare module 'requestData'{
     ceiling: {
       start: string
       end: string
+      use_count: string
     }
   }
 
