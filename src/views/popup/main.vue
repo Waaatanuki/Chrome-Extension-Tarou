@@ -37,10 +37,10 @@ async function openDashboard() {
       tabId.value = tab.id
       windowId.value = windowInfo.id
 
-      const result = await chrome.debugger.getTargets()
-      const hit = result.find(item => item.tabId === tabId.value)
-      if (hit?.attached)
-        await chrome.debugger.detach({ tabId: tabId.value })
+      // const result = await chrome.debugger.getTargets()
+      // const hit = result.find(item => item.tabId === tabId.value)
+      // if (hit?.attached)
+      //   await chrome.debugger.detach({ tabId: tabId.value })
 
       await chrome.debugger.attach({ tabId: tabId.value }, '1.2')
       await chrome.debugger.sendCommand({ tabId: tabId.value }, 'Network.enable')
