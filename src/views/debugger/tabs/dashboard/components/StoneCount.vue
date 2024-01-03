@@ -18,8 +18,8 @@ function reset() {
           {{ `攒井第${dayjs().diff(dayjs.unix(saveStoneDate), "day")}天` }}
         </span>
         <div fc gap-10px text-lg>
-          <div i-carbon:document icon-btn title="查看抽卡记录" @click="recordVisiable = true" />
-          <div i-carbon:reset icon-btn title="重置天数" @click="reset" />
+          <div i-carbon:document icon-btn title="View Roll History" @click="recordVisiable = true" />
+          <div i-carbon:reset icon-btn title="Days Since Reset" @click="reset" />
         </div>
       </div>
     </template>
@@ -27,24 +27,24 @@ function reset() {
       <div w-80px fc flex-col>
         <img :src="getLocalImg('20010', 'ticket')">
         <span text-center text-sm>
-          {{ `${legendticket10}枚` }}
+          {{ `${legendticket10}x` }}
         </span>
       </div>
       <div w-80px fc flex-col>
         <img :src="getLocalImg('20011', 'ticket')">
         <span text-center text-sm>
-          {{ `${legendticket}枚` }}
+          {{ `${legendticket}x` }}
         </span>
       </div>
       <div w-80px fc flex-col>
         <img :src="getLocalImg('gem')">
         <span text-center text-sm>
-          {{ `${stone}個` }}
+          {{ `${stone}x` }}
         </span>
       </div>
       <div w-80px fc flex-col text-center text-base font-bold text-orange-600>
         <div v-if="totalStone >= 90000">
-          {{ `${Math.floor(totalStone / 90000)}井` }}
+          {{ `${Math.floor(totalStone / 90000)} Sparks` }}
         </div>
         <div v-if="Math.floor((totalStone % 90000) / 300) !== 0">
           {{ `${Math.floor((totalStone % 90000) / 300)}抽` }}

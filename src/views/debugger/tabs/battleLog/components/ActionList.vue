@@ -45,7 +45,7 @@ function getNpcImg(action: Action) {
         >
           <div relative w-200px fc shrink-0 flex-col gap-10px p-10px class="bg-#f5f7fa dark:bg-#262727">
             <div text-base font-bold>
-              {{ `第${list.turn}回合` }}
+              {{ `Turn ${list.turn}` }}
             </div>
             <div fc gap-2px>
               <ElCheckTag v-for="index in 4" :key="index" label="G" :checked="!!list.guard_status[index - 1]?.is_guard_status">
