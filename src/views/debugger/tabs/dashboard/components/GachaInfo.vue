@@ -21,18 +21,18 @@ const summary = computed(() =>
       <div>
         <ElCheckboxGroup v-model="resultFilter.type">
           <ElCheckboxButton label="weapon">
-            武器
+            Weapon
           </ElCheckboxButton>
           <ElCheckboxButton label="summon">
-            召唤
+            Summon
           </ElCheckboxButton>
         </ElCheckboxGroup>
       </div>
       <ElTag v-if="summary.count" effect="dark" size="large" round>
-        {{ `总抽数: ${summary.count}(${summary.ssrNum}) SSR率: ${(summary.ssrNum / summary.count * 100).toFixed(1)}%` }}
+        {{ `Total Draws: ${summary.count}(${summary.ssrNum}) SSR Rate: ${(summary.ssrNum / summary.count * 100).toFixed(1)}%` }}
       </ElTag>
       <ElTag v-else type="info" effect="dark" size="large" round>
-        当前没有抽卡信息
+        No draw info
       </ElTag>
     </div>
     <ElScrollbar :max-height="height - 300">
@@ -45,7 +45,7 @@ const summary = computed(() =>
               </div>
               <div flex flex-col items-end justify-center gap-10px>
                 <div>{{ `${data.service_start} - ${data.service_end}` }}</div>
-                <div>{{ `已抽: ${data.count}(${data.ssrList.length}) SSR率: ${(data.ssrList.length / data.count * 100).toFixed(1)}%` }}</div>
+                <div>{{ `Rolled: ${data.count}(${data.ssrList.length}) SSR Rate: ${(data.ssrList.length / data.count * 100).toFixed(1)}%` }}</div>
               </div>
             </div>
           </template>
@@ -61,7 +61,7 @@ const summary = computed(() =>
             </div>
             <div w-full fc>
               <ElTag v-if="data.ssrList.length === 0" type="info" effect="dark" round>
-                未抽到SSR
+                No SSR
               </ElTag>
             </div>
           </div>

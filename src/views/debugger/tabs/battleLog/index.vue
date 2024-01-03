@@ -173,17 +173,17 @@ function recordRaidInfo(data: BattleStartJson) {
         use_ability_count: 0,
         use_special_skill_count: 0,
         damage: {
-          total: { comment: '总计', value: 0 },
-          attack: { comment: '通常攻击&反击', value: 0 },
-          ability: { comment: '技能伤害', value: 0 },
-          special: { comment: '奥义伤害', value: 0 },
-          other: { comment: '其他', value: 0 },
+          total: { comment: 'Total', value: 0 },
+          attack: { comment: 'Normal ATK', value: 0 },
+          ability: { comment: 'Skill DMG', value: 0 },
+          special: { comment: 'CA DMG', value: 0 },
+          other: { comment: 'Other', value: 0 },
         },
         damageTaken: {
-          total: { comment: '总计', value: 0 },
-          attack: { comment: '通常攻击&反击', value: 0 },
-          super: { comment: '特动', value: 0 },
-          other: { comment: '其他', value: 0 },
+          total: { comment: 'Total', value: 0 },
+          attack: { comment: 'Autos', value: 0 },
+          super: { comment: 'Special ATK', value: 0 },
+          other: { comment: 'Other', value: 0 },
         },
       })
       return pre

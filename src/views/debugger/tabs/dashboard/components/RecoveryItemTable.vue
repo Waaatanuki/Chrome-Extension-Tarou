@@ -40,25 +40,25 @@ function handleOpen() {
     <template #header>
       <div flex justify-between>
         <div text-xl>
-          回复道具记录
+          Record Selection
         </div>
         <div>
           <ElButton type="danger" link @click="reset">
-            重置
+            Reset
           </ElButton>
           <ElButton type="primary" link @click="handleCopy">
-            复制
+            Duplicate
           </ElButton>
         </div>
       </div>
     </template>
     <ElTable :data="recoveryItemList" cell-class-name="cell-class-name">
-      <ElTableColumn prop="timeStamp" label="日期" align="center">
+      <ElTableColumn prop="timeStamp" label="Date" align="center">
         <template #default="{ row }">
           {{ dayjs(row.timeStamp).format("YYYY-MM-DD") }}
         </template>
       </ElTableColumn>
-      <ElTableColumn label="大红" align="center">
+      <ElTableColumn label="Full Elixir" align="center">
         <template #default="{ row }">
           <ElBadge
             :value="(row.fullElixirDiff >= 0 ? '+' : '') + row.fullElixirDiff"
@@ -70,7 +70,7 @@ function handleOpen() {
           </ElBadge>
         </template>
       </ElTableColumn>
-      <ElTableColumn label="半红" align="center">
+      <ElTableColumn label="Half Elixir" align="center">
         <template #default="{ row }">
           <ElBadge
             :value="(row.halfElixirDiff >= 0 ? '+' : '') + row.halfElixirDiff"
@@ -82,7 +82,7 @@ function handleOpen() {
           </ElBadge>
         </template>
       </ElTableColumn>
-      <ElTableColumn label="粉盒" align="center">
+      <ElTableColumn label="Soul Balm" align="center">
         <template #default="{ row }">
           <ElBadge
             :value="(row.soulBalmDiff >= 0 ? '+' : '') + row.soulBalmDiff"
@@ -94,7 +94,7 @@ function handleOpen() {
           </ElBadge>
         </template>
       </ElTableColumn>
-      <ElTableColumn label="豆子" align="center">
+      <ElTableColumn label="Soul Berry" align="center">
         <template #default="{ row }">
           <ElBadge
             :value="(row.soulBerryDiff >= 0 ? '+' : '') + row.soulBerryDiff"
