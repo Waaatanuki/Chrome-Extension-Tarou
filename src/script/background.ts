@@ -44,8 +44,8 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       })
     }
 
+    // 记录id与掉落结果
     if (changeInfo.url && resultUrlREG.test(changeInfo.url)) {
-      // 记录id与掉落结果
       const battle_id = changeInfo.url.match(/[0-9]+/g)![0]
       const hitMemo = battleMemo.value.find(memo => memo.battle_id === battle_id)
       if (!hitMemo)
@@ -73,6 +73,51 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       })
     }
   })
+
+  chrome.webRequest.onCompleted.addListener((details) => {
+    if (details.url.includes('/quest/unclaimed_reward')) {
+      chrome.tabs.sendMessage(details.tabId, { todo: 'getUnclaimedList' }).then((res) => {
+        if (!res?.domStr)
+          return
+
+        const $ = load(res.domStr)
+        const unclaimedList: Unclaimed[] = []
+
+        $('.lis-raid').each((i, elem) => {
+          const raidName = $(elem).find('.txt-raid-name')?.text()
+          const finishTime = $(elem).find('.prt-finish-time')?.text()
+
+          unclaimedList.push({
+            battle_id: String($(elem).data().raidId),
+            raidName: raidName.trim(),
+            finishTime: finishTime.trim(),
+          })
+        })
+
+        unclaimedList.forEach((raid) => {
+          const hitMemo = battleMemo.value.find(memo => memo.battle_id === raid.battle_id)
+          if (hitMemo) {
+            console.log('已经记录过该战斗信息')
+            return
+          }
+          console.log('未记录过的战斗信息', raid)
+
+          const hitRaid = targetRaid.find(r => r.quest_name_jp.includes(raid.raidName) || r.quest_name_en.includes(raid.raidName))
+          if (!hitRaid) {
+            console.log('没有匹配到设定副本')
+            return
+          }
+
+          battleMemo.value.push({ battle_id: raid.battle_id, quest_id: hitRaid.quest_id, quest_name: raid.raidName, timestamp: Date.now() })
+        })
+
+        while (battleMemo.value.length > 15)
+          battleMemo.value.shift()
+
+        console.log('memoList===>', battleMemo.value)
+      })
+    }
+  }, { urls: ['*://*.granbluefantasy.jp/*'] })
 
   function showNotifications(treasureList: Treasure[]) {
     const hitTreasure = treasureList.find(treasure => noticeItem.some(item => item.key === treasure.key))
@@ -194,4 +239,10 @@ interface Treasure {
   box: string
   key: string
   count: number
+}
+
+interface Unclaimed {
+  battle_id: string
+  raidName: string
+  finishTime: string
 }

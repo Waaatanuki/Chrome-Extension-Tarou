@@ -41,6 +41,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }, 200)
   }
 
+  if (message.todo === 'getUnclaimedList') {
+    const start = setInterval(() => {
+      if (!document.URL.includes('#quest/assist/unclaimed')) {
+        console.log('未结算战斗检测中断', document.URL)
+        clearInterval(start)
+        sendResponse({})
+      }
+
+      console.log('监测到未结算战斗页面')
+      const targetEl = document.querySelector('#prt-unclaimed-list')
+
+      if (targetEl) {
+        clearInterval(start)
+        sendResponse({ domStr: targetEl.outerHTML })
+      }
+    }, 200)
+  }
+
   if (message.todo === 'importData') {
     console.log('开始导入...')
     const DBOpenRequest = window.indexedDB.open('gbfApp')
