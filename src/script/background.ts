@@ -6,6 +6,10 @@ import { noticeItem } from '~/constants'
 import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
 (() => {
+  chrome.tabs.onUpdated.addListener(() => {
+    console.log('wake up!')
+  })
+
   chrome.webRequest.onBeforeRequest.addListener((details) => {
     // 记录战斗id与副本名称
     if (details.url.includes('/rest/multiraid/start.json')) {
