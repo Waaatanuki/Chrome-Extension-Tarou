@@ -6,30 +6,30 @@ import { noticeItem } from '~/constants'
 import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
 (() => {
-  const raidUrlREG = /granbluefantasy.jp\/#raid_multi\/[0-9]+/
-  const resultUrlREG = /granbluefantasy.jp\/#result_multi\/[0-9]+/
-  let checkFlag = false
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    // 记录id与副本名称
-    if (changeInfo.url && raidUrlREG.test(changeInfo.url) && tab.favIconUrl)
-      checkFlag = false
-
-    if (changeInfo.status === 'loading' && !changeInfo.url && tab.url && raidUrlREG.test(tab.url))
-      checkFlag = true
-
-    if (changeInfo.status === 'complete' && tab.url && raidUrlREG.test(tab.url)) {
-      if (!checkFlag)
+  chrome.webRequest.onBeforeRequest.addListener((details) => {
+    // 记录战斗id与副本名称
+    if (details.url.includes('/rest/multiraid/start.json')) {
+      if (!details.requestBody?.raw) {
+        console.log('details.requestBody==>', details.requestBody)
         return
+      }
+      const arrayBuffer = details.requestBody.raw[0].bytes!
 
-      const battle_id = tab.url.match(/[0-9]+/g)![0]
+      const decoder = new TextDecoder('utf-8')
+      const uint8Array = new Uint8Array(arrayBuffer)
+      const jsonString = decoder.decode(uint8Array)
+      const requestBody: RequestBody = JSON.parse(jsonString)
+
+      const battle_id = String(requestBody.raid_id)
       const hitMemo = battleMemo.value.find(memo => memo.battle_id === battle_id)
       if (hitMemo)
         return
       console.log('gogogo')
-      chrome.tabs.sendMessage(tabId, { todo: 'getRaidName' }).then((res) => {
+
+      chrome.tabs.sendMessage(details.tabId, { todo: 'getRaidName' }).then((res) => {
         if (!res?.questName)
           return
-        console.log('memo===>', { battle_id, quest_name: res.questName, timestamp: Date.now() })
+        console.log('memo==>', { battle_id, quest_name: res.questName, timestamp: Date.now() })
         const hit = targetRaid.find(r => r.tweet_name_en.includes(res.questName) || r.tweet_name_jp.includes(res.questName))
         if (!hit) {
           console.log('没有匹配到设定副本')
@@ -40,17 +40,19 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
         if (battleMemo.value.length > 15)
           battleMemo.value.shift()
-        console.log('memoList===>', battleMemo.value)
+        console.log('memoList==>', battleMemo.value)
       })
     }
+  }, { urls: ['*://*.granbluefantasy.jp/*'] }, ['requestBody'])
 
-    // 记录id与掉落结果
-    if (changeInfo.url && resultUrlREG.test(changeInfo.url)) {
-      const battle_id = changeInfo.url.match(/[0-9]+/g)![0]
+  chrome.webRequest.onCompleted.addListener((details) => {
+    // 记录掉落结果
+    if (details.url.includes('/resultmulti/content/index')) {
+      const battle_id = details.url.match(/\d+/g)![0]
       const hitMemo = battleMemo.value.find(memo => memo.battle_id === battle_id)
       if (!hitMemo)
         return
-      chrome.tabs.sendMessage(tabId, { todo: 'getBattleResult' }).then((res) => {
+      chrome.tabs.sendMessage(details.tabId, { todo: 'getBattleResult' }).then((res) => {
         if (!res?.domStr)
           return
 
@@ -72,9 +74,8 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         battleMemo.value = battleMemo.value.filter(memo => memo.battle_id !== battle_id)
       })
     }
-  })
 
-  chrome.webRequest.onCompleted.addListener((details) => {
+    // 记录未结算战斗信息
     if (details.url.includes('/quest/unclaimed_reward')) {
       chrome.tabs.sendMessage(details.tabId, { todo: 'getUnclaimedList' }).then((res) => {
         if (!res?.domStr)
@@ -114,7 +115,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         while (battleMemo.value.length > 15)
           battleMemo.value.shift()
 
-        console.log('memoList===>', battleMemo.value)
+        console.log('memoList==>', battleMemo.value)
       })
     }
   }, { urls: ['*://*.granbluefantasy.jp/*'] })
@@ -245,4 +246,12 @@ interface Unclaimed {
   battle_id: string
   raidName: string
   finishTime: string
+}
+
+interface RequestBody {
+  special_token: any
+  raid_id: string
+  action: string
+  is_multi: boolean
+  time: number
 }
