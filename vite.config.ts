@@ -25,11 +25,7 @@ function getEntry() {
 
 export default defineConfig({
   plugins: [
-    vue({
-      script: {
-        defineModel: true,
-      },
-    }),
+    vue(),
     AutoImport({
       imports: ['vue', '@vueuse/core'],
       dirs: [r('src/composables')],
