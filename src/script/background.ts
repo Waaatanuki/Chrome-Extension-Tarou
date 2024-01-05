@@ -6,6 +6,9 @@ import { noticeItem } from '~/constants'
 import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
 (() => {
+  // 重载清除
+  const MaxMemoLength = 100
+
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
   })
@@ -42,7 +45,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
         battleMemo.value.push({ battle_id, quest_id: hit.quest_id, quest_name: res.questName, timestamp: Date.now() })
 
-        if (battleMemo.value.length > 15)
+        if (battleMemo.value.length > MaxMemoLength)
           battleMemo.value.shift()
         console.log('memoList==>', battleMemo.value)
       })
@@ -60,22 +63,46 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         if (!res?.domStr)
           return
 
-        const $ = load(res.domStr)
-        const treasureList: Treasure[] = []
+        const treasureList: Treasure[] = getTreasureList(res.domStr)
 
-        $('.btn-treasure-item').each((i, elem) => {
-          const count = $(elem).find('.prt-article-count')?.text().split('x')[1]
-          treasureList.push({
-            box: String($(elem).data().box),
-            key: $(elem).data().key as string,
-            count: count ? Number(count) : 1,
-          })
-        })
         showNotifications(treasureList)
         checkGoldBrick(treasureList, hitMemo)
         checkEternitySand(treasureList, hitMemo)
 
         battleMemo.value = battleMemo.value.filter(memo => memo.battle_id !== battle_id)
+      })
+    }
+
+    // 记录历史记录里的掉落结果
+    if (details.url.includes('/resultmulti/content/detail')) {
+      const battle_id = details.url.match(/\d+/g)![0]
+
+      const hitData = goldBrickData.value.find(data => data.battleId === battle_id)
+      if (hitData) {
+        console.log('该战斗数据已经记录')
+        return
+      }
+
+      chrome.tabs.sendMessage(details.tabId, { todo: 'getBattleHistoryResult' }).then((res) => {
+        if (!res?.domStr)
+          return
+
+        const $ = load(res.domStr)
+        const raidName = $('.txt-enemy-name').text().trim()
+        const hitRaid = Raid_GoldBrick.find(r => r.quest_name_jp.includes(raidName) || r.quest_name_en.includes(raidName))
+        if (!hitRaid) {
+          console.log('没有匹配到设定副本')
+          return
+        }
+        const treasureList: Treasure[] = getTreasureList(res.domStr)
+        const memo = {
+          battle_id,
+          quest_id: hitRaid.quest_id,
+          quest_name: raidName,
+          timestamp: Date.now(),
+        }
+        showNotifications(treasureList)
+        checkGoldBrick(treasureList, memo)
       })
     }
 
@@ -85,19 +112,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         if (!res?.domStr)
           return
 
-        const $ = load(res.domStr)
-        const unclaimedList: Unclaimed[] = []
-
-        $('.lis-raid').each((i, elem) => {
-          const raidName = $(elem).find('.txt-raid-name')?.text()
-          const finishTime = $(elem).find('.prt-finish-time')?.text()
-
-          unclaimedList.push({
-            battle_id: String($(elem).data().raidId),
-            raidName: raidName.trim(),
-            finishTime: finishTime.trim(),
-          })
-        })
+        const unclaimedList = getBattleList(res.domStr)
 
         unclaimedList.forEach((raid) => {
           const hitMemo = battleMemo.value.find(memo => memo.battle_id === raid.battle_id)
@@ -116,13 +131,45 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
           battleMemo.value.push({ battle_id: raid.battle_id, quest_id: hitRaid.quest_id, quest_name: raid.raidName, timestamp: Date.now() })
         })
 
-        while (battleMemo.value.length > 15)
+        while (battleMemo.value.length > MaxMemoLength)
           battleMemo.value.shift()
 
         console.log('memoList==>', battleMemo.value)
       })
     }
   }, { urls: ['*://*.granbluefantasy.jp/*'] })
+
+  function getBattleList(domStr: string) {
+    const $ = load(domStr)
+    const res: BattleInfo[] = []
+
+    $('.lis-raid').each((i, elem) => {
+      const raidName = $(elem).find('.txt-raid-name')?.text()
+      const finishTime = $(elem).find('.prt-finish-time')?.text()
+
+      res.push({
+        battle_id: String($(elem).data().raidId),
+        raidName: raidName.trim(),
+        finishTime: finishTime.trim(),
+      })
+    })
+    return res
+  }
+
+  function getTreasureList(domStr: string) {
+    const $ = load(domStr)
+    const res: Treasure[] = []
+
+    $('.btn-treasure-item').each((i, elem) => {
+      const count = $(elem).find('.prt-article-count')?.text().split('x')[1]
+      res.push({
+        box: String($(elem).data().box),
+        key: $(elem).data().key as string,
+        count: count ? Number(count) : 1,
+      })
+    })
+    return res
+  }
 
   function showNotifications(treasureList: Treasure[]) {
     const hitTreasure = treasureList.find(treasure => noticeItem.some(item => item.key === treasure.key))
@@ -246,7 +293,7 @@ interface Treasure {
   count: number
 }
 
-interface Unclaimed {
+interface BattleInfo {
   battle_id: string
   raidName: string
   finishTime: string
