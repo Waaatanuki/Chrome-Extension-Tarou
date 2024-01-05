@@ -7,7 +7,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
 (() => {
   // 重载清除
-  const MaxMemoLength = 100
+  const MaxMemoLength = 20
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -277,6 +277,13 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
   chrome.runtime.onInstalled.addListener(() => {
     setBadge()
+
+    // 删除两周前的memo
+    const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+    battleMemo.value = battleMemo.value.filter((meno) => {
+      const itemTimestamp = new Date(meno.timestamp)
+      return itemTimestamp > twoWeeksAgo
+    })
   })
 
   chrome.storage.onChanged.addListener((changes) => {
