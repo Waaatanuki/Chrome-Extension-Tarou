@@ -89,6 +89,8 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
         const $ = load(res.domStr)
         const raidName = $('.txt-enemy-name').text().trim()
+        const finishTime = $('.txt-defeat-value').first().text()
+
         const hitRaid = Raid_GoldBrick.find(r => r.quest_name_jp.includes(raidName) || r.quest_name_en.includes(raidName))
         if (!hitRaid) {
           console.log('没有匹配到设定副本')
@@ -99,7 +101,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
           battle_id,
           quest_id: hitRaid.quest_id,
           quest_name: raidName,
-          timestamp: Date.now(),
+          timestamp: getTimestamp(finishTime),
         }
         showNotifications(treasureList)
         checkGoldBrick(treasureList, memo)
@@ -128,7 +130,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
             return
           }
 
-          battleMemo.value.push({ battle_id: raid.battle_id, quest_id: hitRaid.quest_id, quest_name: raid.raidName, timestamp: Date.now() })
+          battleMemo.value.push({ battle_id: raid.battle_id, quest_id: hitRaid.quest_id, quest_name: raid.raidName, timestamp: raid.timestamp })
         })
 
         while (battleMemo.value.length > MaxMemoLength)
@@ -150,7 +152,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       res.push({
         battle_id: String($(elem).data().raidId),
         raidName: raidName.trim(),
-        finishTime: finishTime.trim(),
+        timestamp: getTimestamp(finishTime),
       })
     })
     return res
@@ -169,6 +171,15 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       })
     })
     return res
+  }
+
+  function getTimestamp(finishTime: string) {
+    // finishTime格式MM/DD HH:mm
+    const currentYear = new Date().getFullYear()
+    const date = new Date(`${currentYear}/${finishTime}`)
+    if (date.valueOf() > new Date().valueOf())
+      date.setFullYear(currentYear - 1)
+    return date.valueOf()
   }
 
   function showNotifications(treasureList: Treasure[]) {
@@ -232,7 +243,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       goldBrickTableData.value.push(hitRaid)
     }
 
-    const data: GoldBrickData = { raidName: raid.raidName, battleId: hitMemo.battle_id, timestamp: Date.now() }
+    const data: GoldBrickData = { raidName: raid.raidName, battleId: hitMemo.battle_id, timestamp: hitMemo.timestamp }
 
     hitRaid.total!++
     treasureList.forEach((treasure) => {
@@ -296,7 +307,7 @@ interface Treasure {
 interface BattleInfo {
   battle_id: string
   raidName: string
-  finishTime: string
+  timestamp: number
 }
 
 interface RequestBody {
