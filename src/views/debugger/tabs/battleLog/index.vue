@@ -411,6 +411,10 @@ function handleActionQueue(type: string, data: AttackResultJson) {
     if (dieIndex === 0)
       return
   }
+
+  if (!data.status)
+    return
+
   const currentTurn = data.status.turn
   currentRaid.turn = currentTurn
 
