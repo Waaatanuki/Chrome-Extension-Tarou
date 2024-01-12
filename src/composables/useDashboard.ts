@@ -5,12 +5,10 @@ export default function useDashboard() {
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
     if (tab?.url?.includes('game.granbluefantasy.jp')) {
       try {
-        console.log('try', windowId.value)
-
         await chrome.windows.get(windowId.value)
 
         chrome.notifications.create({
-          iconUrl: `/assets/icon-48.png`,
+          iconUrl: '/assets/icon-48.png',
           message: '已开启详细面板',
           type: 'basic',
           title: '通知',
@@ -27,7 +25,7 @@ export default function useDashboard() {
     }
     else {
       chrome.notifications.create({
-        iconUrl: `/assets/icon-48.png`,
+        iconUrl: '/assets/icon-48.png',
         message: '请先进入游戏页面',
         type: 'basic',
         title: '通知',

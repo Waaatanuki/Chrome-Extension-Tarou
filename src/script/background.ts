@@ -8,7 +8,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 (() => {
   // 重载清除
   const MaxMemoLength = 20
-  const { registerContextMenu } = useContextMenu()
+  const { registerContextMenu, addMenuClickListener } = useContextMenu()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -280,6 +280,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     setBadge()
     registerContextMenu()
   })
+  addMenuClickListener()
 
   chrome.storage.onChanged.addListener((changes) => {
     if (changes.goldBrickData) {

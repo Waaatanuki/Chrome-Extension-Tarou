@@ -3,7 +3,9 @@ export default function useContextMenu() {
 
   function registerContextMenu() {
     chrome.contextMenus.create({ id: 'openDetail', title: '开启详细面板', contexts: ['all'] })
+  }
 
+  function addMenuClickListener() {
     chrome.contextMenus.onClicked.addListener((info) => {
       switch (info.menuItemId) {
         case 'openDetail':
@@ -13,5 +15,5 @@ export default function useContextMenu() {
     })
   }
 
-  return { registerContextMenu }
+  return { registerContextMenu, addMenuClickListener }
 }
