@@ -7,7 +7,7 @@ import { defaultEvokerInfo } from '~/constants/evoker'
 
 // Debugger
 export const tabId = useStorageLocal('tabId', 0)
-export const windowId = useStorageLocal('tabId', 0)
+export const windowId = useStorageLocal('windowId', 0)
 export const windowSize = useStorageLocal('windowSize', { left: 300, top: 0, width: 800, height: 600 })
 
 // Dashboard
