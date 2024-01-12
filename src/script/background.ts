@@ -8,7 +8,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 (() => {
   // 重载清除
   const MaxMemoLength = 20
-  const { openDashboard } = useDashboard()
+  const { registerContextMenu } = useContextMenu()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -276,22 +276,9 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     })
   }
 
-  // 注册右键菜单
-  function registerMenu() {
-    chrome.contextMenus.create({ id: 'openDetail', title: '开启详细面板', contexts: ['all'] })
-  }
-
-  chrome.contextMenus.onClicked.addListener((info) => {
-    switch (info.menuItemId) {
-      case 'openDetail':
-        openDashboard()
-        break
-    }
-  })
-
   chrome.runtime.onInstalled.addListener(() => {
     setBadge()
-    registerMenu()
+    registerContextMenu()
   })
 
   chrome.storage.onChanged.addListener((changes) => {
