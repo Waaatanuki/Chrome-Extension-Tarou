@@ -8,6 +8,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 (() => {
   // 重载清除
   const MaxMemoLength = 20
+  const { openDashboard } = useDashboard()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -275,15 +276,22 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     })
   }
 
+  // 注册右键菜单
+  function registerMenu() {
+    chrome.contextMenus.create({ id: 'openDetail', title: '开启详细面板', contexts: ['all'] })
+  }
+
+  chrome.contextMenus.onClicked.addListener((info) => {
+    switch (info.menuItemId) {
+      case 'openDetail':
+        openDashboard()
+        break
+    }
+  })
+
   chrome.runtime.onInstalled.addListener(() => {
     setBadge()
-
-    // 删除两周前的memo
-    const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-    battleMemo.value = battleMemo.value.filter((meno) => {
-      const itemTimestamp = new Date(meno.timestamp)
-      return itemTimestamp > twoWeeksAgo
-    })
+    registerMenu()
   })
 
   chrome.storage.onChanged.addListener((changes) => {

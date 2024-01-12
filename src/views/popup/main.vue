@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { RaidInfo } from 'myStorage'
-import { eternitySandData, goldBrickData, goldBrickTableData, tabId, windowId, windowSize } from '~/logic/storage'
+import { eternitySandData, goldBrickData, goldBrickTableData, windowSize } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
 
 const goldBrickCardData = computed<RaidInfo[]>(() =>
@@ -25,31 +25,7 @@ const goldBrickCardData = computed<RaidInfo[]>(() =>
   })),
 )
 
-async function openDashboard() {
-  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
-  if (tab && tab.url?.includes('game.granbluefantasy.jp')) {
-    try {
-      await chrome.windows.get(windowId.value)
-      ElMessage.warning('已开启详细面板')
-    }
-    catch (error) {
-      const windowInfo = await chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...windowSize.value })
-      tabId.value = tab.id
-      windowId.value = windowInfo.id
-
-      // const result = await chrome.debugger.getTargets()
-      // const hit = result.find(item => item.tabId === tabId.value)
-      // if (hit?.attached)
-      //   await chrome.debugger.detach({ tabId: tabId.value })
-
-      await chrome.debugger.attach({ tabId: tabId.value }, '1.2')
-      await chrome.debugger.sendCommand({ tabId: tabId.value }, 'Network.enable')
-    }
-  }
-  else {
-    ElMessage.warning('请先进入游戏页面')
-  }
-}
+const { openDashboard } = useDashboard()
 
 function handleReset(command: string) {
   switch (command) {
