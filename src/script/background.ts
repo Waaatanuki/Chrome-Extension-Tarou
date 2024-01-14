@@ -92,7 +92,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         const raidName = $('.txt-enemy-name').text().trim()
         const finishTime = $('.txt-defeat-value').first().text()
 
-        const hitRaid = Raid_GoldBrick.find(r => r.quest_name_jp.includes(raidName) || r.quest_name_en.includes(raidName))
+        const hitRaid = Raid_GoldBrick.find(r => r.quest_name_jp === raidName || r.quest_name_en === raidName)
         if (!hitRaid) {
           console.log('没有匹配到设定副本')
           return
@@ -125,7 +125,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
           }
           console.log('未记录过的战斗信息', raid)
 
-          const hitRaid = targetRaid.find(r => r.quest_name_jp.includes(raid.raidName) || r.quest_name_en.includes(raid.raidName))
+          const hitRaid = targetRaid.find(r => r.quest_name_jp === raid.raidName || r.quest_name_en === raid.raidName)
           if (!hitRaid) {
             console.log('没有匹配到设定副本')
             return
