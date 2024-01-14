@@ -180,7 +180,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     const date = new Date(`${currentYear}/${finishTime}`)
     if (date.valueOf() > new Date().valueOf())
       date.setFullYear(currentYear - 1)
-    return date.valueOf()
+    return date.valueOf() || Date.now()
   }
 
   function showNotifications(treasureList: Treasure[]) {
