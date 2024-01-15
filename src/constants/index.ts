@@ -11,8 +11,8 @@ export const defaultTodoList = [
 ]
 
 export const noticeItem = [
-  { kind: '10', id: '215', type: 'item/article', comment: '沙漏' },
-  { kind: '17', id: '20004', type: 'item/evolution', comment: 'ffj' },
+  { key: '10_215', comment: '沙漏' },
+  { key: '17_20004', comment: 'ffj' },
 ]
 
 export const defaultEternitySandData = Raid_EternitySand.reduce<RaidInfo[]>((pre, cur) => {

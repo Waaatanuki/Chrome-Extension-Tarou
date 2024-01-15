@@ -184,7 +184,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
   }
 
   function showNotifications(treasureList: Treasure[]) {
-    const hitTreasure = noticeItem.find(item => treasureList.some(treasure => `${item.kind}_${item.id}` === treasure.key))
+    const hitTreasure = treasureList.find(treasure => noticeItem.some(item => item.key === treasure.key))
     const length = Math.floor(Math.random() * 10) + 1
 
     let str = ''
@@ -193,7 +193,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
     if (hitTreasure) {
       chrome.notifications.create({
-        iconUrl: `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/${hitTreasure.type}/s/${hitTreasure.id}.jpg`,
+        iconUrl: `/assets/${hitTreasure.key}.png`,
         message: ` G${str}t☆Daze!`,
         type: 'basic',
         title: '通知',
