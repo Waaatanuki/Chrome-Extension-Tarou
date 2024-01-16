@@ -36,6 +36,7 @@
     "@vueuse/core": "^10.7.1",
     "archiver": "^6.0.1",
     "cheerio": "^1.0.0-rc.12",
+    "copy-text-to-clipboard": "^3.2.0",
     "dayjs": "^1.11.10",
     "element-plus": "^2.4.4",
     "eslint": "^8.56.0",

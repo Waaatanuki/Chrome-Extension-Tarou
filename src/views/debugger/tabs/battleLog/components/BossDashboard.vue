@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { BossInfo } from 'battleLog'
+import copy from 'copy-text-to-clipboard'
 import Memo from './Memo.vue'
 import { battleRecord } from '~/logic'
 
-const props = defineProps<{ bossInfo: BossInfo; raidId?: number }>()
+const props = defineProps<{ bossInfo: BossInfo, raidId?: number }>()
 const remainderSecond = ref<number>(0)
 const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
 const bossImgSrc = computed(() => `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/${props.bossInfo.imgId}.png`)
@@ -18,6 +19,11 @@ const operationSecond = computed(() => {
 
 function handleTimeChange(millisecond: number) {
   remainderSecond.value = Math.round(millisecond / 1000)
+}
+
+function handleCopy(text: string) {
+  if (copy(text))
+    ElMessage.success(`已复制救援码${text}`)
 }
 </script>
 
@@ -53,7 +59,9 @@ function handleTimeChange(millisecond: number) {
       {{ formatTime(operationSecond) }}
     </div>
     <div absolute right-1 top-1 text-base>
-      {{ bossInfo.battleId }}
+      <el-link :underline="false" @click="handleCopy(bossInfo.battleId ?? '')">
+        {{ bossInfo.battleId }}
+      </el-link>
     </div>
     <div absolute bottom-1 left-1>
       <Memo :quest-id="props.bossInfo.questId" :quest-name="props.bossInfo.name" />
