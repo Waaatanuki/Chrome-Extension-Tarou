@@ -34,15 +34,15 @@ function getSkillAlias(weapon: WeaponDetail) {
   <div fc flex-col>
     <div h-210px fc>
       <div relative w-100px>
-        <img w-full :src="getImg('weapon', weapons[1].master.id, 'ls')">
+        <img w-full :src="getImg('weapon', weapons[1].param.image_id, 'ls')">
         <ElTag v-if="getSkillAlias (weapons[1])" type="danger" size="small" class="skill-tag">
           {{ getSkillAlias (weapons[1]) }}
         </ElTag>
       </div>
       <div w-275px fc flex-wrap gap-5px>
         <div v-for="idx in 12" :key="idx" class="party_weapon_wrapper">
-          <img v-if="weapons[idx + 1]?.master?.id" w-full :src="getImg('weapon', weapons[idx + 1]?.master?.id)">
-          <img v-if="weapons[idx + 1]?.param?.arousal.is_arousal_weapon" class="ico-arousal-type" :src="getArousalType(weapons[idx + 1]?.param?.arousal.form)">
+          <img v-if="weapons[idx + 1]?.param?.image_id" w-full :src="getImg('weapon', weapons[idx + 1]?.param?.image_id)">
+          <img v-if="weapons[idx + 1]?.param?.arousal.form" class="ico-arousal-type" :src="getArousalType(weapons[idx + 1]?.param?.arousal.form)">
           <ElTag v-if="getSkillAlias (weapons[idx + 1])" type="danger" size="small" class="skill-tag">
             {{ getSkillAlias (weapons[idx + 1]) }}
           </ElTag>

@@ -599,6 +599,7 @@ declare module 'requestData'{
    }
 
    interface WeaponParam {
+     image_id: string
      arousal: {
        is_arousal_weapon: boolean
        form: number
