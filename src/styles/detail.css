@@ -211,3 +211,48 @@
   left: -4px;
   z-index: 10;
 }
+
+.prt-ultimate-star-on[data-level="210"] {
+  display: block;
+  background: url('https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/evolution_star-s1fa502e63d.png') no-repeat 0 -25px;
+  -webkit-background-size: 22px 417px;
+  background-size: 22px 417px;
+  width: 22px;
+  height: 22px;
+}
+
+.prt-ultimate-star-on[data-level="220"] {
+  display: block;
+  background: url('https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/evolution_star-s1fa502e63d.png') no-repeat 0 -75px;
+  -webkit-background-size: 22px 417px;
+  background-size: 22px 417px;
+  width: 22px;
+  height: 22px;
+}
+
+.prt-ultimate-star-on[data-level="230"] {
+  display: block;
+  background: url('https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/evolution_star-s1fa502e63d.png') no-repeat 0 -100px;
+  -webkit-background-size: 22px 417px;
+  background-size: 22px 417px;
+  width: 22px;
+  height: 22px;
+}
+
+.prt-ultimate-star-on[data-level="240"] {
+  display: block;
+  background: url('https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/evolution_star-s1fa502e63d.png') no-repeat 0 -125px;
+  -webkit-background-size: 22px 417px;
+  background-size: 22px 417px;
+  width: 22px;
+  height: 22px;
+}
+
+.prt-ultimate-star-on[data-level="250"] {
+  display: block;
+  background: url('https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/evolution_star-s1fa502e63d.png') no-repeat 0 0;
+  -webkit-background-size: 22px 417px;
+  background-size: 22px 417px;
+  width: 22px;
+  height: 22px;
+}

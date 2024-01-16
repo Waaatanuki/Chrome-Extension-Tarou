@@ -30,3 +30,9 @@ body {
   height: 65px;
   position: relative;
 }
+
+.prt-ultimate-star-wrapper{
+  position: absolute;
+  top: -1px;
+  left: 0px;
+}
