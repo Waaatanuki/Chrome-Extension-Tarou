@@ -72,19 +72,19 @@ export const weaponSkill = [
     }, {
       id: '14005',
       name: '絶涯のペンデュラム',
-      alias: '絶涯',
+      alias: '极破',
       comment: '通常攻撃の与ダメージUP',
       comment_en: 'Amplify normal attack DMG',
     }, {
       id: '14006',
       name: '窮理のペンデュラム',
-      alias: '窮理',
+      alias: '极技',
       comment: 'アビリティの与ダメージUP',
       comment_en: 'Amplify skill DMG',
     }, {
       id: '14007',
       name: '天髄のペンデュラム',
-      alias: '天髄',
+      alias: '极奥',
       comment: '奥義の与ダメージUP',
       comment_en: 'Amplify chain burst DMG',
     }],
