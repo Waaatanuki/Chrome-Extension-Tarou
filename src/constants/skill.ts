@@ -69,6 +69,24 @@ export const weaponSkill = [
       alias: '虚诈',
       comment: '自属性追撃効果/奥義ゲージ上昇量大幅DOWN',
       comment_en: 'Bonus Elemental DMG effect / Sharp hit to charge bar gain',
+    }, {
+      id: '14005',
+      name: '絶涯のペンデュラム',
+      alias: '絶涯',
+      comment: '通常攻撃の与ダメージUP',
+      comment_en: 'Amplify normal attack DMG',
+    }, {
+      id: '14006',
+      name: '窮理のペンデュラム',
+      alias: '窮理',
+      comment: 'アビリティの与ダメージUP',
+      comment_en: 'Amplify skill DMG',
+    }, {
+      id: '14007',
+      name: '天髄のペンデュラム',
+      alias: '天髄',
+      comment: '奥義の与ダメージUP',
+      comment_en: 'Amplify chain burst DMG',
     }],
   },
   {
