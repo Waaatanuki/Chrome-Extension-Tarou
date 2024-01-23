@@ -177,10 +177,14 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
   function getTimestamp(finishTime: string) {
     // finishTime格式MM/DD HH:mm
     const currentYear = new Date().getFullYear()
-    const date = new Date(`${currentYear}/${finishTime}`)
-    if (date.valueOf() > new Date().valueOf())
-      date.setFullYear(currentYear - 1)
-    return date.valueOf() || Date.now()
+    const date_JP = new Date(`${currentYear}/${finishTime}`)
+    if (!date_JP.valueOf())
+      return Date.now()
+    const date_ZH = new Date(date_JP.getTime() - (1 * 60 * 60 * 1000))
+
+    if (date_ZH.valueOf() > new Date().valueOf())
+      date_ZH.setFullYear(currentYear - 1)
+    return date_ZH.valueOf()
   }
 
   function showNotifications(treasureList: Treasure[]) {
