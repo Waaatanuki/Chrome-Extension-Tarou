@@ -287,6 +287,11 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     setBadge()
     registerContextMenu()
   })
+
+  chrome.runtime.onStartup.addListener(() => {
+    setBadge()
+  })
+
   addMenuClickListener()
 
   chrome.storage.onChanged.addListener((changes) => {
@@ -299,9 +304,6 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
     if (changes.eternitySandData)
       eternitySandData.value = JSON.parse(changes.eternitySandData.newValue)
-
-    if (changes.goldBrickData)
-      goldBrickData.value = JSON.parse(changes.goldBrickData.newValue)
 
     if (changes.goldBrickTableData)
       goldBrickTableData.value = JSON.parse(changes.goldBrickTableData.newValue)

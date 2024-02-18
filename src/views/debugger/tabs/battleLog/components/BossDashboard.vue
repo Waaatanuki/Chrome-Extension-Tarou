@@ -4,7 +4,7 @@ import copy from 'copy-text-to-clipboard'
 import Memo from './Memo.vue'
 import { battleRecord } from '~/logic'
 
-const props = defineProps<{ bossInfo: BossInfo, raidId?: number }>()
+const props = defineProps<{ bossInfo: BossInfo; raidId?: number }>()
 const remainderSecond = ref<number>(0)
 const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
 const bossImgSrc = computed(() => `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/${props.bossInfo.imgId}.png`)
