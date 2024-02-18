@@ -167,7 +167,7 @@ function toggleVisible(raid: RaidInfo, type: number) {
         <div mr-2>
           <el-badge is-dot :type="uid ? 'success' : 'danger'">
             <el-link mr-2>
-              玩家ID: {{ uid || '未监测到' }}
+              玩家ID: {{ uid || '未获取' }}
             </el-link>
           </el-badge>
         </div>
