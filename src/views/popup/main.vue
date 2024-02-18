@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { RaidInfo } from 'myStorage'
-import { eternitySandData, goldBrickData, goldBrickTableData, windowSize } from '~/logic/storage'
+import { eternitySandData, goldBrickData, goldBrickTableData, uid, windowSize } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
 
 const goldBrickCardData = computed<RaidInfo[]>(() =>
@@ -27,7 +27,7 @@ const goldBrickCardData = computed<RaidInfo[]>(() =>
 
 const { openDashboard } = useDashboard()
 
-function handleReset(command: string) {
+function handleCommand(command: string) {
   switch (command) {
     case 'goldBrick':
       goldBrickTableData.value = defaultGoldBrickTableData
@@ -50,6 +50,9 @@ function handleReset(command: string) {
       break
     case 'export':
       exportData()
+      break
+    case 'toggleDark':
+      toggleDark()
       break
     case 'dashboard':
       openDashboard()
@@ -127,7 +130,7 @@ function toggleVisible(raid: RaidInfo, type: number) {
 
       <div flex items-center justify-between>
         <div>
-          <ElDropdown @command="handleReset">
+          <ElDropdown @command="handleCommand">
             <div m-2 flex btn size="small" type="danger">
               操作
             </div>
@@ -151,6 +154,9 @@ function toggleVisible(raid: RaidInfo, type: number) {
                 <ElDropdownItem command="export">
                   导出金本原始数据
                 </ElDropdownItem>
+                <ElDropdownItem command="toggleDark">
+                  切换暗黑模式
+                </ElDropdownItem>
                 <ElDropdownItem command="dashboard">
                   打开详细面板
                 </ElDropdownItem>
@@ -158,10 +164,12 @@ function toggleVisible(raid: RaidInfo, type: number) {
             </template>
           </ElDropdown>
         </div>
-        <div mr-15px flex gap-20px text-lg>
-          <el-tooltip content="切换模式" placement="bottom">
-            <div i-carbon-sun dark:i-carbon-moon icon-btn @click="toggleDark()" />
-          </el-tooltip>
+        <div mr-2>
+          <el-badge is-dot :type="uid ? 'success' : 'danger'">
+            <el-link mr-2>
+              玩家ID: {{ uid || '未监测到' }}
+            </el-link>
+          </el-badge>
         </div>
       </div>
     </div>

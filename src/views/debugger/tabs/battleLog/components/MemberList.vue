@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { MemberInfo } from 'battleLog'
+import { uid } from '~/logic'
 
 const props = defineProps<{
-  userId?: string
   memberInfo?: MemberInfo[]
   mvpInfo?: {
     userId: string
@@ -10,6 +10,7 @@ const props = defineProps<{
     point: number
   }[]
 }>()
+
 function goProfilePage(userId: string) {
   window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
 }
@@ -29,7 +30,7 @@ const data = computed(() =>
     <div flex flex-wrap gap-25px text-base>
       <div
         v-for="member, idx in data" :key="idx"
-        :class="{ myself: member.userId === userId, host: member.is_host }"
+        :class="{ myself: member.userId === uid, host: member.is_host }"
         relative h-65px w-160px flex cursor-pointer select-none items-center rounded-md bg-gray-2 transition-all hover:scale-105 dark:bg-gray-7
         @click="goProfilePage(member.userId)"
       >

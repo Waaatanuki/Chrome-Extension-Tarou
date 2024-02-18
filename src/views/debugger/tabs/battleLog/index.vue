@@ -8,12 +8,11 @@ import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
 import DamageRecord from './components/DamageRecord.vue'
 import ActionList from './components/ActionList.vue'
-import { battleRecord } from '~/logic'
+import { battleRecord, uid } from '~/logic'
 
 const props = defineProps<{
-  userId: string
   battleStartJson: BattleStartJson
-  resultJson: { type: string, result: AttackResultJson }
+  resultJson: { type: string; result: AttackResultJson }
   resultJsonPayload: ResultJsonPayload
   bossConditionJson: BossConditionJson
   inLobby: boolean
@@ -30,7 +29,7 @@ const buffInfo = ref<BuffInfo>({ bossBuffs: [], playerBuffs: [] })
 const memberInfo = ref<MemberInfo[]>()
 const raidId = ref<number>()
 const leaderAttr = ref('')
-const mvpInfo = ref<{ userId: string, rank: number, point: number }[]>()
+const mvpInfo = ref<{ userId: string; rank: number; point: number }[]>()
 
 watch(() => props.battleStartJson, (data) => {
   if (!data || !data.raid_id)
@@ -145,8 +144,8 @@ watch(() => props.wsPayloadData, (data) => {
 
 function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
   if (bossCondition) {
-    const bossBuffs = bossCondition.buff?.filter(item => !item.personal_buff_user_id || item.personal_buff_user_id === props.userId) || []
-    const bossDebuffs = bossCondition.debuff?.filter(item => !item.personal_debuff_user_id || item.personal_debuff_user_id === props.userId) || []
+    const bossBuffs = bossCondition.buff?.filter(item => !item.personal_buff_user_id || item.personal_buff_user_id === uid.value) || []
+    const bossDebuffs = bossCondition.debuff?.filter(item => !item.personal_debuff_user_id || item.personal_debuff_user_id === uid.value) || []
     const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => index === self.findIndex(t => t.status === item.status))
     buffInfo.value.bossBuffs = totalBossBuffs
   }
@@ -326,7 +325,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
     }
     if (action.cmd === 'damage' && action.to === 'player') {
       action.list.forEach((_hit) => {
-        const hit: { pos: number, value: number } = _hit as any
+        const hit: { pos: number; value: number } = _hit as any
         const playerNum = currentRaid.formation[hit.pos]
         currentRaid.player[playerNum].damageTaken.other.value += hit.value
       })
@@ -420,7 +419,7 @@ function handleActionQueue(type: string, data: AttackResultJson) {
 
   if (currentTurn !== currentRaid.actionQueue.at(-1)?.turn) {
     const guard_status = Object.values(data.status.ability)
-      .reduce< { is_guard_status: number, num: number }[]>((pre, cur) => {
+      .reduce< { is_guard_status: number; num: number }[]>((pre, cur) => {
         pre.push({
           num: cur.pos,
           is_guard_status: 0,
@@ -640,7 +639,7 @@ const normalAttackInfo = computed(() => {
       </ElDescriptionsItem>
     </ElDescriptions>
 
-    <MemberList :member-info="memberInfo" :mvp-info="mvpInfo" :user-id="userId" />
+    <MemberList :member-info="memberInfo" :mvp-info="mvpInfo" />
   </div>
   <div v-else fc>
     <ElTag type="info" effect="dark" size="large" round>

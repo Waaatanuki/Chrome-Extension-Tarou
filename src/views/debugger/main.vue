@@ -9,9 +9,8 @@ import Sandglass from './tabs/sandglass/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
-import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, windowId, windowSize } from '~/logic'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, uid, windowId, windowSize } from '~/logic'
 
-const userId = ref<string>('')
 const battleStartJson = ref()
 const resultJson = ref()
 const resultJsonPayload = ref()
@@ -416,7 +415,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           const turn = gainList[3]
           const time = gainList[4]
 
-          const treasureList: { src: string, number: string, boxClass: string }[] = []
+          const treasureList: { src: string; number: string; boxClass: string }[] = []
 
           $('.lis-treasure').each((i, elem) => {
             treasureList.push({
@@ -518,7 +517,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // BattleLog 记录副本start信息
     if (/\/rest\/(raid|multiraid)\/start\.json/.test(requestUrl)) {
       const searchParams = new URLSearchParams(requestUrl)
-      userId.value = searchParams.get('uid') || ''
+      uid.value = searchParams.get('uid') || ''
     }
 
     // BattleLog 记录单次攻击日志
@@ -599,7 +598,6 @@ window.addEventListener('beforeunload', () => {
       </ElTabPane>
       <ElTabPane label="战斗日志">
         <BattleLog
-          :user-id="userId"
           :battle-start-json="battleStartJson"
           :result-json="resultJson"
           :result-json-payload="resultJsonPayload"
