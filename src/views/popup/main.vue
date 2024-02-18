@@ -29,18 +29,13 @@ const { openDashboard } = useDashboard()
 
 function handleReset(command: string) {
   switch (command) {
-    case 'all':
-      goldBrickTableData.value = defaultGoldBrickTableData
-      eternitySandData.value = defaultEternitySandData
-      ElMessage.success('全部数据已重置')
-      break
     case 'goldBrick':
       goldBrickTableData.value = defaultGoldBrickTableData
       ElMessage.success('金本数据已重置')
       break
     case 'eternitySand':
       eternitySandData.value = defaultEternitySandData
-      ElMessage.success('沙漏本数据已重置')
+      ElMessage.success('沙漏数据已重置')
       break
     case 'windowSize':
       windowSize.value = { left: 300, top: 0, width: 800, height: 600 }
@@ -49,6 +44,15 @@ function handleReset(command: string) {
     case 'cardShow':
       goldBrickTableData.value.forEach(raid => raid.visiable = true)
       ElMessage.success('金本全部展示')
+      break
+    case 'import':
+      importData()
+      break
+    case 'export':
+      exportData()
+      break
+    case 'dashboard':
+      openDashboard()
       break
   }
 }
@@ -81,7 +85,7 @@ function exportData() {
   }, [])
   exportJSONFile(exportData)
   goldBrickData.value = []
-  ElMessage.success('导出成功,并清空数据')
+  ElMessage.success('导出成功,并清空原始数据')
 }
 
 function exportJSONFile(itemList: any) {
@@ -125,25 +129,30 @@ function toggleVisible(raid: RaidInfo, type: number) {
         <div>
           <ElDropdown @command="handleReset">
             <div m-2 flex btn size="small" type="danger">
-              <div i-carbon:reset mr-1 />
-              重置
+              操作
             </div>
             <template #dropdown>
               <ElDropdownMenu>
-                <ElDropdownItem command="all">
-                  全部重置
-                </ElDropdownItem>
                 <ElDropdownItem command="goldBrick">
-                  仅金本
+                  重置金本数据
                 </ElDropdownItem>
                 <ElDropdownItem command="eternitySand">
-                  仅沙漏本
+                  重置沙漏数据
                 </ElDropdownItem>
                 <ElDropdownItem command="windowSize">
-                  面板位置
+                  重置面板位置
                 </ElDropdownItem>
                 <ElDropdownItem command="cardShow">
-                  金本显隐
+                  重置金本显隐
+                </ElDropdownItem>
+                <ElDropdownItem command="import">
+                  导入金本数据至APP
+                </ElDropdownItem>
+                <ElDropdownItem command="export">
+                  导出金本原始数据
+                </ElDropdownItem>
+                <ElDropdownItem command="dashboard">
+                  打开详细面板
                 </ElDropdownItem>
               </ElDropdownMenu>
             </template>
@@ -152,15 +161,6 @@ function toggleVisible(raid: RaidInfo, type: number) {
         <div mr-15px flex gap-20px text-lg>
           <el-tooltip content="切换模式" placement="bottom">
             <div i-carbon-sun dark:i-carbon-moon icon-btn @click="toggleDark()" />
-          </el-tooltip>
-          <el-tooltip content="导入至APP" placement="bottom">
-            <div i-carbon:document-import icon-btn @click="importData" />
-          </el-tooltip>
-          <el-tooltip content="导出" placement="bottom">
-            <div i-carbon:document-export icon-btn @click="exportData" />
-          </el-tooltip>
-          <el-tooltip content="详细面板" placement="bottom">
-            <div i-carbon:dashboard icon-btn @click="openDashboard" />
           </el-tooltip>
         </div>
       </div>

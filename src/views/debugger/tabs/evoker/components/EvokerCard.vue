@@ -44,9 +44,7 @@ const evoker = defineModel<EvokerInfo>({ required: true })
       <ElSelect
         v-model="evoker.weaponLevel"
         class="w-100px"
-        :class="{
-          completed: evoker.weaponLevel === weaponList.at(-1)?.value,
-        }"
+        :class="{ completed: evoker.weaponLevel === weaponList.at(-1)?.value }"
         size="small"
         placeholder="贤武进度"
         placement="bottom"
@@ -62,9 +60,7 @@ const evoker = defineModel<EvokerInfo>({ required: true })
       <ElSelect
         v-model="evoker.domainLevel"
         class="w-100px"
-        :class="{
-          completed: evoker.domainLevel === domainList.at(-1)?.value,
-        }"
+        :class="{ completed: evoker.domainLevel === domainList.at(-1)?.value }"
         size="small"
         placeholder="领域进度"
         placement="bottom"
