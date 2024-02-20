@@ -29,6 +29,8 @@ const calculateSetting = ref()
 const paylaod = ref<any>()
 const wsPayloadData = ref<any>()
 
+const { sendBossInfo } = useCustomFetch()
+
 async function getResponse(tabId: number, requestId: string, cb: (resp: any) => void) {
   let count = 0
   let resp: any
@@ -313,6 +315,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
       getResponse(tabId, requestId, (resp) => {
         inLobby.value = false
         battleStartJson.value = resp
+        sendBossInfo(resp)
       })
     }
 
@@ -415,7 +418,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           const turn = gainList[3]
           const time = gainList[4]
 
-          const treasureList: { src: string; number: string; boxClass: string }[] = []
+          const treasureList: { src: string, number: string, boxClass: string }[] = []
 
           $('.lis-treasure').each((i, elem) => {
             treasureList.push({

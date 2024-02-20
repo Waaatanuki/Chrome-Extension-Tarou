@@ -1,10 +1,24 @@
 declare module 'myStorage' {
   interface BattleMemo {
-    uid: string
     battle_id: string
     quest_id: string
     quest_name: string
     timestamp: number
+  }
+
+  interface DropInfo {
+    raidId: string
+    questId: string
+    monster: string
+    uid: string
+    timestamp: number
+    reward: Treasure[]
+  }
+
+  interface Treasure {
+    box: string
+    key: string
+    count: number
   }
 
   interface QuestMemo {
@@ -223,6 +237,10 @@ declare module 'requestData'{
     timer: number
     quest_id: string
     raid_id: number
+    battle: {
+      total: number
+      count: string
+    }
     multi_raid_member_info?: MultiRaidMemberInfo[]
     twitter: { battle_id: string }
     summon: Summon[]

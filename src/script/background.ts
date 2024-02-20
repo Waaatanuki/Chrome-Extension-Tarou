@@ -1,14 +1,14 @@
 import { load } from 'cheerio'
-import type { BattleMemo, GoldBrickData } from 'myStorage'
+import type { BattleMemo, GoldBrickData, Treasure } from 'myStorage'
 import { battleMemo, eternitySandData, goldBrickData, goldBrickTableData } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
 (() => {
   // 重载清除
-  const MaxMemoLength = 20
+  const MaxMemoLength = 50
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
-  const { getUid } = useCustomFetch()
+  const { getUid, sendDropInfo } = useCustomFetch()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -17,7 +17,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
   chrome.webRequest.onBeforeRequest.addListener((details) => {
     // 记录战斗id与副本名称
     if (/\/rest\/(raid|multiraid)\/start\.json/.test(details.url)) {
-      const uid = getUid(details.url)
+      getUid(details.url)
 
       if (!details.requestBody?.raw) {
         console.log('details.requestBody==>', details.requestBody)
@@ -40,12 +40,12 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
           return
         console.log('memo==>', { battle_id, quest_name: res.questName, timestamp: Date.now() })
         const hit = targetRaid.find(r => r.tweet_name_en.includes(res.questName) || r.tweet_name_jp.includes(res.questName))
-        if (!hit) {
-          console.log('没有匹配到设定副本')
-          return
-        }
+        // if (!hit) {
+        //   console.log('没有匹配到设定副本')
+        //   return
+        // }
 
-        battleMemo.value.push({ uid, battle_id, quest_id: hit.quest_id, quest_name: res.questName, timestamp: Date.now() })
+        battleMemo.value.push({ battle_id, quest_id: hit?.quest_id || '', quest_name: res.questName, timestamp: Date.now() })
 
         if (battleMemo.value.length > MaxMemoLength)
           battleMemo.value.shift()
@@ -67,6 +67,8 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
         const treasureList: Treasure[] = getTreasureList(res.domStr)
 
+        sendDropInfo(hitMemo, treasureList)
+
         showNotifications(treasureList)
         checkGoldBrick(treasureList, hitMemo)
         checkEternitySand(treasureList, hitMemo)
@@ -79,11 +81,6 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     if (details.url.includes('/resultmulti/content/detail')) {
       const battle_id = details.url.match(/\d+/g)![0]
       const uid = getUid(details.url)
-      const hitData = goldBrickData.value.find(data => data.battleId === battle_id)
-      if (hitData) {
-        console.log('该战斗数据已经记录')
-        return
-      }
 
       chrome.tabs.sendMessage(details.tabId, { todo: 'getBattleHistoryResult' }).then((res) => {
         if (!res?.domStr)
@@ -93,19 +90,31 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         const raidName = $('.txt-enemy-name').text().trim()
         const finishTime = $('.txt-defeat-value').first().text()
 
-        const hitRaid = Raid_GoldBrick.find(r => r.quest_name_jp === raidName || r.quest_name_en === raidName)
-        if (!hitRaid) {
-          console.log('没有匹配到设定副本')
-          return
-        }
+        const hitTargetRaid = targetRaid.find(r => r.quest_name_jp === raidName || r.quest_name_en === raidName)
+
         const treasureList: Treasure[] = getTreasureList(res.domStr)
         const memo = {
           uid,
           battle_id,
-          quest_id: hitRaid.quest_id,
+          quest_id: hitTargetRaid?.quest_id || '',
           quest_name: raidName,
           timestamp: getTimestamp(finishTime),
         }
+
+        sendDropInfo(memo, treasureList)
+
+        const hitData = goldBrickData.value.find(data => data.battleId === battle_id)
+        if (hitData) {
+          console.log('该战斗数据已经记录')
+          return
+        }
+
+        const hitGoldBrickRaid = Raid_GoldBrick.find(r => r.quest_name_jp === raidName || r.quest_name_en === raidName)
+        if (!hitGoldBrickRaid) {
+          console.log('没有匹配到设定金本')
+          return
+        }
+
         showNotifications(treasureList)
         checkGoldBrick(treasureList, memo)
       })
@@ -116,7 +125,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       chrome.tabs.sendMessage(details.tabId, { todo: 'getUnclaimedList' }).then((res) => {
         if (!res?.domStr)
           return
-        const uid = getUid(details.url)
+        getUid(details.url)
         const unclaimedList = getBattleList(res.domStr)
 
         unclaimedList.forEach((raid) => {
@@ -128,12 +137,12 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
           console.log('未记录过的战斗信息', raid)
 
           const hitRaid = targetRaid.find(r => r.quest_name_jp === raid.raidName || r.quest_name_en === raid.raidName)
-          if (!hitRaid) {
-            console.log('没有匹配到设定副本')
-            return
-          }
+          // if (!hitRaid) {
+          //   console.log('没有匹配到设定副本')
+          //   return
+          // }
 
-          battleMemo.value.push({ uid, battle_id: raid.battle_id, quest_id: hitRaid.quest_id, quest_name: raid.raidName, timestamp: raid.timestamp })
+          battleMemo.value.push({ battle_id: raid.battle_id, quest_id: hitRaid?.quest_id || '', quest_name: raid.raidName, timestamp: raid.timestamp })
         })
 
         while (battleMemo.value.length > MaxMemoLength)
@@ -292,6 +301,13 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
   chrome.runtime.onStartup.addListener(() => {
     setBadge()
+
+    // 删除两周前的memo
+    const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+    battleMemo.value = battleMemo.value.filter((meno) => {
+      const itemTimestamp = new Date(meno.timestamp)
+      return itemTimestamp > twoWeeksAgo
+    })
   })
 
   addMenuClickListener()
@@ -311,12 +327,6 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       goldBrickTableData.value = JSON.parse(changes.goldBrickTableData.newValue)
   })
 })()
-
-interface Treasure {
-  box: string
-  key: string
-  count: number
-}
 
 interface BattleInfo {
   battle_id: string
