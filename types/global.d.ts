@@ -1,5 +1,6 @@
 declare module 'myStorage' {
   interface BattleMemo {
+    uid: string
     battle_id: string
     quest_id: string
     quest_name: string
@@ -434,7 +435,7 @@ declare module 'requestData'{
       src: string
       list: {
         [key: string]: {
-          class: string
+          'class': string
           'ability-id': string
         }[]
       }
@@ -673,37 +674,37 @@ declare module 'requestData'{
    }
 
    interface AssistRaidsData {
-     chapter_name: string
-     cjs_id: string
-     raid: Raid
-     boss_hp_width: number
-     remaining_time: string
-     member_count: number
-     assist_user_limit: number
-     called_user_name: string
+     'chapter_name': string
+     'cjs_id': string
+     'raid': Raid
+     'boss_hp_width': number
+     'remaining_time': string
+     'member_count': number
+     'assist_user_limit': number
+     'called_user_name': string
      'data-raid-type': number
-     used_battle_point: number
-     is_same_guild: boolean
-     is_friend: boolean
-     is_semi: any
-     is_special_battle: boolean
-     owner_job_id: string
-     is_complete_perfection_proof: boolean
-     is_lottery_rare_enemy: boolean
-     is_trial_multi: boolean
-     boss_image: string
-     is_adddrop: boolean
-     exskill_cp_type: number
-     is_half: boolean
-     boss_count_alive: number
-     boss_count: number
-     used_battle_point_max: string
-     is_unpopular: boolean
-     bp_select_type: number
-     buff_name: string
-     is_defendorder: boolean
-     is_restrict_assist: boolean
-     is_beginner: boolean
+     'used_battle_point': number
+     'is_same_guild': boolean
+     'is_friend': boolean
+     'is_semi': any
+     'is_special_battle': boolean
+     'owner_job_id': string
+     'is_complete_perfection_proof': boolean
+     'is_lottery_rare_enemy': boolean
+     'is_trial_multi': boolean
+     'boss_image': string
+     'is_adddrop': boolean
+     'exskill_cp_type': number
+     'is_half': boolean
+     'boss_count_alive': number
+     'boss_count': number
+     'used_battle_point_max': string
+     'is_unpopular': boolean
+     'bp_select_type': number
+     'buff_name': string
+     'is_defendorder': boolean
+     'is_restrict_assist': boolean
+     'is_beginner': boolean
    }
 
    interface Raid {

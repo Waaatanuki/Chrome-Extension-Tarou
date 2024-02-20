@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { load } from 'cheerio'
 import type { BattleMemo, GoldBrickData } from 'myStorage'
 import { battleMemo, eternitySandData, goldBrickData, goldBrickTableData } from '~/logic/storage'
@@ -9,6 +8,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
   // 重载清除
   const MaxMemoLength = 20
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
+  const { getUid } = useCustomFetch()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -16,7 +16,9 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
 
   chrome.webRequest.onBeforeRequest.addListener((details) => {
     // 记录战斗id与副本名称
-    if (details.url.includes('/rest/multiraid/start.json')) {
+    if (/\/rest\/(raid|multiraid)\/start\.json/.test(details.url)) {
+      const uid = getUid(details.url)
+
       if (!details.requestBody?.raw) {
         console.log('details.requestBody==>', details.requestBody)
         return
@@ -27,7 +29,6 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       const uint8Array = new Uint8Array(arrayBuffer)
       const jsonString = decoder.decode(uint8Array)
       const requestBody: RequestBody = JSON.parse(jsonString)
-
       const battle_id = String(requestBody.raid_id)
       const hitMemo = battleMemo.value.find(memo => memo.battle_id === battle_id)
       if (hitMemo)
@@ -44,7 +45,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
           return
         }
 
-        battleMemo.value.push({ battle_id, quest_id: hit.quest_id, quest_name: res.questName, timestamp: Date.now() })
+        battleMemo.value.push({ uid, battle_id, quest_id: hit.quest_id, quest_name: res.questName, timestamp: Date.now() })
 
         if (battleMemo.value.length > MaxMemoLength)
           battleMemo.value.shift()
@@ -77,7 +78,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     // 记录历史记录里的掉落结果
     if (details.url.includes('/resultmulti/content/detail')) {
       const battle_id = details.url.match(/\d+/g)![0]
-
+      const uid = getUid(details.url)
       const hitData = goldBrickData.value.find(data => data.battleId === battle_id)
       if (hitData) {
         console.log('该战斗数据已经记录')
@@ -99,6 +100,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
         }
         const treasureList: Treasure[] = getTreasureList(res.domStr)
         const memo = {
+          uid,
           battle_id,
           quest_id: hitRaid.quest_id,
           quest_name: raidName,
@@ -114,7 +116,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
       chrome.tabs.sendMessage(details.tabId, { todo: 'getUnclaimedList' }).then((res) => {
         if (!res?.domStr)
           return
-
+        const uid = getUid(details.url)
         const unclaimedList = getBattleList(res.domStr)
 
         unclaimedList.forEach((raid) => {
@@ -131,7 +133,7 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
             return
           }
 
-          battleMemo.value.push({ battle_id: raid.battle_id, quest_id: hitRaid.quest_id, quest_name: raid.raidName, timestamp: raid.timestamp })
+          battleMemo.value.push({ uid, battle_id: raid.battle_id, quest_id: hitRaid.quest_id, quest_name: raid.raidName, timestamp: raid.timestamp })
         })
 
         while (battleMemo.value.length > MaxMemoLength)
