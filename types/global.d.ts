@@ -448,6 +448,11 @@ declare module 'requestData'{
     turn: number
     is_guard_status: { is_guard_status: number }[]
     special_skill_indicate?: { interrupt_display_text: string }[]
+    unique_gauge_time_limit?: {
+      default_time_limit: string
+      limit_reduce_second: number
+      rest_time: number
+    }
   }
 
   interface Ability {
