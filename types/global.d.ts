@@ -251,6 +251,11 @@ declare module 'requestData'{
     special_skill_indicate?: { interrupt_display_text: string }[]
     scenario?: ScenarioType[]
     status?: StatusInfo
+    unique_gauge_time_limit?: {
+      default_time_limit: string
+      limit_reduce_second: number
+      rest_time: number
+    }
   }
 
   interface Boss {
@@ -793,6 +798,13 @@ declare module 'battleLog'{
     turn: number
     timer: number
     interrupt_display_text?: string
+    addition?: {
+      unique_gauge_time_limit?: {
+        default_time_limit: string
+        limit_reduce_second: number
+        rest_time: number
+      }
+    }
   }
 
   interface BuffInfo {

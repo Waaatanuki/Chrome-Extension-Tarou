@@ -4,9 +4,10 @@ import copy from 'copy-text-to-clipboard'
 import Memo from './Memo.vue'
 import { battleRecord } from '~/logic'
 
-const props = defineProps<{ bossInfo: BossInfo; raidId?: number }>()
+const props = defineProps<{ bossInfo: BossInfo, raidId?: number }>()
 const remainderSecond = ref<number>(0)
 const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
+const endTimerValue = computed(() => Date.now() + Number(props.bossInfo.addition?.unique_gauge_time_limit?.rest_time) * 1000 || 0)
 const bossImgSrc = computed(() => `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/${props.bossInfo.imgId}.png`)
 
 const operationSecond = computed(() => {
@@ -52,6 +53,11 @@ function handleCopy(text: string) {
         </div>
       </template>
     </ElProgress>
+    <ElCountdown
+      v-if="bossInfo.addition?.unique_gauge_time_limit"
+      title="END" value-style="color: red" format="mm:ss" :value="endTimerValue"
+      absolute class="left-1/2 top-1/2 translate-y--110px -translate-x-1/2"
+    />
     <ElTag v-if="bossInfo.interrupt_display_text" absolute class="left-1/2 top-1/2 translate-y-85px -translate-x-1/2">
       {{ bossInfo.interrupt_display_text }}
     </ElTag>

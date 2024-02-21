@@ -12,7 +12,7 @@ import { battleRecord, uid } from '~/logic'
 
 const props = defineProps<{
   battleStartJson: BattleStartJson
-  resultJson: { type: string; result: AttackResultJson }
+  resultJson: { type: string, result: AttackResultJson }
   resultJsonPayload: ResultJsonPayload
   bossConditionJson: BossConditionJson
   inLobby: boolean
@@ -29,7 +29,7 @@ const buffInfo = ref<BuffInfo>({ bossBuffs: [], playerBuffs: [] })
 const memberInfo = ref<MemberInfo[]>()
 const raidId = ref<number>()
 const leaderAttr = ref('')
-const mvpInfo = ref<{ userId: string; rank: number; point: number }[]>()
+const mvpInfo = ref<{ userId: string, rank: number, point: number }[]>()
 
 watch(() => props.battleStartJson, (data) => {
   if (!data || !data.raid_id)
@@ -39,6 +39,10 @@ watch(() => props.battleStartJson, (data) => {
   const boss = data.boss.param[0]
   const player = data.player.param[0]
   leaderAttr.value = player.attr
+
+  const addition = {
+    unique_gauge_time_limit: data.unique_gauge_time_limit || undefined,
+  }
 
   bossInfo.value = {
     questId: data.quest_id,
@@ -50,6 +54,7 @@ watch(() => props.battleStartJson, (data) => {
     hpPercent: Number.parseFloat((Number(boss.hp) / Number(boss.hpmax) * 100).toFixed(2)),
     timer: data.timer,
     turn: data.turn,
+    addition,
   }
 
   if (data.special_skill_indicate && data.special_skill_indicate.length > 0)
@@ -325,7 +330,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
     }
     if (action.cmd === 'damage' && action.to === 'player') {
       action.list.forEach((_hit) => {
-        const hit: { pos: number; value: number } = _hit as any
+        const hit: { pos: number, value: number } = _hit as any
         const playerNum = currentRaid.formation[hit.pos]
         currentRaid.player[playerNum].damageTaken.other.value += hit.value
       })
@@ -419,7 +424,7 @@ function handleActionQueue(type: string, data: AttackResultJson) {
 
   if (currentTurn !== currentRaid.actionQueue.at(-1)?.turn) {
     const guard_status = Object.values(data.status.ability)
-      .reduce< { is_guard_status: number; num: number }[]>((pre, cur) => {
+      .reduce< { is_guard_status: number, num: number }[]>((pre, cur) => {
         pre.push({
           num: cur.pos,
           is_guard_status: 0,
