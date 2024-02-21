@@ -377,6 +377,20 @@ export const Raid_EternitySand = [
     is_blue_treasure: true,
     is_blue_eternitySand: true,
   },
+  {
+    quest_id: '305581',
+    level: '200',
+    element: 'normal',
+    tweet_name_en: ['Lvl 325 Lucilius'],
+    tweet_name_jp: ['Lv325 ルシファー'],
+    quest_name_en: 'Dark Rapture Zero',
+    quest_name_jp: 'ダーク・ラプチャー・ゼロ',
+    difficulty: '7',
+    stage_id: '12071',
+    thumbnail_image: '305581',
+    is_blue_treasure: false,
+    is_blue_eternitySand: false,
+  },
 ]
 
 export const Raid_GoldBrick = [
