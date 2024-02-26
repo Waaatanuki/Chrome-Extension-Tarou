@@ -6,9 +6,8 @@ export default function useCustomFetch() {
   // todo: 处理发送失败的情况
   function sendDropInfo(memo: BattleMemo, treasureList: Treasure[]) {
     const dropInfo: DropInfo = {
-      raidId: memo.battle_id,
-      questId: memo.quest_id,
-      monster: memo.quest_name,
+      battleId: memo.battleId,
+      questName: memo.questName,
       uid: uid.value,
       timestamp: memo.timestamp,
       reward: treasureList,

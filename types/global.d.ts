@@ -1,15 +1,13 @@
 declare module 'myStorage' {
   interface BattleMemo {
-    battle_id: string
-    quest_id: string
-    quest_name: string
+    battleId: string
+    questName: string
     timestamp: number
   }
 
   interface DropInfo {
-    raidId: string
-    questId: string
-    monster: string
+    battleId: string
+    questName: string
     uid: string
     timestamp: number
     reward: Treasure[]
