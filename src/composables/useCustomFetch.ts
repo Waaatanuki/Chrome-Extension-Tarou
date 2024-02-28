@@ -3,6 +3,12 @@ import type { BattleMemo, DropInfo, Treasure } from 'myStorage'
 import { uid } from '~/logic'
 
 export default function useCustomFetch() {
+  function getUid(url: string) {
+    const searchParams = new URLSearchParams(url)
+    uid.value = searchParams.get('uid') || ''
+    return uid.value
+  }
+
   // todo: 处理发送失败的情况
   function sendDropInfo(memo: BattleMemo, treasureList: Treasure[]) {
     const dropInfo: DropInfo = {
@@ -30,12 +36,6 @@ export default function useCustomFetch() {
     }
     // todo: cjs和name会有多个
     console.log('bossInfo', bossInfo)
-  }
-
-  function getUid(url: string) {
-    const searchParams = new URLSearchParams(url)
-    uid.value = searchParams.get('uid') || ''
-    return uid.value
   }
 
   return {

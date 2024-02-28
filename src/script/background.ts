@@ -52,10 +52,12 @@ import { noticeItem } from '~/constants'
   chrome.webRequest.onCompleted.addListener((details) => {
     // 记录掉落结果
     if (details.url.includes('/resultmulti/content/index')) {
+      getUid(details.url)
       const battleId = details.url.match(/\d+/g)![0]
       const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
       if (!hitMemo)
         return
+
       chrome.tabs.sendMessage(details.tabId, { todo: 'getBattleResult' }).then((res) => {
         if (!res?.domStr)
           return
@@ -71,8 +73,8 @@ import { noticeItem } from '~/constants'
 
     // 记录历史记录里的掉落结果
     if (details.url.includes('/resultmulti/content/detail')) {
-      const battleId = details.url.match(/\d+/g)![0]
       getUid(details.url)
+      const battleId = details.url.match(/\d+/g)![0]
 
       chrome.tabs.sendMessage(details.tabId, { todo: 'getBattleHistoryResult' }).then((res) => {
         if (!res?.domStr)
@@ -92,10 +94,11 @@ import { noticeItem } from '~/constants'
 
     // 记录未结算战斗信息
     if (details.url.includes('/quest/unclaimed_reward')) {
+      getUid(details.url)
       chrome.tabs.sendMessage(details.tabId, { todo: 'getUnclaimedList' }).then((res) => {
         if (!res?.domStr)
           return
-        getUid(details.url)
+
         const unclaimedList = getBattleList(res.domStr)
 
         unclaimedList.forEach((battle) => {
