@@ -61,6 +61,18 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     const responseUrl = params.response.url
     const tabId = source.tabId
     const requestId = params.requestId
+
+    // 获取副本信息
+    // if (/\/rest\/quest\/(multi|free)\/stage_detail/.test(responseUrl)) {
+    //   getResponse(tabId, requestId, (resp) => {
+    //     fetch('http://localhost:4000/quest', {
+    //       method: 'post',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify(resp.list),
+    //     })
+    //   })
+    // }
+
     // Dashboard 抽卡数据
     if (responseUrl.includes('game.granbluefantasy.jp/gacha/list')) {
       getResponse(tabId, requestId, (resp) => {
