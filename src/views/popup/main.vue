@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { RaidInfo } from 'myStorage'
-import { eternitySandData, goldBrickData, goldBrickTableData, uid, windowSize } from '~/logic/storage'
+import copy from 'copy-text-to-clipboard'
+import { code, eternitySandData, goldBrickData, goldBrickTableData, uid, windowSize } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
 
 const goldBrickCardData = computed<RaidInfo[]>(() =>
@@ -103,6 +104,18 @@ function exportJSONFile(itemList: any) {
   urlObject.revokeObjectURL(url)
 }
 
+const dialogVisible = ref(false)
+const form = reactive({
+  oldValue: '',
+  newValue: '',
+})
+
+function showDialog() {
+  dialogVisible.value = true
+  form.oldValue = code.value
+  form.newValue = ''
+}
+
 function toggleVisible(raid: RaidInfo, type: number) {
   if (type === 1) {
     const hit = goldBrickTableData.value.find(r => r.quest_id === raid.quest_id)
@@ -111,6 +124,29 @@ function toggleVisible(raid: RaidInfo, type: number) {
   }
   if (type === 2)
     raid.visiable = !raid.visiable
+}
+
+function handleCopy(text: string) {
+  if (copy(text))
+    ElMessage.success(`已复制引继码`)
+}
+
+function submit() {
+  fetch('http://localhost:4000/code', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  }).then(async (resp) => {
+    const data = await resp.json()
+    if (resp.ok) {
+      code.value = data.code
+      dialogVisible.value = false
+      ElMessage.success('迁移成功')
+    }
+    else {
+      ElMessage.error(data.msg)
+    }
+  })
 }
 </script>
 
@@ -165,13 +201,29 @@ function toggleVisible(raid: RaidInfo, type: number) {
           </ElDropdown>
         </div>
         <div mr-2>
-          <el-badge is-dot :type="uid ? 'success' : 'danger'">
-            <el-link mr-2>
-              玩家ID: {{ uid || '未获取' }}
-            </el-link>
-          </el-badge>
+          <el-link @click="showDialog">
+            玩家ID: {{ uid || '未获取' }}
+          </el-link>
         </div>
       </div>
     </div>
+    <el-dialog v-model="dialogVisible" width="350">
+      <el-form :model="form" label-position="top">
+        <el-form-item label="当前引继码">
+          <el-link ml-2 type="primary" @click="handleCopy(form.oldValue)">
+            {{ form.oldValue }}
+          </el-link>
+        </el-form-item>
+        <el-form-item label="迁移引继码">
+          <el-input v-model="form.newValue" />
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <div btn @click="submit">
+          确定
+        </div>
+      </template>
+    </el-dialog>
   </main>
 </template>

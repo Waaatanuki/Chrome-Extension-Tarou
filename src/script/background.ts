@@ -7,7 +7,7 @@ import { noticeItem } from '~/constants'
   // 重载清除
   const MaxMemoLength = 50
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
-  const { getUid, sendDropInfo } = useCustomFetch()
+  const { getUid, sendDropInfo, checkCode } = useCustomFetch()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -187,9 +187,11 @@ import { noticeItem } from '~/constants'
 
   chrome.runtime.onInstalled.addListener(() => {
     registerContextMenu()
+    checkCode()
   })
 
   chrome.runtime.onStartup.addListener(() => {
+    checkCode()
     // 删除两周前的memo
     const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
     battleMemo.value = battleMemo.value.filter((memo) => {

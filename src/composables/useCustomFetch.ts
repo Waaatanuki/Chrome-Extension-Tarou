@@ -1,12 +1,18 @@
 import type { BattleStartJson } from 'requestData'
 import type { BattleMemo, DropInfo, Treasure } from 'myStorage'
-import { uid } from '~/logic'
+import { validate as uuidValidate, v4 as uuidv4 } from 'uuid'
+import { code, uid } from '~/logic'
 
 export default function useCustomFetch() {
   function getUid(url: string) {
     const searchParams = new URLSearchParams(url)
     uid.value = searchParams.get('uid') || ''
     return uid.value
+  }
+
+  function checkCode() {
+    if (!uuidValidate(code.value))
+      code.value = uuidv4()
   }
 
   // todo: 处理发送失败的情况
@@ -54,6 +60,7 @@ export default function useCustomFetch() {
   }
 
   return {
+    checkCode,
     sendDropInfo,
     sendBossInfo,
     getUid,

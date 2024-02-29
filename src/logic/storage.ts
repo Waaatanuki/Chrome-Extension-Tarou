@@ -6,6 +6,7 @@ import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } f
 import { defaultEvokerInfo } from '~/constants/evoker'
 
 // Debugger
+export const code = useStorageLocal('code', '')
 export const uid = useStorageLocal('uid', '')
 export const tabId = useStorageLocal('tabId', 0)
 export const windowId = useStorageLocal('windowId', 0)
