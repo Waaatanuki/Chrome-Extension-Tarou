@@ -144,8 +144,10 @@ function submit() {
       ElMessage.success('迁移成功')
     }
     else {
-      ElMessage.error(data.msg)
+      ElMessage.error(data.message)
     }
+  }).catch((error) => {
+    ElMessage.error(error.message)
   })
 }
 </script>
