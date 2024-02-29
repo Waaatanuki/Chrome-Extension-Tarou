@@ -4,7 +4,6 @@ import { battleMemo } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {
-  // 重载清除
   const MaxMemoLength = 50
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
   const { getUid, sendDropInfo, checkCode } = useCustomFetch()

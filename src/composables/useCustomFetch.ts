@@ -15,7 +15,17 @@ export default function useCustomFetch() {
       code.value = uuidv4()
   }
 
-  // todo: 处理发送失败的情况
+  function request(api: string, method: string, data: any) {
+    const baseUrl = 'http://localhost:4000'
+    fetch(baseUrl + api, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
   function sendDropInfo(memo: BattleMemo, treasureList: Treasure[]) {
     const dropInfo: DropInfo = {
       battleId: memo.battleId,
@@ -24,13 +34,7 @@ export default function useCustomFetch() {
       timestamp: memo.timestamp,
       reward: treasureList,
     }
-    console.log('dropInfo=>', dropInfo)
-
-    // fetch('http://localhost:4000/drop', {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(dropInfo),
-    // })
+    request('/drop', 'post', dropInfo)
   }
 
   function sendBossInfo(rawData: BattleStartJson) {
@@ -49,14 +53,7 @@ export default function useCustomFetch() {
         hp: Number(boss.hpmax),
       })),
     }
-    // todo: cjs和name会有多个
-    console.log('bossInfo', bossInfo)
-
-    // fetch('http://localhost:4000/startJson', {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(bossInfo),
-    // })
+    request('/startJson', 'post', bossInfo)
   }
 
   return {
