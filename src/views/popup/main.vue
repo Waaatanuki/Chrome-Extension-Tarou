@@ -3,6 +3,7 @@ import type { RaidInfo } from 'myStorage'
 import copy from 'copy-text-to-clipboard'
 import { code, eternitySandData, goldBrickData, goldBrickTableData, uid, windowSize } from '~/logic/storage'
 import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
+import { updateCode } from '~/api'
 
 const goldBrickCardData = computed<RaidInfo[]>(() =>
   goldBrickTableData.value.map(raid => ({
@@ -57,6 +58,10 @@ function handleCommand(command: string) {
       break
     case 'dashboard':
       openDashboard()
+      break
+    case 'test':
+      code.value = ''
+      uid.value = ''
       break
   }
 }
@@ -132,22 +137,12 @@ function handleCopy(text: string) {
 }
 
 function submit() {
-  fetch('http://localhost:4000/code', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(form),
-  }).then(async (resp) => {
-    const data = await resp.json()
-    if (resp.ok) {
-      code.value = data.code
-      dialogVisible.value = false
-      ElMessage.success('迁移成功')
-    }
-    else {
-      ElMessage.error(data.message)
-    }
-  }).catch((error) => {
-    ElMessage.error(error.message)
+  updateCode({ code: form.newValue }).then((data) => {
+    code.value = data.code
+    dialogVisible.value = false
+    ElMessage.success('迁移成功')
+  }).catch((err) => {
+    ElMessage.error(err.message)
   })
 }
 </script>
@@ -197,6 +192,9 @@ function submit() {
                 </ElDropdownItem>
                 <ElDropdownItem command="dashboard">
                   打开详细面板
+                </ElDropdownItem>
+                <ElDropdownItem command="test">
+                  测试
                 </ElDropdownItem>
               </ElDropdownMenu>
             </template>

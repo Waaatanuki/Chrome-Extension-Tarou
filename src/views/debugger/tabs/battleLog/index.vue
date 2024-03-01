@@ -11,7 +11,7 @@ import ActionList from './components/ActionList.vue'
 import { battleRecord, uid } from '~/logic'
 
 const props = defineProps<{
-  battleStartJson: BattleStartJson
+  battleStartJson?: BattleStartJson
   resultJson: { type: string, result: AttackResultJson }
   resultJsonPayload: ResultJsonPayload
   bossConditionJson: BossConditionJson

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BattleResult, GachaResult, NpcAbility, NpcInfo } from 'requestData'
+import type { BattleResult, BattleStartJson, GachaResult, NpcAbility, NpcInfo } from 'requestData'
 import type { Player } from 'myStorage'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
@@ -10,8 +10,9 @@ import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
 import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, uid, windowId, windowSize } from '~/logic'
+import { sendBossInfo } from '~/api'
 
-const battleStartJson = ref()
+const battleStartJson = ref<BattleStartJson>()
 const resultJson = ref()
 const resultJsonPayload = ref()
 const guardSettingJson = ref()
@@ -28,8 +29,6 @@ const calculateSetting = ref()
 
 const paylaod = ref<any>()
 const wsPayloadData = ref<any>()
-
-const { sendBossInfo } = useCustomFetch()
 
 async function getResponse(tabId: number, requestId: string, cb: (resp: any) => void) {
   let count = 0
@@ -327,7 +326,25 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
       getResponse(tabId, requestId, (resp) => {
         inLobby.value = false
         battleStartJson.value = resp
-        sendBossInfo(resp)
+
+        if (!battleStartJson.value)
+          return
+        const bossInfo = {
+          battleId: String(battleStartJson.value.raid_id),
+          userId: battleStartJson.value.user_id,
+          questId: battleStartJson.value.quest_id,
+          battleTotal: Number(battleStartJson.value.battle.total),
+          battleCount: Number(battleStartJson.value.battle.count),
+          boss: battleStartJson.value.boss.param.map(boss => ({
+            id: boss.enemy_id,
+            name: boss.monster,
+            lv: boss.Lv,
+            attr: boss.attr,
+            cjs: boss.cjs,
+            hp: Number(boss.hpmax),
+          })),
+        }
+        sendBossInfo(bossInfo)
       })
     }
 

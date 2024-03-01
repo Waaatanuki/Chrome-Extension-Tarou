@@ -1,12 +1,13 @@
 import { load } from 'cheerio'
 import type { BattleMemo, Treasure } from 'myStorage'
-import { battleMemo } from '~/logic/storage'
+import { sendDropInfo } from '~/api'
+import { battleMemo, uid } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {
   const MaxMemoLength = 50
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
-  const { getUid, sendDropInfo, checkCode } = useCustomFetch()
+  const { checkUid, checkCode } = useUser()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -15,7 +16,7 @@ import { noticeItem } from '~/constants'
   chrome.webRequest.onBeforeRequest.addListener((details) => {
     // 记录战斗id与副本名称
     if (/\/rest\/(raid|multiraid)\/start\.json/.test(details.url)) {
-      getUid(details.url)
+      checkUid(details.url)
 
       if (!details.requestBody?.raw) {
         console.log('details.requestBody==>', details.requestBody)
@@ -51,7 +52,7 @@ import { noticeItem } from '~/constants'
   chrome.webRequest.onCompleted.addListener((details) => {
     // 记录掉落结果
     if (details.url.includes('/resultmulti/content/index')) {
-      getUid(details.url)
+      checkUid(details.url)
       const battleId = details.url.match(/\d+/g)![0]
       const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
       if (!hitMemo)
@@ -64,15 +65,24 @@ import { noticeItem } from '~/constants'
         const treasureList: Treasure[] = getTreasureList(res.domStr)
 
         showNotifications(treasureList)
-        sendDropInfo(hitMemo, treasureList)
+
+        const dropInfo = {
+          battleId: hitMemo.battleId,
+          questName: hitMemo.questName,
+          timestamp: hitMemo.timestamp,
+          reward: treasureList,
+        }
 
         battleMemo.value = battleMemo.value.filter(memo => memo.battleId !== battleId)
+
+        sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
       })
     }
 
     // 记录历史记录里的掉落结果
     if (details.url.includes('/resultmulti/content/detail')) {
-      getUid(details.url)
+      checkUid(details.url)
+
       const battleId = details.url.match(/\d+/g)![0]
 
       chrome.tabs.sendMessage(details.tabId, { todo: 'getBattleHistoryResult' }).then((res) => {
@@ -84,16 +94,23 @@ import { noticeItem } from '~/constants'
         const finishTime = $('.txt-defeat-value').first().text()
 
         const treasureList: Treasure[] = getTreasureList(res.domStr)
-        const memo = { battleId, questName, timestamp: getTimestamp(finishTime) }
 
-        sendDropInfo(memo, treasureList)
+        const dropInfo = {
+          battleId,
+          questName,
+          timestamp: getTimestamp(finishTime),
+          reward: treasureList,
+        }
+
+        sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
+
         showNotifications(treasureList)
       })
     }
 
     // 记录未结算战斗信息
     if (details.url.includes('/quest/unclaimed_reward')) {
-      getUid(details.url)
+      checkUid(details.url)
       chrome.tabs.sendMessage(details.tabId, { todo: 'getUnclaimedList' }).then((res) => {
         if (!res?.domStr)
           return
@@ -200,6 +217,13 @@ import { noticeItem } from '~/constants'
   })
 
   addMenuClickListener()
+
+  chrome.storage.onChanged.addListener((changes) => {
+    console.log(changes)
+
+    if (changes.uid)
+      uid.value = changes.uid.newValue
+  })
 })()
 
 interface RequestBody {

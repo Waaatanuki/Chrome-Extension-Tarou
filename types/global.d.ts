@@ -5,14 +5,6 @@ declare module 'myStorage' {
     timestamp: number
   }
 
-  interface DropInfo {
-    battleId: string
-    questName: string
-    uid: string
-    timestamp: number
-    reward: Treasure[]
-  }
-
   interface Treasure {
     box: string
     key: string
@@ -848,5 +840,32 @@ declare module 'party'{
     subSummons: DeckSummon
     damageInfo: DamageInfo
     calculateSetting?: CalculateSetting
+  }
+}
+
+declare module 'api'{
+  interface DropInfo {
+    battleId: string
+    questName: string
+    timestamp: number
+    reward: Treasure[]
+  }
+
+  interface Boss {
+    id: string
+    name: string
+    lv: string
+    attr: string
+    cjs: string
+    hp: number
+  }
+
+  interface StartJsonBoss {
+    battleId: string
+    userId: string
+    questId: string
+    battleTotal: number
+    battleCount: number
+    boss: Boss[]
   }
 }
