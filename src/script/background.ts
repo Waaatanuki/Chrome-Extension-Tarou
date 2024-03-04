@@ -1,5 +1,6 @@
 import { load } from 'cheerio'
-import type { BattleMemo, Treasure } from 'myStorage'
+import type { BattleMemo } from 'myStorage'
+import type { Treasure } from 'api'
 import { sendDropInfo } from '~/api'
 import { battleMemo, uid } from '~/logic/storage'
 import { noticeItem } from '~/constants'
@@ -219,8 +220,6 @@ import { noticeItem } from '~/constants'
   addMenuClickListener()
 
   chrome.storage.onChanged.addListener((changes) => {
-    console.log(changes)
-
     if (changes.uid)
       uid.value = changes.uid.newValue
   })

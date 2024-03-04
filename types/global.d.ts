@@ -5,12 +5,6 @@ declare module 'myStorage' {
     timestamp: number
   }
 
-  interface Treasure {
-    box: string
-    key: string
-    count: number
-  }
-
   interface QuestMemo {
     questId: string
     questName: string
@@ -849,6 +843,12 @@ declare module 'api'{
     questName: string
     timestamp: number
     reward: Treasure[]
+  }
+
+  interface Treasure {
+    box: string
+    key: string
+    count: number
   }
 
   interface Boss {
