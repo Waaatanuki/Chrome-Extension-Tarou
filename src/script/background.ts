@@ -218,11 +218,6 @@ import { noticeItem } from '~/constants'
   })
 
   addMenuClickListener()
-
-  chrome.storage.onChanged.addListener((changes) => {
-    if (changes.uid)
-      uid.value = changes.uid.newValue
-  })
 })()
 
 interface RequestBody {

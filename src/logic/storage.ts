@@ -1,43 +1,43 @@
 import dayjs from 'dayjs'
 import type { BattleMemo, BattleRecord, GachaRecord, MaterialInfo, QuestMemo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
-import { useStorageLocal } from '~/composables/useStorageLocal'
+import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
 import { defaultEvokerInfo } from '~/constants/evoker'
 
 // Debugger
-export const code = useStorageLocal('code', '')
-export const uid = useStorageLocal('uid', '')
-export const tabId = useStorageLocal('tabId', 0)
-export const windowId = useStorageLocal('windowId', 0)
-export const windowSize = useStorageLocal('windowSize', { left: 300, top: 0, width: 800, height: 600 })
+export const code = useWebExtensionStorage('code', '')
+export const uid = useWebExtensionStorage('uid', '')
+export const tabId = useWebExtensionStorage('tabId', 0)
+export const windowId = useWebExtensionStorage('windowId', 0)
+export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top: 0, width: 800, height: 600 })
 
 // Dashboard
-export const stone = useStorageLocal('stone', 0)
-export const legendticket10 = useStorageLocal('legendticket10', 0)
-export const legendticket = useStorageLocal('legendticket', 0)
-export const gachaRecord = useStorageLocal<GachaRecord[]>('gachaRecord', [])
-export const saveStoneDate = useStorageLocal('saveStoneDate', dayjs().unix())
-export const lastUpdateTodo = useStorageLocal('lastUpdateTodo', dayjs().unix())
-export const todoList = useStorageLocal('todoList', defaultTodoList)
-export const recoveryItemList = useStorageLocal<RecoveryItem[]>('recoveryItemList', [])
+export const stone = useWebExtensionStorage('stone', 0)
+export const legendticket10 = useWebExtensionStorage('legendticket10', 0)
+export const legendticket = useWebExtensionStorage('legendticket', 0)
+export const gachaRecord = useWebExtensionStorage<GachaRecord[]>('gachaRecord', [])
+export const saveStoneDate = useWebExtensionStorage('saveStoneDate', dayjs().unix())
+export const lastUpdateTodo = useWebExtensionStorage('lastUpdateTodo', dayjs().unix())
+export const todoList = useWebExtensionStorage('todoList', defaultTodoList)
+export const recoveryItemList = useWebExtensionStorage<RecoveryItem[]>('recoveryItemList', [])
 
 // Evoker
-export const materialInfo = useStorageLocal<MaterialInfo[]>('materialInfo', [])
-export const evokerInfo = useStorageLocal('evokerInfo', defaultEvokerInfo)
+export const materialInfo = useWebExtensionStorage<MaterialInfo[]>('materialInfo', [])
+export const evokerInfo = useWebExtensionStorage('evokerInfo', defaultEvokerInfo)
 
 // BattleLog
-export const battleRecord = useStorageLocal<BattleRecord[]>('battleRecord', [])
-export const specBossBuff = useStorageLocal<string[]>('specBossBuff', [])
-export const specPlayerBuff = useStorageLocal<string[]>('specPlayerBuff', [])
-export const questMemo = useStorageLocal<QuestMemo[]>('questMemo', [])
+export const battleRecord = useWebExtensionStorage<BattleRecord[]>('battleRecord', [])
+export const specBossBuff = useWebExtensionStorage<string[]>('specBossBuff', [])
+export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff', [])
+export const questMemo = useWebExtensionStorage<QuestMemo[]>('questMemo', [])
 
 // 掉落统计
-export const goldBrickData = useStorageLocal<GoldBrickData[]>('goldBrickData', [])
-export const goldBrickTableData = useStorageLocal('goldBrickTableData', defaultGoldBrickTableData)
-export const eternitySandData = useStorageLocal('eternitySandData', defaultEternitySandData)
-export const battleMemo = useStorageLocal<BattleMemo[]>('battleMemo', [])
+export const goldBrickData = useWebExtensionStorage<GoldBrickData[]>('goldBrickData', [])
+export const goldBrickTableData = useWebExtensionStorage('goldBrickTableData', defaultGoldBrickTableData)
+export const eternitySandData = useWebExtensionStorage('eternitySandData', defaultEternitySandData)
+export const battleMemo = useWebExtensionStorage<BattleMemo[]>('battleMemo', [])
 
 // Party
-export const jobAbilityList = useStorageLocal<NpcAbility[]>('jobAbilityList', [])
-export const localNpcList = useStorageLocal<NpcInfo[]>('localNpcList', [])
+export const jobAbilityList = useWebExtensionStorage<NpcAbility[]>('jobAbilityList', [])
+export const localNpcList = useWebExtensionStorage<NpcInfo[]>('localNpcList', [])
