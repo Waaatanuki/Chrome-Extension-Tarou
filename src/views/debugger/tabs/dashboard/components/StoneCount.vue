@@ -42,7 +42,7 @@ function reset() {
           {{ `${stone}個` }}
         </span>
       </div>
-      <div w-80px fc flex-col text-center text-base font-bold text-orange-600>
+      <div w-80px fc flex-col text-center text-base text-orange-600 font-bold>
         <div v-if="totalStone >= 90000">
           {{ `${Math.floor(totalStone / 90000)}井` }}
         </div>

@@ -5,12 +5,12 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import Dashborad from './tabs/dashboard/index.vue'
 import EvokerPage from './tabs/evoker/index.vue'
-import Sandglass from './tabs/sandglass/index.vue'
+import Drop from './tabs/drop/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
 import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, uid, windowId, windowSize } from '~/logic'
-import { sendBossInfo } from '~/api'
+import { listDrop, sendBossInfo } from '~/api'
 
 const battleStartJson = ref<BattleStartJson>()
 const resultJson = ref()
@@ -611,6 +611,12 @@ chrome.windows.onBoundsChanged.addListener((windowInfo) => {
 window.addEventListener('beforeunload', () => {
   chrome.debugger.detach({ tabId: Number(document.URL.split('?')[1]) })
 })
+
+onMounted(() => {
+  listDrop('debugger').then(() => {
+
+  })
+})
 </script>
 
 <template>
@@ -622,8 +628,8 @@ window.addEventListener('beforeunload', () => {
       <ElTabPane label="贤者素材">
         <EvokerPage />
       </ElTabPane>
-      <ElTabPane label="沙漏统计">
-        <Sandglass />
+      <ElTabPane label="掉落统计">
+        <Drop />
       </ElTabPane>
       <ElTabPane label="队伍信息">
         <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />

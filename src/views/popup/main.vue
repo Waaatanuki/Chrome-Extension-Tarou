@@ -1,51 +1,17 @@
 <script setup lang="ts">
-import type { RaidInfo } from 'myStorage'
+import type { DropData } from 'api'
 import copy from 'copy-text-to-clipboard'
-import { code, eternitySandData, goldBrickData, goldBrickTableData, uid, windowSize } from '~/logic/storage'
-import { defaultEternitySandData, defaultGoldBrickTableData } from '~/constants'
-import { updateCode } from '~/api'
-
-const goldBrickCardData = computed<RaidInfo[]>(() =>
-  goldBrickTableData.value.map(raid => ({
-    quest_id: raid.quest_id,
-    level: '',
-    element: '',
-    tweet_name_en: '',
-    tweet_name_jp: '',
-    quest_name_en: '',
-    quest_name_jp: '',
-    difficulty: '',
-    stage_id: '',
-    thumbnail_image: '',
-    is_blue_treasure: !(raid.quest_id === '303141'),
-    visiable: Object.hasOwn(raid, 'visiable') ? raid.visiable : true,
-    total: raid.total,
-    blueChest: raid.blueChest,
-    goldBrick: raid.goldBrick,
-    lastDropCount: raid.lastBlueChestCount,
-    lastDropTake: raid.lastBlueChestTake,
-  })),
-)
+import { code, goldBrickData, questConfig, uid, windowSize } from '~/logic/storage'
+import { listDrop, updateCode } from '~/api'
 
 const { openDashboard } = useDashboard()
+const cardData = ref<DropData[]>([])
 
 function handleCommand(command: string) {
   switch (command) {
-    case 'goldBrick':
-      goldBrickTableData.value = defaultGoldBrickTableData
-      ElMessage.success('金本数据已重置')
-      break
-    case 'eternitySand':
-      eternitySandData.value = defaultEternitySandData
-      ElMessage.success('沙漏数据已重置')
-      break
     case 'windowSize':
       windowSize.value = { left: 300, top: 0, width: 800, height: 600 }
       ElMessage.success('详细面板位置已重置')
-      break
-    case 'cardShow':
-      goldBrickTableData.value.forEach(raid => raid.visiable = true)
-      ElMessage.success('金本全部展示')
       break
     case 'import':
       importData()
@@ -121,14 +87,12 @@ function showDialog() {
   form.newValue = ''
 }
 
-function toggleVisible(raid: RaidInfo, type: number) {
-  if (type === 1) {
-    const hit = goldBrickTableData.value.find(r => r.quest_id === raid.quest_id)
-    if (hit)
-      hit.visiable = !hit.visiable
+function toggleVisible(quest: DropData) {
+  const hit = questConfig.value.find(q => q.questId === quest.questId)
+  if (hit) {
+    hit.visible = false
+    cardData.value = cardData.value.filter(q => q.questId !== quest.questId)
   }
-  if (type === 2)
-    raid.visiable = !raid.visiable
 }
 
 function handleCopy(text: string) {
@@ -145,6 +109,29 @@ function submit() {
     ElMessage.error(err.message)
   })
 }
+
+function handleQuery() {
+  cardData.value = []
+  listDrop('popup').then(({ data }) => {
+    if (questConfig.value.length === 0)
+      questConfig.value = data.map(quest => ({ questId: quest.questId, visible: true }))
+
+    data.forEach((quest) => {
+      if (!questConfig.value.some(q => quest.questId === q.questId))
+        questConfig.value.push({ questId: quest.questId, visible: true })
+    })
+
+    const questOrder = questConfig.value.filter(q => q.visible)
+    questOrder.forEach((quest) => {
+      const hit = data.find(q => quest.questId === q.questId)
+      hit && cardData.value.push(hit)
+    })
+  })
+}
+
+onMounted(() => {
+  handleQuery()
+})
 </script>
 
 <template>
@@ -152,11 +139,8 @@ function submit() {
     <div w-370px>
       <ElScrollbar max-height="450px">
         <div flex flex-col>
-          <div v-for="item in goldBrickCardData.filter(i => i.visiable)" :key="item.quest_id">
-            <RaidCard :raid-info="item" :type="1" @toggle-visible="toggleVisible" />
-          </div>
-          <div v-for="item in eternitySandData.filter(i => i.visiable)" :key="item.quest_id">
-            <RaidCard :raid-info="item" :type="2" @toggle-visible="toggleVisible" />
+          <div v-for="quest in cardData" :key="quest.questId">
+            <QuestCard :quest-info="quest" :visible="true" @toggle-visible="toggleVisible(quest)" />
           </div>
         </div>
       </ElScrollbar>
@@ -169,12 +153,6 @@ function submit() {
             </div>
             <template #dropdown>
               <ElDropdownMenu>
-                <ElDropdownItem command="goldBrick">
-                  重置金本数据
-                </ElDropdownItem>
-                <ElDropdownItem command="eternitySand">
-                  重置沙漏数据
-                </ElDropdownItem>
                 <ElDropdownItem command="windowSize">
                   重置面板位置
                 </ElDropdownItem>

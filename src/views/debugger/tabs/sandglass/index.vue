@@ -79,7 +79,7 @@ function toggleVisible(raid: RaidInfo, type: number) {
     </div>
     <div mt-10px fc flex-wrap gap-10px>
       <div v-for="item in eternitySandData.filter(i => i.visiable)" :key="item.quest_id">
-        <RaidCard :raid-info="item" :type="2" @toggle-visible="toggleVisible" />
+        <QuestCard :raid-info="item" :type="2" @toggle-visible="toggleVisible" />
       </div>
     </div>
     <ElCollapse>
@@ -93,7 +93,7 @@ function toggleVisible(raid: RaidInfo, type: number) {
         </template>
         <div flex flex-wrap gap-10px>
           <div v-for="item in eternitySandData.filter(i => !i.visiable)" :key="item.quest_id">
-            <RaidCard :raid-info="item" :type="2" @toggle-visible="toggleVisible" />
+            <QuestCard :raid-info="item" :type="2" @toggle-visible="toggleVisible" />
           </div>
         </div>
       </ElCollapseItem>

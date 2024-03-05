@@ -6,16 +6,16 @@ import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } f
 import { defaultEvokerInfo } from '~/constants/evoker'
 
 // Debugger
-export const code = useWebExtensionStorage('code', '')
-export const uid = useWebExtensionStorage('uid', '')
-export const tabId = useWebExtensionStorage('tabId', 0)
-export const windowId = useWebExtensionStorage('windowId', 0)
+export const code = useWebExtensionStorage<string>('code', '')
+export const uid = useWebExtensionStorage<string>('uid', '')
+export const tabId = useWebExtensionStorage<number>('tabId', 0)
+export const windowId = useWebExtensionStorage<number>('windowId', 0)
 export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top: 0, width: 800, height: 600 })
 
 // Dashboard
-export const stone = useWebExtensionStorage('stone', 0)
-export const legendticket10 = useWebExtensionStorage('legendticket10', 0)
-export const legendticket = useWebExtensionStorage('legendticket', 0)
+export const stone = useWebExtensionStorage<number>('stone', 0)
+export const legendticket10 = useWebExtensionStorage<number>('legendticket10', 0)
+export const legendticket = useWebExtensionStorage<number>('legendticket', 0)
 export const gachaRecord = useWebExtensionStorage<GachaRecord[]>('gachaRecord', [])
 export const saveStoneDate = useWebExtensionStorage('saveStoneDate', dayjs().unix())
 export const lastUpdateTodo = useWebExtensionStorage('lastUpdateTodo', dayjs().unix())
@@ -33,6 +33,7 @@ export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff',
 export const questMemo = useWebExtensionStorage<QuestMemo[]>('questMemo', [])
 
 // 掉落统计
+export const questConfig = useWebExtensionStorage<{ questId: string, visible: boolean }[]>('questConfig', [])
 export const goldBrickData = useWebExtensionStorage<GoldBrickData[]>('goldBrickData', [])
 export const goldBrickTableData = useWebExtensionStorage('goldBrickTableData', defaultGoldBrickTableData)
 export const eternitySandData = useWebExtensionStorage('eternitySandData', defaultEternitySandData)

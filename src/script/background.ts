@@ -2,7 +2,7 @@ import { load } from 'cheerio'
 import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendDropInfo } from '~/api'
-import { battleMemo, uid } from '~/logic/storage'
+import { battleMemo } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {

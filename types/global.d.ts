@@ -868,4 +868,17 @@ declare module 'api'{
     battleCount: number
     boss: Boss[]
   }
+
+  interface DropData {
+    questId: string
+    questName: string
+    isBlueBox: boolean
+    isBlueTreasure: boolean
+    targetItemKey: string
+    targetItemCount: number
+    total: number
+    blueChest: number
+    lastDropCount: number
+    lastDropTake: number
+  }
 }

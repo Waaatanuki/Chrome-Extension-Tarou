@@ -1,6 +1,6 @@
 import { code, uid } from '~/logic'
 
-async function request(api: string, options?: RequestInit) {
+async function request<T>(api: string, options?: RequestInit): Promise<T> {
   const baseURL = import.meta.env.VITE_APP_BASE_API
 
   const defaultOptions = {
