@@ -3,7 +3,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.todo === 'getRaidName') {
     const start = setInterval(() => {
-      if (!/granbluefantasy.jp\/#raid(_multi)?\/[0-9]+/.test(document.URL)) {
+      if (!/\/#raid(_multi)?\/[0-9]+/.test(document.URL)) {
         console.log('战斗开始检测中断', document.URL)
         clearInterval(start)
         sendResponse({})
@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.todo === 'getBattleResult') {
     const start = setInterval(() => {
-      if (!/granbluefantasy.jp\/#result(_multi)?\/[0-9]+/.test(document.URL)) {
+      if (!/\/#result(_multi)?\/[0-9]+/.test(document.URL)) {
         console.log('战斗结算检测中断', document.URL)
         clearInterval(start)
         sendResponse({})
