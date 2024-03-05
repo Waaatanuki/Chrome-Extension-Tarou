@@ -344,6 +344,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
             hp: Number(boss.hpmax),
           })),
         }
+        console.log('sendBossInfo', bossInfo)
         sendBossInfo(bossInfo)
       })
     }

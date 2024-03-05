@@ -141,48 +141,6 @@ declare module 'myStorage' {
     }[]
   }
 
-  interface RaidInfo {
-    quest_id: string
-    level: string
-    element: string
-    tweet_name_en: string | string[]
-    tweet_name_jp: string | string[]
-    quest_name_en: string
-    quest_name_jp: string
-    difficulty: string
-    stage_id: string
-    thumbnail_image: string
-    is_blue_treasure: boolean
-    visiable?: boolean
-    is_blue_eternitySand?: boolean
-    total?: number
-    blueChest?: number
-    goldBrick?: number
-    eternitySand?: number
-    lastDropCount?: number
-    lastDropTake?: number
-  }
-
-  interface GoldBrickTableData {
-    quest_id: string
-    total: number
-    blueChest: number
-    goldBrick: number
-    ring1: number
-    ring2: number
-    ring3: number
-    lastBlueChestCount: number
-    lastBlueChestTake?: number
-    visiable?: boolean
-  }
-
-  interface GoldBrickData {
-    timestamp: number
-    raidName: string
-    battleId: string
-    blueChests?: string
-    goldBrick?: string
-  }
 }
 
 declare module 'requestData'{

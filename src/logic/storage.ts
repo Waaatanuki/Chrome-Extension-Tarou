@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import type { BattleMemo, BattleRecord, GachaRecord, MaterialInfo, QuestMemo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
-import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
+import { defaultTodoList } from '~/constants'
 import { defaultEvokerInfo } from '~/constants/evoker'
 
 // Debugger
@@ -34,9 +34,6 @@ export const questMemo = useWebExtensionStorage<QuestMemo[]>('questMemo', [])
 
 // 掉落统计
 export const questConfig = useWebExtensionStorage<{ questId: string, visible: boolean }[]>('questConfig', [])
-export const goldBrickData = useWebExtensionStorage<GoldBrickData[]>('goldBrickData', [])
-export const goldBrickTableData = useWebExtensionStorage('goldBrickTableData', defaultGoldBrickTableData)
-export const eternitySandData = useWebExtensionStorage('eternitySandData', defaultEternitySandData)
 export const battleMemo = useWebExtensionStorage<BattleMemo[]>('battleMemo', [])
 
 // Party

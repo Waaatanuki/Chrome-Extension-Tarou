@@ -76,6 +76,7 @@ import { noticeItem } from '~/constants'
 
         battleMemo.value = battleMemo.value.filter(memo => memo.battleId !== battleId)
 
+        console.log('sendDropInfo', dropInfo)
         sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
       })
     }
@@ -103,6 +104,7 @@ import { noticeItem } from '~/constants'
           reward: treasureList,
         }
 
+        console.log('sendDropInfo', dropInfo)
         sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
 
         showNotifications(treasureList)
