@@ -111,9 +111,9 @@ onMounted(() => {
                 <ElDropdownItem command="dashboard">
                   打开详细面板
                 </ElDropdownItem>
-                <ElDropdownItem command="test">
+                <!-- <ElDropdownItem command="test">
                   测试
-                </ElDropdownItem>
+                </ElDropdownItem> -->
               </ElDropdownMenu>
             </template>
           </ElDropdown>
