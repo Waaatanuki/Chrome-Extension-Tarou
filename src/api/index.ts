@@ -20,7 +20,6 @@ export function sendDropInfo(data: DropInfo) {
 // 批量发送掉落信息
 export function sendMultiDropInfo(data: DropInfo[]) {
   return request('/ext/multiDrop', {
-    headers: { 'Content-Type': 'multipart/form-data' },
     method: 'post',
     body: JSON.stringify(data),
   })
