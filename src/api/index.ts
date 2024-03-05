@@ -18,8 +18,9 @@ export function sendDropInfo(data: DropInfo) {
 }
 
 // 批量发送掉落信息
-export function sendBatchDropInfo(data: DropInfo[]) {
+export function sendMultiDropInfo(data: DropInfo[]) {
   return request('/ext/multiDrop', {
+    headers: { 'Content-Type': 'multipart/form-data' },
     method: 'post',
     body: JSON.stringify(data),
   })
@@ -27,7 +28,7 @@ export function sendBatchDropInfo(data: DropInfo[]) {
 
 // 发送startJson中的boss信息
 export function sendBossInfo(data: StartJsonBoss) {
-  return request('/ext/drop', {
+  return request('/ext/startJson', {
     method: 'post',
     body: JSON.stringify(data),
   })

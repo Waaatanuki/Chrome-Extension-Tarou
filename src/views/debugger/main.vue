@@ -10,7 +10,7 @@ import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
 import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, uid, windowId, windowSize } from '~/logic'
-import { listDrop, sendBossInfo } from '~/api'
+import { sendBossInfo } from '~/api'
 
 const battleStartJson = ref<BattleStartJson>()
 const resultJson = ref()
@@ -610,12 +610,6 @@ chrome.windows.onBoundsChanged.addListener((windowInfo) => {
 
 window.addEventListener('beforeunload', () => {
   chrome.debugger.detach({ tabId: Number(document.URL.split('?')[1]) })
-})
-
-onMounted(() => {
-  listDrop('debugger').then(() => {
-
-  })
 })
 </script>
 

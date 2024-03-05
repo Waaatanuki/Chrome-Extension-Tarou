@@ -840,6 +840,7 @@ declare module 'party'{
 declare module 'api'{
   interface DropInfo {
     battleId: string
+    questId?: string
     questName: string
     timestamp: number
     reward: Treasure[]

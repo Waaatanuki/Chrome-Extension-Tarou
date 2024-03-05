@@ -20,8 +20,7 @@ function handleCommand(command: string) {
       openDashboard()
       break
     case 'test':
-      code.value = ''
-      uid.value = ''
+      handleQuery()
       break
   }
 }
@@ -78,7 +77,9 @@ function handleQuery() {
 }
 
 onMounted(() => {
-  handleQuery()
+  setTimeout(() => {
+    handleQuery()
+  }, 0)
 })
 </script>
 

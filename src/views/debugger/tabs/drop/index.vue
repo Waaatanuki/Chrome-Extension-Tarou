@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DropData } from 'api'
 import { questConfig } from '~/logic/storage'
-import { listDrop } from '~/api'
+import { listDrop, sendMultiDropInfo } from '~/api'
 
 const cardData = ref<DropData[]>([])
 const filesList = ref([])
@@ -47,26 +47,32 @@ function handleDragEnd() {
 
 function handleUploadChange(uploadFile: any) {
   const selectedFile = uploadFile.raw
+  sendMultiDropInfo(selectedFile)
+  // const reader = new FileReader()
+  // reader.readAsText(selectedFile)
 
-  const reader = new FileReader()
-  reader.readAsText(selectedFile)
-  reader.onload = function () {
-    const dataSet = JSON.parse(reader.result as string)
-    dataSet.forEach((item: RaidInfo) => {
-      const hit = eternitySandData.value.find(raid => raid.quest_id === item.quest_id)
-      if (hit) {
-        hit.total! += item.total ?? 0
-        hit.blueChest! += item.blueChest ?? 0
-        hit.eternitySand! += item.eternitySand ?? 0
-        hit.lastDropCount! += item.lastDropCount ?? 0
-      }
-    })
-    ElMessage.success('导入成功')
-  }
+  // reader.onload = function () {
+  //   const dataSet = JSON.parse(reader.result as string)
+
+  //   sendMultiDropInfo(dataSet)
+
+  //   // dataSet.forEach((item: RaidInfo) => {
+  //   //   const hit = eternitySandData.value.find(raid => raid.quest_id === item.quest_id)
+  //   //   if (hit) {
+  //   //     hit.total! += item.total ?? 0
+  //   //     hit.blueChest! += item.blueChest ?? 0
+  //   //     hit.eternitySand! += item.eternitySand ?? 0
+  //   //     hit.lastDropCount! += item.lastDropCount ?? 0
+  //   //   }
+  //   // })
+  //   ElMessage.success('导入成功')
+  // }
 }
 
 onMounted(() => {
-  handleQuery()
+  setTimeout(() => {
+    handleQuery()
+  }, 0)
 })
 </script>
 
