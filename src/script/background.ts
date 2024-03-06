@@ -299,17 +299,6 @@ import { Raid_EternitySand, Raid_GoldBrick, targetRaid } from '~/constants/raid'
     registerContextMenu()
   })
 
-  chrome.runtime.onStartup.addListener(() => {
-    setBadge()
-
-    // 删除两周前的memo
-    const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-    battleMemo.value = battleMemo.value.filter((meno) => {
-      const itemTimestamp = new Date(meno.timestamp)
-      return itemTimestamp > twoWeeksAgo
-    })
-  })
-
   addMenuClickListener()
 
   chrome.storage.onChanged.addListener((changes) => {
