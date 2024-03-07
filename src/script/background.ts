@@ -70,6 +70,8 @@ import { noticeItem } from '~/constants'
         const dropInfo = {
           battleId: hitMemo.battleId,
           questName: hitMemo.questName,
+          questImage: hitMemo.questImage,
+          questType: hitMemo.questType,
           timestamp: hitMemo.timestamp,
           reward: treasureList,
         }
@@ -93,12 +95,14 @@ import { noticeItem } from '~/constants'
         const $ = load(res.domStr)
         const questName = $('.txt-enemy-name').text().trim()
         const finishTime = $('.txt-defeat-value').first().text()
-
+        const questImage = $('.img-defeat').attr('alt') ?? ''
         const treasureList: Treasure[] = getTreasureList(res.domStr)
 
         const dropInfo = {
           battleId,
           questName,
+          questImage,
+          questType: '1',
           timestamp: getTimestamp(finishTime),
           reward: treasureList,
         }
@@ -126,7 +130,13 @@ import { noticeItem } from '~/constants'
 
           console.log('未记录过的战斗信息', battle)
 
-          battleMemo.value.push({ battleId: battle.battleId, questName: battle.questName, timestamp: battle.timestamp })
+          battleMemo.value.push({
+            battleId: battle.battleId,
+            questName: battle.questName,
+            questImage: battle.questImage,
+            questType: '1',
+            timestamp: battle.timestamp,
+          })
         })
 
         while (battleMemo.value.length > MaxMemoLength)
@@ -144,10 +154,11 @@ import { noticeItem } from '~/constants'
     $('.lis-raid').each((i, elem) => {
       const questName = $(elem).find('.txt-raid-name')?.text()
       const finishTime = $(elem).find('.prt-finish-time')?.text()
-
+      const questImage = $(elem).find('.img-raid-thumbnail').attr('alt') ?? ''
       res.push({
         battleId: String($(elem).data().raidId),
         questName: questName.trim(),
+        questImage,
         timestamp: getTimestamp(finishTime),
       })
     })

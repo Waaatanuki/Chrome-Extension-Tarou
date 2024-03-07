@@ -2,6 +2,8 @@ declare module 'myStorage' {
   interface BattleMemo {
     battleId: string
     questName: string
+    questImage?: string
+    questType?: string
     timestamp: number
   }
 
