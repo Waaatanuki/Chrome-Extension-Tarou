@@ -208,16 +208,6 @@ import { noticeItem } from '~/constants'
     checkCode()
   })
 
-  chrome.runtime.onStartup.addListener(() => {
-    checkCode()
-    // 删除两周前的memo
-    const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-    battleMemo.value = battleMemo.value.filter((memo) => {
-      const timestamp = new Date(memo.timestamp)
-      return timestamp > twoWeeksAgo
-    })
-  })
-
   addMenuClickListener()
 })()
 
