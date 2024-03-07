@@ -329,15 +329,21 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
 
         if (!battleStartJson.value)
           return
+
+        const matchName = battleStartJson.value.boss.param.reduce<string[]>((pre, cur) => {
+          pre.push(cur.name.ja, cur.name.en)
+          return pre
+        }, [])
         const bossInfo = {
           battleId: String(battleStartJson.value.raid_id),
           userId: battleStartJson.value.user_id,
           questId: battleStartJson.value.quest_id,
           battleTotal: Number(battleStartJson.value.battle.total),
           battleCount: Number(battleStartJson.value.battle.count),
+          matchName,
           boss: battleStartJson.value.boss.param.map(boss => ({
             id: boss.enemy_id,
-            name: [...new Set([boss.name.ja, boss.name.en])].join(','),
+            name: boss.name.ja,
             lv: boss.Lv,
             attr: boss.attr,
             cjs: boss.cjs,
