@@ -337,7 +337,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           battleCount: Number(battleStartJson.value.battle.count),
           boss: battleStartJson.value.boss.param.map(boss => ({
             id: boss.enemy_id,
-            name: boss.monster,
+            name: [...new Set([boss.name.ja, boss.name.en])].join(','),
             lv: boss.Lv,
             attr: boss.attr,
             cjs: boss.cjs,
