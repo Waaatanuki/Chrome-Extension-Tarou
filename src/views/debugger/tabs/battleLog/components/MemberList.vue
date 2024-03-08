@@ -49,7 +49,7 @@ const data = computed(() =>
     <div flex flex-wrap gap-25px text-base>
       <el-popover
         v-for="member, idx in data" :key="idx"
-        placement="top" :width="150" trigger="hover"
+        placement="top" :width="150" trigger="hover" effect="dark"
       >
         <template #reference>
           <div
@@ -83,7 +83,7 @@ const data = computed(() =>
           {{ markedUserList.find(user => user.id === member.userId)?.comment }}
         </div>
         <div flex items-center justify-end gap-10px text-xl>
-          <div i-carbon:search icon-btn @click="goProfilePage(member.userId)" />
+          <div i-carbon:identification icon-btn @click="goProfilePage(member.userId)" />
           <div i-carbon:bookmark-add icon-btn @click="handleMark(member)" />
         </div>
       </el-popover>
