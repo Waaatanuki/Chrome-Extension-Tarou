@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { BattleMemo, BattleRecord, GachaRecord, MaterialInfo, QuestMemo, RecoveryItem } from 'myStorage'
+import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, QuestMemo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultTodoList } from '~/constants'
@@ -32,10 +32,13 @@ export const specBossBuff = useWebExtensionStorage<string[]>('specBossBuff', [])
 export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff', [])
 export const questMemo = useWebExtensionStorage<QuestMemo[]>('questMemo', [])
 
-// 掉落统计
+// Drop
 export const questConfig = useWebExtensionStorage<{ questId: string, visible: boolean }[]>('questConfig', [])
 export const battleMemo = useWebExtensionStorage<BattleMemo[]>('battleMemo', [])
 
 // Party
 export const jobAbilityList = useWebExtensionStorage<NpcAbility[]>('jobAbilityList', [])
 export const localNpcList = useWebExtensionStorage<NpcInfo[]>('localNpcList', [])
+
+// MarkedUser
+export const markedUserList = useWebExtensionStorage<MarkedUser[]>('markedUserList', [])

@@ -143,6 +143,13 @@ declare module 'myStorage' {
     }[]
   }
 
+  interface MarkedUser {
+    name: string
+    id: string
+    rank: string
+    rate: number
+    comment: string
+  }
 }
 
 declare module 'requestData'{
