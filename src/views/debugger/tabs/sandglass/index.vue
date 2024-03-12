@@ -18,6 +18,8 @@ function handleUploadChange(uploadFile: any) {
         hit.blueChest! += item.blueChest ?? 0
         hit.eternitySand! += item.eternitySand ?? 0
         hit.lastDropCount! += item.lastDropCount ?? 0
+        if (!hit.lastDropTake && item.lastDropTake)
+          hit.lastDropTake = item.lastDropTake
       }
     })
     ElMessage.success('导入成功')
