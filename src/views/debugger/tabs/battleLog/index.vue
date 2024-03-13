@@ -564,8 +564,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   if (bossGauge && bossInfo.value) {
     bossInfo.value.name = bossGauge.name!.ja
     bossInfo.value.hp = bossGauge.hp!
-    bossInfo.value.hpmax = bossGauge.hpmax!
-    bossInfo.value.hpPercent = Number.parseFloat((Number(bossGauge.hp) / Number(bossGauge.hpmax) * 100).toFixed(2))
+    bossInfo.value.hpPercent = Number.parseFloat((Number(bossGauge.hp) / Number(bossInfo.value.hpmax) * 100).toFixed(2))
     bossInfo.value.timer = status?.timer ?? bossInfo.value.timer
     bossInfo.value.turn = status?.turn ?? bossInfo.value.turn
   }
