@@ -1,6 +1,6 @@
 import { code, uid } from '~/logic'
 
-async function request<T>(api: string, options?: RequestInit): Promise<T> {
+async function request<T>(api: string, options?: RequestInit, maxCount = 0): Promise<T> {
   const baseURL = import.meta.env.VITE_APP_BASE_API
 
   const defaultOptions = {
@@ -17,12 +17,9 @@ async function request<T>(api: string, options?: RequestInit): Promise<T> {
   return fetch(baseURL + api, fetchOptions).then((response) => {
     if (!response.ok)
       throw new Error(response.statusText || '请求失败')
-
     return response.json()
   })
-    .catch((error) => {
-      throw error
-    })
+    .catch(err => maxCount > 0 ? request(api, options, maxCount - 1) : Promise.reject(err))
 }
 
 export default request
