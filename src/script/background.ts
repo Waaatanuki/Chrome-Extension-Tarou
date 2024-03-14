@@ -46,6 +46,8 @@ import { noticeItem } from '~/constants'
         if (battleMemo.value.length > MaxMemoLength)
           battleMemo.value.shift()
         console.log('memoList==>', battleMemo.value)
+      }).catch((err) => {
+        console.log(err)
       })
     }
   }, { urls: ['*://*.granbluefantasy.jp/*'] }, ['requestBody'])
@@ -80,6 +82,8 @@ import { noticeItem } from '~/constants'
 
         console.log('sendDropInfo', dropInfo)
         sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
+      }).catch((err) => {
+        console.log(err)
       })
     }
 
@@ -111,6 +115,8 @@ import { noticeItem } from '~/constants'
         sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
 
         showNotifications(treasureList)
+      }).catch((err) => {
+        console.log(err)
       })
     }
 
@@ -143,6 +149,8 @@ import { noticeItem } from '~/constants'
           battleMemo.value.shift()
 
         console.log('memoList==>', battleMemo.value)
+      }).catch((err) => {
+        console.log(err)
       })
     }
   }, { urls: ['*://*.granbluefantasy.jp/*'] })
