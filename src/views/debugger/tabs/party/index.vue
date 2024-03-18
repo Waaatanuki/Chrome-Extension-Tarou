@@ -52,12 +52,17 @@ watch(() => props.deckJson, (value) => {
     const jobFirstAbility = jobAbilityList.value.find(a => a.job_param_id === job_param_id)
 
     const leaderAbilityList: NpcAbility[] = []
+    const setAction: { name: string, set_action_id: string, icon_id?: string }[] = []
     if (jobFirstAbility) {
       leaderAbilityList[0] = jobFirstAbility
       value.pc.set_action.forEach((ab, idx) => {
         const hitAb = jobAbilityList.value.find(a => a.action_id === ab.set_action_id)
-        if (hitAb)
+        const action: { name: string, set_action_id: string, icon_id?: string } = { name: ab.name, set_action_id: ab.set_action_id }
+        if (hitAb) {
           leaderAbilityList[idx + 1] = { ...hitAb }
+          action.icon_id = hitAb.icon_id
+        }
+        setAction.push({ ...action })
       })
     }
 
@@ -68,7 +73,7 @@ watch(() => props.deckJson, (value) => {
       leader: value.pc.param,
       leaderAbilityList,
       npcs: newNpcs,
-      setAction: value.pc.set_action.filter(a => a.set_action_id),
+      setAction,
       weapons: value.pc.weapons,
       summons: value.pc.summons,
       quickSummoniId: String(value.pc.quick_user_summon_id),

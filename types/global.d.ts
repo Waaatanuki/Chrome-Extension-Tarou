@@ -630,6 +630,7 @@ declare module 'requestData'{
 
    interface NpcAbility {
      action_id: string
+     icon_id: string
      name: string
      icon_type: string
      user_full_auto_setting_flag: number
