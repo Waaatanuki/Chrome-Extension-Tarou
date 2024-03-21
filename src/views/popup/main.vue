@@ -83,33 +83,24 @@ onMounted(() => {
   <main>
     <div w-370px>
       <ElScrollbar max-height="450px">
-        <div flex flex-col>
+        <div min-h-50px flex flex-col>
           <div v-for="quest in questConfig.filter(q => q.visible)" :key="quest.questId">
             <QuestCard :quest-info="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
+          </div>
+          <div v-if="questConfig.filter(q => q.visible).length === 0" h-50px text-center>
+            还未收藏副本
           </div>
         </div>
       </ElScrollbar>
 
-      <div flex items-center justify-between>
-        <div>
-          <ElDropdown @command="handleCommand">
-            <div m-2 flex btn size="small" type="danger">
-              操作
-            </div>
-            <template #dropdown>
-              <ElDropdownMenu>
-                <ElDropdownItem command="toggleDark">
-                  切换暗黑模式
-                </ElDropdownItem>
-                <ElDropdownItem command="dashboard">
-                  打开详细面板
-                </ElDropdownItem>
-                <!-- <ElDropdownItem command="test">
-                  测试
-                </ElDropdownItem> -->
-              </ElDropdownMenu>
-            </template>
-          </ElDropdown>
+      <div flex items-center justify-between px-15px py-10px>
+        <div fc gap-20px text-lg>
+          <el-tooltip content="切换模式" placement="bottom">
+            <div i-carbon-sun dark:i-carbon-moon icon-btn @click="handleCommand('toggleDark')" />
+          </el-tooltip>
+          <el-tooltip content="详细面板" placement="bottom">
+            <div i-carbon:dashboard icon-btn @click="handleCommand('dashboard')" />
+          </el-tooltip>
         </div>
         <div mr-2>
           <el-link @click="showDialog">
