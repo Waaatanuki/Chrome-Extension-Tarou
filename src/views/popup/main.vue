@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DropData } from 'api'
 import copy from 'copy-text-to-clipboard'
-import { code, questConfig, uid, windowSize } from '~/logic/storage'
+import { code, questConfig, uid } from '~/logic/storage'
 import { listDrop, updateCode } from '~/api'
 
 const { openDashboard } = useDashboard()
@@ -9,10 +9,6 @@ const cardData = ref<DropData[]>([])
 
 function handleCommand(command: string) {
   switch (command) {
-    case 'windowSize':
-      windowSize.value = { left: 300, top: 0, width: 800, height: 600 }
-      ElMessage.success('详细面板位置已重置')
-      break
     case 'toggleDark':
       toggleDark()
       break
@@ -102,9 +98,6 @@ onMounted(() => {
             </div>
             <template #dropdown>
               <ElDropdownMenu>
-                <ElDropdownItem command="windowSize">
-                  重置面板位置
-                </ElDropdownItem>
                 <ElDropdownItem command="toggleDark">
                   切换暗黑模式
                 </ElDropdownItem>

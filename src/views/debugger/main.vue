@@ -354,7 +354,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           })),
         }
         console.log('sendBossInfo', bossInfo)
-        sendBossInfo(bossInfo)
+        sendBossInfo(bossInfo).catch((err) => { console.log(err.message) })
       })
     }
 
