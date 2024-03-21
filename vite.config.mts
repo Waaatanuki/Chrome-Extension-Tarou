@@ -18,7 +18,7 @@ export const sharedConfig: UserConfig = {
   plugins: [
     Vue(),
     AutoImport({
-      imports: ['vue', '@vueuse/core', { 'webextension-polyfill': [['*', 'browser']] }],
+      imports: ['vue', '@vueuse/core'],
       dirs: [r('src/composables')],
       resolvers: [ElementPlusResolver()],
       vueTemplate: true,
@@ -34,7 +34,6 @@ export const sharedConfig: UserConfig = {
     include: [
       'vue',
       '@vueuse/core',
-      'webextension-polyfill',
     ],
   },
 }

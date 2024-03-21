@@ -1,9 +1,7 @@
 import { StorageSerializers } from '@vueuse/core'
 import { toValue, tryOnScopeDispose, watchWithFilter } from '@vueuse/shared'
-import { storage } from 'webextension-polyfill'
 import type { StorageLikeAsync, UseStorageAsyncOptions } from '@vueuse/core'
 import type { MaybeRefOrGetter, RemovableRef } from '@vueuse/shared'
-import type { Storage } from 'webextension-polyfill'
 
 export type WebExtensionStorageOptions<T> = UseStorageAsyncOptions<T>
 
@@ -30,15 +28,15 @@ export function guessSerializerType<T extends(string | number | boolean | object
 
 const storageInterface: StorageLikeAsync = {
   removeItem(key: string) {
-    return storage.local.remove(key)
+    return chrome.storage.local.remove(key)
   },
 
   setItem(key: string, value: string) {
-    return storage.local.set({ [key]: value })
+    return chrome.storage.local.set({ [key]: value })
   },
 
   async getItem(key: string) {
-    const storedData = await storage.local.get(key)
+    const storedData = await chrome.storage.local.get(key)
 
     return storedData[key]
   },
@@ -106,7 +104,7 @@ export function useWebExtensionStorage<T extends(string | number | boolean | obj
   void read()
 
   if (listenToStorageChanges) {
-    const listener = async (changes: Record<string, Storage.StorageChange>) => {
+    const listener = async (changes: Record<string, chrome.storage.StorageChange>) => {
       for (const [key, change] of Object.entries(changes)) {
         await read({
           key,
@@ -115,10 +113,10 @@ export function useWebExtensionStorage<T extends(string | number | boolean | obj
       }
     }
 
-    storage.onChanged.addListener(listener)
+    chrome.storage.onChanged.addListener(listener)
 
     tryOnScopeDispose(() => {
-      storage.onChanged.removeListener(listener)
+      chrome.storage.onChanged.removeListener(listener)
     })
   }
 

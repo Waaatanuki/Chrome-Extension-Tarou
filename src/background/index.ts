@@ -11,11 +11,11 @@ import { noticeItem } from '~/constants'
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
   const { checkUid, checkCode } = useUser()
 
-  browser.tabs.onUpdated.addListener(() => {
+  chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
   })
 
-  browser.webRequest.onBeforeRequest.addListener((details) => {
+  chrome.webRequest.onBeforeRequest.addListener((details) => {
     // 记录战斗id与副本名称
     if (/\/rest\/(raid|multiraid)\/start\.json/.test(details.url)) {
       checkUid(details.url)
@@ -55,7 +55,7 @@ import { noticeItem } from '~/constants'
     }
   }, { urls: ['*://*.granbluefantasy.jp/*'] }, ['requestBody'])
 
-  browser.webRequest.onCompleted.addListener((details) => {
+  chrome.webRequest.onCompleted.addListener((details) => {
     // 记录掉落结果
     if (/\/result(multi)?\/content\/index/.test(details.url)) {
       checkUid(details.url)
@@ -213,7 +213,7 @@ import { noticeItem } from '~/constants'
       str += 'e'
 
     if (hitTreasure) {
-      browser.notifications.create({
+      chrome.notifications.create({
         iconUrl: `/assets/${hitTreasure.key}.png`,
         message: ` G${str}t☆Daze!`,
         type: 'basic',
@@ -222,7 +222,7 @@ import { noticeItem } from '~/constants'
     }
   }
 
-  browser.runtime.onInstalled.addListener(() => {
+  chrome.runtime.onInstalled.addListener(() => {
     registerContextMenu()
     checkCode()
   })
