@@ -43,7 +43,7 @@ function handleInputConfirm() {
 
 onMounted(() => {
   if (dayjs().tz().isAfter(dayjs().tz().hour(4).minute(0).second(0))
-  && dayjs.unix(lastUpdateTodo.value).tz().isBefore(dayjs().tz().hour(4).minute(0).second(0))
+    && dayjs.unix(lastUpdateTodo.value).tz().isBefore(dayjs().tz().hour(4).minute(0).second(0))
   ) {
     lastUpdateTodo.value = dayjs().unix()
     todoList.value.forEach(task => (task.done = false))

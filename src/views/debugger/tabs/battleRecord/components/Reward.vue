@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ treasureList: { src: string; number: string; boxClass: string }[] }>()
+defineProps<{ treasureList: { src: string, number: string, boxClass: string }[] }>()
 </script>
 
 <template>

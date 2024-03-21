@@ -3,9 +3,9 @@ node_modules
 dist
 dist-ssr
 *.local
+*.zip
 
 types/auto-imports.d.ts
 types/components.d.ts
 .eslintcache
-Chrome-Extension-Tarou*.zip
 components.d.ts

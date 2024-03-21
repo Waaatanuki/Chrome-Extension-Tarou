@@ -2,7 +2,7 @@
 import type { QuestMemo } from 'myStorage'
 import { questMemo } from '~/logic'
 
-const props = defineProps<{ questId: string; questName: string }>()
+const props = defineProps<{ questId: string, questName: string }>()
 
 const dialogVisiable = ref(false)
 const textarea = ref('')
