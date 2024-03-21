@@ -1,6 +1,7 @@
 import { load } from 'cheerio'
 import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
+import { sendMessage } from 'webext-bridge/background'
 import { sendDropInfo } from '~/api'
 import { battleMemo } from '~/logic/storage'
 import { noticeItem } from '~/constants'
@@ -10,11 +11,11 @@ import { noticeItem } from '~/constants'
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
   const { checkUid, checkCode } = useUser()
 
-  chrome.tabs.onUpdated.addListener(() => {
+  browser.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
   })
 
-  chrome.webRequest.onBeforeRequest.addListener((details) => {
+  browser.webRequest.onBeforeRequest.addListener((details) => {
     // 记录战斗id与副本名称
     if (/\/rest\/(raid|multiraid)\/start\.json/.test(details.url)) {
       checkUid(details.url)
@@ -36,7 +37,9 @@ import { noticeItem } from '~/constants'
         return
       console.log('gogogo')
 
-      chrome.tabs.sendMessage(details.tabId, { todo: 'getRaidName' }).then((res) => {
+      sendMessage('getRaidName', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
+        console.log(res)
+
         if (!res?.questName)
           return
         console.log('新增memo==>', { battleId, quest_name: res.questName, timestamp })
@@ -52,7 +55,7 @@ import { noticeItem } from '~/constants'
     }
   }, { urls: ['*://*.granbluefantasy.jp/*'] }, ['requestBody'])
 
-  chrome.webRequest.onCompleted.addListener((details) => {
+  browser.webRequest.onCompleted.addListener((details) => {
     // 记录掉落结果
     if (/\/result(multi)?\/content\/index/.test(details.url)) {
       checkUid(details.url)
@@ -61,14 +64,11 @@ import { noticeItem } from '~/constants'
       if (!hitMemo)
         return
 
-      chrome.tabs.sendMessage(details.tabId, { todo: 'getBattleResult' }).then((res) => {
+      sendMessage('getBattleResult', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.domStr)
           return
-
         const treasureList: Treasure[] = getTreasureList(res.domStr)
-
         showNotifications(treasureList)
-
         const dropInfo = {
           battleId: hitMemo.battleId,
           questName: hitMemo.questName,
@@ -79,7 +79,6 @@ import { noticeItem } from '~/constants'
         }
 
         battleMemo.value = battleMemo.value.filter(memo => memo.battleId !== battleId)
-
         console.log('sendDropInfo', dropInfo)
         sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
       }).catch((err) => {
@@ -92,7 +91,7 @@ import { noticeItem } from '~/constants'
       checkUid(details.url)
       const battleId = details.url.match(/\d+/g)![0]
 
-      chrome.tabs.sendMessage(details.tabId, { todo: 'getBattleHistoryResult' }).then((res) => {
+      sendMessage('getBattleHistoryResult', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.domStr)
           return
 
@@ -123,7 +122,8 @@ import { noticeItem } from '~/constants'
     // 记录未结算战斗信息
     if (details.url.includes('/quest/unclaimed_reward')) {
       checkUid(details.url)
-      chrome.tabs.sendMessage(details.tabId, { todo: 'getUnclaimedList' }).then((res) => {
+
+      sendMessage('getUnclaimedList', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.domStr)
           return
 
@@ -213,7 +213,7 @@ import { noticeItem } from '~/constants'
       str += 'e'
 
     if (hitTreasure) {
-      chrome.notifications.create({
+      browser.notifications.create({
         iconUrl: `/assets/${hitTreasure.key}.png`,
         message: ` G${str}t☆Daze!`,
         type: 'basic',
@@ -222,7 +222,7 @@ import { noticeItem } from '~/constants'
     }
   }
 
-  chrome.runtime.onInstalled.addListener(() => {
+  browser.runtime.onInstalled.addListener(() => {
     registerContextMenu()
     checkCode()
   })
