@@ -9,6 +9,7 @@ import Sandglass from './tabs/sandglass/index.vue'
 import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
+import MarkedUser from './tabs/markedUser/index.vue'
 import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, uid, windowId, windowSize } from '~/logic'
 
 const battleStartJson = ref()
@@ -616,6 +617,9 @@ window.addEventListener('beforeunload', () => {
       </ElTabPane>
       <ElTabPane label="战斗历史">
         <BattleRecord :battle-record-limit="battleRecordLimit" />
+      </ElTabPane>
+      <ElTabPane label="标记用户">
+        <MarkedUser />
       </ElTabPane>
     </ElTabs>
   </main>

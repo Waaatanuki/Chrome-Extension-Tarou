@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { BattleMemo, BattleRecord, GachaRecord, MaterialInfo, QuestMemo, RecoveryItem } from 'myStorage'
+import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, QuestMemo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
 import { useStorageLocal } from '~/composables/useStorageLocal'
 import { defaultEternitySandData, defaultGoldBrickTableData, defaultTodoList } from '~/constants'
@@ -40,3 +40,6 @@ export const battleMemo = useStorageLocal<BattleMemo[]>('battleMemo', [])
 // Party
 export const jobAbilityList = useStorageLocal<NpcAbility[]>('jobAbilityList', [])
 export const localNpcList = useStorageLocal<NpcInfo[]>('localNpcList', [])
+
+// MarkedUser
+export const markedUserList = useStorageLocal<MarkedUser[]>('markedUserList', [])

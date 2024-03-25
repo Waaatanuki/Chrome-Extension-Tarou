@@ -199,6 +199,14 @@ declare module 'myStorage' {
     blueChests?: string
     goldBrick?: string
   }
+
+  interface MarkedUser {
+    name: string
+    id: string
+    rank: string
+    rate: number
+    comment: string
+  }
 }
 
 declare module 'requestData'{
