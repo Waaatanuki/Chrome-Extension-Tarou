@@ -232,6 +232,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           if (currentAbility) {
             npcInfo.action_ability.push({
               action_id: currentAbility.action_id,
+              icon_id: currentAbility.class_name,
               name: currentAbility.name,
               icon_type: currentAbility.icon_type,
               user_full_auto_setting_flag: currentAbility.user_full_auto_setting_flag,
@@ -274,6 +275,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           if (actionAbility) {
             const ab: NpcAbility = {
               action_id: String(actionAbility.action_id),
+              icon_id: actionAbility.class_name,
               name: actionAbility.name,
               icon_type: actionAbility.action_icon.split('_')[1],
               user_full_auto_setting_flag: actionAbility.user_full_auto_setting_flag,

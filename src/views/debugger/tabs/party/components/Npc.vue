@@ -5,7 +5,7 @@ defineProps<{
   leader: any
   leaderAbilityList: NpcAbility[]
   npcs: NpcInfo[]
-  setAction: { name: string; set_action_id: string }[]
+  setAction: { name: string, set_action_id: string, icon_id?: string }[]
   damageInfo: DamageInfo
 }>()
 
@@ -52,7 +52,10 @@ function getImg(id: string, type = 'npc') {
       </div>
       <div flex flex-col gap-5px px-2 text-sm>
         <ElTag v-for="action in setAction " :key="action.name" type="info" effect="plain">
-          {{ action.name }}
+          <div fc gap-4px>
+            <img v-if="action.icon_id" w-20px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/${action.icon_id}.png`">
+            <span>{{ action.name }}</span>
+          </div>
         </ElTag>
       </div>
     </div>
