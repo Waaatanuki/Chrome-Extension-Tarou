@@ -559,8 +559,8 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
       resultJsonPayload.value = JSON.parse(params.request.postData)
 
     // BattleLog 记录切换奥义温存日志
-    if (/\/rest\/(raid|multiraid)\/special_skill_setting\.json/.test(requestUrl))
-      resultJsonPayload.value = JSON.parse(params.request.postData)
+    if (/\/rest\/(raid|multiraid)\/special_skill_setting/.test(requestUrl))
+      specialSkillSetting.value = JSON.parse(params.request.postData)
   }
 
   //   getResponse(tabId, requestId, (resp) => {
