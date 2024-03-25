@@ -29,7 +29,7 @@ export function sendMultiDropInfo(data: DropInfo[]) {
 export function sendBossInfo(data: StartJsonBoss) {
   return request('/ext/startJson', {
     method: 'post',
-    body: JSON.stringify({ quest: data }),
+    body: JSON.stringify(data),
   })
 }
 
