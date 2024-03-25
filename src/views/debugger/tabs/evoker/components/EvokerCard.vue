@@ -11,7 +11,7 @@ const evoker = defineModel<EvokerInfo>({ required: true })
     <div class="h-170px flex flex-col items-center justify-evenly">
       <ElSelect
         v-model="evoker.tarotLevel"
-        class="w-100px"
+        style="width:100px"
         :class="{ completed: evoker.tarotLevel === tarotList.at(-1)?.value }"
         size="small"
         placeholder="塔罗牌进度"
@@ -27,7 +27,7 @@ const evoker = defineModel<EvokerInfo>({ required: true })
 
       <ElSelect
         v-model="evoker.evokerLevel"
-        class="w-100px"
+        style="width:100px"
         :class="{ completed: evoker.evokerLevel === evokerList.at(-1)?.value }"
         size="small"
         placeholder="贤者进度"
@@ -43,7 +43,7 @@ const evoker = defineModel<EvokerInfo>({ required: true })
 
       <ElSelect
         v-model="evoker.weaponLevel"
-        class="w-100px"
+        style="width:100px"
         :class="{ completed: evoker.weaponLevel === weaponList.at(-1)?.value }"
         size="small"
         placeholder="贤武进度"
@@ -59,7 +59,7 @@ const evoker = defineModel<EvokerInfo>({ required: true })
 
       <ElSelect
         v-model="evoker.domainLevel"
-        class="w-100px"
+        style="width:100px"
         :class="{ completed: evoker.domainLevel === domainList.at(-1)?.value }"
         size="small"
         placeholder="领域进度"
@@ -91,7 +91,7 @@ const evoker = defineModel<EvokerInfo>({ required: true })
 <style lang="scss">
 .evoker-card {
   .el-select.completed {
-    .el-input__wrapper {
+    .el-select__wrapper {
       background-color: rgba(255, 166, 0, 0.7);
     }
   }

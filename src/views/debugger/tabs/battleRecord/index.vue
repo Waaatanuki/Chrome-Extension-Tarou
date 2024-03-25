@@ -6,6 +6,7 @@ import ActionList from '../battleLog/components/ActionList.vue'
 import { battleRecord } from '~/logic'
 
 const props = defineProps<{ battleRecordLimit: number }>()
+const { height } = useWindowSize()
 
 function triggerLock(row: BattleRecord) {
   const lockedNum = battleRecord.value.filter(record => record.reserve).length
@@ -49,7 +50,7 @@ function clear() {
 </script>
 
 <template>
-  <ElTable :data="battleRecord">
+  <ElTable :data="battleRecord" :height="height - 71 - 52">
     <ElTableColumn type="expand">
       <template #default="{ row } ">
         <div flex items-start justify-start gap-2 p-2>

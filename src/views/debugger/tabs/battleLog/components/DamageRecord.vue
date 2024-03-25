@@ -50,7 +50,7 @@ function getImg(player: Player) {
   return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${player.is_npc ? 'npc' : 'leader'}/m/${player.image_id}.jpg`
 }
 
-function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number; da: number; ta: number }) {
+function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number, da: number, ta: number }) {
   return `${Math.floor(info[type] / info.total * 100)}%`
 }
 </script>
@@ -61,7 +61,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
       <ElTabPane label="伤害统计" name="damage">
         <div h-500px>
           <div fc pb-20px pt-5px>
-            <ElSelect v-model="damageType" w-150px>
+            <ElSelect v-model="damageType" style="width:150px">
               <ElOption
                 v-for="item in damageTypeOptions"
                 :key="item.value"
@@ -75,7 +75,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
             <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
               <div relative w-100px>
                 <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
-                  <span text-base font-bold text-red>Dead</span>
+                  <span text-base text-red font-bold>Dead</span>
                 </div>
                 <img w-full :src="getImg(player)">
               </div>
@@ -138,7 +138,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number; sa: number;
             <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
               <div relative w-100px>
                 <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
-                  <span text-base font-bold text-red>Dead</span>
+                  <span text-base text-red font-bold>Dead</span>
                 </div>
                 <img w-full :src="getImg(player)">
               </div>
