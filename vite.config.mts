@@ -45,6 +45,7 @@ function getEntry() {
     const name = path.split('/').at(-2)
     list[`assets/${name}`] = `${r(`${path}.html`)}`
   })
+  list.background = r('src/background/index.ts')
   return list
 }
 

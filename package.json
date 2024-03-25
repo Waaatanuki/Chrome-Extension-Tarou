@@ -13,12 +13,11 @@
     }
   },
   "scripts": {
-    "ba": "run-s clear build:alp build:prepare build:background build:js",
-    "bp": "run-s clear build:prod build:prepare build:background build:js",
+    "ba": "run-s clear build:alp build:prepare  build:js",
+    "bp": "run-s clear build:prod build:prepare  build:js",
     "build:alp": "vite build --mode development",
     "build:prod": "vite build --mode production",
     "build:prepare": "esno scripts/prepare.ts",
-    "build:background": "vite build --config vite.config.background.mts",
     "build:js": "vite build --config vite.config.content.mts",
     "zip": "esno scripts/zip.ts",
     "watch": "npm-watch",
