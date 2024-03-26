@@ -57,16 +57,14 @@ function submit() {
 }
 
 function handleQuery() {
-  cardData.value = []
-  listDrop().then(({ data }) => {
-    cardData.value = data
-    if (questConfig.value.length === 0)
-      questConfig.value = data.map(quest => ({ questId: quest.questId, visible: true }))
+  const questIds = questConfig.value.filter(q => q.visible).map(q => q.questId)
+  if (questIds.length === 0) {
+    console.log('还未收藏副本')
+    return
+  }
 
-    data.forEach((quest) => {
-      if (!questConfig.value.some(q => quest.questId === q.questId))
-        questConfig.value.push({ questId: quest.questId, visible: true })
-    })
+  listDrop(questIds).then(({ data }) => {
+    cardData.value = data
   }).catch(() => {
     ElMessage.error('掉落数据请求失败')
   })
@@ -85,9 +83,9 @@ onMounted(() => {
       <ElScrollbar max-height="450px">
         <div min-h-50px flex flex-col>
           <div v-for="quest in questConfig.filter(q => q.visible)" :key="quest.questId">
-            <QuestCard :quest-info="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
+            <QuestCard :quest-info="quest" :data="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
           </div>
-          <div v-if="questConfig.filter(q => q.visible).length === 0" h-50px text-center>
+          <div v-if="questConfig.filter(q => q.visible).length === 0" mt-10px h-50px text-center text-xl>
             还未收藏副本
           </div>
         </div>

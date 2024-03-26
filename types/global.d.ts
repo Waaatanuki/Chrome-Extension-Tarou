@@ -150,6 +150,15 @@ declare module 'myStorage' {
     rate: number
     comment: string
   }
+
+  interface Quest {
+    questId: string
+    questName: string
+    isBlueBox: boolean
+    isBlueTreasure: boolean
+    targetItemKey: string
+    visible: boolean
+  }
 }
 
 declare module 'requestData'{

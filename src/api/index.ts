@@ -33,9 +33,18 @@ export function sendBossInfo(data: StartJsonBoss) {
   })
 }
 
-// 获取掉落统计信息
-export function listDrop() {
-  return request<{ data: DropData[] }>('/ext/drop', {
+// 获取副本信息
+export function listQuest() {
+  return request<{ data: { questId: string, questName: string, isBlueBox: boolean, isBlueTreasure: boolean, targetItemKey: string }[] }>('/ext/quest', {
     method: 'get',
+
+  })
+}
+
+// 获取掉落统计信息
+export function listDrop(questIds: string[]) {
+  return request<{ data: DropData[] }>('/ext/stat', {
+    method: 'post',
+    body: JSON.stringify(questIds),
   })
 }

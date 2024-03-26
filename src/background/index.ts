@@ -38,8 +38,6 @@ import { noticeItem } from '~/constants'
       console.log('gogogo')
 
       sendMessage('getRaidName', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
-        console.log(res)
-
         if (!res?.questName)
           return
         console.log('新增memo==>', { battleId, quest_name: res.questName, timestamp })

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { DropData } from 'api'
+import type { Quest } from 'myStorage'
 
-const props = defineProps<{ questInfo?: DropData, visible: boolean }>()
+const props = defineProps<{ questInfo: Quest, data?: DropData, visible: boolean }>()
 defineEmits(['toggleVisible'])
 
 function getRatio(a = 0, b = 0) {
@@ -11,14 +12,18 @@ function getRatio(a = 0, b = 0) {
   return ((a / b) * 100).toFixed(2)
 }
 
-function getDropRatio(item: DropData) {
+function getDropRatio(item?: DropData) {
+  if (!item)
+    return '0.00'
   if (item.isBlueTreasure)
     return getRatio(item.targetItemCount, item.blueChest)
   else
     return getRatio(item.targetItemCount, item.total)
 }
 
-function getMsg(item: DropData) {
+function getMsg(item?: DropData) {
+  if (!item)
+    return '收藏后刷新获取数据'
   let prefix: string
   switch (props.questInfo?.targetItemKey) {
     case '17_20004':
@@ -51,7 +56,7 @@ function getMsg(item: DropData) {
         <div mt-2px fc gap-2px>
           <div i-game-icons:crossed-swords />
           <div text-orange font-black>
-            {{ questInfo.total?.toLocaleString() }}
+            {{ data?.total?.toLocaleString() }}
           </div>
           <div i-game-icons:crossed-swords />
         </div>
@@ -59,12 +64,12 @@ function getMsg(item: DropData) {
       <div fc flex-col>
         <div w-230px flex items-center justify-around>
           <div v-if="questInfo.isBlueBox" class="desc-item">
-            <el-badge :value="questInfo.blueChest" type="danger" :max="999999">
+            <el-badge :value="data?.blueChest" type="danger" :max="999999">
               <img w-40px draggable="false" :src="getLocalImg('blueChest')">
             </el-badge>
 
             <div text-xs>
-              {{ getRatio(questInfo.blueChest, questInfo.total) }}%
+              {{ getRatio(data?.blueChest, data?.total) }}%
             </div>
           </div>
 
@@ -73,17 +78,17 @@ function getMsg(item: DropData) {
           </div>
 
           <div class="desc-item">
-            <el-badge :value="questInfo.targetItemCount" type="danger" :max="999999">
+            <el-badge :value="data?.targetItemCount" type="danger" :max="999999">
               <img w-40px draggable="false" :src="getLocalImg(questInfo.targetItemKey, 'item')">
             </el-badge>
 
             <div text-xs>
-              {{ getDropRatio(questInfo) }}%
+              {{ getDropRatio(data) }}%
             </div>
           </div>
         </div>
         <div text-xs text-gray>
-          {{ getMsg(questInfo) }}
+          {{ getMsg(data) }}
         </div>
       </div>
     </div>

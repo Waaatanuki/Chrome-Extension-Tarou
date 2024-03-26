@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { DropData } from 'api'
 import { questConfig } from '~/logic/storage'
-import { listDrop, sendMultiDropInfo } from '~/api'
+import { listDrop, listQuest, sendMultiDropInfo } from '~/api'
 
 const cardData = ref<DropData[]>([])
+const btnLoading = ref(false)
 const filesList = ref([])
 function toggleVisible(quest: DropData) {
   const hit = questConfig.value.find(q => q.questId === quest.questId)
@@ -12,18 +13,20 @@ function toggleVisible(quest: DropData) {
 }
 
 function handleQuery() {
-  cardData.value = []
-  listDrop().then(({ data }) => {
+  if (btnLoading.value)
+    return
+  const questIds = questConfig.value.filter(q => q.visible).map(q => q.questId)
+  if (questIds.length === 0) {
+    console.log('还未收藏副本')
+    return
+  }
+  btnLoading.value = true
+  listDrop(questIds).then(({ data }) => {
     cardData.value = data
-    if (questConfig.value.length === 0)
-      questConfig.value = data.map(quest => ({ questId: quest.questId, visible: true }))
-
-    data.forEach((quest) => {
-      if (!questConfig.value.some(q => quest.questId === q.questId))
-        questConfig.value.push({ questId: quest.questId, visible: true })
-    })
   }).catch(() => {
     ElMessage.error('掉落数据请求失败')
+  }).finally(() => {
+    btnLoading.value = false
   })
 }
 
@@ -62,6 +65,16 @@ function handleUploadChange(uploadFile: any) {
   }
 }
 
+function updateQuestList() {
+  listQuest().then(({ data }) => {
+    data.forEach((quest) => {
+      if (!questConfig.value.some(q => quest.questId === q.questId))
+        questConfig.value.push({ ...quest, visible: false })
+    })
+    ElMessage.success('更新副本列表成功')
+  })
+}
+
 onMounted(() => {
   setTimeout(() => {
     handleQuery()
@@ -71,11 +84,16 @@ onMounted(() => {
 
 <template>
   <main>
-    <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-end bg-violet px-4 text-base>
+    <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between bg-violet px-4 text-base>
+      <div fc text-xs btn @click="handleQuery">
+        <div v-if="btnLoading" i-svg-spinners:90-ring-with-bg />
+        <div v-else i-carbon:update-now />
+        刷新
+      </div>
       <div fc gap-2>
-        <div fc text-xs btn @click="handleQuery">
-          <div i-carbon:update-now mr-1 />
-          刷新
+        <div fc text-xs btn @click="updateQuestList">
+          <div i-carbon:document-download mr-1 />
+          更新副本列表
         </div>
         <ElUpload v-model:file-list="filesList" :on-change="handleUploadChange" :show-file-list="false" :limit="1" :auto-upload="false" accept=".json">
           <template #trigger>
@@ -96,8 +114,11 @@ onMounted(() => {
         @dragenter="(e) => handleDragEnter(e, quest)"
         @dragend="handleDragEnd"
       >
-        <QuestCard :quest-info="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
+        <QuestCard :quest-info="quest" :data="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
         <div v-if="questConfig[currentIdx]?.questId === quest.questId" border="1 dashed #ccc" absolute left-0 top-0 h-full w-full bg-slate-900 opacity-50 />
+      </div>
+      <div v-if="questConfig.filter(q => q.visible).length === 0" mt-10px h-50px text-center text-xl>
+        还未收藏副本
       </div>
     </div>
     <ElCollapse>
@@ -111,7 +132,7 @@ onMounted(() => {
         </template>
         <div fc flex-wrap gap-10px>
           <div v-for="quest in questConfig.filter(q => !q.visible)" :key="quest.questId">
-            <QuestCard :quest-info="cardData.find(q => q.questId === quest.questId)" :visible="false" @toggle-visible="toggleVisible" />
+            <QuestCard :quest-info="quest" :visible="false" @toggle-visible="toggleVisible" />
           </div>
         </div>
       </ElCollapseItem>

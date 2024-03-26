@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, QuestMemo, RecoveryItem } from 'myStorage'
+import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, Quest, QuestMemo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultTodoList } from '~/constants'
@@ -33,7 +33,7 @@ export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff',
 export const questMemo = useWebExtensionStorage<QuestMemo[]>('questMemo', [])
 
 // Drop
-export const questConfig = useWebExtensionStorage<{ questId: string, visible: boolean }[]>('questConfig', [])
+export const questConfig = useWebExtensionStorage<Quest[]>('questConfig', [])
 export const battleMemo = useWebExtensionStorage<BattleMemo[]>('battleMemo', [])
 
 // Party
