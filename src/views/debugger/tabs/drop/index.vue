@@ -4,7 +4,8 @@ import { questConfig } from '~/logic/storage'
 import { listDrop, listQuest, sendMultiDropInfo } from '~/api'
 
 const cardData = ref<DropData[]>([])
-const btnLoading = ref(false)
+const queryBtnLoading = ref(false)
+const importBtnLoading = ref(false)
 const filesList = ref([])
 function toggleVisible(quest: DropData) {
   const hit = questConfig.value.find(q => q.questId === quest.questId)
@@ -17,20 +18,20 @@ function toggleVisible(quest: DropData) {
 }
 
 function handleQuery() {
-  if (btnLoading.value)
+  if (queryBtnLoading.value)
     return
   const questIds = questConfig.value.filter(q => q.visible).map(q => q.questId)
   if (questIds.length === 0) {
     console.log('还未收藏副本')
     return
   }
-  btnLoading.value = true
+  queryBtnLoading.value = true
   listDrop(questIds).then(({ data }) => {
     cardData.value = data
   }).catch(() => {
     ElMessage.error('掉落数据请求失败')
   }).finally(() => {
-    btnLoading.value = false
+    queryBtnLoading.value = false
   })
 }
 
@@ -60,11 +61,14 @@ function handleUploadChange(uploadFile: any) {
   reader.onload = function () {
     const dataSet = JSON.parse(reader.result as string)
 
+    importBtnLoading.value = true
     sendMultiDropInfo(dataSet).then(() => {
       ElMessage.success('导入成功')
       handleQuery()
     }).catch((err) => {
       ElMessage.error(err.message)
+    }).finally(() => {
+      importBtnLoading.value = false
     })
   }
 }
@@ -90,8 +94,8 @@ onMounted(() => {
   <main>
     <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between bg-violet px-4 text-base>
       <div fc text-xs btn @click="handleQuery">
-        <div v-if="btnLoading" i-svg-spinners:90-ring-with-bg />
-        <div v-else i-carbon:update-now />
+        <div v-if="queryBtnLoading" i-svg-spinners:90-ring-with-bg />
+        <div v-else i-carbon:update-now mr-1 />
         刷新
       </div>
       <div fc gap-2>
@@ -99,10 +103,14 @@ onMounted(() => {
           <div i-carbon:document-download mr-1 />
           更新副本列表
         </div>
-        <ElUpload v-model:file-list="filesList" :on-change="handleUploadChange" :show-file-list="false" :limit="1" :auto-upload="false" accept=".json">
+        <ElUpload
+          v-model:file-list="filesList" :on-change="handleUploadChange"
+          :show-file-list="false" :limit="1" :auto-upload="false" accept=".json" :disabled="importBtnLoading"
+        >
           <template #trigger>
             <div fc text-xs btn @click="filesList = []">
-              <div i-carbon:document-import mr-1 />
+              <div v-if="importBtnLoading" i-svg-spinners:90-ring-with-bg />
+              <div v-else i-carbon:document-import mr-1 />
               导入
             </div>
           </template>
