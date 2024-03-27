@@ -540,7 +540,7 @@ function handleStartAttackRusult(data: BattleStartJson) {
     summonInfo.value.supporter.recast = status.supporter.recast
   }
 
-  if (status.unique_gauge_time_limit && bossInfo.value)
+  if (status?.unique_gauge_time_limit && bossInfo.value)
     bossInfo.value.addition = { unique_gauge_time_limit: status.unique_gauge_time_limit }
 
   const bossBuffs = scenario.filter(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0).at(-1)
@@ -555,7 +555,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   const bossGauge = data.scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)
   const status = data.status
 
-  if (status.unique_gauge_time_limit && bossInfo.value)
+  if (status?.unique_gauge_time_limit && bossInfo.value)
     bossInfo.value.addition = { unique_gauge_time_limit: status.unique_gauge_time_limit }
 
   if (bossInfo.value && status?.special_skill_indicate)

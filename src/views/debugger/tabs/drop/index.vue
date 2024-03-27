@@ -80,6 +80,8 @@ function updateQuestList() {
         questConfig.value.push({ ...quest, visible: false })
     })
     ElMessage.success('更新副本列表成功')
+  }).catch((err) => {
+    ElMessage.error(err.message)
   })
 }
 
