@@ -37,7 +37,6 @@ export function sendBossInfo(data: StartJsonBoss) {
 export function listQuest() {
   return request<{ data: { questId: string, questName: string, isBlueBox: boolean, isBlueTreasure: boolean, targetItemKey: string }[] }>('/ext/quest', {
     method: 'get',
-
   })
 }
 
