@@ -26,7 +26,7 @@ const form = reactive({
   oldValue: '',
   newValue: '',
 })
-
+const loading = ref(false)
 function showDialog() {
   dialogVisible.value = true
   form.oldValue = code.value
@@ -63,10 +63,13 @@ function handleQuery() {
     return
   }
 
+  loading.value = true
   listDrop(questIds).then(({ data }) => {
     cardData.value = data
   }).catch(() => {
     ElMessage.error('掉落数据请求失败')
+  }).finally(() => {
+    loading.value = false
   })
 }
 
@@ -80,7 +83,7 @@ onMounted(() => {
 <template>
   <main>
     <div w-370px>
-      <ElScrollbar max-height="450px">
+      <ElScrollbar v-loading="loading" max-height="450px">
         <div min-h-50px flex flex-col>
           <div v-for="quest in questConfig.filter(q => q.visible)" :key="quest.questId">
             <QuestCard :quest-info="quest" :data="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
