@@ -8,8 +8,12 @@ const btnLoading = ref(false)
 const filesList = ref([])
 function toggleVisible(quest: DropData) {
   const hit = questConfig.value.find(q => q.questId === quest.questId)
-  if (hit)
+  if (hit) {
+    if (!hit.visible && questConfig.value.filter(q => q.visible).length >= 7)
+      return ElMessage.info('最多只能收藏7个副本')
+
     hit.visible = !hit.visible
+  }
 }
 
 function handleQuery() {
