@@ -21,29 +21,24 @@ function getDropRatio(item?: DropData) {
     return getRatio(item.targetItemCount, item.total)
 }
 
-function getMsg(item?: DropData) {
-  if (!item)
+const msg = computed(() => {
+  if (!props.data)
     return '收藏后刷新获取数据'
-  let prefix: string
-  switch (props.questInfo?.targetItemKey) {
-    case '17_20004':
-      if (item.targetItemCount === 0)
-        return '还未出过金'
 
-      // 超巴不返回信息
-      if (item.questId === '303141')
-        return ''
-
-      prefix = item.lastDropTake ? `上次出金${item.lastDropTake}蓝箱，` : ''
-      return `${prefix}已经${item.lastDropCount}蓝箱没出过了`
-    case '10_215':
-      if (item.targetItemCount === 0)
-        return '还未出过沙漏'
-
-      prefix = item.lastDropTake ? `上次沙漏${item.lastDropTake}场，` : ''
-      return `${prefix}已经${item.lastDropCount}场没出过了`
+  const itemObj: { [key: string]: string } = {
+    '17_20004': '金',
+    '10_215': '沙漏',
   }
-}
+
+  const itemName = itemObj[props.data.targetItemKey]
+
+  if (props.data.targetItemCount === 0)
+    return `还未出过${itemName}`
+
+  const type = props.data.isBlueTreasure ? '蓝箱' : '场'
+  const prefix = props.data.lastDropTake ? `上次出${itemName}${props.data.lastDropTake}${type}，` : ''
+  return `${prefix}已经${props.data.lastDropCount}${type}没出过了`
+})
 </script>
 
 <template>
@@ -61,8 +56,8 @@ function getMsg(item?: DropData) {
           <div i-game-icons:crossed-swords />
         </div>
       </div>
-      <div fc flex-col>
-        <div w-230px flex items-center justify-around>
+      <div w-250px fc flex-col>
+        <div w-full flex items-center justify-around>
           <div v-if="questInfo.isBlueBox" class="desc-item">
             <el-badge :value="data?.blueChest" type="danger" :max="999999">
               <img w-40px draggable="false" :src="getLocalImg('blueChest')">
@@ -87,8 +82,8 @@ function getMsg(item?: DropData) {
             </div>
           </div>
         </div>
-        <div text-xs text-gray>
-          {{ getMsg(data) }}
+        <div text-center text-xs text-gray>
+          {{ msg }}
         </div>
       </div>
     </div>

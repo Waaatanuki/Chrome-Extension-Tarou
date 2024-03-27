@@ -82,7 +82,7 @@ onMounted(() => {
 
 <template>
   <main>
-    <div w-370px>
+    <div w-380px>
       <ElScrollbar v-loading="loading" max-height="450px">
         <div min-h-50px flex flex-col>
           <div v-for="quest in questConfig.filter(q => q.visible)" :key="quest.questId">
