@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Action, BattleRecord } from 'myStorage'
+import type { BattleRecord } from 'myStorage'
 
 const props = defineProps<{ battleRecord: BattleRecord }>()
 const innerRef = ref<HTMLDivElement>()
@@ -10,28 +10,6 @@ watch(() => props.battleRecord, () => {
     scrollbarRef.value?.setScrollTop(innerRef.value?.scrollHeight || 0)
   })
 }, { deep: true })
-
-function getImg(action: Action) {
-  if (action.type === 'ability') {
-    return action.isSub
-      ? `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/ability/s/${action.icon}.jpg`
-      : `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/${action.icon}.png`
-  }
-  if (action.type === 'fc')
-    return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/fatal_chain_${action.icon}.png`
-  if (action.type === 'summon')
-    return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/summon/m/${action.icon}.jpg`
-  if (action.type === 'temporary')
-    return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/temporary/m/${action.icon}.jpg`
-  if (action.type === 'recovery')
-    return 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/normal/s/1.jpg'
-  if (action.type === 'attack')
-    return 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/normal_attack.png'
-}
-
-function getNpcImg(action: Action) {
-  return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/${action.aim_is_npc ? 'npc' : 'leader'}/m/${action.aim_num}_01.jpg`
-}
 </script>
 
 <template>
@@ -64,10 +42,10 @@ function getNpcImg(action: Action) {
 
           <div flex flex-wrap items-center justify-start gap-10px p-10px>
             <div v-for="action, i in list.acitonList" :key="i" fc>
-              <img h-50px :src="getImg(action)">
+              <img h-50px :src="getActionIcon(action)">
               <template v-if="action.aim_num">
                 <div i-carbon:arrow-right w-20px text-xl />
-                <img h-50px :src="getNpcImg(action)">
+                <img h-50px :src="getAssetImg(action.aim_is_npc ? 'npc' : 'leader', `${action.aim_num}_01`)">
               </template>
             </div>
           </div>

@@ -8,14 +8,6 @@ defineProps<{
   damageInfo: DamageInfo
 }>()
 
-function getImg(type: string, id: string, size = 'm') {
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/${size}/${id}.jpg`
-}
-
-function getArousalType(form: number) {
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/arousal_type/type_${form}.png`
-}
-
 function getSkillAlias(weapon: WeaponDetail) {
   const series_id = weapon?.master?.series_id
   const hit = weaponSkill.find(category => category.series_id.includes(series_id))
@@ -34,7 +26,7 @@ function getSkillAlias(weapon: WeaponDetail) {
   <div fc flex-col>
     <div h-210px fc>
       <div relative w-100px>
-        <img w-full :src="getImg('weapon', weapons[1].param.image_id, 'ls')">
+        <img w-full :src="getAssetImg('weapon', weapons[1].param.image_id, 'ls')">
         <div class="prt-ultimate-star-wrapper">
           <div class="prt-ultimate-star-on" :data-level=" weapons[1].param.level" />
         </div>
@@ -44,11 +36,11 @@ function getSkillAlias(weapon: WeaponDetail) {
       </div>
       <div w-275px fc flex-wrap gap-5px>
         <div v-for="idx in 12" :key="idx" class="party_weapon_wrapper">
-          <img v-if="weapons[idx + 1]?.param?.image_id" w-full :src="getImg('weapon', weapons[idx + 1]?.param?.image_id)">
+          <img v-if="weapons[idx + 1]?.param?.image_id" w-full :src="getAssetImg('weapon', weapons[idx + 1]?.param?.image_id)">
           <div class="prt-ultimate-star-wrapper">
             <div class="prt-ultimate-star-on" :data-level="weapons[idx + 1]?.param?.level" />
           </div>
-          <img v-if="weapons[idx + 1]?.param?.arousal.form" class="ico-arousal-type" :src="getArousalType(weapons[idx + 1]?.param?.arousal.form)">
+          <img v-if="weapons[idx + 1]?.param?.arousal.form" class="ico-arousal-type" :src="getArousalIcon(weapons[idx + 1]?.param?.arousal.form)">
           <ElTag v-if="getSkillAlias (weapons[idx + 1])" type="danger" size="small" class="skill-tag">
             {{ getSkillAlias (weapons[idx + 1]) }}
           </ElTag>

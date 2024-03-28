@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BattleRecord, Player } from 'myStorage'
+import type { BattleRecord } from 'myStorage'
 
 const props = defineProps<{ battleRecord: BattleRecord }>()
 
@@ -46,10 +46,6 @@ const totalDamageTaken = computed(() =>
   }, 0),
 )
 
-function getImg(player: Player) {
-  return `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${player.is_npc ? 'npc' : 'leader'}/m/${player.image_id}.jpg`
-}
-
 function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number, da: number, ta: number }) {
   return `${Math.floor(info[type] / info.total * 100)}%`
 }
@@ -77,7 +73,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
                 <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
                   <span text-base text-red font-bold>Dead</span>
                 </div>
-                <img w-full :src="getImg(player)">
+                <img w-full :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id)">
               </div>
               <div fc flex-col gap-5px>
                 <div relative w-60px>
@@ -140,7 +136,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
                 <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
                   <span text-base text-red font-bold>Dead</span>
                 </div>
-                <img w-full :src="getImg(player)">
+                <img w-full :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id)">
               </div>
               <div fc flex-col gap-5px>
                 <div relative w-60px>

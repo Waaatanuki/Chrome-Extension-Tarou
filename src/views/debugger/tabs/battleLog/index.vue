@@ -71,7 +71,7 @@ watch(() => props.battleStartJson, (data) => {
     nickname: cur.nickname,
     userId: cur.user_id,
     userRank: cur.level,
-    jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${cur.job_id}.png`,
+    jobIcon: getJobIcon(cur.job_id),
     attributeClass: `ico-attribute ico-attribute-${cur.pc_attribute}`,
     is_dead: cur.is_dead,
     is_host: cur.is_host,
@@ -136,7 +136,7 @@ watch(() => props.wsPayloadData, (data) => {
       nickname: member.nickname,
       userId: member.user_id,
       userRank: String(member.level),
-      jobIcon: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/job/${member.job_id}.png`,
+      jobIcon: getJobIcon(member.job_id),
       attributeClass: `ico-attribute ico-attribute-${member.pc_attribute}`,
       is_dead: false,
     })

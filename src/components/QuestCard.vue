@@ -47,7 +47,7 @@ const msg = computed(() => {
       <div v-if="visible" i-carbon:star-filled absolute right-0 top-0 text-sm text-amber hover:scale-120 @click="$emit('toggleVisible', questInfo)" />
       <div v-else i-carbon:star absolute right-0 top-0 text-sm hover:scale-120 @click="$emit('toggleVisible', questInfo)" />
       <div relative shrink-0>
-        <img w-100px draggable="false" :src="getQuestImg(questInfo.questId)">
+        <img w-100px draggable="false" :src="getQuestImg(questInfo.questId, 'lobby')">
         <div mt-2px fc gap-2px>
           <div i-game-icons:crossed-swords />
           <div text-orange font-black>

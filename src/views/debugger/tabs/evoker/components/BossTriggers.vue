@@ -16,12 +16,12 @@ function getTriggerNumber(id: string) {
           <ElDescriptionsItem label-class-name="bossLabelClass">
             <template #label>
               <div fc>
-                <img w-20 :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/quest/assets/replicard/${boss.bossId}.png`">
+                <img w-20 :src="getQuestImg(boss.bossId, 'replicard')">
               </div>
             </template>
             <div fc>
               <div v-for="img, index2 in boss.itemList" :key="index2" mx-2 fc flex-col>
-                <img w-10 :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${img}.jpg`">
+                <img w-10 :src="getAssetsItemImg('article', img)">
                 <label>{{ getTriggerNumber(img) }}</label>
               </div>
             </div>

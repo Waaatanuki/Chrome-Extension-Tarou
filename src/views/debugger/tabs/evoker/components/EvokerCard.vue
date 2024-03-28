@@ -7,7 +7,7 @@ const evoker = defineModel<EvokerInfo>({ required: true })
 
 <template>
   <ElCard class="evoker-card w-130px" :body-style="{ padding: '0px' }" shadow="hover">
-    <img w-130px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/npc/m/${evoker.npcId}_01.jpg`">
+    <img w-130px :src="getAssetImg('npc', `${evoker.npcId}_01`)">
     <div class="h-170px flex flex-col items-center justify-evenly">
       <ElSelect
         v-model="evoker.tarotLevel"

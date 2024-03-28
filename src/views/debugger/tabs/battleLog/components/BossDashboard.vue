@@ -8,7 +8,7 @@ const props = defineProps<{ bossInfo: BossInfo, raidId?: number }>()
 const remainderSecond = ref<number>(0)
 const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
 const endTimerValue = computed(() => Date.now() + Number(props.bossInfo.addition?.unique_gauge_time_limit?.rest_time) * 1000 || 0)
-const bossImgSrc = computed(() => `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/${props.bossInfo.imgId}.png`)
+const bossImgSrc = computed(() => getBossImg('enemy', props.bossInfo.imgId, 's'))
 
 const operationSecond = computed(() => {
   const hit = battleRecord.value.find(record => record.raid_id === props.raidId)

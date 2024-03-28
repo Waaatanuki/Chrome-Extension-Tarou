@@ -8,17 +8,13 @@ defineProps<{
   setAction: { name: string, set_action_id: string, icon_id?: string }[]
   damageInfo: DamageInfo
 }>()
-
-function getImg(id: string, type = 'npc') {
-  return `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/${type}/quest/${id}.jpg`
-}
 </script>
 
 <template>
   <div h-210px w-380px fc flex-col justify-start>
     <div w-full flex items-start justify-start gap-4px>
       <div h-122px w-60px>
-        <img w-full :src="getImg(leader.image, 'leader')">
+        <img w-full :src="getAssetImg('leader', leader.image, 'quest')">
         <div mt-1px h-12px flex items-center justify-start>
           <div v-for=" i in 4" :key="i" relative w-15px fc>
             <div v-if="leaderAbilityList[i - 1]" :class="`ability_icon_type_${leaderAbilityList[i - 1].icon_type}`" h-12px w-12px border-1 rounded-sm />
@@ -30,7 +26,7 @@ function getImg(id: string, type = 'npc') {
         </div>
       </div>
       <div v-for="npc in npcs" :key="npc.id" h-122px w-60px>
-        <img h-109px w-full :src="getImg(npc.image_id_3)">
+        <img h-109px w-full :src="getAssetImg('npc', npc.image_id_3, 'quest')">
         <div mt-1px h-12px flex items-center justify-start>
           <div v-for="ability in npc.action_ability" :key="ability.action_id" relative w-15px fc>
             <div
@@ -53,7 +49,7 @@ function getImg(id: string, type = 'npc') {
       <div flex flex-col gap-5px px-2 text-sm>
         <ElTag v-for="action in setAction " :key="action.name" type="info" effect="plain">
           <div fc gap-4px>
-            <img v-if="action.icon_id" w-20px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/ability/m/${action.icon_id}.png`">
+            <img v-if="action.icon_id" w-20px :src="getAbilityIcon(action.icon_id)">
             <span>{{ action.name }}</span>
           </div>
         </ElTag>

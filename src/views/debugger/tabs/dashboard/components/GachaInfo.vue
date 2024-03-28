@@ -41,7 +41,7 @@ const summary = computed(() =>
           <template #header>
             <div flex items-center justify-between>
               <div>
-                <img w-200px :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/banner/gacha/banner_${data.random_key}_1.png`">
+                <img w-200px :src="getGachaBanner(data.random_key)">
               </div>
               <div flex flex-col items-end justify-center gap-10px>
                 <div>{{ `${data.service_start} - ${data.service_end}` }}</div>
@@ -54,7 +54,7 @@ const summary = computed(() =>
               v-for="item, idx in data.ssrList.filter(ssr => resultFilter.type.includes(ssr.type))"
               :key="idx" relative w-100px
             >
-              <img :src="getGachaItemImg(item.type, item.id)">
+              <img :src="getAssetImg(item.type, item.id)">
               <ElTag v-if="item.is_new" absolute right--8px top--8px type="warning" size="small">
                 NEW
               </ElTag>

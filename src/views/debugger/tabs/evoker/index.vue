@@ -90,7 +90,7 @@ const evokerPageResult = computed(() => {
             w-50px fc flex-col
           >
             <ElTooltip :content="`${item.name} 总需${item.total}`" placement="top">
-              <img w-full :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${item.id}.jpg`">
+              <img w-full :src="getAssetsItemImg('article', item.id)">
             </ElTooltip>
             <label>{{ item.need }}</label>
           </div>

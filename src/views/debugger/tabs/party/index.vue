@@ -56,6 +56,8 @@ watch(() => props.deckJson, (value) => {
     if (jobFirstAbility) {
       leaderAbilityList[0] = jobFirstAbility
       value.pc.set_action.forEach((ab, idx) => {
+        if (!ab.set_action_id)
+          return
         const hitAb = jobAbilityList.value.find(a => a.action_id === ab.set_action_id)
         const action: { name: string, set_action_id: string, icon_id?: string } = { name: ab.name, set_action_id: ab.set_action_id }
         if (hitAb) {
