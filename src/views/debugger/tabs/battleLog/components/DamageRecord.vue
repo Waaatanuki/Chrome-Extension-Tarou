@@ -61,7 +61,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
       <ElTabPane label="伤害统计" name="damage">
         <div h-500px>
           <div fc pb-20px pt-5px>
-            <ElSelect v-model="damageType" w-150px>
+            <ElSelect v-model="damageType" style="width:150px">
               <ElOption
                 v-for="item in damageTypeOptions"
                 :key="item.value"
