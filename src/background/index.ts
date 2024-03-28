@@ -134,13 +134,7 @@ import { noticeItem } from '~/constants'
 
           console.log('未记录过的战斗信息', battle)
 
-          battleMemo.value.push({
-            battleId: battle.battleId,
-            questName: battle.questName,
-            questImage: battle.questImage,
-            questType: '1',
-            timestamp: battle.timestamp,
-          })
+          battleMemo.value.push({ ...battle })
         })
 
         while (battleMemo.value.length > MaxMemoLength)
@@ -164,6 +158,7 @@ import { noticeItem } from '~/constants'
       res.push({
         battleId: String($(elem).data().raidId),
         questName: questName.trim(),
+        questType: '1',
         questImage,
         timestamp: getTimestamp(finishTime),
       })

@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { DropData } from 'api'
+import type { Stat } from 'api'
+import type { Quest } from 'myStorage'
 import { questConfig } from '~/logic/storage'
 import { listDrop, listQuest, sendMultiDropInfo } from '~/api'
 
-const cardData = ref<DropData[]>([])
+const cardData = ref<Stat[]>([])
 const queryBtnLoading = ref(false)
 const importBtnLoading = ref(false)
 const filesList = ref([])
-function toggleVisible(quest: DropData) {
+function toggleVisible(quest: Quest) {
   const hit = questConfig.value.find(q => q.questId === quest.questId)
   if (hit) {
     if (!hit.visible && questConfig.value.filter(q => q.visible).length >= 7)

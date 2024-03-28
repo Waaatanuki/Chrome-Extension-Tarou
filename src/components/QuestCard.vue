@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { DropData } from 'api'
+import type { Stat } from 'api'
 import type { Quest } from 'myStorage'
 
-const props = defineProps<{ questInfo: Quest, data?: DropData, visible: boolean }>()
+const props = defineProps<{ questInfo: Quest, data?: Stat, visible: boolean }>()
 defineEmits(['toggleVisible'])
 
 function getRatio(a = 0, b = 0) {
@@ -12,7 +12,7 @@ function getRatio(a = 0, b = 0) {
   return ((a / b) * 100).toFixed(2)
 }
 
-function getDropRatio(item?: DropData) {
+function getDropRatio(item?: Stat) {
   if (!item)
     return '0.00'
   if (item.isBlueTreasure)

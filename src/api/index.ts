@@ -1,4 +1,4 @@
-import type { DropData, DropInfo, StartJsonBoss } from 'api'
+import type { DropInfo, RawDrop, StartJsonBoss, Stat } from 'api'
 import request from './request'
 
 // 更新引继码
@@ -18,7 +18,7 @@ export function sendDropInfo(data: DropInfo) {
 }
 
 // 批量发送掉落信息
-export function sendMultiDropInfo(data: DropInfo[]) {
+export function sendMultiDropInfo(data: RawDrop[]) {
   return request('/ext/multiDrop', {
     method: 'post',
     body: JSON.stringify(data),
@@ -42,7 +42,7 @@ export function listQuest() {
 
 // 获取掉落统计信息
 export function listDrop(questIds: string[]) {
-  return request<{ data: DropData[] }>('/ext/stat', {
+  return request<{ data: Stat[] }>('/ext/stat', {
     method: 'post',
     body: JSON.stringify(questIds),
   })

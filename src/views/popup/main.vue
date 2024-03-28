@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { DropData } from 'api'
+import type { Stat } from 'api'
+import type { Quest } from 'myStorage'
 import copy from 'copy-text-to-clipboard'
 import { code, questConfig, uid } from '~/logic/storage'
 import { listDrop, updateCode } from '~/api'
 
 const { openDashboard } = useDashboard()
-const cardData = ref<DropData[]>([])
+const cardData = ref<Stat[]>([])
 
 function handleCommand(command: string) {
   switch (command) {
@@ -33,7 +34,7 @@ function showDialog() {
   form.newValue = ''
 }
 
-function toggleVisible(quest: DropData) {
+function toggleVisible(quest: Quest) {
   const hit = questConfig.value.find(q => q.questId === quest.questId)
   if (hit) {
     hit.visible = false

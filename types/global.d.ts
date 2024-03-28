@@ -817,8 +817,9 @@ declare module 'party'{
 declare module 'api'{
   interface DropInfo {
     battleId: string
-    questId?: string
     questName: string
+    questImage?: string
+    questType?: string
     timestamp: number
     reward: Treasure[]
   }
@@ -829,13 +830,13 @@ declare module 'api'{
     count: number
   }
 
-  interface Boss {
-    id: string
-    name: string
-    lv: string
-    attr: string
-    cjs: string
-    hp: number
+  interface RawDrop {
+    [key: string]: {
+      raidName: string
+      timestamp: number
+      blueChests?: string
+      goldBrick?: string
+    }
   }
 
   interface StartJsonBoss {
@@ -847,7 +848,16 @@ declare module 'api'{
     boss: Boss[]
   }
 
-  interface DropData {
+  interface Boss {
+    id: string
+    name: string
+    lv: string
+    attr: string
+    cjs: string
+    hp: number
+  }
+
+  interface Stat {
     questId: string
     questName: string
     isBlueBox: boolean
