@@ -186,7 +186,7 @@ const showDamage = computed(() => {
             w-300px flex items-center justify-between text-base
             :class="{ effect_up: effect.diff === 1, effect_down: effect.diff === -1 }"
           >
-            <img w-100px :src="getSkillIcon(effect.icon_img)">
+            <img w-100px :src="getSkillLabelIcon(effect.icon_img)">
             <div fc>
               <div :class="{ max: effect.value1.is_max }">
                 {{ effect.value1.str }}

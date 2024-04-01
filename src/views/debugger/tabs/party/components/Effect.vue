@@ -12,7 +12,7 @@ defineProps<{
       v-for="effect in effectValueInfo" :key="effect.icon_img"
       w-190px flex items-center justify-between text-base
     >
-      <img w-100px :src="getSkillIcon(effect.icon_img)">
+      <img w-100px :src="getSkillLabelIcon(effect.icon_img)">
       <div :class="{ max: effect.is_max }">
         {{ effect.value }}
       </div>

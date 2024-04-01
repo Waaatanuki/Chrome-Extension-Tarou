@@ -20,6 +20,12 @@ function getSkillAlias(weapon: WeaponDetail) {
 
   return hit.list.find(skill => description.includes(skill.comment) || description.includes(skill.comment_en))?.alias
 }
+
+// 判断是不是法武(3)或者U武(13)
+function isFWorUW(weapon: WeaponDetail) {
+  const series_id = weapon?.master?.series_id
+  return ['3', '13'].includes(series_id)
+}
 </script>
 
 <template>
@@ -33,6 +39,7 @@ function getSkillAlias(weapon: WeaponDetail) {
         <ElTag v-if="getSkillAlias (weapons[1])" type="danger" size="small" class="skill-tag">
           {{ getSkillAlias (weapons[1]) }}
         </ElTag>
+        <img v-if="weapons[1]?.skill2?.image && isFWorUW(weapons[1])" class="skill2-icon" :src="getSkillIcon(weapons[1]?.skill2?.image)">
       </div>
       <div w-275px fc flex-wrap gap-5px>
         <div v-for="idx in 12" :key="idx" class="party_weapon_wrapper">
@@ -44,6 +51,7 @@ function getSkillAlias(weapon: WeaponDetail) {
           <ElTag v-if="getSkillAlias (weapons[idx + 1])" type="danger" size="small" class="skill-tag">
             {{ getSkillAlias (weapons[idx + 1]) }}
           </ElTag>
+          <img v-if="weapons[idx + 1]?.skill2?.image && isFWorUW(weapons[idx + 1])" class="skill2-icon" :src="getSkillIcon(weapons[idx + 1]?.skill2?.image)">
         </div>
       </div>
     </div>
@@ -65,5 +73,12 @@ function getSkillAlias(weapon: WeaponDetail) {
   position: absolute;
   top: -1px;
   right: 0px;
+}
+.skill2-icon{
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 18px;
+  height: 18px;
 }
 </style>

@@ -40,6 +40,10 @@ export function getAbilityIcon(id: string) {
 }
 
 export function getSkillIcon(id: string) {
+  return `${imgUri}/sp/ui/icon/skill/${id}.png`
+}
+
+export function getSkillLabelIcon(id: string) {
   return `${imgUri}/sp/ui/icon/weapon_skill_label/${id}`
 }
 
