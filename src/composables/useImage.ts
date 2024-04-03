@@ -56,7 +56,7 @@ export function getActionIcon(action: Action) {
   if (action.type === 'fc')
     return getAbilityIcon(`fatal_chain_${action.icon}`)
   if (action.type === 'summon')
-    return getAssetImg('summon', action.icon!)
+    return getAssetImg('summon', action.icon!, 's')
   if (action.type === 'temporary')
     return getAssetsItemImg('temporary', action.icon!, 'm')
   if (action.type === 'recovery')

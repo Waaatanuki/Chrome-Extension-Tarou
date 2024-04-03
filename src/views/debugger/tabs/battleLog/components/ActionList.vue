@@ -44,8 +44,8 @@ watch(() => props.battleRecord, () => {
             <div v-for="action, i in list.acitonList" :key="i" fc>
               <img h-50px :src="getActionIcon(action)">
               <template v-if="action.aim_num">
-                <div i-carbon:arrow-right w-20px text-xl />
-                <img h-50px :src="getAssetImg(action.aim_is_npc ? 'npc' : 'leader', `${action.aim_num}_01`)">
+                <div i-game-icons:fast-forward-button mx-5px text-xl />
+                <img h-50px :src="getAssetImg(action.aim_is_npc ? 'npc' : 'leader', `${action.aim_num}_01`, 's')">
               </template>
             </div>
           </div>

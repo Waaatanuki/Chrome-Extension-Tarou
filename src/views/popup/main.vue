@@ -85,11 +85,11 @@ onMounted(() => {
   <main>
     <div w-380px>
       <ElScrollbar v-loading="loading" max-height="450px">
-        <div min-h-50px flex flex-col>
+        <div min-h-350px flex flex-col>
           <div v-for="quest in questConfig.filter(q => q.visible)" :key="quest.questId">
             <QuestCard :quest-info="quest" :data="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
           </div>
-          <div v-if="questConfig.filter(q => q.visible).length === 0" mt-10px h-50px text-center text-xl>
+          <div v-if="questConfig.filter(q => q.visible).length === 0" m-auto h-50px text-center text-xl>
             还未收藏副本
           </div>
         </div>
