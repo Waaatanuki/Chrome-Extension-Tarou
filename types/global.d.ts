@@ -452,6 +452,7 @@ declare module 'requestData'{
      index?: number | string
      target?: string
      comment?: string
+     mode?: string
    }
 
    interface SpecialScenario extends Scenario {

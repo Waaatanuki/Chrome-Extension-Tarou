@@ -605,25 +605,60 @@ function getAbilityList(rawAbility: Ability) {
 }
 
 const normalAttackInfo = computed(() => {
+  const res = { hit: 0, damage: 0 }
   if (!props.resultJson?.result || props.resultJson?.type !== 'normal')
-    return { hit: 0, damage: 0 }
+    return res
 
-  const attackList = props.resultJson.result.scenario?.filter((item: any) => item.cmd === 'attack' && item.from === 'player') || []
-  if (attackList.length === 0)
-    return { hit: 0, damage: 0 }
-  let damageList: any[] = []
-  attackList.forEach((item: any) => {
-    damageList = damageList.concat(item.damage)
-  })
+  const scenario = props.resultJson.result.scenario
+  if (!scenario)
+    return res
 
-  const data: any[] = []
-  damageList.forEach((damage: any) => {
-    for (const key in damage)
-      data.push(damage[key])
-  })
+  for (let index = 0; index < scenario.length; index++) {
+    const action = scenario[index]
 
-  const damage = data.reduce<number>((pre, cur) => pre + Number(cur.value), 0)
-  return { hit: data.length, damage }
+    if (action.cmd === 'attack' && action.from === 'player') {
+      for (let i = 0; i < action.damage.length; i++) {
+        for (let j = 0; j < action.damage[i].length; j++) {
+          res.hit++
+          res.damage += Number(action.damage[i][j].value)
+        }
+      }
+    }
+
+    if (action.cmd === 'special' || action.cmd === 'special_npc') {
+      if (!action.list)
+        continue
+
+      const _action = action as unknown as SpecialScenario
+      res.hit++
+      for (let i = 0; i < _action.list.length || 0; i++) {
+        const detail = _action.list[i]
+        for (let j = 0; j < detail.damage.length; j++)
+          res.damage += Number(detail.damage[j].value)
+      }
+    }
+
+    if (action.cmd === 'damage' && action.to === 'boss') {
+      const _action = action as unknown as DamageScenario
+      for (let i = 0; i < _action.list.length || 0; i++) {
+        res.hit++
+        res.damage += Number(_action.list[i].value)
+      }
+    }
+
+    if (action.cmd === 'loop_damage' && action.to === 'boss') {
+      const _action = action as unknown as LoopDamageScenario
+      for (let i = 0; i < _action.list.length; i++) {
+        for (let j = 0; j < _action.list[i].length; j++) {
+          res.hit++
+          res.damage += Number(_action.list[i][j].value)
+        }
+      }
+    }
+    if (action.cmd === 'turn' && action.mode === 'boss')
+      break
+  }
+  return res
 })
 </script>
 
@@ -644,7 +679,7 @@ const normalAttackInfo = computed(() => {
       <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
     <ElDescriptions v-if="battleStartJson && bossInfo " border :column="1">
-      <ElDescriptionsItem label="平A结果">
+      <ElDescriptionsItem label="攻击结果">
         {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage}` }}
       </ElDescriptionsItem>
     </ElDescriptions>
