@@ -680,7 +680,7 @@ const normalAttackInfo = computed(() => {
     </div>
     <ElDescriptions v-if="battleStartJson && bossInfo " border :column="1">
       <ElDescriptionsItem label="攻击结果">
-        {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage}` }}
+        {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage.toLocaleString()}` }}
       </ElDescriptionsItem>
     </ElDescriptions>
 
