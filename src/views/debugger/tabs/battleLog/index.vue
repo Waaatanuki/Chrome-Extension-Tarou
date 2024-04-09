@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Action, BattleRecord, Player } from 'myStorage'
+import type { Action, BattleRecord, Player, TeamCondition } from 'myStorage'
 import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'requestData'
 import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
@@ -147,6 +147,30 @@ watch(() => props.wsPayloadData, (data) => {
     mvpInfo.value = data.mvpUpdate.mvpList.map(mvp => ({ userId: mvp.user_id, rank: mvp.rank, point: Number(mvp.point) }))
 })
 
+function mergerCondition(condition: Condition) {
+  const buffs = condition.buff || []
+  const debuffs = condition.debuff || []
+  const totalPlayerBuffs = buffs.concat(debuffs).filter((item, index, self) => index === self.findIndex(t => t.status === item.status))
+  return totalPlayerBuffs
+}
+
+function handleTeamConditionInfo(teamCondition: TeamCondition[]) {
+  const hitRecord = battleRecord.value.find(r => r.raid_id === raidId.value)
+  if (!hitRecord)
+    return
+
+  teamCondition.forEach((player) => {
+    const playerNum = hitRecord.formation[player.pos]
+    console.log(player.pos)
+    console.log(playerNum)
+    console.log(hitRecord.player)
+
+    hitRecord.player[player.pos].condition = {
+      buff: player.buff,
+      coating_value: player.coating_value,
+    }
+  })
+}
 function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
   if (bossCondition) {
     const bossBuffs = bossCondition.buff?.filter(item => !item.personal_buff_user_id || item.personal_buff_user_id === uid.value) || []
@@ -165,68 +189,72 @@ function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condit
 
 function recordRaidInfo(data: BattleStartJson) {
   const hit = battleRecord.value.find(record => record.raid_id === raidId.value)
-  if (!hit) {
-    const boss = data.boss.param[0]
+  if (hit)
+    return
+  const boss = data.boss.param[0]
 
-    const player = data.player.param.reduce<Player[]>((pre, cur) => {
-      pre.push({
-        pid: cur.pid.split('_')[0],
-        is_dead: !cur.alive,
-        is_npc: cur.cjs.startsWith('npc'),
-        image_id: `${cur.pid.split('_')[0]}_01`,
-        use_ability_count: 0,
-        use_special_skill_count: 0,
-        damage: {
-          total: { comment: '总计', value: 0 },
-          attack: { comment: '通常攻击&反击', value: 0 },
-          ability: { comment: '技能伤害', value: 0 },
-          special: { comment: '奥义伤害', value: 0 },
-          other: { comment: '其他', value: 0 },
-        },
-        damageTaken: {
-          total: { comment: '总计', value: 0 },
-          attack: { comment: '通常攻击&反击', value: 0 },
-          super: { comment: '特动', value: 0 },
-          other: { comment: '其他', value: 0 },
-        },
-      })
-      return pre
-    }, [])
-
-    const formation = Object.values(data.ability).map(a => a.pos)
-    const guard_status = Object.values(data.ability).map(a => ({ num: a.pos, is_guard_status: 0 }))
-
-    const actionQueue = [{
-      turn: data.turn,
-      bossHpPercent: bossInfo.value!.hpPercent,
-      special_skill_flag: Number(data.special_skill_flag),
-      acitonList: [],
-      guard_status,
-    }]
-
-    const abilityList = getAbilityList(data.ability)
-
-    battleRecord.value.unshift({
-      quest_id: data.quest_id,
-      raid_id: raidId.value!,
-      raid_name: boss.monster,
-      imgId: boss.cjs.split('_').at(-1)!,
-      turn: data.turn,
-      startTimestamp: Date.now(),
-      startTimer: data.timer || 0,
-      endTimer: data.timer || 0,
-      player,
-      formation,
-      special_skill_flag: Number(data.special_skill_flag),
-      actionQueue,
-      reserve: false,
-      abilityList,
+  const player = data.player.param.reduce<Player[]>((pre, cur) => {
+    pre.push({
+      pid: cur.pid.split('_')[0],
+      is_dead: !cur.alive,
+      is_npc: cur.cjs.startsWith('npc'),
+      image_id: `${cur.pid.split('_')[0]}_01`,
+      use_ability_count: 0,
+      use_special_skill_count: 0,
+      damage: {
+        total: { comment: '总计', value: 0 },
+        attack: { comment: '通常攻击&反击', value: 0 },
+        ability: { comment: '技能伤害', value: 0 },
+        special: { comment: '奥义伤害', value: 0 },
+        other: { comment: '其他', value: 0 },
+      },
+      damageTaken: {
+        total: { comment: '总计', value: 0 },
+        attack: { comment: '通常攻击&反击', value: 0 },
+        super: { comment: '特动', value: 0 },
+        other: { comment: '其他', value: 0 },
+      },
+      condition: {
+        buff: mergerCondition(cur.condition),
+        coating_value: cur.condition.coating_value ?? 0,
+      },
     })
+    return pre
+  }, [])
 
-    if (battleRecord.value.length > props.battleRecordLimit) {
-      const lastIndex = battleRecord.value.findLastIndex(record => !record.reserve)
-      battleRecord.value.splice(lastIndex, 1)
-    }
+  const formation = Object.values(data.ability).map(a => a.pos)
+  const guard_status = Object.values(data.ability).map(a => ({ num: a.pos, is_guard_status: 0 }))
+
+  const actionQueue = [{
+    turn: data.turn,
+    bossHpPercent: bossInfo.value!.hpPercent,
+    special_skill_flag: Number(data.special_skill_flag),
+    acitonList: [],
+    guard_status,
+  }]
+
+  const abilityList = getAbilityList(data.ability)
+
+  battleRecord.value.unshift({
+    quest_id: data.quest_id,
+    raid_id: raidId.value!,
+    raid_name: boss.monster,
+    imgId: boss.cjs.split('_').at(-1)!,
+    turn: data.turn,
+    startTimestamp: Date.now(),
+    startTimer: data.timer || 0,
+    endTimer: data.timer || 0,
+    player,
+    formation,
+    special_skill_flag: Number(data.special_skill_flag),
+    actionQueue,
+    reserve: false,
+    abilityList,
+  })
+
+  if (battleRecord.value.length > props.battleRecordLimit) {
+    const lastIndex = battleRecord.value.findLastIndex(record => !record.reserve)
+    battleRecord.value.splice(lastIndex, 1)
   }
 }
 
@@ -543,8 +571,26 @@ function handleStartAttackRusult(data: BattleStartJson) {
   if (status?.unique_gauge_time_limit && bossInfo.value)
     bossInfo.value.addition = { unique_gauge_time_limit: status.unique_gauge_time_limit }
 
-  const bossBuffs = scenario.filter(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0).at(-1)
-  const playerBuffs = scenario.filter(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0).at(-1)
+  const bossBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
+  const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
+
+  const teamCondition: TeamCondition[] = []
+
+  const hitRecord = battleRecord.value.find(r => r.raid_id === raidId.value)
+  const formation = status.formation || hitRecord?.formation || []
+
+  for (let i = 0; i < 6; i++) {
+    const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
+    if (playerBuffs?.condition) {
+      teamCondition.push({
+        pos: Number(formation[i]),
+        buff: mergerCondition(playerBuffs.condition),
+        coating_value: playerBuffs.condition.coating_value ?? 0,
+      })
+    }
+  }
+
+  handleTeamConditionInfo(teamCondition)
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
   handleDamageStatistic('start', data)
 }
@@ -582,8 +628,25 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
     summonInfo.value.supporter.recast = status?.supporter?.recast ?? summonInfo.value.supporter.recast
   }
 
-  const bossBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0).at(-1)
-  const playerBuffs = data.scenario.filter(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0).at(-1)
+  const bossBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
+  const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
+
+  const teamCondition: TeamCondition[] = []
+  const hitRecord = battleRecord.value.find(r => r.raid_id === raidId.value)
+  const formation = status.formation || hitRecord?.formation || []
+
+  for (let i = 0; i < 6; i++) {
+    const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
+    if (playerBuffs?.condition) {
+      teamCondition.push({
+        pos: Number(formation[i]),
+        buff: mergerCondition(playerBuffs.condition),
+        coating_value: playerBuffs.condition.coating_value ?? 0,
+      })
+    }
+  }
+
+  handleTeamConditionInfo(teamCondition)
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
   handleDamageStatistic(type, data)
   handleActionQueue(type, data)
@@ -675,7 +738,7 @@ const normalAttackInfo = computed(() => {
       </div>
     </div>
     <div w-full flex items-start justify-start gap-2 p-2>
-      <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
+      <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" :turn="bossInfo.turn" />
       <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
     <ElDescriptions v-if="battleStartJson && bossInfo " border :column="1">

@@ -1,4 +1,6 @@
 declare module 'myStorage' {
+  import type { Buff } from 'requestData'
+
   interface BattleMemo {
     battleId: string
     questName: string
@@ -107,6 +109,16 @@ declare module 'myStorage' {
       da: number
       ta: number
     }
+    condition: {
+      buff: Buff[]
+      coating_value: number
+    }
+  }
+
+  interface TeamCondition {
+    pos: number
+    buff: Buff[]
+    coating_value: number
   }
 
   interface PlayerDamage {
@@ -280,6 +292,7 @@ declare module 'requestData'{
     buff?: Buff[]
     debuff?: Buff[]
     num?: number
+    coating_value?: number
   }
 
   interface Buff {
@@ -392,7 +405,7 @@ declare module 'requestData'{
 
   interface StatusInfo {
     ability: Ability
-    formation: string[]
+    formation?: string[]
     supporter: { recast: null | number | string }
     summon: {
       skill: string

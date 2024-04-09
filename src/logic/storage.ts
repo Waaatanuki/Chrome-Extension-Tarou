@@ -31,6 +31,7 @@ export const battleRecord = useWebExtensionStorage<BattleRecord[]>('battleRecord
 export const specBossBuff = useWebExtensionStorage<string[]>('specBossBuff', [])
 export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff', [])
 export const questMemo = useWebExtensionStorage<QuestMemo[]>('questMemo', [])
+export const onlyShowSpecBuff = useWebExtensionStorage<boolean>('onlyShowSpecBuff', false)
 
 // Drop
 export const questConfig = useWebExtensionStorage<Quest[]>('questConfig', [])

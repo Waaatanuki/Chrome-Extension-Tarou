@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { BattleRecord } from 'myStorage'
+import PlayerStatus from './PlayerStatus.vue'
 
-const props = defineProps<{ battleRecord: BattleRecord }>()
+const props = defineProps<{ battleRecord: BattleRecord, turn: number }>()
 
 const tabName = ref('damage')
 const damageType = ref<'total' | 'attack' | 'ability' | 'special' | 'other'>('total')
@@ -54,9 +55,14 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
 <template>
   <ElCard v-if="battleRecord" w-420px shrink-0>
     <ElTabs v-model="tabName" stretch>
+      <ElTabPane label="角色状态" name="status">
+        <div h-500px>
+          <PlayerStatus :battle-record="battleRecord" :turn="turn" />
+        </div>
+      </ElTabPane>
       <ElTabPane label="伤害统计" name="damage">
         <div h-500px>
-          <div fc pb-20px pt-5px>
+          <div h-60px w-full fc>
             <ElSelect v-model="damageType" style="width:150px">
               <ElOption
                 v-for="item in damageTypeOptions"
@@ -67,7 +73,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
             </ElSelect>
           </div>
 
-          <div fc flex-col gap-10px>
+          <div flex flex-col items-start justify-center gap-10px>
             <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
               <div relative w-100px>
                 <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
@@ -119,8 +125,8 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
       </ElTabPane>
       <ElTabPane label="承伤统计" name="damageTaken">
         <div h-500px>
-          <div fc pb-20px pt-5px>
-            <ElSelect v-model="damageTakenType" w-150px>
+          <div h-60px w-full fc>
+            <ElSelect v-model="damageTakenType" style="width:150px">
               <ElOption
                 v-for="item in damageTakenTypeOptions"
                 :key="item.value"
@@ -130,7 +136,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
             </ElSelect>
           </div>
 
-          <div v-if="hasDamageTaken" fc flex-col gap-10px>
+          <div v-if="hasDamageTaken" flex flex-col items-start justify-center gap-10px>
             <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
               <div relative w-100px>
                 <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
