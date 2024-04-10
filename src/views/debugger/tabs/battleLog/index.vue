@@ -40,9 +40,7 @@ watch(() => props.battleStartJson, (data) => {
   const player = data.player.param[0]
   leaderAttr.value = player.attr
 
-  const addition = {
-    unique_gauge_time_limit: data.unique_gauge_time_limit || undefined,
-  }
+  const addition = { unique_gauge_time_limit: data.unique_gauge_time_limit || undefined }
 
   bossInfo.value = {
     questId: data.quest_id,
@@ -155,12 +153,12 @@ function mergerCondition(condition: Condition) {
 }
 
 function handleTeamConditionInfo(teamCondition: TeamCondition[]) {
-  const hitRecord = battleRecord.value.find(r => r.raid_id === raidId.value)
-  if (!hitRecord)
+  const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
+  if (!currentRaid)
     return
 
   teamCondition.forEach((player) => {
-    hitRecord.player[player.pos].condition = {
+    currentRaid.player[player.pos].condition = {
       buff: player.buff,
       coating_value: player.coating_value,
     }
@@ -183,8 +181,8 @@ function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condit
 }
 
 function recordRaidInfo(data: BattleStartJson) {
-  const hit = battleRecord.value.find(record => record.raid_id === raidId.value)
-  if (hit)
+  const currentRaid = battleRecord.value.find(record => record.raid_id === raidId.value)
+  if (currentRaid)
     return
   const boss = data.boss.param[0]
 
@@ -571,8 +569,8 @@ function handleStartAttackRusult(data: BattleStartJson) {
 
   const teamCondition: TeamCondition[] = []
 
-  const hitRecord = battleRecord.value.find(r => r.raid_id === raidId.value)
-  const formation = status.formation || hitRecord?.formation || []
+  const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
+  const formation = status.formation || currentRaid?.formation || []
 
   for (let i = 0; i < 6; i++) {
     const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
@@ -627,8 +625,8 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
 
   const teamCondition: TeamCondition[] = []
-  const hitRecord = battleRecord.value.find(r => r.raid_id === raidId.value)
-  const formation = status.formation || hitRecord?.formation || []
+  const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
+  const formation = status.formation || currentRaid?.formation || []
 
   for (let i = 0; i < 6; i++) {
     const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
