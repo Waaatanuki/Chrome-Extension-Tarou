@@ -489,6 +489,10 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
                 super: { comment: '特动', value: 0 },
                 other: { comment: '其他', value: 0 },
               },
+              condition: {
+                buff: [],
+                coating_value: 0,
+              },
             })
             return pre
           }, [])

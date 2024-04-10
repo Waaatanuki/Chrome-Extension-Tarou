@@ -160,11 +160,6 @@ function handleTeamConditionInfo(teamCondition: TeamCondition[]) {
     return
 
   teamCondition.forEach((player) => {
-    const playerNum = hitRecord.formation[player.pos]
-    console.log(player.pos)
-    console.log(playerNum)
-    console.log(hitRecord.player)
-
     hitRecord.player[player.pos].condition = {
       buff: player.buff,
       coating_value: player.coating_value,
