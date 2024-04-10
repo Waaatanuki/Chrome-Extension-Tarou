@@ -3,7 +3,7 @@ import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
 import { sendDropInfo } from '~/api'
-import { battleMemo } from '~/logic/storage'
+import { battleMemo, mySupportSummon } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {
@@ -141,6 +141,34 @@ import { noticeItem } from '~/constants'
           battleMemo.value.shift()
 
         console.log('memoList==>', battleMemo.value)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
+    // 记录友招信息
+    if (details.url.includes('/profile/content/index')) {
+      sendMessage('getSupportSummon', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
+        if (!res?.domStr)
+          return
+
+        const $ = load(res.domStr)
+
+        for (let i = 0; i < 7; i++) {
+          for (let j = 0; j < 2; j++) {
+            const target = $(`#js-fix-summon${i}${j}`)
+            if (target.length) {
+              const imgId = String(target.data().imageId)
+              const name = $(`#js-fix-summon${i}${j}-name`).text()
+              const infoClass = $(`#js-fix-summon${i}${j}-info`).attr('class')
+              const rank = infoClass?.match(/bless-(.*?)-style/)
+              mySupportSummon.value[`${i}${j}`] = { imgId, name, rank: rank ? rank[1] : '', necessary: mySupportSummon.value[`${i}${j}`]?.necessary ?? false }
+            }
+            else {
+              mySupportSummon.value[`${i}${j}`] = { imgId: 'empty', name: '', rank: '', necessary: mySupportSummon.value[`${i}${j}`]?.necessary ?? false }
+            }
+          }
+        }
       }).catch((err) => {
         console.log(err)
       })

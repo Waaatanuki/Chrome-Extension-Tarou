@@ -171,6 +171,15 @@ declare module 'myStorage' {
     targetItemKey: string
     visible: boolean
   }
+
+  interface MySupportSummon {
+    [key: string]: {
+      imgId: string
+      name: string
+      rank: stirng
+      necessary: boolean
+    }
+  }
 }
 
 declare module 'requestData'{

@@ -83,4 +83,25 @@ import { onMessage } from 'webext-bridge/content-script'
       }, 200)
     })
   })
+
+  // 获取友招信息
+  onMessage('getSupportSummon', () => {
+    return new Promise((resolve) => {
+      const start = setInterval(() => {
+        if (!document.URL.includes('#profile')) {
+          console.log('主页检测中断', document.URL)
+          clearInterval(start)
+          resolve({})
+        }
+
+        console.log('监测到主页')
+        const targetEl = document.querySelector('#prt-support-summon-list')
+
+        if (targetEl) {
+          clearInterval(start)
+          resolve({ domStr: targetEl.outerHTML })
+        }
+      }, 200)
+    })
+  })
 })()
