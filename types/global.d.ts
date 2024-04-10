@@ -115,7 +115,7 @@ declare module 'myStorage' {
     }
   }
 
-  interface TeamCondition {
+  interface PartyCondition {
     pos: number
     buff: Buff[]
     coating_value: number

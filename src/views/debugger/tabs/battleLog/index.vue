@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Action, BattleRecord, Player, TeamCondition } from 'myStorage'
+import type { Action, BattleRecord, PartyCondition, Player } from 'myStorage'
 import type { Ability, AttackResultJson, BattleStartJson, BossConditionJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'requestData'
 import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import BossDashboard from './components/BossDashboard.vue'
@@ -152,12 +152,12 @@ function mergerCondition(condition: Condition) {
   return totalPlayerBuffs
 }
 
-function handleTeamConditionInfo(teamCondition: TeamCondition[]) {
+function handlePartyConditionInfo(partyCondition: PartyCondition[]) {
   const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
   if (!currentRaid)
     return
 
-  teamCondition.forEach((player) => {
+  partyCondition.forEach((player) => {
     currentRaid.player[player.pos].condition = {
       buff: player.buff,
       coating_value: player.coating_value,
@@ -567,7 +567,7 @@ function handleStartAttackRusult(data: BattleStartJson) {
   const bossBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
   const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
 
-  const teamCondition: TeamCondition[] = []
+  const partyCondition: PartyCondition[] = []
 
   const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
   const formation = status.formation || currentRaid?.formation || []
@@ -575,7 +575,7 @@ function handleStartAttackRusult(data: BattleStartJson) {
   for (let i = 0; i < 6; i++) {
     const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
     if (playerBuffs?.condition) {
-      teamCondition.push({
+      partyCondition.push({
         pos: Number(formation[i]),
         buff: mergerCondition(playerBuffs.condition),
         coating_value: playerBuffs.condition.coating_value ?? 0,
@@ -583,7 +583,7 @@ function handleStartAttackRusult(data: BattleStartJson) {
     }
   }
 
-  handleTeamConditionInfo(teamCondition)
+  handlePartyConditionInfo(partyCondition)
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
   handleDamageStatistic('start', data)
 }
@@ -624,14 +624,14 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
   const bossBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
   const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
 
-  const teamCondition: TeamCondition[] = []
+  const partyCondition: PartyCondition[] = []
   const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
   const formation = status.formation || currentRaid?.formation || []
 
   for (let i = 0; i < 6; i++) {
     const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
     if (playerBuffs?.condition) {
-      teamCondition.push({
+      partyCondition.push({
         pos: Number(formation[i]),
         buff: mergerCondition(playerBuffs.condition),
         coating_value: playerBuffs.condition.coating_value ?? 0,
@@ -639,7 +639,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
     }
   }
 
-  handleTeamConditionInfo(teamCondition)
+  handlePartyConditionInfo(partyCondition)
   handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
   handleDamageStatistic(type, data)
   handleActionQueue(type, data)
