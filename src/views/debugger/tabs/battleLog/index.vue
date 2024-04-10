@@ -6,7 +6,7 @@ import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
-import DamageRecord from './components/DamageRecord.vue'
+import BattleAnalysis from './components/BattleAnalysis.vue'
 import ActionList from './components/ActionList.vue'
 import { battleRecord, uid } from '~/logic'
 
@@ -738,7 +738,7 @@ const normalAttackInfo = computed(() => {
       </div>
     </div>
     <div w-full flex items-start justify-start gap-2 p-2>
-      <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === raidId)!" :turn="bossInfo.turn" />
+      <BattleAnalysis :battle-record="battleRecord.find(record => record.raid_id === raidId)!" :turn="bossInfo.turn" />
       <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
     <ElDescriptions v-if="battleStartJson && bossInfo " border :column="1">
