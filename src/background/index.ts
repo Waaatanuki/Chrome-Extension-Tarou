@@ -3,7 +3,7 @@ import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
 import { sendDropInfo } from '~/api'
-import { battleMemo, mySupportSummon, uid, userImgPc } from '~/logic/storage'
+import { battleMemo, mySupportSummon, userImgPc } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {

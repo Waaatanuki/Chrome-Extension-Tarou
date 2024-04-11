@@ -44,12 +44,11 @@ function toggleImage(specBuff: string[], buffId: string) {
           </el-tag>
           <img w-full :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id)">
         </div>
-        <div w-260px flex flex-wrap border-2 border-blue-500 rounded p-5px>
+        <div w-260px flex flex-wrap border-1 border-blue-500 rounded p-5px>
           <img
             v-for="buff, idx in getPlayerBuffs(player.condition.buff)" :key="idx"
             :src="getBuffIcon(buff, turn)"
-            h-20px
-            cursor-pointer @click="toggleImage(specPlayerBuff, buff.status.split('_')[0])"
+            h-22px w-22px cursor-pointer @click="toggleImage(specPlayerBuff, buff.status.split('_')[0])"
           >
         </div>
         <!-- <div fc flex-col gap-5px>
