@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, Quest, QuestMemo, RecoveryItem } from 'myStorage'
+import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultTodoList } from '~/constants'
@@ -13,7 +13,7 @@ export const windowId = useWebExtensionStorage<number>('windowId', 0)
 export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top: 0, width: 800, height: 600 })
 
 // Dashboard
-export const userImgPc = useWebExtensionStorage<string>('userImgPc', '')
+export const profile = useWebExtensionStorage<Profile>('profile', { uid: '', name: '', imgPc: '' })
 export const mySupportSummon = useWebExtensionStorage<MySupportSummon>('mySupportSummon', {})
 export const stone = useWebExtensionStorage<number>('stone', 0)
 export const legendticket10 = useWebExtensionStorage<number>('legendticket10', 0)

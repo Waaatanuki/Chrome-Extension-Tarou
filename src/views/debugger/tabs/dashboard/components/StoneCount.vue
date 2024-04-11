@@ -11,7 +11,7 @@ function reset() {
 </script>
 
 <template>
-  <ElCard m-3 h-full w-220px>
+  <ElCard h-full w-220px>
     <template #header>
       <div flex items-center justify-between>
         <span text-xl>

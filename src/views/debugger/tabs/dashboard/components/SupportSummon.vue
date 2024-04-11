@@ -1,41 +1,43 @@
 <script setup lang="ts">
-import { mySupportSummon, uid, userImgPc } from '~/logic'
+import { mySupportSummon, profile } from '~/logic'
 
 const order = [1, 2, 3, 4, 5, 6, 0]
 </script>
 
 <template>
-  <div v-if="userImgPc" w-full fc>
-    <el-card w-850px shrink-0 :body-style="{ padding: '10px' }">
-      <div relative h-111px>
-        <div absolute left-0 top-0>
-          <img w-200px :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/leader/raid_log/${userImgPc}.png`">
-          <div mt-10px pl-20px text-15px font-700>
-            ID: {{ uid }}
-          </div>
-        </div>
-        <div ml-150px flex gap-15px>
-          <div v-for="i in order" :key="i" space-y-15px>
+  <el-card v-if="profile.uid" h-full shrink-0 :body-style="{ padding: '10px' }">
+    <div flex gap-10px>
+      <div>
+        <img w-60px :src="getAssetImg('leader', profile.imgPc, 'raid_chain')">
+      </div>
+      <div flex flex-col items-stretch justify-between>
+        <div flex gap-10px>
+          <div v-for="i in order" :key="i" space-y-10px>
             <div v-for="j in 2" :key="`${i}${j}`" relative cursor-pointer @click="mySupportSummon[`${i}${j - 1}`].necessary = !mySupportSummon[`${i}${j - 1}`]?.necessary">
               <template v-if="mySupportSummon[`${i}${j - 1}`]">
-                <img :class="{ necessary: mySupportSummon[`${i}${j - 1}`].necessary }" w-85px :src="getAssetImg('summon', mySupportSummon[`${i}${j - 1}`].imgId) ">
-                <div absolute bottom-0 right-0 rounded bg-slate px-1 text-12px :class="`bless-${mySupportSummon[`${i}${j - 1}`].rank}-style`">
+                <img w-50px :src="getAssetImg('summon', mySupportSummon[`${i}${j - 1}`].imgId, 'raid_normal') ">
+                <div absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${mySupportSummon[`${i}${j - 1}`].rank}-style`">
                   {{ mySupportSummon[`${i}${j - 1}`].name.split(' ')[0] }}
                 </div>
+                <div v-if="mySupportSummon[`${i}${j - 1}`].necessary" i-twemoji:pushpin absolute right--8px top--8px />
               </template>
             </div>
           </div>
         </div>
+        <div flex items-center justify-between text-15px font-700>
+          <div>
+            ID: {{ profile.uid }}
+          </div>
+          <div>
+            昵称: {{ profile.name }}
+          </div>
+        </div>
       </div>
-    </el-card>
-  </div>
+    </div>
+  </el-card>
 </template>
 
 <style scoped>
-.necessary {
-  box-shadow: 0 0 5px 5px #dc2626;
-}
-
 .bless-rank1-style {
     color: #ffa826;
     text-shadow: 0px 0px 1px #694429,0px 0px 1px #694429,0px 0px 1px #694429,0px 0px 2px #694429,0px 0px 2px #694429,0px 0px 2px #694429

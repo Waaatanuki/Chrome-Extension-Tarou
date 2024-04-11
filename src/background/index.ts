@@ -3,7 +3,7 @@ import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
 import { sendDropInfo } from '~/api'
-import { battleMemo, mySupportSummon, userImgPc } from '~/logic/storage'
+import { battleMemo, mySupportSummon, profile } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {
@@ -147,13 +147,16 @@ import { noticeItem } from '~/constants'
 
     // 记录友招信息
     if (details.url.includes('/profile/content/index')) {
-      checkUid(details.url)
       sendMessage('getSupportSummon', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.domStr)
           return
 
+        const searchParams = new URLSearchParams(details.url)
+        profile.value.uid = searchParams.get('uid') || ''
+
         const $ = load(res.domStr)
-        userImgPc.value = String($(`.img-pc`).data().imageName)
+        profile.value.imgPc = String($(`.img-pc`).data().imageName)
+        profile.value.name = String($(`.txt-user-name`).text())
 
         for (let i = 0; i < 7; i++) {
           for (let j = 0; j < 2; j++) {

@@ -27,9 +27,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.8.3",
-    "@iconify-json/carbon": "^1.1.31",
-    "@iconify-json/game-icons": "^1.1.7",
-    "@iconify-json/svg-spinners": "^1.1.2",
+    "@iconify/json": "^2.2.191",
     "@types/archiver": "^6.0.2",
     "@types/chrome": "^0.0.263",
     "@types/lodash-es": "^4.17.12",

@@ -52,7 +52,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <ElCard m-3 min-w-200px>
+  <ElCard min-w-200px>
     <template #header>
       <div flex items-center justify-between>
         <span text-xl>日常</span>

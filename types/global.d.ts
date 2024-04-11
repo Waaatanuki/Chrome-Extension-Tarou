@@ -1,6 +1,12 @@
 declare module 'myStorage' {
   import type { Buff } from 'requestData'
 
+  interface Profile {
+    uid: string
+    name: string
+    imgPc: string
+  }
+
   interface BattleMemo {
     battleId: string
     questName: string

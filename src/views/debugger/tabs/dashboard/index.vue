@@ -7,7 +7,7 @@ import SupportSummon from './components/SupportSummon.vue'
 </script>
 
 <template>
-  <div flex flex-wrap>
+  <div flex flex-wrap gap-3>
     <ToDoList />
     <StoneCount />
     <SupportSummon />
