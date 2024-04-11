@@ -95,7 +95,7 @@ import { onMessage } from 'webext-bridge/content-script'
         }
 
         console.log('监测到主页')
-        const targetEl = document.querySelector('#prt-support-summon-list')
+        const targetEl = document.querySelector('.cnt-profile')
 
         if (targetEl) {
           clearInterval(start)

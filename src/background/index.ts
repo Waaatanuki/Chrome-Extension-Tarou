@@ -3,7 +3,7 @@ import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
 import { sendDropInfo } from '~/api'
-import { battleMemo, mySupportSummon } from '~/logic/storage'
+import { battleMemo, mySupportSummon, uid, userImgPc } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {
@@ -120,7 +120,6 @@ import { noticeItem } from '~/constants'
     // 记录未结算战斗信息
     if (details.url.includes('/quest/unclaimed_reward')) {
       checkUid(details.url)
-
       sendMessage('getUnclaimedList', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.domStr)
           return
@@ -148,11 +147,13 @@ import { noticeItem } from '~/constants'
 
     // 记录友招信息
     if (details.url.includes('/profile/content/index')) {
+      checkUid(details.url)
       sendMessage('getSupportSummon', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.domStr)
           return
 
         const $ = load(res.domStr)
+        userImgPc.value = String($(`.img-pc`).data().imageName)
 
         for (let i = 0; i < 7; i++) {
           for (let j = 0; j < 2; j++) {

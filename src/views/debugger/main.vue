@@ -10,7 +10,7 @@ import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
 import MarkedUser from './tabs/markedUser/index.vue'
-import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, uid, userImgPc, windowId, windowSize } from '~/logic'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, windowId, windowSize } from '~/logic'
 import { sendBossInfo } from '~/api'
 
 const battleStartJson = ref<BattleStartJson>()
@@ -61,17 +61,6 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     const responseUrl = params.response.url
     const tabId = source.tabId
     const requestId = params.requestId
-
-    // 获取主页信息
-    if (responseUrl.includes('profile/content/index')) {
-      getResponse(tabId, requestId, (resp) => {
-        const htmlString = decodeURIComponent(resp.data)
-        const $ = load(htmlString)
-        const userId = $(`.prt-user-id`).text()
-        uid.value = userId.trim().split(' ')[1] || ''
-        userImgPc.value = String($(`.img-pc`).data().imageName)
-      })
-    }
 
     // Dashboard 抽卡数据
     if (responseUrl.includes('game.granbluefantasy.jp/gacha/list')) {
@@ -558,12 +547,6 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     if (requestUrl.includes('party/save_calculate_setting')) {
       const setting = JSON.parse(params.request.postData)
       calculateSetting.value = { priority: String(setting.group_priority) + String(setting.priority), setting }
-    }
-
-    // BattleLog 记录副本start信息
-    if (/\/rest\/(raid|multiraid)\/start\.json/.test(requestUrl)) {
-      const searchParams = new URLSearchParams(requestUrl)
-      uid.value = searchParams.get('uid') || ''
     }
 
     // BattleLog 记录单次攻击日志
