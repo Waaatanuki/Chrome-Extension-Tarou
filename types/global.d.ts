@@ -504,6 +504,7 @@ declare module 'requestData'{
    }
 
    interface ResultJsonPayload {
+     type?: string
      ability_id: string
      summon_id: string
      character_num?: string
@@ -520,11 +521,6 @@ declare module 'requestData'{
          is_guard_status: number
        }
      }
-   }
-
-   interface BossConditionJson {
-     buff?: BossCondition[]
-     debuff?: BossCondition[]
    }
 
    interface BossCondition {
@@ -673,17 +669,6 @@ declare module 'requestData'{
      icon_type: string
      user_full_auto_setting_flag: number
      job_param_id?: string
-   }
-
-   interface BattleResult {
-     raid_id: number
-     endTimestr: string
-     name: string
-     point: string
-     turn: string
-     duration: string
-     speed: string
-     treasureList: { src: string, number: string, boxClass: string }[]
    }
 
    interface SpecialSkillSetting {

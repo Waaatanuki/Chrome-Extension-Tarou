@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BattleResult, BattleStartJson, GachaResult, NpcAbility, NpcInfo } from 'requestData'
+import type { BattleStartJson, GachaResult, NpcAbility, NpcInfo } from 'requestData'
 import type { Player } from 'myStorage'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
@@ -13,23 +13,12 @@ import MarkedUser from './tabs/markedUser/index.vue'
 import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, windowId, windowSize } from '~/logic'
 import { sendBossInfo } from '~/api'
 
-const battleStartJson = ref<BattleStartJson>()
-const resultJson = ref()
-const resultJsonPayload = ref()
-const guardSettingJson = ref()
-const specialSkillSetting = ref()
-const bossConditionJson = ref()
-const battleRecordLimit = ref(30)
-
-const inLobby = ref(false)
-const lobbyMemberList = ref()
-const battleResultList = ref<BattleResult[]>([])
-
 const deckJson = ref()
 const calculateSetting = ref()
 
 const paylaod = ref<any>()
-const wsPayloadData = ref<any>()
+
+const battleLogStore = useBattleLogStore()
 
 async function getResponse(tabId: number, requestId: string, cb: (resp: any) => void) {
   let count = 0
@@ -295,18 +284,18 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // BattleLog 查询房间成员
     if (responseUrl.includes('/lobby/content/room_member')) {
       getResponse(tabId, requestId, (resp) => {
-        inLobby.value = true
-        lobbyMemberList.value = []
+        battleLogStore.inLobby = true
+        battleLogStore.lobbyMemberList = []
         const htmlString = decodeURIComponent(resp.data)
         const $ = load(htmlString)
         const memberEl = $('.prt-room-member').children()
         memberEl.each((i, elem) => {
-          lobbyMemberList.value.push({
+          battleLogStore.lobbyMemberList!.push({
             nickname: elem.attribs['data-nick-name'],
             userId: elem.attribs['data-user-id'],
             userRank: elem.attribs['data-user-rank'],
-            jobIcon: $(elem).find('.img-job-icon').attr('src'),
-            attributeClass: $(elem).find('.ico-attribute').attr('class'),
+            jobIcon: $(elem).find('.img-job-icon').attr('src') ?? '',
+            attributeClass: $(elem).find('.ico-attribute').attr('class') ?? '',
             is_dead: false,
           })
         })
@@ -316,24 +305,25 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // BattleLog 记录副本start信息
     if (/\/rest\/(raid|multiraid)\/start\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
-        inLobby.value = false
-        battleStartJson.value = resp
-
-        if (!battleStartJson.value)
+        battleLogStore.inLobby = false
+        if (!resp)
           return
+        const battleStartJson: BattleStartJson = resp
 
-        const matchName = battleStartJson.value.boss.param.reduce<string[]>((pre, cur) => {
+        battleLogStore.handleStartJson(battleStartJson)
+
+        const matchName = battleStartJson.boss.param.reduce<string[]>((pre, cur) => {
           pre.push(cur.name.ja, cur.name.en)
           return pre
         }, [])
         const bossInfo = {
-          battleId: String(battleStartJson.value.raid_id),
-          userId: battleStartJson.value.user_id,
-          questId: battleStartJson.value.quest_id,
-          battleTotal: Number(battleStartJson.value.battle.total),
-          battleCount: Number(battleStartJson.value.battle.count),
+          battleId: String(battleStartJson.raid_id),
+          userId: battleStartJson.user_id,
+          questId: battleStartJson.quest_id,
+          battleTotal: Number(battleStartJson.battle.total),
+          battleCount: Number(battleStartJson.battle.count),
           matchName,
-          boss: battleStartJson.value.boss.param.map(boss => ({
+          boss: battleStartJson.boss.param.map(boss => ({
             id: boss.enemy_id,
             name: boss.name.ja,
             lv: boss.Lv,
@@ -350,28 +340,29 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // BattleLog 记录单次攻击日志
     if (/\/rest\/(raid|multiraid)\/normal_attack_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
-        resultJson.value = { type: 'normal', result: resp }
+        battleLogStore.handleAttackRusultJson('normal', resp)
+        battleLogStore.handleNormalAttackJson(resp)
       })
     }
 
     // BattleLog 记录使用召唤日志
     if (/\/rest\/(raid|multiraid)\/summon_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
-        resultJson.value = { type: 'summon', result: resp }
+        battleLogStore.handleAttackRusultJson('summon', resp)
       })
     }
 
     // BattleLog 记录使用FC日志
     if (/\/rest\/(raid|multiraid)\/fatal_chain_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
-        resultJson.value = { type: 'fc', result: resp }
+        battleLogStore.handleAttackRusultJson('fc', resp)
       })
     }
 
     // BattleLog 记录使用技能日志
     if (/\/rest\/(raid|multiraid)\/ability_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
-        resultJson.value = { type: 'ability', result: resp }
+        battleLogStore.handleAttackRusultJson('ability', resp)
       })
     }
 
@@ -396,31 +387,21 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // BattleLog 记录使用蓝绿药日志
     if (/\/rest\/(raid|multiraid)\/temporary_item_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
-        resultJson.value = { type: 'temporary', result: resp }
+        battleLogStore.handleAttackRusultJson('temporary', resp)
       })
     }
 
     // BattleLog 记录使用大红日志
     if (/\/rest\/(raid|multiraid)\/user_recovery\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
-        resultJson.value = { type: 'recovery', result: resp }
+        battleLogStore.handleAttackRusultJson('recovery', resp)
       })
     }
 
     // BattleLog 记录切换guard日志
     if (/\/rest\/(raid|multiraid)\/guard_setting\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
-        guardSettingJson.value = {
-          raid_id: paylaod.value.raid_id,
-          guard_status: resp.guard_status,
-        }
-      })
-    }
-
-    // BattleLog 记录boss buff信息
-    if (/\/rest\/(raid|multiraid)\/condition/.test(responseUrl)) {
-      getResponse(tabId, requestId, (resp) => {
-        bossConditionJson.value = resp.condition
+        battleLogStore.handleGuardSettingJson({ raid_id: paylaod.value.raid_id, guard_status: resp.guard_status })
       })
     }
 
@@ -506,7 +487,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
             })
             battleRecord.value.sort((a, b) => Number(b.raid_id) - Number(a.raid_id))
 
-            if (battleRecord.value.length > battleRecordLimit.value) {
+            if (battleRecord.value.length > battleLogStore.battleRecordLimit) {
               const lastIndex = battleRecord.value.findLastIndex(record => !record.reserve)
               battleRecord.value.splice(lastIndex, 1)
             }
@@ -551,19 +532,19 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
 
     // BattleLog 记录单次攻击日志
     if (/\/rest\/(raid|multiraid)\/normal_attack_result\.json/.test(requestUrl))
-      resultJsonPayload.value = JSON.parse(params.request.postData)
+      battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录使用召唤日志
     if (/\/rest\/(raid|multiraid)\/summon_result\.json/.test(requestUrl))
-      resultJsonPayload.value = JSON.parse(params.request.postData)
+      battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录使用FC日志
     if (/\/rest\/(raid|multiraid)\/fatal_chain_result\.json/.test(requestUrl))
-      resultJsonPayload.value = JSON.parse(params.request.postData)
+      battleLogStore.resultJsonPayload = { type: 'fc', ...JSON.parse(params.request.postData) }
 
     // BattleLog 记录使用技能日志
     if (/\/rest\/(raid|multiraid)\/ability_result\.json/.test(requestUrl))
-      resultJsonPayload.value = JSON.parse(params.request.postData)
+      battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录子技能日志
     if (/\/rest\/(raid|multiraid)\/get_select_if\.json/.test(requestUrl))
@@ -575,15 +556,15 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
 
     // BattleLog 记录使用蓝绿药日志
     if (/\/rest\/(raid|multiraid)\/temporary_item_result\.json/.test(requestUrl))
-      resultJsonPayload.value = JSON.parse(params.request.postData)
+      battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录使用大红日志
     if (/\/rest\/(raid|multiraid)\/user_recovery\.json/.test(requestUrl))
-      resultJsonPayload.value = JSON.parse(params.request.postData)
+      battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录切换奥义温存日志
     if (/\/rest\/(raid|multiraid)\/special_skill_setting/.test(requestUrl))
-      specialSkillSetting.value = JSON.parse(params.request.postData)
+      battleLogStore.handleSpecialSkillSettingJson(JSON.parse(params.request.postData))
   }
 
   //   getResponse(tabId, requestId, (resp) => {
@@ -591,7 +572,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     const payloadData: string = params.response?.payloadData || ''
     if (payloadData.substring(0, 2) === '42') {
       // console.log(JSON.parse(payloadData.substring(2))[1].bossUpdate?.param?.boss1_condition)
-      wsPayloadData.value = JSON.parse(payloadData.substring(2))[1]
+      battleLogStore.handleWsPayloadJson(JSON.parse(payloadData.substring(2))[1])
     }
   }
 })
@@ -626,22 +607,10 @@ window.addEventListener('beforeunload', () => {
         <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
       </ElTabPane>
       <ElTabPane label="战斗日志">
-        <BattleLog
-          :battle-start-json="battleStartJson"
-          :result-json="resultJson"
-          :result-json-payload="resultJsonPayload"
-          :boss-condition-json="bossConditionJson"
-          :in-lobby="inLobby"
-          :lobby-member-list="lobbyMemberList"
-          :battle-result-list="battleResultList"
-          :guard-setting-json="guardSettingJson"
-          :special-skill-setting="specialSkillSetting"
-          :battle-record-limit="battleRecordLimit"
-          :ws-payload-data="wsPayloadData"
-        />
+        <BattleLog />
       </ElTabPane>
       <ElTabPane label="战斗历史">
-        <BattleRecord :battle-record-limit="battleRecordLimit" />
+        <BattleRecord />
       </ElTabPane>
       <ElTabPane label="标记用户">
         <MarkedUser />

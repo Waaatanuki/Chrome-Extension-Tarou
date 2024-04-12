@@ -5,12 +5,11 @@ import DamageRecord from '../battleLog/components/DamageRecord.vue'
 import ActionList from '../battleLog/components/ActionList.vue'
 import { battleRecord } from '~/logic'
 
-const props = defineProps<{ battleRecordLimit: number }>()
 const { height } = useWindowSize()
-
+const battleLogStore = useBattleLogStore()
 function triggerLock(row: BattleRecord) {
   const lockedNum = battleRecord.value.filter(record => record.reserve).length
-  if (lockedNum + 1 >= props.battleRecordLimit && !row.reserve)
+  if (lockedNum + 1 >= battleLogStore.battleRecordLimit && !row.reserve)
     ElMessage.info('已达锁定上限')
   else
     row.reserve = !row.reserve
@@ -94,7 +93,7 @@ function clear() {
   </ElTable>
   <div flex items-center justify-end gap-10px p-10px text-base>
     <div>
-      {{ `数量 : ${battleRecord.length}/${battleRecordLimit}` }}
+      {{ `数量 : ${battleRecord.length}/${battleLogStore.battleRecordLimit}` }}
     </div>
     <div btn @click="clear">
       清空列表
