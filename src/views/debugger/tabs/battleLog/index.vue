@@ -626,7 +626,7 @@ function handleAttackRusult(type: string, data: AttackResultJson) {
 
   const partyCondition: PartyCondition[] = []
   const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
-  const formation = status.formation || currentRaid?.formation || []
+  const formation = status?.formation || currentRaid?.formation || []
 
   for (let i = 0; i < 6; i++) {
     const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
