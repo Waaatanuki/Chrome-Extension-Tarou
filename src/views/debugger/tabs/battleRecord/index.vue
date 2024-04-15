@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import type { BattleRecord } from 'myStorage'
-import DamageRecord from '../battleLog/components/DamageRecord.vue'
+import BattleAnalysis from '../battleLog/components/BattleAnalysis.vue'
 import ActionList from '../battleLog/components/ActionList.vue'
 import { battleRecord } from '~/logic'
 
@@ -53,7 +53,7 @@ function clear() {
     <ElTableColumn type="expand">
       <template #default="{ row } ">
         <div flex items-start justify-start gap-2 p-2>
-          <DamageRecord :battle-record="battleRecord.find(record => record.raid_id === row.raid_id)!" />
+          <BattleAnalysis :battle-record="battleRecord.find(record => record.raid_id === row.raid_id)!" />
           <ActionList :battle-record="battleRecord.find(record => record.raid_id === row.raid_id)!" />
         </div>
       </template>
