@@ -3,9 +3,10 @@ import type { BattleRecord } from 'myStorage'
 
 const props = defineProps<{ battleRecord: BattleRecord }>()
 
-const damageType = ref<'total' | 'attack' | 'ability' | 'special' | 'other'>('total')
+type DamageType = 'total' | 'attack' | 'ability' | 'special' | 'other'
+const damageType = ref<DamageType>('total')
 
-const damageTypeOptions = ref([
+const damageTypeOptions = ref<{ value: DamageType, label: string }[]>([
   { value: 'total', label: '总计' },
   { value: 'attack', label: '通常攻击&反击' },
   { value: 'ability', label: '技能伤害' },
@@ -18,10 +19,18 @@ const maxDamage = computed(() =>
 )
 
 const totalDamage = computed(() =>
-  props.battleRecord.player.reduce((pre, cur) => {
-    pre += cur.damage[damageType.value].value
-    return pre
-  }, 0),
+  damageTypeOptions.value.reduce<{ value: string, label: string, total: number }[]>((p, c) => {
+    p.push({
+      value: c.value,
+      label: c.label,
+      total: props.battleRecord.player.reduce((pre, cur) => {
+        pre += cur.damage[c.value].value
+        return pre
+      }, 0),
+    })
+
+    return p
+  }, []),
 )
 
 function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number, da: number, ta: number }) {
@@ -86,8 +95,28 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
           </div>
         </div>
       </div>
-      <div mr-5px mt-10px w-full text-end text-xl>
-        合计： {{ totalDamage.toLocaleString() }}
+      <div mt-10px w-full flex justify-end>
+        <div mr-10px fc gap-10px text-xl>
+          合计： {{ totalDamage[0].total.toLocaleString() }}
+          <el-popover placement="top-end" width="200">
+            <template #reference>
+              <div i-carbon:information />
+            </template>
+            <el-descriptions direction="vertical" :column="1" size="small" border>
+              <el-descriptions-item v-for="i in 4" :key="i" label="Username">
+                <template #label>
+                  <div flex items-center justify-between>
+                    <div>{{ totalDamage[i].label }}</div>
+                    <div>{{ `${(totalDamage[i].total / totalDamage[0].total * 100).toFixed(2)}%` }}</div>
+                  </div>
+                </template>
+                <div>
+                  {{ `${totalDamage[i].total.toLocaleString()}` }}
+                </div>
+              </el-descriptions-item>
+            </el-descriptions>
+          </el-popover>
+        </div>
       </div>
     </div>
   </div>
