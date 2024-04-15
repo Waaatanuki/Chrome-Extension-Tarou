@@ -2,6 +2,7 @@ import { load } from 'cheerio'
 import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
+import dayjs from 'dayjs'
 import { sendDropInfo } from '~/api'
 import { battleMemo, mySupportSummon, profile } from '~/logic/storage'
 import { noticeItem } from '~/constants'
@@ -40,9 +41,9 @@ import { noticeItem } from '~/constants'
       sendMessage('getRaidName', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.questName)
           return
-        console.log('新增memo==>', { battleId, quest_name: res.questName, timestamp })
+        console.log('新增memo==>', { battleId, quest_name: res.questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') })
 
-        battleMemo.value.push({ battleId, questName: res.questName, timestamp })
+        battleMemo.value.push({ battleId, questName: res.questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') })
 
         if (battleMemo.value.length > MaxMemoLength)
           battleMemo.value.shift()
@@ -76,9 +77,10 @@ import { noticeItem } from '~/constants'
           reward: treasureList,
         }
 
-        battleMemo.value = battleMemo.value.filter(memo => memo.battleId !== battleId)
         console.log('sendDropInfo', dropInfo)
-        sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
+        sendDropInfo(dropInfo)
+          .then(() => { cleanBattleMemo(battleId) })
+          .catch((err) => { console.log(err.message) })
       }).catch((err) => {
         console.log(err)
       })
@@ -109,7 +111,9 @@ import { noticeItem } from '~/constants'
         }
 
         console.log('sendDropInfo', dropInfo)
-        sendDropInfo(dropInfo).catch((err) => { console.log(err.message) })
+        sendDropInfo(dropInfo)
+          .then(() => { cleanBattleMemo(battleId) })
+          .catch((err) => { console.log(err.message) })
 
         showNotifications(treasureList)
       }).catch((err) => {
@@ -193,6 +197,7 @@ import { noticeItem } from '~/constants'
         questType: '1',
         questImage,
         timestamp: getTimestamp(finishTime),
+        date: dayjs(getTimestamp(finishTime)).format('YYYY-MM-DD HH:mm:ss'),
       })
     })
     return res
@@ -227,6 +232,10 @@ import { noticeItem } from '~/constants'
     if (compareDate.valueOf() > new Date().valueOf())
       finishDate.setFullYear(currentYear - 1)
     return finishDate.valueOf()
+  }
+
+  function cleanBattleMemo(battleId: string) {
+    battleMemo.value = battleMemo.value.filter(memo => memo.battleId !== battleId && Date.now() - memo.timestamp < 14 * 24 * 60 * 60 * 1000)
   }
 
   function showNotifications(treasureList: Treasure[]) {

@@ -13,6 +13,7 @@ declare module 'myStorage' {
     questImage?: string
     questType?: string
     timestamp: number
+    date: string
   }
 
   interface QuestMemo {
