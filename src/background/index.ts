@@ -10,7 +10,7 @@ import { noticeItem } from '~/constants'
 (() => {
   const MaxMemoLength = 50
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
-  const { checkUid, checkCode } = useUser()
+  const { checkUser } = useUser()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -19,7 +19,7 @@ import { noticeItem } from '~/constants'
   chrome.webRequest.onBeforeRequest.addListener((details) => {
     // 记录战斗id与副本名称
     if (/\/rest\/(raid|multiraid)\/start\.json/.test(details.url)) {
-      checkUid(details.url)
+      checkUser(details.url)
 
       if (!details.requestBody?.raw) {
         console.log('details.requestBody==>', details.requestBody)
@@ -57,7 +57,7 @@ import { noticeItem } from '~/constants'
   chrome.webRequest.onCompleted.addListener((details) => {
     // 记录掉落结果
     if (/\/result(multi)?\/content\/index/.test(details.url)) {
-      checkUid(details.url)
+      checkUser(details.url)
       const battleId = details.url.match(/\d+/g)![0]
       const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
       if (!hitMemo)
@@ -88,7 +88,7 @@ import { noticeItem } from '~/constants'
 
     // 记录历史记录里的掉落结果
     if (/\/result(multi)?\/content\/detail/.test(details.url)) {
-      checkUid(details.url)
+      checkUser(details.url)
       const battleId = details.url.match(/\d+/g)![0]
 
       sendMessage('getBattleHistoryResult', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
@@ -123,7 +123,7 @@ import { noticeItem } from '~/constants'
 
     // 记录未结算战斗信息
     if (details.url.includes('/quest/unclaimed_reward')) {
-      checkUid(details.url)
+      checkUser(details.url)
       sendMessage('getUnclaimedList', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.domStr)
           return
@@ -258,7 +258,6 @@ import { noticeItem } from '~/constants'
 
   chrome.runtime.onInstalled.addListener(() => {
     registerContextMenu()
-    checkCode()
   })
 
   addMenuClickListener()

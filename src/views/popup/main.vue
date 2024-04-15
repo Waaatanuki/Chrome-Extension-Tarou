@@ -28,7 +28,11 @@ const form = reactive({
   newValue: '',
 })
 const loading = ref(false)
+
 function showDialog() {
+  if (!code.value || !uid.value)
+    return ElMessage.info('进入战斗获取信息')
+
   dialogVisible.value = true
   form.oldValue = code.value
   form.newValue = ''
