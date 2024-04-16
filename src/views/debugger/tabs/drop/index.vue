@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VueDraggableNext } from 'vue-draggable-next'
-import type { Stat } from 'api'
+import type { DropInfo, RawDrop, Stat } from 'api'
 import { questConfig } from '~/logic/storage'
 import { listDrop, listQuest, sendMultiDropInfo } from '~/api'
 
@@ -44,18 +44,59 @@ function handleUploadChange(uploadFile: any) {
   const reader = new FileReader()
   reader.readAsText(selectedFile)
 
-  reader.onload = function () {
-    const dataSet = JSON.parse(reader.result as string)
+  reader.onload = async function () {
+    const Quest_GoldBrick = [
+      { questId: '301061', questName: '邂逅、黒銀の翼ＨＬ', raidName: 'tuyobaha' },
+      { questId: '303251', questName: '崩天、虚空の兆', raidName: 'akx' },
+      { questId: '305161', questName: '降臨、調停の翼ＨＬ', raidName: 'gurande' },
+      { questId: '303141', questName: '神撃、究極の竜ＨＬ', raidName: 'cb' },
+    ]
+
+    const dataSet: RawDrop[] = JSON.parse(reader.result as string)
+    const dataList: DropInfo[][] = [[]]
+
+    dataSet.forEach((item) => {
+      for (const [key, value] of Object.entries(item)) {
+        const hit = Quest_GoldBrick.find(raid => raid.raidName === value.raidName)
+        if (hit) {
+          const reward = []
+          if (value.blueChests)
+            reward.push({ box: '11', key: value.blueChests, count: 1 })
+
+          if (value.goldBrick && !value.blueChests)
+            reward.push({ box: value.goldBrick, key: '17_20004', count: 1 })
+
+          const battle: DropInfo = {
+            battleId: key,
+            questName: hit.questName,
+            timestamp: Math.floor(value.timestamp / 1000),
+            reward,
+          }
+
+          const list = dataList.at(-1)!
+          if (list.length < 1000)
+            list.push({ ...battle })
+          else
+            dataList.push([{ ...battle }])
+        }
+      }
+    })
 
     importBtnLoading.value = true
-    sendMultiDropInfo(dataSet).then(() => {
-      ElMessage.success('导入成功')
-      handleQuery()
-    }).catch((err) => {
-      ElMessage.error(err.message)
-    }).finally(() => {
-      importBtnLoading.value = false
-    })
+
+    for (let i = 0; i < dataList.length; i++) {
+      const currentList = dataList[i]
+      try {
+        await sendMultiDropInfo(currentList)
+      }
+      catch (error) {
+        // todo 错误处理
+      }
+    }
+
+    ElMessage.success('导入成功')
+    handleQuery()
+    importBtnLoading.value = false
   }
 }
 
@@ -83,7 +124,7 @@ onMounted(() => {
 
 <template>
   <main>
-    <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between bg-violet px-4 text-base>
+    <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-violet px-4 text-base>
       <div fc gap-1 text-xs btn @click="handleQuery">
         <div v-if="queryBtnLoading" i-svg-spinners:90-ring-with-bg />
         <div v-else i-carbon:update-now />

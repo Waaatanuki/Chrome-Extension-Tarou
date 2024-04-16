@@ -1,4 +1,4 @@
-import type { DropInfo, RawDrop, StartJsonBoss, Stat } from 'api'
+import type { DropInfo, StartJsonBoss, Stat } from 'api'
 import request from './request'
 
 // 更新引继码
@@ -18,7 +18,7 @@ export function sendDropInfo(data: DropInfo) {
 }
 
 // 批量发送掉落信息
-export function sendMultiDropInfo(data: RawDrop[]) {
+export function sendMultiDropInfo(data: DropInfo[]) {
   return request('/ext/multiDrop', {
     method: 'post',
     body: JSON.stringify(data),
