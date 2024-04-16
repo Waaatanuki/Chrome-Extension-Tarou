@@ -121,7 +121,7 @@ onMounted(() => {
       </el-form>
 
       <template #footer>
-        <div fc btn @click="submit">
+        <div fc gap-1 btn @click="submit">
           <div v-if="btnLoading" i-svg-spinners:90-ring-with-bg />
           确定
         </div>

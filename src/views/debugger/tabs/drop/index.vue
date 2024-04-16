@@ -84,9 +84,9 @@ onMounted(() => {
 <template>
   <main>
     <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between bg-violet px-4 text-base>
-      <div fc text-xs btn @click="handleQuery">
+      <div fc gap-1 text-xs btn @click="handleQuery">
         <div v-if="queryBtnLoading" i-svg-spinners:90-ring-with-bg />
-        <div v-else i-carbon:update-now mr-1 />
+        <div v-else i-carbon:update-now />
         刷新
       </div>
       <div fc gap-2>
@@ -99,9 +99,9 @@ onMounted(() => {
           :show-file-list="false" :limit="1" :auto-upload="false" accept=".json" :disabled="importBtnLoading"
         >
           <template #trigger>
-            <div fc text-xs btn @click="filesList = []">
+            <div fc gap-1 text-xs btn @click="filesList = []">
               <div v-if="importBtnLoading" i-svg-spinners:90-ring-with-bg />
-              <div v-else i-carbon:document-import mr-1 />
+              <div v-else i-carbon:document-import />
               导入
             </div>
           </template>
