@@ -12,12 +12,7 @@ export default function useUser() {
   }
 
   function sendInfo(dropInfo: DropInfo[]) {
-    failedDropInfoList.value = []
-    console.log(failedDropInfoList.value.concat(dropInfo).length)
-
     const chunkList = splitArrayIntoGroups(failedDropInfoList.value.concat(dropInfo), 1000)
-    console.log(chunkList.length)
-
     const chunkRetry = 3
     let retry = 0
     return new Promise<void>((resolve, reject) => {
@@ -30,6 +25,7 @@ export default function useUser() {
               retry = 0
             }
             else {
+              setBadge()
               resolve()
             }
           })
@@ -38,6 +34,7 @@ export default function useUser() {
             chunkList.push(chunk)
             if (retry > chunkRetry) {
               chunkList.forEach((c) => { failedDropInfoList.value = failedDropInfoList.value.concat(c) })
+              setBadge()
               reject(new Error('上传失败'))
               return
             }
@@ -57,6 +54,15 @@ export default function useUser() {
       result.push(group)
     }
     return result
+  }
+
+  function setBadge() {
+    const total = failedDropInfoList.value.length
+    if (total === 0)
+      return
+    chrome.action.setBadgeText({ text: total.toString() }, () => {
+      chrome.action.setBadgeBackgroundColor({ color: '#be0000' })
+    })
   }
 
   return {
