@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
 import type { NpcAbility, NpcInfo } from 'requestData'
+import type { DropInfo } from 'api'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultTodoList } from '~/constants'
 import { defaultEvokerInfo } from '~/constants/evoker'
@@ -38,6 +39,7 @@ export const onlyShowSpecBuff = useWebExtensionStorage<boolean>('onlyShowSpecBuf
 // Drop
 export const questConfig = useWebExtensionStorage<Quest[]>('questConfig', [])
 export const battleMemo = useWebExtensionStorage<BattleMemo[]>('battleMemo', [])
+export const failedDropInfoList = useWebExtensionStorage<DropInfo[]>('failedDropInfoList', [])
 
 // Party
 export const jobAbilityList = useWebExtensionStorage<NpcAbility[]>('jobAbilityList', [])

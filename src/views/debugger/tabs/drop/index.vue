@@ -2,8 +2,9 @@
 import { VueDraggableNext } from 'vue-draggable-next'
 import type { DropInfo, RawDrop, Stat } from 'api'
 import { questConfig } from '~/logic/storage'
-import { listDrop, listQuest, sendMultiDropInfo } from '~/api'
+import { listDrop, listQuest } from '~/api'
 
+const { sendInfo } = useUser()
 const questData = ref<Stat[]>([])
 const queryBtnLoading = ref(false)
 const importBtnLoading = ref(false)
@@ -44,7 +45,7 @@ function handleUploadChange(uploadFile: any) {
   const reader = new FileReader()
   reader.readAsText(selectedFile)
 
-  reader.onload = async function () {
+  reader.onload = function () {
     const Quest_GoldBrick = [
       { questId: '301061', questName: '邂逅、黒銀の翼ＨＬ', raidName: 'tuyobaha' },
       { questId: '303251', questName: '崩天、虚空の兆', raidName: 'akx' },
@@ -53,7 +54,7 @@ function handleUploadChange(uploadFile: any) {
     ]
 
     const dataSet: RawDrop[] = JSON.parse(reader.result as string)
-    const dataList: DropInfo[][] = [[]]
+    const dataList: DropInfo[] = []
 
     dataSet.forEach((item) => {
       for (const [key, value] of Object.entries(item)) {
@@ -73,30 +74,21 @@ function handleUploadChange(uploadFile: any) {
             reward,
           }
 
-          const list = dataList.at(-1)!
-          if (list.length < 1000)
-            list.push({ ...battle })
-          else
-            dataList.push([{ ...battle }])
+          dataList.push({ ...battle })
         }
       }
     })
 
     importBtnLoading.value = true
 
-    for (let i = 0; i < dataList.length; i++) {
-      const currentList = dataList[i]
-      try {
-        await sendMultiDropInfo(currentList)
-      }
-      catch (error) {
-        // todo 错误处理
-      }
-    }
-
-    ElMessage.success('导入成功')
-    handleQuery()
-    importBtnLoading.value = false
+    sendInfo(dataList).then(() => {
+      ElMessage.success('导入成功')
+      handleQuery()
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      importBtnLoading.value = false
+    })
   }
 }
 

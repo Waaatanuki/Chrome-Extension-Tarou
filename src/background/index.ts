@@ -3,14 +3,13 @@ import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
 import dayjs from 'dayjs'
-import { sendDropInfo } from '~/api'
 import { battleMemo, mySupportSummon, profile } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {
   const MaxMemoLength = 50
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
-  const { checkUser } = useUser()
+  const { checkUser, sendInfo } = useUser()
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
@@ -78,7 +77,7 @@ import { noticeItem } from '~/constants'
         }
 
         console.log('sendDropInfo', dropInfo)
-        sendDropInfo(dropInfo)
+        sendInfo([dropInfo])
           .then(() => { cleanBattleMemo(battleId) })
           .catch((err) => { console.log(err.message) })
       }).catch((err) => {
@@ -111,7 +110,7 @@ import { noticeItem } from '~/constants'
         }
 
         console.log('sendDropInfo', dropInfo)
-        sendDropInfo(dropInfo)
+        sendInfo([dropInfo])
           .then(() => { cleanBattleMemo(battleId) })
           .catch((err) => { console.log(err.message) })
 
