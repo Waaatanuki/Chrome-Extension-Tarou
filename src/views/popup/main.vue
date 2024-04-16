@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import type { Stat } from 'api'
-import type { Quest } from 'myStorage'
 import copy from 'copy-text-to-clipboard'
 import { code, questConfig, uid } from '~/logic/storage'
 import { listDrop, updateCode } from '~/api'
 
 const { openDashboard } = useDashboard()
-const cardData = ref<Stat[]>([])
+const questData = ref<Stat[]>([])
 
 function handleCommand(command: string) {
   switch (command) {
@@ -38,14 +37,6 @@ function showDialog() {
   form.newValue = ''
 }
 
-function toggleVisible(quest: Quest) {
-  const hit = questConfig.value.find(q => q.questId === quest.questId)
-  if (hit) {
-    hit.visible = false
-    cardData.value = cardData.value.filter(q => q.questId !== quest.questId)
-  }
-}
-
 function handleCopy(text: string) {
   if (copy(text))
     ElMessage.success(`已复制引继码`)
@@ -63,14 +54,12 @@ function submit() {
 
 function handleQuery() {
   const questIds = questConfig.value.filter(q => q.visible).map(q => q.questId)
-  if (questIds.length === 0) {
-    console.log('还未收藏副本')
+  if (questIds.length === 0)
     return
-  }
 
   loading.value = true
   listDrop(questIds).then(({ data }) => {
-    cardData.value = data
+    questData.value = data
   }).catch(() => {
     ElMessage.error('掉落数据请求失败')
   }).finally(() => {
@@ -90,9 +79,7 @@ onMounted(() => {
     <div w-380px>
       <ElScrollbar v-loading="loading" max-height="450px">
         <div min-h-350px flex flex-col>
-          <div v-for="quest in questConfig.filter(q => q.visible)" :key="quest.questId">
-            <QuestCard :quest-info="quest" :data="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
-          </div>
+          <QuestCard v-for="quest in questData" :key="quest.questId" :data="quest" />
           <div v-if="questConfig.filter(q => q.visible).length === 0" m-auto h-50px text-center text-xl>
             还未收藏副本
           </div>

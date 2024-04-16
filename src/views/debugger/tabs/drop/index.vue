@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import { VueDraggableNext } from 'vue-draggable-next'
 import type { Stat } from 'api'
-import type { Quest } from 'myStorage'
 import { questConfig } from '~/logic/storage'
 import { listDrop, listQuest, sendMultiDropInfo } from '~/api'
 
-const cardData = ref<Stat[]>([])
+const questData = ref<Stat[]>([])
 const queryBtnLoading = ref(false)
 const importBtnLoading = ref(false)
+const dialogVisible = ref(false)
+const dialogLoading = ref(false)
 const filesList = ref([])
-function toggleVisible(quest: Quest) {
-  const hit = questConfig.value.find(q => q.questId === quest.questId)
+
+function toggleVisible(questId: string) {
+  const hit = questConfig.value.find(q => q.questId === questId)
   if (hit) {
     if (!hit.visible && questConfig.value.filter(q => q.visible).length >= 7)
       return ElMessage.info('最多只能收藏7个副本')
@@ -28,30 +31,12 @@ function handleQuery() {
   }
   queryBtnLoading.value = true
   listDrop(questIds).then(({ data }) => {
-    cardData.value = data
+    questData.value = data
   }).catch(() => {
     ElMessage.error('掉落数据请求失败')
   }).finally(() => {
     queryBtnLoading.value = false
   })
-}
-
-const currentIdx = ref<number>(-1)
-
-function handleDragStart(e: DragEvent, quest: { questId: string, visible: boolean }) {
-  const idx = questConfig.value.findIndex(q => q.questId === quest.questId)
-  currentIdx.value = idx
-}
-
-function handleDragEnter(e: DragEvent, quest: { questId: string, visible: boolean }) {
-  const idx = questConfig.value.findIndex(q => q.questId === quest.questId)
-  const [item] = questConfig.value.splice(currentIdx.value, 1)
-  questConfig.value.splice(idx, 0, item)
-  currentIdx.value = idx
-}
-
-function handleDragEnd() {
-  currentIdx.value = -1
 }
 
 function handleUploadChange(uploadFile: any) {
@@ -74,13 +59,16 @@ function handleUploadChange(uploadFile: any) {
   }
 }
 
-function updateQuestList() {
+function manageQuest() {
+  dialogVisible.value = true
+  dialogLoading.value = true
+
   listQuest().then(({ data }) => {
     data.forEach((quest) => {
       if (!questConfig.value.some(q => quest.questId === q.questId))
         questConfig.value.push({ ...quest, visible: false })
     })
-    ElMessage.success('更新副本列表成功')
+    dialogLoading.value = false
   }).catch((err) => {
     ElMessage.error(err.message)
   })
@@ -102,9 +90,9 @@ onMounted(() => {
         刷新
       </div>
       <div fc gap-2>
-        <div fc text-xs btn @click="updateQuestList">
+        <div fc text-xs btn @click="manageQuest">
           <div i-carbon:document-download mr-1 />
-          更新副本列表
+          管理副本
         </div>
         <ElUpload
           v-model:file-list="filesList" :on-change="handleUploadChange"
@@ -120,37 +108,63 @@ onMounted(() => {
         </ElUpload>
       </div>
     </div>
-    <div my-10px fc flex-wrap gap-10px>
-      <div
-        v-for="quest in questConfig.filter(q => q.visible)" :key="quest.questId"
-        relative
-        draggable="true"
-        @dragstart="(e) => handleDragStart(e, quest)"
-        @dragenter="(e) => handleDragEnter(e, quest)"
-        @dragend="handleDragEnd"
-      >
-        <QuestCard :quest-info="quest" :data="cardData.find(q => q.questId === quest.questId)" :visible="true" @toggle-visible="toggleVisible" />
-        <div v-if="questConfig[currentIdx]?.questId === quest.questId" border="1 dashed #ccc" absolute left-0 top-0 h-full w-full bg-slate-900 opacity-50 />
-      </div>
-      <div v-if="questConfig.filter(q => q.visible).length === 0" mt-10px h-50px text-center text-xl>
-        还未收藏副本
-      </div>
-    </div>
-    <ElCollapse>
-      <ElCollapseItem>
-        <template #title>
-          <div ml-5>
-            <ElText size="large">
-              未收藏副本
-            </ElText>
-          </div>
-        </template>
-        <div fc flex-wrap gap-10px>
-          <div v-for="quest in questConfig.filter(q => !q.visible)" :key="quest.questId">
-            <QuestCard :quest-info="quest" :visible="false" @toggle-visible="toggleVisible" />
+
+    <el-skeleton :loading="queryBtnLoading" animated :throttle="500">
+      <template #template>
+        <div my-10px w-500px w-full fc flex-wrap gap-10px>
+          <el-skeleton-item v-for="i in questConfig.filter(q => q.visible).length" :key="i" variant="p" style="width: 370px; height: 110px" />
+        </div>
+      </template>
+
+      <template #default>
+        <div my-10px fc flex-wrap gap-10px>
+          <QuestCard v-for="quest in questData" :key="quest.questId" :data="quest" />
+          <div v-if="questConfig.filter(q => q.visible).length === 0" mt-10px h-50px text-center text-xl>
+            还未收藏副本
           </div>
         </div>
-      </ElCollapseItem>
-    </ElCollapse>
+      </template>
+    </el-skeleton>
+
+    <el-dialog v-model="dialogVisible" width="700" @close="handleQuery">
+      <el-skeleton :loading="dialogLoading" animated>
+        <template #template>
+          <div w-full fc flex-wrap gap-10px>
+            <el-skeleton-item variant="p" style="width: 100%; height: 400px" />
+          </div>
+        </template>
+
+        <VueDraggableNext v-model="questConfig" flex flex-wrap gap-10px>
+          <transition-group name="list">
+            <div
+              v-for="quest in questConfig" :key="quest.questId"
+              :class="{ 'brightness-50': !quest.visible }"
+              cursor-pointer select-none
+              @click="toggleVisible(quest.questId)"
+            >
+              <img w-100px :src="getQuestImg(quest.questId, 'lobby')">
+            </div>
+          </transition-group>
+        </VueDraggableNext>
+      </el-skeleton>
+    </el-dialog>
   </main>
 </template>
+
+<style>
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.list-leave-active {
+  position: absolute;
+}
+</style>

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { Stat } from 'api'
-import type { Quest } from 'myStorage'
 
-const props = defineProps<{ questInfo: Quest, data?: Stat, visible: boolean }>()
-defineEmits(['toggleVisible'])
+const props = defineProps<{ data: Stat }>()
 
 function getRatio(a = 0, b = 0) {
   if (b === 0)
@@ -42,12 +40,10 @@ const msg = computed(() => {
 </script>
 
 <template>
-  <ElCard v-if="questInfo" :body-style="{ padding: '5px' }">
+  <ElCard :body-style="{ padding: '5px' }">
     <div relative h-100px fc gap-10px text-sm>
-      <div v-if="visible" i-carbon:star-filled absolute right-0 top-0 text-sm text-amber hover:scale-120 @click="$emit('toggleVisible', questInfo)" />
-      <div v-else i-carbon:star absolute right-0 top-0 text-sm hover:scale-120 @click="$emit('toggleVisible', questInfo)" />
       <div relative shrink-0>
-        <img w-100px draggable="false" :src="getQuestImg(questInfo.questId, 'lobby')">
+        <img w-100px draggable="false" :src="getQuestImg(data.questId, 'lobby')">
         <div mt-2px fc gap-2px>
           <div i-game-icons:crossed-swords />
           <div text-orange font-black>
@@ -58,7 +54,7 @@ const msg = computed(() => {
       </div>
       <div w-250px fc flex-col>
         <div w-full flex items-center justify-around>
-          <div v-if="questInfo.isBlueBox" class="desc-item">
+          <div v-if="data.isBlueBox" class="desc-item">
             <el-badge :value="data?.blueChest" type="danger" :max="999999">
               <img w-40px draggable="false" :src="getLocalImg('blueChest')">
             </el-badge>
@@ -74,7 +70,7 @@ const msg = computed(() => {
 
           <div class="desc-item">
             <el-badge :value="data?.targetItemCount" type="danger" :max="999999">
-              <img w-40px draggable="false" :src="getLocalImg(questInfo.targetItemKey, 'item')">
+              <img w-40px draggable="false" :src="getLocalImg(data.targetItemKey, 'item')">
             </el-badge>
 
             <div text-xs>
