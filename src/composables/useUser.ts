@@ -59,9 +59,7 @@ export default function useUser() {
 
   function setBadge() {
     const total = failedDropInfoList.value.length
-    if (total === 0)
-      return
-    chrome.action.setBadgeText({ text: total.toString() }, () => {
+    chrome.action.setBadgeText({ text: total ? total.toString() : '' }, () => {
       chrome.action.setBadgeBackgroundColor({ color: '#be0000' })
     })
   }
