@@ -27,6 +27,7 @@ const form = reactive({
   newValue: '',
 })
 const loading = ref(false)
+const btnLoading = ref(false)
 
 function showDialog() {
   if (!code.value || !uid.value)
@@ -43,12 +44,17 @@ function handleCopy(text: string) {
 }
 
 function submit() {
+  if (btnLoading.value)
+    return
+  btnLoading.value = true
   updateCode({ code: form.newValue }).then((data) => {
     code.value = data.code
     dialogVisible.value = false
     ElMessage.success('迁移成功')
   }).catch((err) => {
     ElMessage.error(err.message)
+  }).finally(() => {
+    btnLoading.value = false
   })
 }
 
@@ -115,7 +121,8 @@ onMounted(() => {
       </el-form>
 
       <template #footer>
-        <div btn @click="submit">
+        <div fc btn @click="submit">
+          <div v-if="btnLoading" i-svg-spinners:90-ring-with-bg />
           确定
         </div>
       </template>
