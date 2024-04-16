@@ -13,6 +13,7 @@ export default function useUser() {
 
   function sendInfo(dropInfo: DropInfo[]) {
     const chunkList = splitArrayIntoGroups(failedDropInfoList.value.concat(dropInfo), 1000)
+    failedDropInfoList.value = []
     const chunkRetry = 3
     let retry = 0
     return new Promise<void>((resolve, reject) => {
