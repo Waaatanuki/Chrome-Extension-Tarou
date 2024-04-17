@@ -121,10 +121,9 @@ onMounted(() => {
       </el-form>
 
       <template #footer>
-        <div fc gap-1 btn @click="submit">
-          <div v-if="btnLoading" i-svg-spinners:90-ring-with-bg />
+        <TheButton :loading="btnLoading" @click="submit">
           确定
-        </div>
+        </TheButton>
       </template>
     </el-dialog>
   </main>

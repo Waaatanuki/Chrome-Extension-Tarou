@@ -117,26 +117,21 @@ onMounted(() => {
 <template>
   <main>
     <div sticky left-0 right-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-violet px-4 text-base>
-      <div fc gap-1 text-xs btn @click="handleQuery">
-        <div v-if="queryBtnLoading" i-svg-spinners:90-ring-with-bg />
-        <div v-else i-carbon:update-now />
+      <TheButton icon="carbon:update-now" :loading="queryBtnLoading" @click="handleQuery">
         刷新
-      </div>
+      </TheButton>
       <div fc gap-2>
-        <div fc text-xs btn @click="manageQuest">
-          <div i-carbon:document-download mr-1 />
+        <TheButton icon="carbon:document-download" @click="manageQuest">
           管理副本
-        </div>
+        </TheButton>
         <ElUpload
           v-model:file-list="filesList" :on-change="handleUploadChange"
           :show-file-list="false" :limit="1" :auto-upload="false" accept=".json" :disabled="importBtnLoading"
         >
           <template #trigger>
-            <div fc gap-1 text-xs btn @click="filesList = []">
-              <div v-if="importBtnLoading" i-svg-spinners:90-ring-with-bg />
-              <div v-else i-carbon:document-import />
+            <TheButton icon="carbon:document-import" :loading="importBtnLoading" @click="filesList = []">
               导入
-            </div>
+            </TheButton>
           </template>
         </ElUpload>
       </div>

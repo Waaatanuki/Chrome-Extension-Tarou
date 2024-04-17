@@ -128,13 +128,13 @@ function triggerSimpleModel(value: CheckboxValueType) {
         效果量
       </ElCheckboxButton>
 
-      <div ml-30px btn @click="dialogVisiable = true">
+      <TheButton ml-30px @click="dialogVisiable = true">
         队伍比较
-      </div>
+      </TheButton>
     </div>
-    <div btn @click="deckList = []">
+    <TheButton @click="deckList = []">
       清空队伍
-    </div>
+    </TheButton>
   </div>
   <div fc flex-col gap-2 :class="{ simpleMode: simpleChecked }">
     <ElTag v-if="deckList.length === 0" type="info" effect="dark" size="large" round>

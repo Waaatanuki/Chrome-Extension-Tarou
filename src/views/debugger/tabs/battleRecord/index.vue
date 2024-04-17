@@ -95,8 +95,8 @@ function clear() {
     <div>
       {{ `数量 : ${battleRecord.length}/${battleLogStore.battleRecordLimit}` }}
     </div>
-    <div btn @click="clear">
+    <TheButton @click="clear">
       清空列表
-    </div>
+    </TheButton>
   </div>
 </template>

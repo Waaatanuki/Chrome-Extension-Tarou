@@ -57,9 +57,9 @@ function submit() {
       </div>
       <div v-else h-200px fc flex-col gap-10px>
         <div>当前副本没有笔记</div>
-        <div btn @click="dialogVisiable = true">
+        <TheButton @click="dialogVisiable = true">
           创建
-        </div>
+        </TheButton>
       </div>
     </div>
   </ElPopover>
@@ -69,9 +69,9 @@ function submit() {
       <ElInput v-model="textarea" type="textarea" :autosize="{ minRows: 10 }" resize="none" maxlength="1000" show-word-limit />
     </div>
     <template #footer>
-      <div btn @click="submit">
+      <TheButton @click="submit">
         确认
-      </div>
+      </TheButton>
     </template>
   </ElDialog>
 </template>
