@@ -12,7 +12,7 @@ export default function useUser() {
   }
 
   function sendInfo(dropInfo: DropInfo[]) {
-    const chunkList = splitArrayIntoGroups(failedDropInfoList.value.concat(dropInfo), 1000)
+    const chunkList = splitDropInfo(failedDropInfoList.value.concat(dropInfo), 1000)
     failedDropInfoList.value = []
     const chunkRetry = 3
     let retry = 0
@@ -34,7 +34,7 @@ export default function useUser() {
             retry++
             chunkList.push(chunk)
             if (retry > chunkRetry) {
-              chunkList.forEach((c) => { failedDropInfoList.value = failedDropInfoList.value.concat(c) })
+              mergeDropInfo(chunkList)
               setBadge()
               reject(new Error('上传失败'))
               return
@@ -48,13 +48,23 @@ export default function useUser() {
     })
   }
 
-  function splitArrayIntoGroups(array: DropInfo[], groupSize: number) {
+  function splitDropInfo(array: DropInfo[], groupSize: number) {
     const result = []
     for (let i = 0; i < array.length; i += groupSize) {
       const group = array.slice(i, i + groupSize)
       result.push(group)
     }
     return result
+  }
+
+  function mergeDropInfo(array: DropInfo[][]) {
+    const flattenedArray = array.reduce((pre, cur) => pre.concat(cur), [])
+    failedDropInfoList.value = flattenedArray.reduce<DropInfo[]>((pre, cur) => {
+      const ids = pre.map(item => item.battleId)
+      if (!ids.includes(cur.battleId))
+        pre.push(cur)
+      return pre
+    }, [])
   }
 
   function setBadge() {
