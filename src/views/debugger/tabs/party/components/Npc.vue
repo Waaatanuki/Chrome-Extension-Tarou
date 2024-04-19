@@ -18,9 +18,9 @@ defineProps<{
         <div mt-1px h-12px flex items-center justify-start>
           <div v-for=" i in 4" :key="i" relative w-15px fc>
             <div v-if="leaderAbilityList[i - 1]" :class="`ability_icon_type_${leaderAbilityList[i - 1].icon_type}`" h-12px w-12px border-1 rounded-sm />
-            <CarbonClose
+            <div
               v-if="leaderAbilityList[i - 1] && !leaderAbilityList[i - 1].user_full_auto_setting_flag"
-              absolute bottom-0 left-0 right-0 top-0 m-auto text-13px text-black
+              i-carbon:close absolute text-13px text-black
             />
           </div>
         </div>
@@ -33,9 +33,9 @@ defineProps<{
               :class="`ability_icon_type_${ability.icon_type}`"
               h-12px w-12px border-1 rounded-sm
             />
-            <CarbonClose
+            <div
               v-if=" !ability.user_full_auto_setting_flag"
-              absolute bottom-0 left-0 right-0 top-0 m-auto text-13px text-black
+              i-carbon:close absolute text-13px text-black
             />
           </div>
         </div>
