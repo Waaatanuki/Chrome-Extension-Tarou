@@ -416,8 +416,8 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           const htmlString = decodeURIComponent(resp.data)
           const $ = load(htmlString)
           const raidName = $('.txt-enemy-name').text()
-          const endTimesstr = $('.txt-defeat-value').first().text()
-          const endTimestamp = dayjs(endTimesstr, 'MM/DD HH:mm').year(dayjs().year()).valueOf()
+          const finishTime = $('.txt-defeat-value').first().text()
+          const endTimestamp = formatFinishTime(finishTime)
           const gainList: string[] = []
 
           $('.txt-gain-value').each((i, elem) => {

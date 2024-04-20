@@ -17,3 +17,19 @@ export function formatTime(seconds: number): string {
     return `${formattedMinutes}:${formattedSeconds}`
   }
 }
+
+// 将MM/DD HH:mm格式时间转化为时间戳
+export function formatFinishTime(finishTime: string) {
+  const currentYear = new Date().getFullYear()
+  const [monthDay, time] = finishTime.split(' ')
+  const [month, day] = monthDay.split('/')
+  const finishDate = new Date(`${currentYear}-${month}-${day}T${time}:00+09:00`)
+  if (!finishDate.valueOf())
+    return Date.now()
+
+  const compareDate = new Date(finishDate.getTime() - 24 * 60 * 60 * 1000)
+
+  if (compareDate.valueOf() > new Date().valueOf())
+    finishDate.setFullYear(currentYear - 1)
+  return finishDate.valueOf()
+}

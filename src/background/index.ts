@@ -105,7 +105,7 @@ import { noticeItem } from '~/constants'
           questName,
           questImage,
           questType: '1',
-          timestamp: getTimestamp(finishTime),
+          timestamp: formatFinishTime(finishTime),
           reward: treasureList,
         }
 
@@ -202,8 +202,8 @@ import { noticeItem } from '~/constants'
         questName: questName.trim(),
         questType: '1',
         questImage,
-        timestamp: getTimestamp(finishTime),
-        date: dayjs(getTimestamp(finishTime)).format('YYYY-MM-DD HH:mm:ss'),
+        timestamp: formatFinishTime(finishTime),
+        date: dayjs(formatFinishTime(finishTime)).format('YYYY-MM-DD HH:mm:ss'),
       })
     })
     return res
@@ -222,22 +222,6 @@ import { noticeItem } from '~/constants'
       })
     })
     return res
-  }
-
-  function getTimestamp(finishTime: string) {
-    // finishTime格式MM/DD HH:mm
-    const currentYear = new Date().getFullYear()
-    const [monthDay, time] = finishTime.split(' ')
-    const [month, day] = monthDay.split('/')
-    const finishDate = new Date(`${currentYear}-${month}-${day}T${time}:00+09:00`)
-    if (!finishDate.valueOf())
-      return Date.now()
-
-    const compareDate = new Date(finishDate.getTime() - 24 * 60 * 60 * 1000)
-
-    if (compareDate.valueOf() > new Date().valueOf())
-      finishDate.setFullYear(currentYear - 1)
-    return finishDate.valueOf()
   }
 
   function cleanBattleMemo(battleId: string) {
