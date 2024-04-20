@@ -150,12 +150,19 @@ import { noticeItem } from '~/constants'
 
     // 记录友招信息
     if (details.url.includes('/profile/content/index')) {
+      const searchParams = new URLSearchParams(details.url)
+      const myUid = searchParams.get('uid') || ''
+      const match = details.url.match(/\/(\d+)\?/)!
+      const currentUid = match[1]
+
+      if (myUid !== currentUid)
+        return
+
       sendMessage('getSupportSummon', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
         if (!res?.domStr)
           return
 
-        const searchParams = new URLSearchParams(details.url)
-        profile.value.uid = searchParams.get('uid') || ''
+        profile.value.uid = myUid
 
         const $ = load(res.domStr)
         profile.value.imgPc = String($(`.img-pc`).data().imageName)
