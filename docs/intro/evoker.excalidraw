@@ -4,28 +4,28 @@
   "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
   "elements": [
     {
-      "id": "WEJjcCzso2sBw3JPF3Url",
       "type": "image",
-      "x": 220.6857142857143,
-      "y": 178.08988764044943,
-      "width": 806.9238095238095,
-      "height": 951.9887640449439,
-      "angle": 0,
-      "strokeColor": "transparent",
-      "backgroundColor": "transparent",
+      "version": 208,
+      "versionNonce": 160398797,
+      "isDeleted": false,
+      "id": "WEJjcCzso2sBw3JPF3Url",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
       "roughness": 1,
       "opacity": 100,
+      "angle": 0,
+      "x": 220.6857142857143,
+      "y": 178.08988764044943,
+      "strokeColor": "transparent",
+      "backgroundColor": "transparent",
+      "width": 806.9238095238095,
+      "height": 951.9887640449439,
+      "seed": 1511326701,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 1511326701,
-      "version": 208,
-      "versionNonce": 160398797,
-      "isDeleted": false,
-      "boundElements": null,
+      "boundElements": [],
       "updated": 1713603867819,
       "link": null,
       "locked": false,
@@ -35,6 +35,399 @@
         1,
         1
       ]
+    },
+    {
+      "id": "w9d8IqjmMqf9sjWQbJwRH",
+      "type": "rectangle",
+      "x": 254.64761904761906,
+      "y": 250.08426966292132,
+      "width": 126,
+      "height": 218,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1238077392,
+      "version": 67,
+      "versionNonce": 648718800,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "id": "jSyFZNhabG5WmH-4okSWS",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1713751551093,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "HIktioSHyaAX7l00jxpcO",
+      "type": "text",
+      "x": 334.64761904761906,
+      "y": 81.08426966292132,
+      "width": 580,
+      "height": 69,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 1249860560,
+      "version": 374,
+      "versionNonce": 1657173456,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "id": "jSyFZNhabG5WmH-4okSWS",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1713751551093,
+      "link": null,
+      "locked": false,
+      "text": "显示当前贤者相关内容制作进度，可以手动勾选也可以进入相应页\n面自动读取，颜色变为黄色代表已经到达最终阶段。最下方的目标\n勾选状态代表是否计算该贤者所需素材。",
+      "fontSize": 20,
+      "fontFamily": 2,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 64,
+      "containerId": null,
+      "originalText": "显示当前贤者相关内容制作进度，可以手动勾选也可以进入相应页\n面自动读取，颜色变为黄色代表已经到达最终阶段。最下方的目标\n勾选状态代表是否计算该贤者所需素材。",
+      "lineHeight": 1.15
+    },
+    {
+      "id": "Ds8rZh2tz2tFZg0pFvdC2",
+      "type": "rectangle",
+      "x": 543.6476190476191,
+      "y": 678.0842696629213,
+      "width": 163,
+      "height": 71,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1147175888,
+      "version": 45,
+      "versionNonce": 1336846640,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "id": "9-7r6MkM5J3K71-__VbI0",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1713751473149,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "8ej8NtTgbyM2TdlppvXX2",
+      "type": "text",
+      "x": 243.64761904761906,
+      "y": 691.0842696629213,
+      "width": 280,
+      "height": 23,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 972032976,
+      "version": 117,
+      "versionNonce": 1973034288,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "id": "9-7r6MkM5J3K71-__VbI0",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1713751473150,
+      "link": null,
+      "locked": false,
+      "text": "当前所缺素材量，悬浮显示总计",
+      "fontSize": 20,
+      "fontFamily": 2,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 18,
+      "containerId": null,
+      "originalText": "当前所缺素材量，悬浮显示总计",
+      "lineHeight": 1.15
+    },
+    {
+      "id": "9-7r6MkM5J3K71-__VbI0",
+      "type": "arrow",
+      "x": 538.6476190476191,
+      "y": 736.0842696629213,
+      "width": 161,
+      "height": 20,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 2025476048,
+      "version": 72,
+      "versionNonce": 64887088,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1713751482709,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -112,
+          7
+        ],
+        [
+          -161,
+          -13
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Ds8rZh2tz2tFZg0pFvdC2",
+        "focus": -0.4210931485758276,
+        "gap": 5
+      },
+      "endBinding": {
+        "elementId": "8ej8NtTgbyM2TdlppvXX2",
+        "focus": 0.3343243645012636,
+        "gap": 9
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "90GoaSHqa6-eqEWLy4kuI",
+      "type": "rectangle",
+      "x": 242.64761904761906,
+      "y": 758.0842696629213,
+      "width": 744,
+      "height": 354,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1868863440,
+      "version": 67,
+      "versionNonce": 294570800,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "id": "U5b4PJLfnSQryK5EpirSD",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1713751517768,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "nE4Pah6vQgDURrnz7L6cP",
+      "type": "text",
+      "x": 791.6476190476191,
+      "y": 694.0842696629213,
+      "width": 162.24609375,
+      "height": 23,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 121005008,
+      "version": 55,
+      "versionNonce": 1935261488,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "id": "U5b4PJLfnSQryK5EpirSD",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1713751517768,
+      "link": null,
+      "locked": false,
+      "text": "沙盒boss门票情况",
+      "fontSize": 20,
+      "fontFamily": 2,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 18,
+      "containerId": null,
+      "originalText": "沙盒boss门票情况",
+      "lineHeight": 1.15
+    },
+    {
+      "id": "U5b4PJLfnSQryK5EpirSD",
+      "type": "arrow",
+      "x": 833.6476190476191,
+      "y": 755.0842696629213,
+      "width": 41,
+      "height": 32,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 538121168,
+      "version": 51,
+      "versionNonce": 219224016,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1713751523122,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          23,
+          -5
+        ],
+        [
+          41,
+          -32
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "90GoaSHqa6-eqEWLy4kuI",
+        "focus": -0.5134041476985332,
+        "gap": 3
+      },
+      "endBinding": {
+        "elementId": "nE4Pah6vQgDURrnz7L6cP",
+        "focus": -0.15253591042740558,
+        "gap": 6
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "jSyFZNhabG5WmH-4okSWS",
+      "type": "arrow",
+      "x": 381.64761904761906,
+      "y": 267.0842696629213,
+      "width": 75,
+      "height": 108,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 969926448,
+      "version": 125,
+      "versionNonce": 751869392,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1713751557740,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          59,
+          -36
+        ],
+        [
+          75,
+          -108
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "w9d8IqjmMqf9sjWQbJwRH",
+        "focus": -0.3591217381308196,
+        "gap": 1
+      },
+      "endBinding": {
+        "elementId": "HIktioSHyaAX7l00jxpcO",
+        "focus": 0.5319148936170212,
+        "gap": 9
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
     }
   ],
   "appState": {
