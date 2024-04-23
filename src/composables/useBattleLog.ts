@@ -14,9 +14,11 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   const raidId = ref<number>()
   const leaderAttr = ref('')
   const mvpInfo = ref<{ userId: string, rank: number, point: number }[]>()
-  const battleRecordLimit = ref(30)
+  const battleRecordLimit = 30
   const resultJsonPayload = ref<ResultJsonPayload>()
   const normalAttackInfo = ref({ hit: 0, damage: 0 })
+
+  const currentBattle = computed(() => battleRecord.value.find(b => b.raid_id === raidId.value))
 
   function handleStartJson(data: BattleStartJson) {
     raidId.value = data.raid_id
@@ -24,7 +26,13 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     const leader = data.player.param[0]
     leaderAttr.value = leader.attr
 
-    const addition = { unique_gauge_time_limit: data.unique_gauge_time_limit || undefined }
+    const interrupt_display_text = data.status?.special_skill_indicate
+      ? data.status.special_skill_indicate[0]?.interrupt_display_text
+      : data.special_skill_indicate
+        ? data.special_skill_indicate[0]?.interrupt_display_text
+        : ''
+
+    const addition = { unique_gauge_time_limit: data.unique_gauge_time_limit }
 
     bossInfo.value = {
       questId: data.quest_id,
@@ -37,13 +45,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       timer: data.timer,
       turn: data.turn,
       addition,
+      interrupt_display_text,
     }
-
-    bossInfo.value.interrupt_display_text = data.status?.special_skill_indicate
-      ? data.status.special_skill_indicate[0]?.interrupt_display_text
-      : data.special_skill_indicate
-        ? data.special_skill_indicate[0]?.interrupt_display_text
-        : ''
 
     summonInfo.value = {
       summon: [...data.summon],
@@ -60,7 +63,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       is_host: cur.is_host,
     }))
 
-    handleConditionInfo(boss.condition, leader.condition)
+    handleMainConditionInfo(boss.condition, leader.condition)
     recordRaidInfo(data)
     // 处理开幕特动情况
     if (data.scenario)
@@ -119,7 +122,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     }
 
     handlePartyConditionInfo(partyCondition)
-    handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
+    handleMainConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
     handleDamageStatistic(type, data)
     handleActionQueue(type, data)
   }
@@ -202,7 +205,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     if (data.bossUpdate && bossInfo.value) {
       bossInfo.value.hp = Number(data.bossUpdate.param.boss1_hp)
       bossInfo.value.hpPercent = Number.parseFloat((Number(bossInfo.value.hp) / Number(bossInfo.value.hpmax) * 100).toFixed(2))
-      handleConditionInfo(data.bossUpdate.param.boss1_condition)
+      handleMainConditionInfo(data.bossUpdate.param.boss1_condition)
     }
 
     if (data.battleFinish && bossInfo.value) {
@@ -248,7 +251,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       }
     })
   }
-  function handleConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
+
+  function handleMainConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
     if (bossCondition) {
       const bossBuffs = bossCondition.buff?.filter(item => !item.personal_buff_user_id || item.personal_buff_user_id === uid.value) || []
       const bossDebuffs = bossCondition.debuff?.filter(item => !item.personal_debuff_user_id || item.personal_debuff_user_id === uid.value) || []
@@ -265,8 +269,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   }
 
   function recordRaidInfo(data: BattleStartJson) {
-    const currentRaid = battleRecord.value.find(record => record.raid_id === raidId.value)
-    if (currentRaid)
+    if (currentBattle.value)
       return
     const boss = data.boss.param[0]
 
@@ -314,7 +317,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
 
     battleRecord.value.unshift({
       quest_id: data.quest_id,
-      raid_id: raidId.value!,
+      raid_id: data.raid_id,
       raid_name: boss.monster,
       imgId: boss.cjs.split('_').at(-1)!,
       turn: data.turn,
@@ -329,7 +332,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       abilityList,
     })
 
-    if (battleRecord.value.length > battleRecordLimit.value) {
+    if (battleRecord.value.length > battleRecordLimit) {
       const lastIndex = battleRecord.value.findLastIndex(record => !record.reserve)
       battleRecord.value.splice(lastIndex, 1)
     }
@@ -648,7 +651,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       summonInfo.value.supporter.recast = status.supporter.recast
     }
 
-    if (status?.unique_gauge_time_limit && bossInfo.value)
+    if (status.unique_gauge_time_limit && bossInfo.value)
       bossInfo.value.addition = { unique_gauge_time_limit: status.unique_gauge_time_limit }
 
     const bossBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
@@ -656,8 +659,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
 
     const partyCondition: PartyCondition[] = []
 
-    const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
-    const formation = status.formation || currentRaid?.formation || []
+    const formation = status.formation || currentBattle.value?.formation || []
 
     for (let i = 0; i < 6; i++) {
       const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
@@ -670,8 +672,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       }
     }
 
+    handleMainConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
     handlePartyConditionInfo(partyCondition)
-    handleConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
     handleDamageStatistic('start', data)
   }
 
