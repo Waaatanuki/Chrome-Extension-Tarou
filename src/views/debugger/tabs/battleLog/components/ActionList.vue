@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { BattleRecord } from 'myStorage'
+import { storeToRefs } from 'pinia'
 
-const props = defineProps<{ battleRecord: BattleRecord }>()
+const battleLogStore = useBattleLogStore()
+const { currentRaid } = storeToRefs(battleLogStore)
 const innerRef = ref<HTMLDivElement>()
 const scrollbarRef = ref()
 
-watch(() => props.battleRecord, () => {
+watch(() => currentRaid.value?.actionQueue, () => {
   nextTick(() => {
     scrollbarRef.value?.setScrollTop(innerRef.value?.scrollHeight || 0)
   })
@@ -13,11 +14,11 @@ watch(() => props.battleRecord, () => {
 </script>
 
 <template>
-  <ElCard v-if="battleRecord" min-w-400px>
+  <ElCard min-w-400px>
     <ElScrollbar ref="scrollbarRef" height="554px">
       <div ref="innerRef">
         <ElCard
-          v-for="list, idx in battleRecord.actionQueue" :key="idx"
+          v-for="list, idx in currentRaid!.actionQueue" :key="idx"
           :body-style="{ padding: '0px', display: 'flex' }"
           shadow="hover"
         >

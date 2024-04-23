@@ -1,4 +1,4 @@
-import type { Action, BattleRecord, PartyCondition, Player } from 'myStorage'
+import type { Action, PartyCondition, Player } from 'myStorage'
 import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'requestData'
 import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import { defineStore } from 'pinia'
@@ -18,7 +18,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   const resultJsonPayload = ref<ResultJsonPayload>()
   const normalAttackInfo = ref({ hit: 0, damage: 0 })
 
-  const currentBattle = computed(() => battleRecord.value.find(b => b.raid_id === raidId.value))
+  const currentRaid = computed(() => battleRecord.value.find(b => b.raid_id === raidId.value))
 
   function handleStartJson(data: BattleStartJson) {
     raidId.value = data.raid_id
@@ -65,9 +65,9 @@ export const useBattleLogStore = defineStore('battleLog', () => {
 
     handleMainConditionInfo(boss.condition, leader.condition)
     recordRaidInfo(data)
-    // 处理开幕特动情况
+    // 处理开幕特动情况start
     if (data.scenario)
-      handleStartAttackRusult(data)
+      handleAttackRusultJson('start', data as AttackResultJson)
   }
 
   function handleAttackRusultJson(type: string, data: AttackResultJson) {
@@ -107,8 +107,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
 
     const partyCondition: PartyCondition[] = []
-    const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
-    const formation = status?.formation || currentRaid?.formation || []
+    const formation = status?.formation || currentRaid.value?.formation || []
 
     for (let i = 0; i < 6; i++) {
       const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
@@ -121,8 +120,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       }
     }
 
-    handlePartyConditionInfo(partyCondition)
     handleMainConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
+    handlePartyConditionInfo(partyCondition)
     handleDamageStatistic(type, data)
     handleActionQueue(type, data)
   }
@@ -181,24 +180,22 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   }
 
   function handleGuardSettingJson(data: GuardSettingJson) {
-    const raid_id = data.raid_id
-    const currentRaid = battleRecord.value.find(battle => battle.raid_id === raid_id)
+    if (!currentRaid.value)
+      return
 
     Object.values(data.guard_status).forEach((item) => {
-      const hit = currentRaid?.actionQueue.at(-1)?.guard_status.find(i => i.num === item.target_num)
+      const hit = currentRaid.value?.actionQueue.at(-1)?.guard_status.find(i => i.num === item.target_num)
       if (hit)
         hit.is_guard_status = item.is_guard_status
     })
   }
 
   function handleSpecialSkillSettingJson(data: SpecialSkillSetting) {
-    const raid_id = data.raid_id
-    const currentRaid = battleRecord.value.find(battle => battle.raid_id === raid_id)
+    if (!currentRaid.value)
+      return
 
-    if (currentRaid) {
-      currentRaid.special_skill_flag = data.value
-      currentRaid.actionQueue.at(-1)!.special_skill_flag = data.value
-    }
+    currentRaid.value.special_skill_flag = data.value
+    currentRaid.value.actionQueue.at(-1)!.special_skill_flag = data.value
   }
 
   function handleWsPayloadJson(data: WsPayloadData) {
@@ -240,12 +237,11 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   }
 
   function handlePartyConditionInfo(partyCondition: PartyCondition[]) {
-    const currentRaid = battleRecord.value.find(r => r.raid_id === raidId.value)
-    if (!currentRaid)
+    if (!currentRaid.value)
       return
 
     partyCondition.forEach((player) => {
-      currentRaid.player[player.pos].condition = {
+      currentRaid.value!.player[player.pos].condition = {
         buff: player.buff,
         coating_value: player.coating_value,
       }
@@ -269,7 +265,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   }
 
   function recordRaidInfo(data: BattleStartJson) {
-    if (currentBattle.value)
+    if (currentRaid.value)
       return
     const boss = data.boss.param[0]
 
@@ -339,24 +335,23 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   }
 
   function handleDamageStatistic(resultType: string, data: AttackResultJson | BattleStartJson) {
-    const currentRaid = battleRecord.value.find(record => record.raid_id === raidId.value)
-    if (!currentRaid)
+    if (!currentRaid.value)
       return
 
-    currentRaid.endTimer = data.status?.timer ?? currentRaid.endTimer
+    currentRaid.value.endTimer = data.status?.timer ?? currentRaid.value.endTimer
 
     const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
     data.scenario!.forEach((action, idx, array) => {
       if (action.cmd === 'special' || action.cmd === 'special_npc') {
-        const hitPlayer = currentRaid.player[action.num]
+        const hitPlayer = currentRaid.value!.player[action.num]
         if (hitPlayer) {
           hitPlayer.use_special_skill_count++
           processSpecialScenario(action as SpecialScenario, hitPlayer)
         }
       }
       if (action.cmd === 'attack' && action.from === 'player') {
-        const hitPlayer = currentRaid.player[action.num]
+        const hitPlayer = currentRaid.value!.player[action.num]
         if (hitPlayer) {
           hitPlayer.damage.attack.value += action.damage!.reduce((pre, cur) => {
             pre += cur.reduce((p, c) => {
@@ -384,19 +379,19 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       }
       if (action.cmd === 'damage' && action.to === 'boss') {
         if (resultType === 'summon')
-          processDamageScenario(action as DamageScenario, currentRaid, 0)
+          processDamageScenario(action as DamageScenario, 0)
 
         for (let i = 1; i <= 4; i++) {
           if (array[idx - i]?.cmd === 'wait')
             break
           if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].to !== 'boss')) {
-            processDamageScenario(action as DamageScenario, currentRaid, array[idx - i].num)
+            processDamageScenario(action as DamageScenario, array[idx - i].num)
             break
           }
 
           if (array[idx - i] && array[idx - i].cmd === 'chain_cutin') {
-            const pos0NpcNum = currentRaid.formation[0]
-            processDamageScenario(action as DamageScenario, currentRaid, pos0NpcNum, 'other')
+            const pos0NpcNum = currentRaid.value!.formation[0]
+            processDamageScenario(action as DamageScenario, pos0NpcNum, 'other')
             break
           }
         }
@@ -406,32 +401,32 @@ export const useBattleLogStore = defineStore('battleLog', () => {
           if (array[idx - i]?.cmd === 'wait')
             break
           if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].to !== 'boss')) {
-            processLoopDamageScenario(action as LoopDamageScenario, currentRaid, array[idx - i].num)
+            processLoopDamageScenario(action as LoopDamageScenario, array[idx - i].num)
             break
           }
         }
       }
       if (action.cmd === 'summon' && action.list.length > 0)
-        processSummonScenario(action as SummonScenario, currentRaid)
+        processSummonScenario(action as SummonScenario)
       if ((action.cmd === 'die' || action.cmd === 'die_back') && action.to === 'player') {
-        const hitPlayer = currentRaid.player[Number(action.index)]
+        const hitPlayer = currentRaid.value!.player[Number(action.index)]
         hitPlayer && (hitPlayer.is_dead = true)
       }
       if (action.cmd === 'resurrection') {
-        const hitPlayer = currentRaid.player[Number(action.index)]
+        const hitPlayer = currentRaid.value!.player[Number(action.index)]
         hitPlayer && (hitPlayer.is_dead = false)
       }
       if (action.cmd === 'rematch')
-        currentRaid.player.forEach(p => p.is_dead = false)
+        currentRaid.value!.player.forEach(p => p.is_dead = false)
 
       // 统计承伤
       if (action.cmd === 'super' && action.target === 'player')
-        processSuperScenario(action as SuperScenario, currentRaid)
+        processSuperScenario(action as SuperScenario)
       if (action.cmd === 'attack' && action.from === 'boss') {
         Object.values(action.damage).forEach((item) => {
           item.forEach((hit) => {
-            const playerNum = currentRaid.formation[hit.pos]
-            currentRaid.player[playerNum].damageTaken.attack.value += hit.value
+            const playerNum = currentRaid.value!.formation[hit.pos]
+            currentRaid.value!.player[playerNum].damageTaken.attack.value += hit.value
           })
         },
         )
@@ -439,22 +434,22 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       if (action.cmd === 'damage' && action.to === 'player') {
         action.list.forEach((_hit) => {
           const hit: { pos: number, value: number } = _hit as any
-          const playerNum = currentRaid.formation[hit.pos]
-          currentRaid.player[playerNum].damageTaken.other.value += hit.value
+          const playerNum = currentRaid.value!.formation[hit.pos]
+          currentRaid.value!.player[playerNum].damageTaken.other.value += hit.value
         })
       }
     })
     let point = 0
-    currentRaid.player.forEach((player) => {
+    currentRaid.value.player.forEach((player) => {
       player.damage.total.value = player.damage.ability.value + player.damage.attack.value + player.damage.other.value + player.damage.special.value
       player.damageTaken.total.value = player.damageTaken.super.value + player.damageTaken.attack.value + player.damageTaken.other.value
       point += player.damage.total.value
     })
-    currentRaid.point = point.toLocaleString()
+    currentRaid.value.point = point.toLocaleString()
 
     // 更新前排角色位置信息
     if (data.status?.formation)
-      currentRaid.formation = data.status.formation.map(num => Number(num))
+      currentRaid.value.formation = data.status.formation.map(num => Number(num))
   }
 
   function processSpecialScenario(action: SpecialScenario, player: Player) {
@@ -467,8 +462,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     }, 0) ?? 0
   }
 
-  function processSummonScenario(action: SummonScenario, raid: BattleRecord) {
-    raid.player[0].damage.other.value += action.list.reduce((pre, cur) => {
+  function processSummonScenario(action: SummonScenario) {
+    currentRaid.value!.player[0].damage.other.value += action.list.reduce((pre, cur) => {
       pre += cur.damage?.reduce((p, c) => {
         p += c.value
         return p
@@ -477,8 +472,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     }, 0)
   }
 
-  function processDamageScenario(action: DamageScenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
-    const hitPlayer = raid.player[num]
+  function processDamageScenario(action: DamageScenario, num: number, type: 'ability' | 'other' = 'ability') {
+    const hitPlayer = currentRaid.value!.player[num]
     if (hitPlayer) {
       if (resultJsonPayload.value?.type === 'fc')
         type = 'other'
@@ -489,8 +484,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     }
   }
 
-  function processLoopDamageScenario(action: LoopDamageScenario, raid: BattleRecord, num: number, type: 'ability' | 'other' = 'ability') {
-    const hitPlayer = raid.player[num]
+  function processLoopDamageScenario(action: LoopDamageScenario, num: number, type: 'ability' | 'other' = 'ability') {
+    const hitPlayer = currentRaid.value!.player[num]
     if (hitPlayer) {
       hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
         pre += cur.reduce((p, c) => {
@@ -502,11 +497,11 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     }
   }
 
-  function processSuperScenario(action: SuperScenario, raid: BattleRecord) {
+  function processSuperScenario(action: SuperScenario) {
     action.list?.forEach((item) => {
       item.damage.forEach((hit) => {
-        const playerNum = raid.formation[hit.pos]
-        raid.player[playerNum].damageTaken.super.value += hit.value
+        const playerNum = currentRaid.value!.formation[hit.pos]
+        currentRaid.value!.player[playerNum].damageTaken.super.value += hit.value
       })
     })
   }
@@ -515,14 +510,13 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     if (!resultJsonPayload.value)
       return
 
-    const currentRaid = battleRecord.value.find(record => record.raid_id === raidId.value)
-    if (!currentRaid)
+    if (!currentRaid.value)
       return
 
     const dieIndex = data.scenario.findIndex(action => action.cmd === 'die' && action.to === 'boss')
 
     if (dieIndex !== -1) {
-      currentRaid.endTimestamp = Date.now()
+      currentRaid.value.endTimestamp = Date.now()
       if (dieIndex === 0)
         return
     }
@@ -531,9 +525,9 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       return
 
     const currentTurn = data.status.turn
-    currentRaid.turn = currentTurn
+    currentRaid.value.turn = currentTurn
 
-    if (currentTurn !== currentRaid.actionQueue.at(-1)?.turn) {
+    if (currentTurn !== currentRaid.value.actionQueue.at(-1)?.turn) {
       const guard_status = Object.values(data.status.ability)
         .reduce< { is_guard_status: number, num: number }[]>((pre, cur) => {
           pre.push({
@@ -543,38 +537,38 @@ export const useBattleLogStore = defineStore('battleLog', () => {
           return pre
         }, [])
 
-      currentRaid.actionQueue.push({
+      currentRaid.value.actionQueue.push({
         turn: currentTurn,
         bossHpPercent: bossInfo.value!.hpPercent,
-        special_skill_flag: currentRaid.special_skill_flag!,
+        special_skill_flag: currentRaid.value.special_skill_flag!,
         acitonList: [],
         guard_status,
       })
     }
 
     if (type === 'ability') {
-      const hit = currentRaid.abilityList?.find(ability => ability.id === resultJsonPayload.value?.ability_id)
+      const hit = currentRaid.value.abilityList?.find(ability => ability.id === resultJsonPayload.value?.ability_id)
       if (!hit)
         return
 
-      currentRaid.player[Number(resultJsonPayload.value.ability_character_num)].use_ability_count++
+      currentRaid.value.player[Number(resultJsonPayload.value.ability_character_num)].use_ability_count++
 
-      currentRaid.actionQueue.at(-1)?.acitonList.push({
+      currentRaid.value.actionQueue.at(-1)?.acitonList.push({
         ...hit,
         icon: hit.subAbility ? hit.subAbility.find(a => a.index === String(resultJsonPayload.value?.ability_sub_param[0]))?.icon : hit.icon,
         id: hit.subAbility ? hit.subAbility.find(a => a.index === String(resultJsonPayload.value?.ability_sub_param[0]))?.id : hit.id,
         isSub: !!hit.subAbility,
         aim_num: resultJsonPayload.value.ability_aim_num
-          ? currentRaid.player[Number(resultJsonPayload.value.ability_aim_num)].pid
+          ? currentRaid.value.player[Number(resultJsonPayload.value.ability_aim_num)].pid
           : '',
         aim_is_npc: resultJsonPayload.value.ability_aim_num
-          ? currentRaid.player[Number(resultJsonPayload.value.ability_aim_num)].is_npc
+          ? currentRaid.value.player[Number(resultJsonPayload.value.ability_aim_num)].is_npc
           : false,
       })
     }
 
     if (type === 'fc') {
-      currentRaid.actionQueue.at(-1)?.acitonList.push({
+      currentRaid.value.actionQueue.at(-1)?.acitonList.push({
         type: 'fc',
         id: leaderAttr.value,
         icon: leaderAttr.value,
@@ -585,14 +579,14 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       const summon_id = resultJsonPayload.value.summon_id
 
       if (summon_id === 'supporter') {
-        currentRaid.actionQueue.at(-1)?.acitonList.push({
+        currentRaid.value.actionQueue.at(-1)?.acitonList.push({
           type: 'summon',
           id: summonInfo.value?.supporter.id,
           icon: summonInfo.value?.supporter.image_id,
         })
       }
       else {
-        currentRaid.actionQueue.at(-1)?.acitonList.push({
+        currentRaid.value.actionQueue.at(-1)?.acitonList.push({
           type: 'summon',
           id: summonInfo.value?.summon[Number(summon_id) - 1].id,
           icon: summonInfo.value?.summon[Number(summon_id) - 1].image_id,
@@ -601,80 +595,36 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     }
 
     if (type === 'temporary') {
-      currentRaid.actionQueue.at(-1)?.acitonList.push({
+      currentRaid.value.actionQueue.at(-1)?.acitonList.push({
         type: 'temporary',
         icon: resultJsonPayload.value.character_num ? '1' : '2',
         id: resultJsonPayload.value.character_num ? '1' : '2',
         aim_num: resultJsonPayload.value.character_num
-          ? currentRaid.player[Number(resultJsonPayload.value.character_num)].pid
+          ? currentRaid.value.player[Number(resultJsonPayload.value.character_num)].pid
           : '',
         aim_is_npc: resultJsonPayload.value.character_num
-          ? currentRaid.player[Number(resultJsonPayload.value.character_num)].is_npc
+          ? currentRaid.value.player[Number(resultJsonPayload.value.character_num)].is_npc
           : false,
       })
     }
 
     if (type === 'recovery')
-      currentRaid.actionQueue.at(-1)?.acitonList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
+      currentRaid.value.actionQueue.at(-1)?.acitonList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
 
     if (type === 'normal') {
       const index = dieIndex !== -1 ? -1 : -2
-      currentRaid.actionQueue.at(index)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
+      currentRaid.value.actionQueue.at(index)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
     }
 
     // 更新技能列表
     const currentAbilityList = getAbilityList(data.status.ability)
     currentAbilityList.forEach((abi) => {
-      const hit = currentRaid.abilityList.find(a => a.id === abi.id)
+      const hit = currentRaid.value!.abilityList.find(a => a.id === abi.id)
       if (hit)
         hit.icon = abi.icon
       else
-        currentRaid.abilityList.push({ ...abi })
+        currentRaid.value!.abilityList.push({ ...abi })
     })
-  }
-
-  function handleStartAttackRusult(data: BattleStartJson) {
-    const scenario = data.scenario!
-    const status = data.status!
-
-    const isBossDie = scenario.find((item: any) => item.cmd === 'die' && item.to === 'boss')
-
-    if (isBossDie && bossInfo.value) {
-      bossInfo.value.hp = 0
-      bossInfo.value.hpPercent = 0
-    }
-
-    if (summonInfo.value) {
-      status.summon.forEach((summon, idx) => {
-        summonInfo.value!.summon[idx].recast = summon.recast
-      })
-      summonInfo.value.supporter.recast = status.supporter.recast
-    }
-
-    if (status.unique_gauge_time_limit && bossInfo.value)
-      bossInfo.value.addition = { unique_gauge_time_limit: status.unique_gauge_time_limit }
-
-    const bossBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
-    const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
-
-    const partyCondition: PartyCondition[] = []
-
-    const formation = status.formation || currentBattle.value?.formation || []
-
-    for (let i = 0; i < 6; i++) {
-      const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
-      if (playerBuffs?.condition) {
-        partyCondition.push({
-          pos: Number(formation[i]),
-          buff: mergerCondition(playerBuffs.condition),
-          coating_value: playerBuffs.condition.coating_value ?? 0,
-        })
-      }
-    }
-
-    handleMainConditionInfo(bossBuffs?.condition, playerBuffs?.condition)
-    handlePartyConditionInfo(partyCondition)
-    handleDamageStatistic('start', data)
   }
 
   function getAbilityList(rawAbility: Ability) {
@@ -704,6 +654,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     memberInfo,
     mvpInfo,
     battleRecordLimit,
+    currentRaid,
     handleStartJson,
     handleAttackRusultJson,
     handleNormalAttackJson,

@@ -416,7 +416,7 @@ declare module 'requestData'{
 
   interface AttackResultJson {
     scenario: ScenarioType[]
-    status: StatusInfo
+    status?: StatusInfo
   }
 
   interface StatusInfo {

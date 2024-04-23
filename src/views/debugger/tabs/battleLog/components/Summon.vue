@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { SummonInfo } from 'battleLog'
+import { storeToRefs } from 'pinia'
 
-defineProps<{ summonInfo: SummonInfo }>()
+const battleLogStore = useBattleLogStore()
+const { summonInfo } = storeToRefs(battleLogStore)
 </script>
 
 <template>
-  <ElCard :body-style="{ padding: '10px' }">
+  <ElCard v-if="summonInfo" :body-style="{ padding: '10px' }">
     <div fc gap-5px>
       <div v-for="idx in 5" :key="idx" class="party_weapon_wrapper">
         <img v-if="summonInfo.summon[idx - 1]?.image_id" w-full :src="getAssetImg('summon', summonInfo.summon[idx - 1]?.image_id)">

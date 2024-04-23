@@ -1,22 +1,16 @@
 <script setup lang="ts">
-import type { BossInfo } from 'battleLog'
+import { storeToRefs } from 'pinia'
 import copy from 'copy-text-to-clipboard'
 import Memo from './Memo.vue'
-import { battleRecord } from '~/logic'
 
-const props = defineProps<{ bossInfo: BossInfo, raidId?: number }>()
+const battleLogStore = useBattleLogStore()
+const { bossInfo, currentRaid } = storeToRefs(battleLogStore)
 const remainderSecond = ref<number>(0)
-const timerValue = computed(() => Date.now() + props.bossInfo.timer * 1000)
-const endTimerValue = computed(() => Date.now() + Number(props.bossInfo.addition?.unique_gauge_time_limit?.rest_time) * 1000 || 0)
-const bossImgSrc = computed(() => getBossImg('enemy', props.bossInfo.imgId, 's'))
+const timerValue = computed(() => Date.now() + bossInfo.value!.timer * 1000)
+const endTimerValue = computed(() => Date.now() + Number(bossInfo.value!.addition?.unique_gauge_time_limit?.rest_time) * 1000 || 0)
+const bossImgSrc = computed(() => getBossImg('enemy', bossInfo.value!.imgId, 's'))
 
-const operationSecond = computed(() => {
-  const hit = battleRecord.value.find(record => record.raid_id === props.raidId)
-  if (hit)
-    return hit.startTimer - hit.endTimer
-  else
-    return 0
-})
+const operationSecond = computed(() => currentRaid.value ? currentRaid.value.startTimer - currentRaid.value.endTimer : 0)
 
 function handleTimeChange(millisecond: number) {
   remainderSecond.value = Math.round(millisecond / 1000)
@@ -29,7 +23,7 @@ function handleCopy(text: string) {
 </script>
 
 <template>
-  <div relative w-350px>
+  <div v-if="bossInfo" relative w-350px>
     <ElProgress type="circle" :percentage="bossInfo.hpPercent" :stroke-width="15" status="exception" :width="350">
       <template #default="{ percentage }">
         <div flex flex-col gap-2>
@@ -70,7 +64,7 @@ function handleCopy(text: string) {
       </el-link>
     </div>
     <div absolute bottom-1 left-1>
-      <Memo :quest-id="props.bossInfo.questId" :quest-name="props.bossInfo.name" />
+      <Memo :quest-id="bossInfo.questId" :quest-name="bossInfo.name" />
     </div>
   </div>
 </template>

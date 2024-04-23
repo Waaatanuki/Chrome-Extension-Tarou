@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { BattleRecord } from 'myStorage'
+import { storeToRefs } from 'pinia'
 import type { Buff } from 'requestData'
 import { onlyShowSpecBuff, specPlayerBuff } from '~/logic'
 
-defineProps<{ battleRecord: BattleRecord, turn: number }>()
+const battleLogStore = useBattleLogStore()
+const { currentRaid, bossInfo } = storeToRefs(battleLogStore)
 
 function getPlayerBuffs(buffs: Buff[]) {
   if (onlyShowSpecBuff.value) {
@@ -34,7 +35,7 @@ function toggleImage(specBuff: string[], buffId: string) {
       </el-checkbox>
     </div>
     <div flex flex-col items-start justify-center gap-10px>
-      <div v-for="player in battleRecord.player" :key="player.pid" flex justify-start gap-10px>
+      <div v-for="player in currentRaid!.player" :key="player.pid" flex justify-start gap-10px>
         <div relative w-100px shrink-0>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
             <span text-base text-red font-bold>Dead</span>
@@ -47,7 +48,7 @@ function toggleImage(specBuff: string[], buffId: string) {
         <div w-260px flex flex-wrap border-1 border-blue-500 rounded p-5px>
           <img
             v-for="buff, idx in getPlayerBuffs(player.condition.buff)" :key="idx"
-            :src="getBuffIcon(buff, turn)"
+            :src="getBuffIcon(buff, bossInfo!.turn)"
             h-22px w-22px cursor-pointer @click="toggleImage(specPlayerBuff, buff.status.split('_')[0])"
           >
         </div>
