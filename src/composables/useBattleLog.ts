@@ -19,13 +19,10 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   const normalAttackInfo = ref({ hit: 0, damage: 0 })
 
   function handleStartJson(data: BattleStartJson) {
-    if (!data || !data.raid_id)
-      return
-
     raidId.value = data.raid_id
     const boss = data.boss.param[0]
-    const player = data.player.param[0]
-    leaderAttr.value = player.attr
+    const leader = data.player.param[0]
+    leaderAttr.value = leader.attr
 
     const addition = { unique_gauge_time_limit: data.unique_gauge_time_limit || undefined }
 
@@ -42,10 +39,11 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       addition,
     }
 
-    if (data.special_skill_indicate && data.special_skill_indicate.length > 0)
-      bossInfo.value.interrupt_display_text = data.special_skill_indicate[0].interrupt_display_text
-    if (data.status?.special_skill_indicate && data.status.special_skill_indicate.length > 0)
-      bossInfo.value.interrupt_display_text = data.status.special_skill_indicate[0].interrupt_display_text
+    bossInfo.value.interrupt_display_text = data.status?.special_skill_indicate
+      ? data.status.special_skill_indicate[0]?.interrupt_display_text
+      : data.special_skill_indicate
+        ? data.special_skill_indicate[0]?.interrupt_display_text
+        : ''
 
     summonInfo.value = {
       summon: [...data.summon],
@@ -62,7 +60,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       is_host: cur.is_host,
     }))
 
-    handleConditionInfo(boss.condition, player.condition)
+    handleConditionInfo(boss.condition, leader.condition)
     recordRaidInfo(data)
     // 处理开幕特动情况
     if (data.scenario)
@@ -79,7 +77,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       bossInfo.value.addition = { unique_gauge_time_limit: status.unique_gauge_time_limit }
 
     if (bossInfo.value && status?.special_skill_indicate)
-      bossInfo.value.interrupt_display_text = status.special_skill_indicate.length > 0 ? status.special_skill_indicate[0].interrupt_display_text : ''
+      bossInfo.value.interrupt_display_text = status.special_skill_indicate[0]?.interrupt_display_text
 
     if (bossGauge && bossInfo.value) {
       bossInfo.value.name = bossGauge.name!.ja
