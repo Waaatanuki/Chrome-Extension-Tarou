@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import type { BattleRecord } from 'myStorage'
 
-const battleLogStore = useBattleLogStore()
-const { currentRaid } = storeToRefs(battleLogStore)
+const props = defineProps<{ battleRecord: BattleRecord }>()
 
 type DamageType = 'total' | 'attack' | 'ability' | 'special' | 'other'
 const damageType = ref<DamageType>('total')
@@ -16,7 +15,7 @@ const damageTypeOptions = ref<{ value: DamageType, label: string }[]>([
 ])
 
 const maxDamage = computed(() =>
-  currentRaid.value!.player.reduce((pre, cur) => pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value, 1),
+  props.battleRecord.player.reduce((pre, cur) => pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value, 1),
 )
 
 const totalDamage = computed(() =>
@@ -24,7 +23,7 @@ const totalDamage = computed(() =>
     p.push({
       value: c.value,
       label: c.label,
-      total: currentRaid.value!.player.reduce((pre, cur) => {
+      total: props.battleRecord.player.reduce((pre, cur) => {
         pre += cur.damage[c.value].value
         return pre
       }, 0),
@@ -53,7 +52,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
     </div>
 
     <div flex flex-col items-start justify-center gap-10px>
-      <div v-for="player in currentRaid!.player" :key="player.pid" fc gap-10px>
+      <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
         <div relative w-100px>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
             <span text-base text-red font-bold>Dead</span>

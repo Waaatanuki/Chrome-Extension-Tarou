@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import type { BattleRecord } from 'myStorage'
 
-const battleLogStore = useBattleLogStore()
-const { currentRaid } = storeToRefs(battleLogStore)
+const props = defineProps<{ battleRecord: BattleRecord }>()
 
 const damageTakenType = ref<'total' | 'attack' | 'super' | 'other'>('total')
 
-const hasDamageTaken = computed(() => currentRaid.value!.player.every(p => p.damageTaken))
+const hasDamageTaken = computed(() => props.battleRecord.player.every(p => p.damageTaken))
 
 const damageTakenTypeOptions = ref([
   { value: 'total', label: '总计' },
@@ -16,11 +15,11 @@ const damageTakenTypeOptions = ref([
 ])
 
 const maxDamageTaken = computed(() =>
-  currentRaid.value!.player.reduce((pre, cur) => pre > cur.damageTaken[damageTakenType.value].value ? pre : cur.damageTaken[damageTakenType.value].value, 1),
+  props.battleRecord.player.reduce((pre, cur) => pre > cur.damageTaken[damageTakenType.value].value ? pre : cur.damageTaken[damageTakenType.value].value, 1),
 )
 
 const totalDamageTaken = computed(() =>
-  currentRaid.value!.player.reduce((pre, cur) => {
+  props.battleRecord.player.reduce((pre, cur) => {
     pre += cur.damageTaken[damageTakenType.value].value
     return pre
   }, 0),
@@ -41,7 +40,7 @@ const totalDamageTaken = computed(() =>
     </div>
 
     <div v-if="hasDamageTaken" flex flex-col items-start justify-center gap-10px>
-      <div v-for="player in currentRaid!.player" :key="player.pid" fc gap-10px>
+      <div v-for="player in battleRecord.player" :key="player.pid" fc gap-10px>
         <div relative w-100px>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
             <span text-base text-red font-bold>Dead</span>

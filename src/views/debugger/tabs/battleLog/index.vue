@@ -6,9 +6,10 @@ import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
 import BattleAnalysis from './components/BattleAnalysis.vue'
 import ActionList from './components/ActionList.vue'
+import { battleRecord } from '~/logic'
 
 const battleLogStore = useBattleLogStore()
-const { inLobby, bossInfo, lobbyMemberList, normalAttackInfo, memberInfo, mvpInfo } = storeToRefs(battleLogStore)
+const { inLobby, bossInfo, lobbyMemberList, normalAttackInfo, memberInfo, mvpInfo, raidId } = storeToRefs(battleLogStore)
 </script>
 
 <template>
@@ -24,8 +25,8 @@ const { inLobby, bossInfo, lobbyMemberList, normalAttackInfo, memberInfo, mvpInf
       </div>
     </div>
     <div w-full flex items-start justify-start gap-2 p-2>
-      <BattleAnalysis />
-      <ActionList />
+      <BattleAnalysis :battle-record="battleRecord.find(record => record.raid_id === raidId)!" :turn="bossInfo.turn" />
+      <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
     <ElDescriptions border :column="1">
       <ElDescriptionsItem label="攻击结果">

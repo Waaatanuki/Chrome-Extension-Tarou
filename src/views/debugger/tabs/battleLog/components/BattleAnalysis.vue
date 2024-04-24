@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import type { BattleRecord } from 'myStorage'
 import PlayerStatus from './PlayerStatus.vue'
 import DamageRecord from './DamageRecord.vue'
 import DamageTaken from './DamageTaken.vue'
 
+defineProps<{ battleRecord: BattleRecord, turn?: number }>()
+
 const tabName = ref('damage')
-const battleLogStore = useBattleLogStore()
-const { currentRaid } = storeToRefs(battleLogStore)
 </script>
 
 <template>
-  <ElCard v-if="currentRaid" w-420px shrink-0>
+  <ElCard v-if="battleRecord" w-420px shrink-0>
     <ElTabs v-model="tabName" stretch>
-      <ElTabPane label="角色状态" name="status">
-        <PlayerStatus />
+      <ElTabPane v-if="turn" label="角色状态" name="status">
+        <PlayerStatus :battle-record="battleRecord" :turn="turn" />
       </ElTabPane>
       <ElTabPane label="伤害统计" name="damage">
-        <DamageRecord />
+        <DamageRecord :battle-record="battleRecord" />
       </ElTabPane>
       <ElTabPane label="承伤统计" name="damageTaken">
-        <DamageTaken />
+        <DamageTaken :battle-record="battleRecord" />
       </ElTabPane>
     </ElTabs>
   </ElCard>
