@@ -1,4 +1,4 @@
-import { StorageSerializers } from '@vueuse/core'
+import { StorageSerializers, throttleFilter } from '@vueuse/core'
 import { toValue, tryOnScopeDispose, watchWithFilter } from '@vueuse/shared'
 import type { StorageLikeAsync, UseStorageAsyncOptions } from '@vueuse/core'
 import type { MaybeRefOrGetter, RemovableRef } from '@vueuse/shared'
@@ -61,7 +61,7 @@ export function useWebExtensionStorage<T extends(string | number | boolean | obj
     writeDefaults = true,
     mergeDefaults = false,
     shallow,
-    eventFilter,
+    eventFilter = throttleFilter(200),
     onError = (e) => {
       console.error(e)
     },
