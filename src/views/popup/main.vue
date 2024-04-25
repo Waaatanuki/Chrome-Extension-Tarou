@@ -67,7 +67,7 @@ function handleQuery() {
   listDrop(questIds).then(({ data }) => {
     questData.value = data
   }).catch(() => {
-    ElMessage.error('掉落数据请求失败')
+    ElMessage.error('请求失败')
   }).finally(() => {
     loading.value = false
   })

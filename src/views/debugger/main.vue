@@ -209,6 +209,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
         const npcInfo: NpcInfo = {
           id: npcDetail.id,
           image_id_3: '',
+          has_npcaugment_constant: npcDetail.has_npcaugment_constant,
           master: {
             id: npcDetail.master.id,
             name: npcDetail.master.name,

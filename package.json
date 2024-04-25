@@ -14,8 +14,8 @@
   },
   "scripts": {
     "dev": "vite --port 1234 --open",
-    "ba": "run-s clear build:alp build:prepare  build:js",
-    "bp": "run-s clear build:prod build:prepare  build:js",
+    "ba": "run-s clear build:alp build:prepare build:js",
+    "bp": "run-s clear build:prod build:prepare build:js",
     "build:alp": "vite build --mode development",
     "build:prod": "vite build --mode production",
     "build:prepare": "esno scripts/prepare.ts",

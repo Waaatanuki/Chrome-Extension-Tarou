@@ -25,8 +25,9 @@ defineProps<{
           </div>
         </div>
       </div>
-      <div v-for="npc in npcs" :key="npc.id" h-122px w-60px>
+      <div v-for="npc in npcs" :key="npc.id" relative h-122px w-60px>
         <img h-109px w-full :src="getAssetImg('npc', npc.image_id_3, 'quest')">
+        <img v-if="npc.has_npcaugment_constant" absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
         <div mt-1px h-12px flex items-center justify-start>
           <div v-for="ability in npc.action_ability" :key="ability.action_id" relative w-15px fc>
             <div

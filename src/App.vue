@@ -1,22 +1,13 @@
 <script setup lang="ts">
-const data = ref({
-  questId: '305381',
-  questName: 'ムゲンＨＬ',
-  isBlueBox: true,
-  isBlueTreasure: true,
-  targetItemKey: '10_215',
-  questImage: '305381',
-  questType: '0',
-  targetItemCount: 3,
-  total: 478,
-  blueChest: 370,
-  lastDropCount: 6,
-  lastDropTake: 18,
-})
+import Contact from '~/views/debugger/tabs/dashboard/components/Contact.vue'
 </script>
 
 <template>
-  <div fc flex-wrap>
-    <QuestCard :data="data" />
+  <Contact absolute right-15px top-15px />
+  <div w-full flex items-start justify-start gap-4px>
+    <div v-for="i in 6" :key="i" relative h-122px w-60px border-1>
+      123
+      <img absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
+    </div>
   </div>
 </template>

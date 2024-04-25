@@ -34,6 +34,7 @@ watch(() => props.deckJson, (value) => {
         const newNpc: NpcInfo = {
           id: npc.param.id,
           image_id_3: npc.param.image_id_3,
+          has_npcaugment_constant: npc.param.has_npcaugment_constant,
           master: {
             id: npc.master.id,
             name: npc.master.name,

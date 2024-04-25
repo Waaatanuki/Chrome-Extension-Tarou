@@ -553,6 +553,7 @@ declare module 'requestData'{
    interface NpcParam {
      image_id_3: string
      id: number
+     has_npcaugment_constant: boolean
    }
 
    interface NpcMaster {
@@ -656,6 +657,7 @@ declare module 'requestData'{
    interface NpcInfo {
      id: number
      image_id_3: string
+     has_npcaugment_constant: boolean
      master: {
        id: string
        name: string
