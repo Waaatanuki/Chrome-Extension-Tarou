@@ -21,10 +21,19 @@ function getSkillAlias(weapon: WeaponDetail) {
   return hit.list.find(skill => description.includes(skill.comment) || description.includes(skill.comment_en))?.alias
 }
 
+// 判断是不是U武(13)
+function isUW(weapon: WeaponDetail) {
+  return weapon?.master?.series_id === '13'
+}
+
+// 判断是不是法武(3)
+function isFW(weapon: WeaponDetail) {
+  return weapon?.master?.series_id === '3'
+}
+
 // 判断是不是法武(3)或者U武(13)
 function isFWorUW(weapon: WeaponDetail) {
-  const series_id = weapon?.master?.series_id
-  return ['3', '13'].includes(series_id)
+  return isFW(weapon) || isUW(weapon)
 }
 </script>
 
@@ -39,6 +48,7 @@ function isFWorUW(weapon: WeaponDetail) {
         <ElTag v-if="getSkillAlias (weapons[1])" type="danger" size="small" class="skill-tag">
           {{ getSkillAlias (weapons[1]) }}
         </ElTag>
+        <img v-if="weapons[1]?.skill1?.image && isUW(weapons[1])" class="skill1-icon" :src="getSkillIcon(weapons[1]?.skill1?.image)">
         <img v-if="weapons[1]?.skill2?.image && isFWorUW(weapons[1])" class="skill2-icon" :src="getSkillIcon(weapons[1]?.skill2?.image)">
       </div>
       <div w-275px fc flex-wrap gap-5px>
@@ -51,6 +61,7 @@ function isFWorUW(weapon: WeaponDetail) {
           <ElTag v-if="getSkillAlias (weapons[idx + 1])" type="danger" size="small" class="skill-tag">
             {{ getSkillAlias (weapons[idx + 1]) }}
           </ElTag>
+          <img v-if="weapons[idx + 1]?.skill1?.image && isUW(weapons[idx + 1])" class="skill1-icon" :src="getSkillIcon(weapons[idx + 1]?.skill1?.image)">
           <img v-if="weapons[idx + 1]?.skill2?.image && isFWorUW(weapons[idx + 1])" class="skill2-icon" :src="getSkillIcon(weapons[idx + 1]?.skill2?.image)">
         </div>
       </div>
@@ -73,6 +84,13 @@ function isFWorUW(weapon: WeaponDetail) {
   position: absolute;
   top: -1px;
   right: 0px;
+}
+.skill1-icon{
+  position: absolute;
+  top: -1px;
+  left: 0px;
+  width: 18px;
+  height: 18px;
 }
 .skill2-icon{
   position: absolute;
