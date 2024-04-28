@@ -5,8 +5,9 @@ const order = [1, 2, 3, 4, 5, 6, 0]
 </script>
 
 <template>
-  <el-card v-if="profile.uid" h-full shrink-0 :body-style="{ padding: '10px' }">
-    <div flex gap-10px>
+  <div v-if="profile.uid" relative h-full>
+    <img absolute h-full w-full :src="getLocalImg('frame')">
+    <div relative z-10 flex gap-10px px-25px py-20px>
       <div>
         <img w-60px :src="getAssetImg('leader', profile.imgPc, 'raid_chain')">
       </div>
@@ -34,7 +35,7 @@ const order = [1, 2, 3, 4, 5, 6, 0]
         </div>
       </div>
     </div>
-  </el-card>
+  </div>
 </template>
 
 <style scoped>
