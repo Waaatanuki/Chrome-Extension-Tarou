@@ -70,7 +70,7 @@ function handleUploadChange(uploadFile: any) {
           const battle: DropInfo = {
             battleId: key,
             questName: hit.questName,
-            timestamp: Math.floor(value.timestamp / 1000),
+            timestamp: value.timestamp,
             reward,
           }
 
