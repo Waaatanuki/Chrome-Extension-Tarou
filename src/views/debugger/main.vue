@@ -10,7 +10,7 @@ import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
 import MarkedUser from './tabs/markedUser/index.vue'
-import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, recoveryItemList, stone, windowId, windowSize } from '~/logic'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, obWindowId, recoveryItemList, stone, windowSize } from '~/logic'
 import { sendBossInfo } from '~/api'
 
 const deckJson = ref()
@@ -579,16 +579,12 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
 })
 
 chrome.windows.onBoundsChanged.addListener((windowInfo) => {
-  if (windowId.value !== windowInfo.id)
+  if (obWindowId.value !== windowInfo.id)
     return
   windowSize.value.left = windowInfo.left ?? 300
   windowSize.value.top = windowInfo.top ?? 0
   windowSize.value.width = windowInfo.width ?? 800
   windowSize.value.height = windowInfo.height ?? 600
-})
-
-window.addEventListener('beforeunload', () => {
-  chrome.debugger.detach({ tabId: Number(document.URL.split('?')[1]) })
 })
 </script>
 

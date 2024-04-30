@@ -1,10 +1,10 @@
-import { tabId, windowId, windowSize } from '~/logic/storage'
+import { obTabId, obWindowId, windowSize } from '~/logic/storage'
 
 export default function useDashboard() {
   async function openDashboard() {
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
     if (tab?.url?.includes('game.granbluefantasy.jp')) {
-      chrome.windows.get(windowId.value).then(() => {
+      chrome.windows.get(obWindowId.value).then(() => {
         chrome.notifications.create({
           iconUrl: '/assets/icon-48.png',
           message: '已开启详细面板',
@@ -18,8 +18,10 @@ export default function useDashboard() {
         return chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...windowSize.value })
       }).then(async (windowInfo) => {
         if (windowInfo) {
-          tabId.value = tab.id
-          windowId.value = windowInfo.id
+          obTabId.value = tab.id
+          obWindowId.value = windowInfo.id
+          try { await chrome.debugger.detach({ tabId: tab.id }) }
+          catch (error) { }
           await chrome.debugger.attach({ tabId: tab.id }, '1.2')
           await chrome.debugger.sendCommand({ tabId: tab.id }, 'Network.enable')
         }

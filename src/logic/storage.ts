@@ -9,8 +9,8 @@ import { defaultEvokerInfo } from '~/constants/evoker'
 // Debugger
 export const code = useWebExtensionStorage<string>('code', '')
 export const uid = useWebExtensionStorage<string>('uid', '')
-export const tabId = useWebExtensionStorage<number>('tabId', 0)
-export const windowId = useWebExtensionStorage<number>('windowId', 0)
+export const obTabId = useWebExtensionStorage<number>('obTabId', 0)
+export const obWindowId = useWebExtensionStorage<number>('obWindowId', 0)
 export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top: 0, width: 800, height: 600 })
 
 // Dashboard

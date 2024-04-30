@@ -3,7 +3,7 @@ import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
 import dayjs from 'dayjs'
-import { battleMemo, mySupportSummon, profile } from '~/logic/storage'
+import { battleMemo, mySupportSummon, obTabId, obWindowId, profile } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {
@@ -13,6 +13,11 @@ import { noticeItem } from '~/constants'
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
+  })
+
+  chrome.tabs.onRemoved.addListener((tabId) => {
+    if (tabId === obTabId.value)
+      chrome.windows.remove(obWindowId.value).catch(() => {})
   })
 
   chrome.webRequest.onBeforeRequest.addListener((details) => {
