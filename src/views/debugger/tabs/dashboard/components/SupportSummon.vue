@@ -18,14 +18,14 @@ const order = [1, 2, 3, 4, 5, 6, 0]
               <template v-if="mySupportSummon[`${i}${j - 1}`]">
                 <img w-50px :src="getAssetImg('summon', mySupportSummon[`${i}${j - 1}`].imgId, 'raid_normal') ">
                 <div absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${mySupportSummon[`${i}${j - 1}`].rank}-style`">
-                  {{ mySupportSummon[`${i}${j - 1}`].name.split(' ')[0] }}
+                  {{ `Lv${mySupportSummon[`${i}${j - 1}`].name.match(/\d+/)![0]}` }}
                 </div>
                 <div v-if="mySupportSummon[`${i}${j - 1}`].necessary" i-twemoji:pushpin absolute right--8px top--8px />
               </template>
             </div>
           </div>
         </div>
-        <div flex items-center justify-between text-15px font-700>
+        <div flex items-center justify-between text-15px text-white font-700>
           <div>
             ID: {{ profile.uid }}
           </div>
