@@ -18,7 +18,11 @@ export default function useUser() {
     let retry = 0
     return new Promise<void>((resolve, reject) => {
       function handel() {
-        const chunk = chunkList.shift()!
+        const chunk = chunkList.shift()
+        if (!chunk) {
+          resolve()
+          return
+        }
         sendMultiDropInfo(chunk)
           .then(() => {
             if (chunkList.length > 0) {

@@ -79,6 +79,9 @@ function handleUploadChange(uploadFile: any) {
       }
     })
 
+    if (dataList.length === 0)
+      return ElMessage.error('数据不合法')
+
     importBtnLoading.value = true
 
     sendInfo(dataList).then(() => {
