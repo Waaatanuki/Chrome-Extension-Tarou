@@ -95,8 +95,11 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
           </div>
         </div>
       </div>
-      <div mt-10px w-full flex justify-end>
-        <div mr-10px fc gap-10px text-xl>
+      <div mt-10px w-full flex justify-between text-base>
+        <div>
+          {{ battleRecord.point ? `贡献：${Math.floor(battleRecord.point).toLocaleString()}` : '' }}
+        </div>
+        <div fc gap-10px>
           合计： {{ totalDamage[0].total.toLocaleString() }}
           <el-popover placement="top-end" width="200">
             <template #reference>

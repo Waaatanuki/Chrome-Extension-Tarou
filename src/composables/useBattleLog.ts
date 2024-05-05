@@ -326,6 +326,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       actionQueue,
       reserve: false,
       abilityList,
+      point: 0,
     })
 
     if (battleRecord.value.length > battleRecordLimit) {
@@ -343,6 +344,9 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
     data.scenario!.forEach((action, idx, array) => {
+      if (action.cmd === 'contribution')
+        currentRaid.value!.point! += action.amount || 0
+
       if (action.cmd === 'special' || action.cmd === 'special_npc') {
         const hitPlayer = currentRaid.value!.player[action.num]
         if (hitPlayer) {

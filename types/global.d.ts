@@ -93,7 +93,7 @@ declare module 'myStorage' {
     }[]
     hasResult?: boolean
     damage?: string
-    point?: string
+    point?: number
     duration?: string
     speed?: string
     treasureList?: { src: string, number: string, boxClass: string }[]
@@ -483,6 +483,7 @@ declare module 'requestData'{
      target?: string
      comment?: string
      mode?: string
+     amount?: number
    }
 
    interface SpecialScenario extends Scenario {

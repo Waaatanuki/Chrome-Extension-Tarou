@@ -70,6 +70,11 @@ function clear() {
     </ElTableColumn>
     <ElTableColumn prop="raid_name" label="副本" align="center" />
     <ElTableColumn prop="damage" label="伤害" align="center" />
+    <ElTableColumn prop="point" label="贡献" align="center">
+      <template #default="{ row }">
+        {{ row.point ? Math.floor(row.point).toLocaleString() : '-' }}
+      </template>
+    </ElTableColumn>
     <ElTableColumn prop="turn" label="回合数" align="center" width="100" />
     <ElTableColumn label="操作时长/跑速" align="center" width="120">
       <template #default="{ row }">
