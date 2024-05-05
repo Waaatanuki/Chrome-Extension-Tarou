@@ -17,18 +17,18 @@ function triggerLock(row: BattleRecord) {
 
 function getRealTimeSpeed(row: BattleRecord) {
   const seconds = row.startTimer - row.endTimer
-  if (!seconds)
+  if (!seconds || !row.damage)
     return '-'
-  const point = Number(row.point?.split(',').join(''))
+  const damage = Number(row.damage?.split(',').join(''))
 
-  return `${formatTime(seconds)} / ${(point / (seconds / 60) / 1000000).toFixed(0)}`
+  return `${formatTime(seconds)} / ${(damage / (seconds / 60) / 1000000).toFixed(0)}`
 }
 
 function getFullTimeSpeed(row: BattleRecord) {
-  if (!row.duration)
+  if (!row.duration || !row.damage)
     return '-'
 
-  const point = Number(row.point?.split(',').join(''))
+  const damage = Number(row.damage?.split(',').join(''))
 
   let formatted_time = row.duration
 
@@ -40,7 +40,7 @@ function getFullTimeSpeed(row: BattleRecord) {
   const second = Number(formatted_time.split(':')[2])
   const seconds = hour * 3600 + minute * 60 + second
 
-  return `${row.duration} / ${(point / (seconds / 60) / 1000000).toFixed(0)}`
+  return `${row.duration} / ${(damage / (seconds / 60) / 1000000).toFixed(0)}`
 }
 
 function clear() {
@@ -69,7 +69,7 @@ function clear() {
       </template>
     </ElTableColumn>
     <ElTableColumn prop="raid_name" label="副本" align="center" />
-    <ElTableColumn prop="point" label="伤害" align="center" />
+    <ElTableColumn prop="damage" label="伤害" align="center" />
     <ElTableColumn prop="turn" label="回合数" align="center" width="100" />
     <ElTableColumn label="操作时长/跑速" align="center" width="120">
       <template #default="{ row }">

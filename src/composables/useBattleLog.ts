@@ -439,13 +439,13 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         })
       }
     })
-    let point = 0
+    let damage = 0
     currentRaid.value.player.forEach((player) => {
       player.damage.total.value = player.damage.ability.value + player.damage.attack.value + player.damage.other.value + player.damage.special.value
       player.damageTaken.total.value = player.damageTaken.super.value + player.damageTaken.attack.value + player.damageTaken.other.value
-      point += player.damage.total.value
+      damage += player.damage.total.value
     })
-    currentRaid.value.point = point.toLocaleString()
+    currentRaid.value.damage = damage.toLocaleString()
 
     // 更新前排角色位置信息
     if (data.status?.formation)

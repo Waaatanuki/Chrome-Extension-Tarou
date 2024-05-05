@@ -92,6 +92,7 @@ declare module 'myStorage' {
       acitonList: Action[]
     }[]
     hasResult?: boolean
+    damage?: string
     point?: string
     duration?: string
     speed?: string

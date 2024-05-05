@@ -424,7 +424,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           $('.txt-gain-value').each((i, elem) => {
             gainList.push($(elem).text())
           })
-          const point = gainList[2]
+          const damage = gainList[2]
           const turn = gainList[3]
           const time = gainList[4]
 
@@ -480,7 +480,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
               player,
               actionQueue: [],
               hasResult: true,
-              point,
+              damage,
               duration: time,
               treasureList,
               reserve: false,
@@ -497,7 +497,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
             hit.endTimestamp = endTimestamp
             hit.player[0].image_id = player[0].image_id
             hit.hasResult = true
-            hit.point = point
+            hit.damage = damage
             hit.duration = time
             hit.treasureList = treasureList
           }
