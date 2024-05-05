@@ -21,7 +21,7 @@ jobs:
       - name: Install
         run: pnpm install
       - name: Build
-        run: pnpm run build
+        run: pnpm run bp
       - name: Zip
         run: pnpm run zip
       - name: Release
