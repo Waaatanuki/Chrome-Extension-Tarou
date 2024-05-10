@@ -30,7 +30,20 @@ const { inLobby, bossInfo, lobbyMemberList, normalAttackInfo, memberInfo, mvpInf
     </div>
     <ElDescriptions border :column="1">
       <ElDescriptionsItem label="攻击结果">
-        {{ `hit: ${normalAttackInfo.hit} 总伤害：${normalAttackInfo.damage.toLocaleString()}` }}
+        <div fc gap-2>
+          <el-tag type="primary" effect="dark">
+            {{ `hit: ${normalAttackInfo.hit}` }}
+          </el-tag>
+          <el-tag type="success" effect="dark">
+            {{ `技伤: ${normalAttackInfo.ability.toLocaleString()}` }}
+          </el-tag>
+          <el-tag type="info" effect="dark">
+            {{ `奥伤: ${normalAttackInfo.special.toLocaleString()}` }}
+          </el-tag>
+          <el-tag type="warning" effect="dark">
+            {{ `总伤害: ${normalAttackInfo.total.toLocaleString()}` }}
+          </el-tag>
+        </div>
       </ElDescriptionsItem>
     </ElDescriptions>
 

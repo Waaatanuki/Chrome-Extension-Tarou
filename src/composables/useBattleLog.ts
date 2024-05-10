@@ -16,7 +16,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   const mvpInfo = ref<{ userId: string, rank: number, point: number }[]>()
   const battleRecordLimit = 30
   const resultJsonPayload = ref<ResultJsonPayload>()
-  const normalAttackInfo = ref({ hit: 0, damage: 0 })
+  const normalAttackInfo = ref({ hit: 0, ability: 0, special: 0, total: 0 })
 
   const currentRaid = computed(() => battleRecord.value.find(b => b.raid_id === raidId.value))
 
@@ -131,7 +131,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     if (!scenario)
       return
 
-    normalAttackInfo.value = { hit: 0, damage: 0 }
+    normalAttackInfo.value = { hit: 0, ability: 0, special: 0, total: 0 }
     for (let index = 0; index < scenario.length; index++) {
       const action = scenario[index]
 
@@ -139,7 +139,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         for (let i = 0; i < action.damage.length; i++) {
           for (let j = 0; j < action.damage[i].length; j++) {
             normalAttackInfo.value.hit++
-            normalAttackInfo.value.damage += Number(action.damage[i][j].value)
+            normalAttackInfo.value.total += Number(action.damage[i][j].value)
           }
         }
       }
@@ -152,8 +152,10 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         normalAttackInfo.value.hit++
         for (let i = 0; i < _action.list.length || 0; i++) {
           const detail = _action.list[i]
-          for (let j = 0; j < detail.damage.length; j++)
-            normalAttackInfo.value.damage += Number(detail.damage[j].value)
+          for (let j = 0; j < detail.damage.length; j++) {
+            normalAttackInfo.value.total += Number(detail.damage[j].value)
+            normalAttackInfo.value.special += Number(detail.damage[j].value)
+          }
         }
       }
 
@@ -161,7 +163,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         const _action = action as unknown as DamageScenario
         for (let i = 0; i < _action.list.length || 0; i++) {
           normalAttackInfo.value.hit++
-          normalAttackInfo.value.damage += Number(_action.list[i].value)
+          normalAttackInfo.value.total += Number(_action.list[i].value)
+          normalAttackInfo.value.ability += Number(_action.list[i].value)
         }
       }
 
@@ -170,7 +173,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         for (let i = 0; i < _action.list.length; i++) {
           for (let j = 0; j < _action.list[i].length; j++) {
             normalAttackInfo.value.hit++
-            normalAttackInfo.value.damage += Number(_action.list[i][j].value)
+            normalAttackInfo.value.total += Number(_action.list[i][j].value)
+            normalAttackInfo.value.ability += Number(_action.list[i][j].value)
           }
         }
       }
