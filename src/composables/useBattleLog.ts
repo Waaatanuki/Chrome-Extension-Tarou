@@ -25,7 +25,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     const boss = data.boss.param[0]
     const leader = data.player.param[0]
     leaderAttr.value = leader.attr
-    mvpInfo.value = []
+
     const interrupt_display_text = data.status?.special_skill_indicate
       ? data.status.special_skill_indicate[0]?.interrupt_display_text
       : data.special_skill_indicate
@@ -302,6 +302,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       return pre
     }, [])
 
+    mvpInfo.value = []
     const formation = Object.values(data.ability).map(a => a.pos)
     const guard_status = Object.values(data.ability).map(a => ({ num: a.pos, is_guard_status: 0 }))
 
