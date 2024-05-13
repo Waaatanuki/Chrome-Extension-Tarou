@@ -303,6 +303,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     }, [])
 
     mvpInfo.value = []
+    normalAttackInfo.value = { hit: 0, ability: 0, special: 0, total: 0 }
     const formation = Object.values(data.ability).map(a => a.pos)
     const guard_status = Object.values(data.ability).map(a => ({ num: a.pos, is_guard_status: 0 }))
 
