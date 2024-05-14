@@ -45,6 +45,7 @@ function isFWorUW(weapon: WeaponDetail) {
         <div class="prt-ultimate-star-wrapper">
           <div class="prt-ultimate-star-on" :data-level=" weapons[1].param.level" />
         </div>
+        <img v-if="weapons[1]?.param?.arousal.form" class="ico-arousal-main-type" :src="getArousalIcon(weapons[1]?.param?.arousal.form)">
         <ElTag v-if="getSkillAlias (weapons[1])" type="danger" size="small" class="skill-tag">
           {{ getSkillAlias (weapons[1]) }}
         </ElTag>
@@ -74,9 +75,15 @@ function isFWorUW(weapon: WeaponDetail) {
 </template>
 
 <style scoped>
+.ico-arousal-main-type{
+  position: absolute;
+  bottom: 25px;
+  left: 1px;
+  width: 30px;
+}
 .ico-arousal-type{
   position: absolute;
-  top: 9px;
+  bottom: 14px;
   left: -2px;
   width: 22px;
 }
