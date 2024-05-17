@@ -1,103 +1,19 @@
 <script setup lang="ts">
 import type { CardInstance, CheckboxValueType } from 'element-plus'
-import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'requestData'
-import type { Deck } from 'party'
-import { cloneDeep } from 'lodash-es'
 import Effect from './components/Effect.vue'
 import Weapon from './components/Weapon.vue'
 import Npc from './components/Npc.vue'
 import Summon from './components/Summon.vue'
 import BuildCompare from './components/BuildCompare.vue'
-import { jobAbilityList, localNpcList } from '~/logic'
 
-const props = defineProps<{
-  deckJson: DeckJson
-  calculateSetting: CalculateSetting
-}>()
-
-const deckList = ref<Deck[]>([])
+const { deckList } = usePartyStore()
 const simpleChecked = ref(false)
 const weaponChecked = ref(true)
 const summonChecked = ref(true)
 const npcChecked = ref(true)
 const effectChecked = ref(true)
 const dialogVisiable = ref(false)
-const calculateSettingList = ref<CalculateSetting[]>([])
 const cardEl = ref<CardInstance[]>()
-
-watch(() => props.deckJson, (value) => {
-  if (value) {
-    const npcs = value.npc
-    const newNpcs: NpcInfo[] = []
-    for (let i = 1; i <= 5; i++) {
-      const npc = npcs[i]
-      if (npc?.param) {
-        const newNpc: NpcInfo = {
-          id: npc.param.id,
-          image_id_3: npc.param.image_id_3,
-          has_npcaugment_constant: npc.param.has_npcaugment_constant,
-          master: {
-            id: npc.master.id,
-            name: npc.master.name,
-          },
-          action_ability: [],
-        }
-        const hit = localNpcList.value.find(n => n.id === newNpc.id)
-        if (hit)
-          newNpc.action_ability = hit.action_ability
-        newNpcs.push(newNpc)
-      }
-    }
-
-    // 获取主角技能
-    const job_param_id = String(value.pc.job.param.id)
-    const jobFirstAbility = jobAbilityList.value.find(a => a.job_param_id === job_param_id)
-
-    const leaderAbilityList: NpcAbility[] = []
-    const setAction: { name: string, set_action_id: string, icon_id?: string }[] = []
-    if (jobFirstAbility) {
-      leaderAbilityList[0] = jobFirstAbility
-      value.pc.set_action.forEach((ab, idx) => {
-        if (!ab.set_action_id)
-          return
-        const hitAb = jobAbilityList.value.find(a => a.action_id === ab.set_action_id)
-        const action: { name: string, set_action_id: string, icon_id?: string } = { name: ab.name, set_action_id: ab.set_action_id }
-        if (hitAb) {
-          leaderAbilityList[idx + 1] = { ...hitAb }
-          action.icon_id = hitAb.icon_id
-        }
-        setAction.push({ ...action })
-      })
-    }
-
-    const hitSetting = calculateSettingList.value.find(item => item.priority === String(value.priority))
-
-    deckList.value.unshift({
-      priority: String(value.priority),
-      leader: value.pc.param,
-      leaderAbilityList,
-      npcs: newNpcs,
-      setAction,
-      weapons: value.pc.weapons,
-      summons: value.pc.summons,
-      quickSummoniId: String(value.pc.quick_user_summon_id),
-      subSummons: value.pc.sub_summons,
-      damageInfo: Object.keys(value.pc.after_damage_info || []).length === 0 ? value.pc.damage_info : value.pc.after_damage_info,
-      calculateSetting: cloneDeep(hitSetting),
-    })
-
-    if (deckList.value.length > 10)
-      deckList.value.pop()
-  }
-})
-
-watch(() => props.calculateSetting, (data) => {
-  const hit = calculateSettingList.value.find(item => item.priority === data?.priority)
-  if (hit)
-    hit.setting = { ...data.setting }
-  else
-    calculateSettingList.value.push(cloneDeep(data))
-})
 
 function triggerSimpleModel(value: CheckboxValueType) {
   weaponChecked.value = !value
@@ -107,7 +23,7 @@ function triggerSimpleModel(value: CheckboxValueType) {
 }
 
 async function capture() {
-  if (deckList.value.length === 0)
+  if (deckList.length === 0)
     return ElMessage.info('请先读取队伍信息')
   const el = cardEl.value![0].$el
 

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
-import type { NpcAbility, NpcInfo } from 'requestData'
+import type { CalculateSetting, NpcAbility, NpcInfo } from 'requestData'
 import type { DropInfo } from 'api'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultTodoList } from '~/constants'
@@ -44,6 +44,7 @@ export const failedDropInfoList = useWebExtensionStorage<DropInfo[]>('failedDrop
 // Party
 export const jobAbilityList = useWebExtensionStorage<NpcAbility[]>('jobAbilityList', [])
 export const localNpcList = useWebExtensionStorage<NpcInfo[]>('localNpcList', [])
+export const calculateSettingList = useWebExtensionStorage<CalculateSetting[]>('calculateSettingList', [])
 
 // MarkedUser
 export const markedUserList = useWebExtensionStorage<MarkedUser[]>('markedUserList', [])

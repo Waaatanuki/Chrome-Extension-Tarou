@@ -13,12 +13,10 @@ import MarkedUser from './tabs/markedUser/index.vue'
 import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, obWindowId, recoveryItemList, stone, windowSize } from '~/logic'
 import { sendBossInfo } from '~/api'
 
-const deckJson = ref()
-const calculateSetting = ref()
-
 const paylaod = ref<any>()
 
 const battleLogStore = useBattleLogStore()
+const partyStore = usePartyStore()
 
 async function getResponse(tabId: number, requestId: string, cb: (resp: any) => void) {
   let count = 0
@@ -240,7 +238,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // Party 记录当前队伍信息
     if (responseUrl.includes('party/deck')) {
       getResponse(tabId, requestId, (resp) => {
-        deckJson.value = resp.deck
+        partyStore.handleDeckJson(resp.deck)
       })
     }
 
@@ -250,7 +248,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
         const regex = /calculate_setting\/(\d+)\/(\d+)/
         const matches = responseUrl.match(regex)
         const priority = matches ? matches.slice(1).join('') : null
-        calculateSetting.value = { priority, setting: resp }
+        partyStore.handleCalculateSetting({ priority, setting: resp })
       })
     }
 
@@ -528,7 +526,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // Party 记录更改伤害计算设置
     if (requestUrl.includes('party/save_calculate_setting')) {
       const setting = JSON.parse(params.request.postData)
-      calculateSetting.value = { priority: String(setting.group_priority) + String(setting.priority), setting }
+      partyStore.handleCalculateSetting({ priority: String(setting.group_priority) + String(setting.priority), setting })
     }
 
     // BattleLog 记录单次攻击日志
@@ -601,7 +599,7 @@ chrome.windows.onBoundsChanged.addListener((windowInfo) => {
         <Drop />
       </ElTabPane>
       <ElTabPane label="队伍信息">
-        <Party :deck-json="deckJson" :calculate-setting="calculateSetting" />
+        <Party />
       </ElTabPane>
       <ElTabPane label="战斗日志">
         <BattleLog />

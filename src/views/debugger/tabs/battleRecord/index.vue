@@ -7,6 +7,8 @@ import { battleRecord } from '~/logic'
 
 const { height } = useWindowSize()
 const battleLogStore = useBattleLogStore()
+const dialogVisible = ref(false)
+
 function triggerLock(row: BattleRecord) {
   const lockedNum = battleRecord.value.filter(record => record.reserve).length
   if (lockedNum + 1 >= battleLogStore.battleRecordLimit && !row.reserve)
@@ -45,6 +47,10 @@ function getFullTimeSpeed(row: BattleRecord) {
 
 function clear() {
   battleRecord.value = battleRecord.value.filter(record => record.reserve)
+}
+
+function handleShare(row: BattleRecord) {
+  dialogVisible.value = true
 }
 </script>
 
@@ -89,6 +95,7 @@ function clear() {
     <ElTableColumn label="操作" align="center" width="100">
       <template #default="{ row, $index }">
         <div w-76px flex items-center justify-start gap-20px p-10px text-xl>
+          <div i-carbon:share icon-btn @click="handleShare(row)" />
           <div v-if="row.reserve" i-carbon:locked icon-btn @click="triggerLock(row)" />
           <div v-else i-carbon:unlocked icon-btn @click="triggerLock(row)" />
           <div v-show="!row.reserve" i-carbon:trash-can icon-btn @click="battleRecord.splice($index, 1)" />
@@ -104,4 +111,20 @@ function clear() {
       清空列表
     </TheButton>
   </div>
+
+  <el-dialog>
+    <!-- <ElCard v-for="deck, idx in deckList" ref="cardEl" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
+      <div relative fc flex-col gap-2>
+        <div fc flex-wrap gap-2>
+          <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
+          <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />
+          <Npc v-show="npcChecked" :npcs="deck.npcs" :leader-ability-list="deck.leaderAbilityList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
+        </div>
+        <div fc>
+          <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />
+        </div>
+        <div i-carbon:close-outline absolute bottom--8px right--8px text-sm icon-btn @click="deckList.splice(idx, 1)" />
+      </div>
+    </ElCard> -->
+  </el-dialog>
 </template>
