@@ -4,7 +4,7 @@ import { weaponSkill } from '~/constants/skill'
 
 defineProps<{
   weapons: DeckWeapon
-  simpleChecked: boolean
+  simpleChecked?: boolean
   damageInfo: DamageInfo
 }>()
 

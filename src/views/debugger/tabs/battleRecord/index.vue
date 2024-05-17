@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import type { BattleRecord } from 'myStorage'
+import { cloneDeep } from 'lodash-es'
+import copy from 'copy-text-to-clipboard'
 import BattleAnalysis from '../battleLog/components/BattleAnalysis.vue'
 import ActionList from '../battleLog/components/ActionList.vue'
+import Effect from '../party/components/Effect.vue'
+import Weapon from '../party/components/Weapon.vue'
+import Npc from '../party/components/Npc.vue'
+import Summon from '../party/components/Summon.vue'
 import { battleRecord } from '~/logic'
 
 const { height } = useWindowSize()
 const battleLogStore = useBattleLogStore()
+const partyStore = usePartyStore()
 const dialogVisible = ref(false)
+
+const currentRecord = ref<BattleRecord>()
+const currentDeck = computed(() => partyStore.deckList[0])
 
 function triggerLock(row: BattleRecord) {
   const lockedNum = battleRecord.value.filter(record => record.reserve).length
@@ -51,6 +61,15 @@ function clear() {
 
 function handleShare(row: BattleRecord) {
   dialogVisible.value = true
+  currentRecord.value = cloneDeep(row)
+}
+
+function handleCopyBuild() {
+  if (!currentDeck.value)
+    return ElMessage.warning('请先获取队伍信息')
+
+  if (copy(JSON.stringify({ deckInfo: currentDeck.value, recordInfo: currentRecord.value })))
+    ElMessage.success(`已成功复制配置信息`)
 }
 </script>
 
@@ -92,9 +111,9 @@ function handleShare(row: BattleRecord) {
         {{ getFullTimeSpeed(row) }}
       </template>
     </ElTableColumn>
-    <ElTableColumn label="操作" align="center" width="100">
+    <ElTableColumn label="操作" align="center" width="150">
       <template #default="{ row, $index }">
-        <div w-76px flex items-center justify-start gap-20px p-10px text-xl>
+        <div fc gap-20px p-10px text-base>
           <div i-carbon:share icon-btn @click="handleShare(row)" />
           <div v-if="row.reserve" i-carbon:locked icon-btn @click="triggerLock(row)" />
           <div v-else i-carbon:unlocked icon-btn @click="triggerLock(row)" />
@@ -112,19 +131,27 @@ function handleShare(row: BattleRecord) {
     </TheButton>
   </div>
 
-  <el-dialog>
-    <!-- <ElCard v-for="deck, idx in deckList" ref="cardEl" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
+  <el-dialog v-model="dialogVisible" width="510" :show-close="false" top="5vh">
+    <div mb-4 flex items-center justify-between>
+      <div>
+        <el-alert title="切换至战斗记录所使用的的队伍" type="info" show-icon :closable="false" />
+      </div>
+      <TheButton @click="handleCopyBuild">
+        复制配置信息
+      </TheButton>
+    </div>
+
+    <el-card v-if="currentDeck" :body-style="{ padding: '10px' }" m-auto w-480px>
       <div relative fc flex-col gap-2>
         <div fc flex-wrap gap-2>
-          <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
-          <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />
-          <Npc v-show="npcChecked" :npcs="deck.npcs" :leader-ability-list="deck.leaderAbilityList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
+          <Weapon :weapons="currentDeck.weapons" :damage-info="currentDeck.damageInfo" />
+          <Summon :summons="currentDeck.summons" :sub-summons="currentDeck.subSummons" :calculate-setting="currentDeck.calculateSetting" :quick-summoni-id="currentDeck.quickSummoniId" />
+          <Npc :npcs="currentDeck.npcs" :leader-ability-list="currentDeck.leaderAbilityList" :leader="currentDeck.leader" :set-action="currentDeck.setAction" :damage-info="currentDeck.damageInfo" />
         </div>
         <div fc>
-          <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />
+          <Effect :effect-value-info="currentDeck.damageInfo.effect_value_info" />
         </div>
-        <div i-carbon:close-outline absolute bottom--8px right--8px text-sm icon-btn @click="deckList.splice(idx, 1)" />
       </div>
-    </ElCard> -->
+    </el-card>
   </el-dialog>
 </template>
