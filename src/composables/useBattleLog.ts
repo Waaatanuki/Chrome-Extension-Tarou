@@ -1,5 +1,5 @@
 import type { Action, PartyCondition, Player } from 'myStorage'
-import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'requestData'
+import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'requestData'
 import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import { defineStore } from 'pinia'
 import { battleRecord, uid } from '~/logic'
@@ -164,7 +164,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         for (let i = 0; i < _action.list.length || 0; i++) {
           normalAttackInfo.value.hit++
           normalAttackInfo.value.total += Number(_action.list[i].value)
-          normalAttackInfo.value.ability += Number(_action.list[i].value)
+          if (isAbilityDamageAction(index, scenario))
+            normalAttackInfo.value.ability += Number(_action.list[i].value)
         }
       }
 
@@ -174,13 +175,34 @@ export const useBattleLogStore = defineStore('battleLog', () => {
           for (let j = 0; j < _action.list[i].length; j++) {
             normalAttackInfo.value.hit++
             normalAttackInfo.value.total += Number(_action.list[i][j].value)
-            normalAttackInfo.value.ability += Number(_action.list[i][j].value)
+            if (isAbilityDamageAction(index, scenario))
+              normalAttackInfo.value.ability += Number(_action.list[i][j].value)
           }
         }
       }
       if (action.cmd === 'turn' && action.mode === 'boss')
         break
     }
+  }
+
+  function isAbilityDamageAction(idx: number, scenario: ScenarioType[]) {
+    const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
+    let flag = true
+    for (let i = 1; i <= 4; i++) {
+      if (scenario[idx - i]?.cmd === 'wait') {
+        flag = false
+        break
+      }
+
+      if (scenario[idx - i] && beforeAbilityDamageCmdList.includes(scenario[idx - i].cmd) && (scenario[idx - i].to !== 'boss'))
+        break
+
+      if (scenario[idx - i] && scenario[idx - i].cmd === 'chain_cutin') {
+        flag = false
+        break
+      }
+    }
+    return flag
   }
 
   function handleGuardSettingJson(data: GuardSettingJson) {
