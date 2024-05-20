@@ -37,10 +37,10 @@ const { inLobby, bossInfo, lobbyMemberList, normalAttackInfo, memberInfo, mvpInf
           <el-tag type="success" effect="dark">
             {{ `技伤: ${normalAttackInfo.ability.toLocaleString()}` }}
           </el-tag>
-          <el-tag type="info" effect="dark">
+          <el-tag type="warning" effect="dark">
             {{ `奥伤: ${normalAttackInfo.special.toLocaleString()}` }}
           </el-tag>
-          <el-tag type="warning" effect="dark">
+          <el-tag type="danger" effect="dark">
             {{ `总伤害: ${normalAttackInfo.total.toLocaleString()}` }}
           </el-tag>
         </div>
@@ -49,9 +49,7 @@ const { inLobby, bossInfo, lobbyMemberList, normalAttackInfo, memberInfo, mvpInf
 
     <MemberList :member-info="memberInfo" :mvp-info="mvpInfo" />
   </div>
-  <div v-else fc>
-    <ElTag type="info" effect="dark" size="large" round>
-      进入战斗时将会读取相关信息
-    </ElTag>
+  <div v-else m-auto w-100>
+    <el-alert type="info" effect="dark" show-icon center :closable="false" title="进入战斗时将会读取相关信息" />
   </div>
 </template>

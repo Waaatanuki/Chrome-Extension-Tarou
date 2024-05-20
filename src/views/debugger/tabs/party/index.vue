@@ -91,9 +91,9 @@ async function capture() {
     </TheButton>
   </div>
   <div fc flex-col gap-2 :class="{ simpleMode: simpleChecked }">
-    <ElTag v-if="deckList.length === 0" type="info" effect="dark" size="large" round>
-      进入编成界面读取队伍信息
-    </ElTag>
+    <div v-if="deckList.length === 0" m-auto w-100>
+      <el-alert type="info" effect="dark" show-icon center :closable="false" title="进入编成界面读取队伍信息" />
+    </div>
     <ElCard v-for="deck, idx in deckList" ref="cardEl" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
       <div relative fc flex-col gap-2>
         <div fc flex-wrap gap-2>

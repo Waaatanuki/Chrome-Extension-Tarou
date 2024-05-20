@@ -140,10 +140,8 @@ const showDamage = computed(() => {
           <Weapon :weapons="deck1.weapons" :simple-checked="false" :damage-info="deck1.damageInfo" />
           <Summon :summons="deck1.summons" :sub-summons="deck1.subSummons" :calculate-setting="deck1.calculateSetting" :quick-summoni-id="deck1.quickSummoniId" />
         </div>
-        <div v-else fc>
-          <ElTag type="info" effect="dark" size="large" round>
-            进入编成界面,读取队伍信息,设定队伍1
-          </ElTag>
+        <div v-else m-auto w-100>
+          <el-alert type="info" effect="dark" show-icon center :closable="false" title="进入编成界面,读取队伍信息,设定队伍1" />
         </div>
       </ElCard>
       <div my-2 w-full>
@@ -171,10 +169,8 @@ const showDamage = computed(() => {
           <Weapon :weapons="deck2.weapons" :simple-checked="false" :damage-info="deck2.damageInfo" />
           <Summon :summons="deck2.summons" :sub-summons="deck2.subSummons" :calculate-setting="deck2.calculateSetting" :quick-summoni-id="deck2.quickSummoniId" />
         </div>
-        <div v-else fc>
-          <ElTag type="info" effect="dark" size="large" round>
-            点击中间箭头锁定队伍1,切换队伍,设定队伍2
-          </ElTag>
+        <div v-else m-auto w-100>
+          <el-alert type="info" effect="dark" show-icon center :closable="false" title="点击中间箭头锁定队伍1,切换队伍,设定队伍2" />
         </div>
       </ElCard>
     </div>

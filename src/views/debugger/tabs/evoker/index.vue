@@ -71,16 +71,12 @@ const evokerPageResult = computed(() => {
       </div>
     </div>
   </div>
-  <div v-if="materialInfo.length === 0" fc>
-    <ElTag type="warning" size="large" effect="dark" round>
-      请先去游戏的素材界面读取素材信息
-    </ElTag>
+  <div v-if="materialInfo.length === 0" m-auto w-100>
+    <el-alert type="info" effect="dark" show-icon center :closable="false" title="请先去游戏的素材界面读取素材信息" />
   </div>
   <div v-else>
-    <div v-if="evokerPageResult.filter(item => item.need > 0).length === 0" fc>
-      <ElTag type="success" size="large" effect="dark" round>
-        恭喜你已出狱！
-      </ElTag>
+    <div v-if="evokerPageResult.filter(item => item.need > 0).length === 0" m-auto w-100>
+      <el-alert type="success" effect="dark" show-icon center :closable="false" title="恭喜你已出狱！" />
     </div>
     <div v-else>
       <ElScrollbar max-height="210">
