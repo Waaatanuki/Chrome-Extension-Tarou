@@ -61,7 +61,7 @@ export function useWebExtensionStorage<T extends(string | number | boolean | obj
     writeDefaults = true,
     mergeDefaults = false,
     shallow,
-    eventFilter = throttleFilter(200),
+    eventFilter = throttleFilter(1000),
     onError = (e) => {
       console.error(e)
     },
