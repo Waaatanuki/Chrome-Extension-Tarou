@@ -5,12 +5,7 @@ export default function useDashboard() {
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
     if (tab?.url?.includes('game.granbluefantasy.jp')) {
       chrome.windows.get(obWindowId.value).then(() => {
-        chrome.notifications.create({
-          iconUrl: '/assets/icon-48.png',
-          message: '已开启详细面板',
-          type: 'basic',
-          title: '通知',
-        })
+        createNotification('已开启详细面板')
       }).catch(() => {
         return chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...windowSize.value })
       }).catch(() => {
@@ -26,21 +21,11 @@ export default function useDashboard() {
           await chrome.debugger.sendCommand({ tabId: tab.id }, 'Network.enable')
         }
       }).catch((err) => {
-        chrome.notifications.create({
-          iconUrl: '/assets/icon-48.png',
-          message: String(err),
-          type: 'basic',
-          title: '错误',
-        })
+        createNotification(String(err))
       })
     }
     else {
-      chrome.notifications.create({
-        iconUrl: '/assets/icon-48.png',
-        message: '请先进入游戏页面',
-        type: 'basic',
-        title: '通知',
-      })
+      createNotification('请先进入游戏页面')
     }
   }
 

@@ -80,7 +80,7 @@ function handleUploadChange(uploadFile: any) {
     })
 
     if (dataList.length === 0)
-      return ElMessage.error('数据不合法')
+      return ElMessage.error('没有可导入的数据')
 
     importBtnLoading.value = true
 

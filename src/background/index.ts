@@ -241,14 +241,8 @@ import { noticeItem } from '~/constants'
     for (let i = 0; i < length; i++)
       str += 'e'
 
-    if (hitTreasure) {
-      chrome.notifications.create({
-        iconUrl: `/assets/${hitTreasure.key}.png`,
-        message: ` G${str}t☆Daze!`,
-        type: 'basic',
-        title: '通知',
-      })
-    }
+    if (hitTreasure)
+      createNotification(`G${str}t☆Daze!`, `/assets/${hitTreasure.key}.png`)
   }
 
   chrome.runtime.onInstalled.addListener(() => {
