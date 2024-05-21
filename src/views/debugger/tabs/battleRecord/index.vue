@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import type { BattleRecord } from 'myStorage'
-import { cloneDeep } from 'lodash-es'
+// import { cloneDeep } from 'lodash-es'
 import copy from 'copy-text-to-clipboard'
 import BattleAnalysis from '../battleLog/components/BattleAnalysis.vue'
 import ActionList from '../battleLog/components/ActionList.vue'
@@ -59,10 +59,10 @@ function clear() {
   battleRecord.value = battleRecord.value.filter(record => record.reserve)
 }
 
-function handleShare(row: BattleRecord) {
-  dialogVisible.value = true
-  currentRecord.value = cloneDeep(row)
-}
+// function handleShare(row: BattleRecord) {
+//   dialogVisible.value = true
+//   currentRecord.value = cloneDeep(row)
+// }
 
 function handleCopyBuild() {
   if (!currentDeck.value)
@@ -114,7 +114,7 @@ function handleCopyBuild() {
     <ElTableColumn label="操作" align="center" width="150">
       <template #default="{ row, $index }">
         <div fc gap-20px p-10px text-base>
-          <div i-carbon:share icon-btn @click="handleShare(row)" />
+          <!-- <div i-carbon:share icon-btn @click="handleShare(row)" /> -->
           <div v-if="row.reserve" i-carbon:locked icon-btn @click="triggerLock(row)" />
           <div v-else i-carbon:unlocked icon-btn @click="triggerLock(row)" />
           <div v-show="!row.reserve" i-carbon:trash-can icon-btn @click="battleRecord.splice($index, 1)" />
