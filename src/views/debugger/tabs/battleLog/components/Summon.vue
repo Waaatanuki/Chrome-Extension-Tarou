@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Summon } from 'requestData'
+import type { Summon } from 'source'
 import { storeToRefs } from 'pinia'
 
 const battleLogStore = useBattleLogStore()

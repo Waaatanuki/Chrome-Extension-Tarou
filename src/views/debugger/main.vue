@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BattleStartJson, GachaResult, NpcAbility, NpcInfo } from 'requestData'
+import type { BattleStartJson, GachaResult, NpcAbility, NpcInfo } from 'source'
 import type { Player } from 'myStorage'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'

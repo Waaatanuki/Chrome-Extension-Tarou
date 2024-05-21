@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
-import type { CalculateSetting, NpcAbility, NpcInfo } from 'requestData'
+import type { CalculateSetting, NpcAbility, NpcInfo } from 'source'
 import type { DropInfo } from 'api'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultTodoList } from '~/constants'

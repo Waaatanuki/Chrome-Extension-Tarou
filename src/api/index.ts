@@ -1,4 +1,5 @@
 import type { DropInfo, StartJsonBoss, Stat } from 'api'
+import type { Quest } from 'myStorage'
 import request from './request'
 
 // 更新引继码
@@ -35,7 +36,7 @@ export function sendBossInfo(data: StartJsonBoss) {
 
 // 获取副本信息
 export function listQuest() {
-  return request<{ data: { questId: string, questName: string, isBlueBox: boolean, isBlueTreasure: boolean, targetItemKey: string }[] }>('/ext/quest', {
+  return request<{ data: Omit<Quest, 'visible'>[] }>('/ext/quest', {
     method: 'get',
   })
 }

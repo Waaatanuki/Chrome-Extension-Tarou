@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CalculateSetting, DeckSummon } from 'requestData'
+import type { CalculateSetting, DeckSummon } from 'source'
 
 defineProps<{
   summons: DeckSummon

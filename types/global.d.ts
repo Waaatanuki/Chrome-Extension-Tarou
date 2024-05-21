@@ -1,5 +1,5 @@
 declare module 'myStorage' {
-  import type { Buff } from 'requestData'
+  import type { Buff } from 'source'
 
   interface Profile {
     uid: string
@@ -190,7 +190,7 @@ declare module 'myStorage' {
   }
 }
 
-declare module 'requestData'{
+declare module 'source'{
 
   interface GachaResult {
     stone_num: string
@@ -770,7 +770,7 @@ declare module 'requestData'{
 }
 
 declare module 'battleLog'{
-  import type { Buff, Summon } from 'requestData'
+  import type { Buff, Summon } from 'source'
 
   interface BossInfo {
     questId: string
@@ -816,7 +816,7 @@ declare module 'battleLog'{
 }
 
 declare module 'party'{
-  import type { CalculateSetting, DamageInfo, DeckSummon, DeckWeapon, NpcAbility, NpcInfo } from 'requestData'
+  import type { CalculateSetting, DamageInfo, DeckSummon, DeckWeapon, NpcAbility, NpcInfo } from 'source'
 
   interface Deck {
     priority: string

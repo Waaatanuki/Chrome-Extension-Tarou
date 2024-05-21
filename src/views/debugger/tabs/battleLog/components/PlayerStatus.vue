@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { BattleRecord } from 'myStorage'
-import type { Buff } from 'requestData'
+import type { Buff } from 'source'
 import { onlyShowSpecBuff, specPlayerBuff } from '~/logic'
 
 defineProps<{ battleRecord: BattleRecord, turn: number }>()

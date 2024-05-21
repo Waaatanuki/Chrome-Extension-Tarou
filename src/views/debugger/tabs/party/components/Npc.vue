@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DamageInfo, NpcAbility, NpcInfo } from 'requestData'
+import type { DamageInfo, NpcAbility, NpcInfo } from 'source'
 
 defineProps<{
   leader: any

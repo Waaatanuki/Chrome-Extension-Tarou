@@ -1,4 +1,4 @@
-import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'requestData'
+import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'source'
 import type { Deck } from 'party'
 import { defineStore } from 'pinia'
 import { cloneDeep } from 'lodash-es'

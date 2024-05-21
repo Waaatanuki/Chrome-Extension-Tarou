@@ -1,5 +1,5 @@
 import type { Action } from 'myStorage'
-import type { Buff } from 'requestData'
+import type { Buff } from 'source'
 
 const imgUri = 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img'
 

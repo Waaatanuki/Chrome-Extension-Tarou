@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EffectValueInfo } from 'requestData'
+import type { EffectValueInfo } from 'source'
 
 defineProps<{
   effectValueInfo: EffectValueInfo[]

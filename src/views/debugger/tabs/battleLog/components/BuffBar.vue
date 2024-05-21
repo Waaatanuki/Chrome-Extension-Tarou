@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Buff } from 'requestData'
+import type { Buff } from 'source'
 import { storeToRefs } from 'pinia'
 import { specBossBuff, specPlayerBuff } from '~/logic'
 
