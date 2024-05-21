@@ -2,7 +2,7 @@ import type { Action, PartyCondition, Player } from 'myStorage'
 import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
 import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import { defineStore } from 'pinia'
-import { battleRecord, uid } from '~/logic'
+import { battleRecord, notificationSetting, uid } from '~/logic'
 
 export const useBattleLogStore = defineStore('battleLog', () => {
   const inLobby = ref(false)
@@ -89,12 +89,20 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       bossInfo.value.timer = status?.timer ?? bossInfo.value.timer
       bossInfo.value.turn = status?.turn ?? bossInfo.value.turn
     }
-    const isBossDie = data.scenario.find(item => item.cmd === 'die' && item.to === 'boss')
+    const isBossDie = data.scenario.some(item => item.cmd === 'die' && item.to === 'boss')
 
     if (isBossDie && bossInfo.value) {
       bossInfo.value.hp = 0
       bossInfo.value.hpPercent = 0
     }
+
+    const isWin = data.scenario.some(item => item.cmd === 'win' && item.is_last_raid)
+    if (isWin && notificationSetting.value.battleWin)
+      createNotification('战斗结束')
+
+    const isLose = data.scenario.some(item => item.cmd === 'lose')
+    if (isLose && notificationSetting.value.battleLose)
+      createNotification('队伍全灭')
 
     if (summonInfo.value) {
       status?.summon.forEach((summon, idx) => {

@@ -188,6 +188,15 @@ declare module 'myStorage' {
       necessary: boolean
     }
   }
+
+  interface NotificationSetting {
+    battleWin: boolean
+    battleLose: boolean
+    targetItemDrop: boolean
+    replicardEvent: boolean
+    appearanceQuest: boolean
+    itemGoal: boolean
+  }
 }
 
 declare module 'source'{
@@ -484,6 +493,7 @@ declare module 'source'{
      comment?: string
      mode?: string
      amount?: number
+     is_last_raid?: boolean
    }
 
    interface SpecialScenario extends Scenario {

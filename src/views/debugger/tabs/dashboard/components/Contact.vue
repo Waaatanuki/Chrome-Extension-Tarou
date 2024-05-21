@@ -1,17 +1,22 @@
+<script setup lang="ts">
+defineEmits(['openSetting'])
+</script>
+
 <template>
-  <div fc flex-col>
+  <div fc flex-col gap-4>
     <div i-carbon-sun dark:i-carbon-moon text-10 icon-btn @click="toggleDark()" />
     <a
-      i-carbon:debug m-2 text-5 hover:text-amber
+      i-carbon:debug text-5 hover:text-amber
       rel="noreferrer"
       href="https://bbs.nga.cn/read.php?tid=30999435"
       target="_blank" title="报Bug"
     />
     <a
-      i-carbon:logo-github m-2 text-5 hover:text-amber
+      i-carbon:logo-github text-5 hover:text-amber
       rel="noreferrer"
       href="https://github.com/Waaatanuki/Chrome-Extension-Tarou"
       target="_blank" title="GitHub"
     />
+    <div i-carbon:settings text-5 icon-btn @click="$emit('openSetting')" />
   </div>
 </template>

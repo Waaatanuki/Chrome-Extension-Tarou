@@ -3,7 +3,7 @@ import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
 import dayjs from 'dayjs'
-import { battleMemo, mySupportSummon, obTabId, obWindowId, profile } from '~/logic/storage'
+import { battleMemo, mySupportSummon, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
 import { noticeItem } from '~/constants'
 
 (() => {
@@ -241,7 +241,7 @@ import { noticeItem } from '~/constants'
     for (let i = 0; i < length; i++)
       str += 'e'
 
-    if (hitTreasure)
+    if (hitTreasure && notificationSetting.value.targetItemDrop)
       createNotification(`G${str}t☆Daze!`, `/assets/${hitTreasure.key}.png`)
   }
 

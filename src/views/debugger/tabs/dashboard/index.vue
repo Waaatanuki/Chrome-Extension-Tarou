@@ -4,6 +4,9 @@ import StoneCount from './components/StoneCount.vue'
 import RecoveryItemTable from './components/RecoveryItemTable.vue'
 import Contact from './components/Contact.vue'
 import SupportSummon from './components/SupportSummon.vue'
+import Setting from './components/Setting.vue'
+
+const settingVisible = ref(false)
 </script>
 
 <template>
@@ -12,6 +15,7 @@ import SupportSummon from './components/SupportSummon.vue'
     <StoneCount />
     <SupportSummon />
     <RecoveryItemTable />
-    <Contact absolute right-15px top-15px />
+    <Contact absolute right-15px top-15px @open-setting="settingVisible = true" />
   </div>
+  <Setting v-model="settingVisible" />
 </template>

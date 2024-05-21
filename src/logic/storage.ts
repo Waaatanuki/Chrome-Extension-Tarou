@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
-import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
+import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, NotificationSetting, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
 import type { CalculateSetting, NpcAbility, NpcInfo } from 'source'
 import type { DropInfo } from 'api'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
-import { defaultTodoList } from '~/constants'
+import { defaultNotificationSetting, defaultTodoList } from '~/constants'
 import { defaultEvokerInfo } from '~/constants/evoker'
 
 // Debugger
@@ -12,6 +12,9 @@ export const uid = useWebExtensionStorage<string>('uid', '')
 export const obTabId = useWebExtensionStorage<number>('obTabId', 0)
 export const obWindowId = useWebExtensionStorage<number>('obWindowId', 0)
 export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top: 0, width: 800, height: 600 })
+
+// Setting
+export const notificationSetting = useWebExtensionStorage<NotificationSetting>('notificationSetting', defaultNotificationSetting)
 
 // Dashboard
 export const profile = useWebExtensionStorage<Profile>('profile', { uid: '', name: '', imgPc: '' })

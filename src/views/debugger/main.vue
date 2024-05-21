@@ -10,7 +10,7 @@ import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
 import MarkedUser from './tabs/markedUser/index.vue'
-import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, obWindowId, recoveryItemList, stone, windowSize } from '~/logic'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, windowSize } from '~/logic'
 import { sendBossInfo } from '~/api'
 
 const paylaod = ref<any>()
@@ -501,6 +501,29 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           }
         })
       }
+    }
+
+    // Notification 战斗结果特殊事件提醒
+    if (/\/result(multi)?\/content\/index\/\d+/.test(responseUrl)) {
+      getResponse(tabId, requestId, (resp) => {
+        const result_data = resp.option.result_data
+        if (result_data.appearance?.is_quest && notificationSetting.value.appearanceQuest)
+          createNotification('Hell提醒')
+
+        if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent)
+          createNotification('沙盒宝箱提醒')
+
+        const display_list = resp.display_list
+        if (!display_list || !notificationSetting.value.itemGoal)
+          return
+        const itemList = Object.values(display_list)
+        itemList.forEach((item: any) => {
+          const current = Number(item.number)
+          const goal = Number(item.registration_number)
+          if (goal > 0 && goal <= current)
+            createNotification(`${item.name}达到目标数量`)
+        })
+      })
     }
   }
 
