@@ -22,7 +22,7 @@ import { noticeItem } from '~/constants'
 
   chrome.webRequest.onBeforeRequest.addListener((details) => {
     // 记录战斗id与副本名称
-    if (/\/rest\/(raid|multiraid)\/start\.json/.test(details.url)) {
+    if (/\/rest\/(?:raid|multiraid)\/start\.json/.test(details.url)) {
       checkUser(details.url)
 
       if (!details.requestBody?.raw) {
@@ -60,7 +60,7 @@ import { noticeItem } from '~/constants'
 
   chrome.webRequest.onCompleted.addListener((details) => {
     // 记录掉落结果
-    if (/\/result(multi)?\/content\/index/.test(details.url)) {
+    if (/\/result(?:multi)?\/content\/index/.test(details.url)) {
       checkUser(details.url)
       const battleId = details.url.match(/\d+/g)![0]
       const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
@@ -91,7 +91,7 @@ import { noticeItem } from '~/constants'
     }
 
     // 记录历史记录里的掉落结果
-    if (/\/result(multi)?\/content\/detail/.test(details.url)) {
+    if (/\/result(?:multi)?\/content\/detail/.test(details.url)) {
       checkUser(details.url)
       const battleId = details.url.match(/\d+/g)![0]
 

@@ -5,7 +5,7 @@ import { onMessage } from 'webext-bridge/content-script'
   onMessage('getRaidName', () => {
     return new Promise((resolve) => {
       const start = setInterval(() => {
-        if (!/\/#raid(_multi)?\/[0-9]+/.test(document.URL)) {
+        if (!/\/#raid(?:_multi)?\/\d+/.test(document.URL)) {
           console.log('战斗开始检测中断', document.URL)
           clearInterval(start)
           resolve({})
@@ -25,7 +25,7 @@ import { onMessage } from 'webext-bridge/content-script'
   onMessage('getBattleResult', () => {
     return new Promise((resolve) => {
       const start = setInterval(() => {
-        if (!/\/#result(_multi)?\/[0-9]+/.test(document.URL)) {
+        if (!/\/#result(?:_multi)?\/\d+/.test(document.URL)) {
           console.log('战斗结算检测中断', document.URL)
           clearInterval(start)
           resolve({})

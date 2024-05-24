@@ -302,7 +302,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     }
 
     // BattleLog 记录副本start信息
-    if (/\/rest\/(raid|multiraid)\/start\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/start\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.inLobby = false
         if (!resp)
@@ -337,7 +337,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     }
 
     // BattleLog 记录单次攻击日志
-    if (/\/rest\/(raid|multiraid)\/normal_attack_result\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/normal_attack_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.handleAttackRusultJson('normal', resp)
         battleLogStore.handleNormalAttackJson(resp)
@@ -345,28 +345,28 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     }
 
     // BattleLog 记录使用召唤日志
-    if (/\/rest\/(raid|multiraid)\/summon_result\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/summon_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.handleAttackRusultJson('summon', resp)
       })
     }
 
     // BattleLog 记录使用FC日志
-    if (/\/rest\/(raid|multiraid)\/fatal_chain_result\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/fatal_chain_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.handleAttackRusultJson('fc', resp)
       })
     }
 
     // BattleLog 记录使用技能日志
-    if (/\/rest\/(raid|multiraid)\/ability_result\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/ability_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.handleAttackRusultJson('ability', resp)
       })
     }
 
     // BattleLog 记录子技能日志
-    if (/\/rest\/(raid|multiraid)\/get_select_if\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/get_select_if\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         const data = resp
         const hit = battleRecord.value.find(record => record.raid_id === paylaod.value.raid_id)
@@ -384,21 +384,21 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     }
 
     // BattleLog 记录使用蓝绿药日志
-    if (/\/rest\/(raid|multiraid)\/temporary_item_result\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/temporary_item_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.handleAttackRusultJson('temporary', resp)
       })
     }
 
     // BattleLog 记录使用大红日志
-    if (/\/rest\/(raid|multiraid)\/user_recovery\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/user_recovery\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.handleAttackRusultJson('recovery', resp)
       })
     }
 
     // BattleLog 记录切换guard日志
-    if (/\/rest\/(raid|multiraid)\/guard_setting\.json/.test(responseUrl)) {
+    if (/\/rest\/(?:raid|multiraid)\/guard_setting\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.handleGuardSettingJson({ raid_id: paylaod.value.raid_id, guard_status: resp.guard_status })
       })
@@ -504,7 +504,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     }
 
     // Notification 战斗结果特殊事件提醒
-    if (/\/result(multi)?\/content\/index\/\d+/.test(responseUrl)) {
+    if (/\/result(?:multi)?\/content\/index\/\d+/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         const result_data = resp.option.result_data
         if (result_data.appearance?.is_quest && notificationSetting.value.appearanceQuest)
@@ -553,39 +553,39 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     }
 
     // BattleLog 记录单次攻击日志
-    if (/\/rest\/(raid|multiraid)\/normal_attack_result\.json/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/normal_attack_result\.json/.test(requestUrl))
       battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录使用召唤日志
-    if (/\/rest\/(raid|multiraid)\/summon_result\.json/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/summon_result\.json/.test(requestUrl))
       battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录使用FC日志
-    if (/\/rest\/(raid|multiraid)\/fatal_chain_result\.json/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/fatal_chain_result\.json/.test(requestUrl))
       battleLogStore.resultJsonPayload = { type: 'fc', ...JSON.parse(params.request.postData) }
 
     // BattleLog 记录使用技能日志
-    if (/\/rest\/(raid|multiraid)\/ability_result\.json/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/ability_result\.json/.test(requestUrl))
       battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录子技能日志
-    if (/\/rest\/(raid|multiraid)\/get_select_if\.json/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/get_select_if\.json/.test(requestUrl))
       paylaod.value = JSON.parse(params.request.postData)
 
     // BattleLog 记录切换Guard日志
-    if (/\/rest\/(raid|multiraid)\/guard_setting\.json/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/guard_setting\.json/.test(requestUrl))
       paylaod.value = JSON.parse(params.request.postData)
 
     // BattleLog 记录使用蓝绿药日志
-    if (/\/rest\/(raid|multiraid)\/temporary_item_result\.json/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/temporary_item_result\.json/.test(requestUrl))
       battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录使用大红日志
-    if (/\/rest\/(raid|multiraid)\/user_recovery\.json/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/user_recovery\.json/.test(requestUrl))
       battleLogStore.resultJsonPayload = JSON.parse(params.request.postData)
 
     // BattleLog 记录切换奥义温存日志
-    if (/\/rest\/(raid|multiraid)\/special_skill_setting/.test(requestUrl))
+    if (/\/rest\/(?:raid|multiraid)\/special_skill_setting/.test(requestUrl))
       battleLogStore.handleSpecialSkillSettingJson(JSON.parse(params.request.postData))
   }
 
