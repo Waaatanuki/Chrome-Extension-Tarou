@@ -3,8 +3,7 @@ import type { BattleMemo } from 'myStorage'
 import type { Treasure } from 'api'
 import { sendMessage } from 'webext-bridge/background'
 import dayjs from 'dayjs'
-import { battleMemo, mySupportSummon, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
-import { noticeItem } from '~/constants'
+import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
 
 (() => {
   const MaxMemoLength = 50
@@ -71,7 +70,6 @@ import { noticeItem } from '~/constants'
         if (!res?.domStr)
           return
         const treasureList: Treasure[] = getTreasureList(res.domStr)
-        showNotifications(treasureList)
         const dropInfo = {
           battleId: hitMemo.battleId,
           questName: hitMemo.questName,
@@ -118,8 +116,6 @@ import { noticeItem } from '~/constants'
         sendInfo([dropInfo])
           .then(() => { cleanBattleMemo(battleId) })
           .catch((err) => { console.log(err.message) })
-
-        showNotifications(treasureList)
       }).catch((err) => {
         console.log(err)
       })
@@ -220,6 +216,15 @@ import { noticeItem } from '~/constants'
 
     $('.btn-treasure-item').each((i, elem) => {
       const count = $(elem).find('.prt-article-count')?.text().split('x')[1]
+      const imgSrc = $(elem).find('.img-treasure-item')?.attr('src')
+      if (imgSrc) {
+        const arr = imgSrc.split('/assets/img/sp/assets')
+        if (arr.length === 2) {
+          const itemKey = arr[1].replace(/\/(m|b)\//, '/s/').replace('.png', '.jpg')
+          if (notificationItem.value.includes(itemKey))
+            showNotifications(itemKey)
+        }
+      }
       res.push({
         box: String($(elem).data().box),
         key: $(elem).data().key as string,
@@ -233,16 +238,16 @@ import { noticeItem } from '~/constants'
     battleMemo.value = battleMemo.value.filter(memo => memo.battleId !== battleId && Date.now() - memo.timestamp < 14 * 24 * 60 * 60 * 1000)
   }
 
-  function showNotifications(treasureList: Treasure[]) {
-    const hitTreasure = treasureList.find(treasure => noticeItem.some(item => item.key === treasure.key))
-    const length = Math.floor(Math.random() * 10) + 1
+  function showNotifications(item: string) {
+    if (!notificationSetting.value.targetItemDrop)
+      return
 
+    const length = Math.floor(Math.random() * 10) + 1
     let str = ''
     for (let i = 0; i < length; i++)
       str += 'e'
 
-    if (hitTreasure && notificationSetting.value.targetItemDrop)
-      createNotification(`G${str}t☆Daze!`, `/assets/${hitTreasure.key}.png`)
+    createNotification(`G${str}t☆Daze!`, `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`)
   }
 
   chrome.runtime.onInstalled.addListener(() => {

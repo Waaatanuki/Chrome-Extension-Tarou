@@ -3,7 +3,7 @@ import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, M
 import type { CalculateSetting, NpcAbility, NpcInfo } from 'source'
 import type { DropInfo } from 'api'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
-import { defaultNotificationSetting, defaultTodoList } from '~/constants'
+import { defaultNotificationItem, defaultNotificationSetting, defaultTodoList } from '~/constants'
 import { defaultEvokerInfo } from '~/constants/evoker'
 
 // Debugger
@@ -15,6 +15,7 @@ export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top:
 
 // Setting
 export const notificationSetting = useWebExtensionStorage<NotificationSetting>('notificationSetting', defaultNotificationSetting)
+export const notificationItem = useWebExtensionStorage<string[]>('notificationItem', defaultNotificationItem)
 
 // Dashboard
 export const profile = useWebExtensionStorage<Profile>('profile', { uid: '', name: '', imgPc: '' })

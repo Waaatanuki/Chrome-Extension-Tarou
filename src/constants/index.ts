@@ -7,10 +7,10 @@ export const defaultTodoList = [
   { done: false, content: '抽卢比' },
 ]
 
-export const noticeItem = [
-  { key: '10_215', comment: '沙漏' },
-  { key: '17_20004', comment: 'ffj' },
-]
+// export const noticeItem = [
+//   { key: '10_215', comment: '沙漏' },
+//   { key: '17_20004', comment: 'ffj' },
+// ]
 
 export const defaultNotificationSetting = {
   battleWin: true,
@@ -20,3 +20,8 @@ export const defaultNotificationSetting = {
   appearanceQuest: true,
   itemGoal: true,
 }
+
+export const defaultNotificationItem = [
+  '/item/evolution/s/20004.jpg',
+  '/item/article/s/215.jpg',
+]
