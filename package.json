@@ -2,7 +2,7 @@
   "name": "chrome-extension-tarou",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "pnpm@9.0.5",
+  "packageManager": "pnpm@9.1.2",
   "watch": {
     "build": {
       "patterns": [
