@@ -511,7 +511,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           createNotification('Hell提醒')
 
         if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent)
-          createNotification('沙盒宝箱提醒')
+          createNotification('沙盒宝箱提醒', 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png')
 
         const display_list = resp.display_list
         if (!display_list || !notificationSetting.value.itemGoal)
