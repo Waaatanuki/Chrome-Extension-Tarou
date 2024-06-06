@@ -44,6 +44,7 @@ function handleDelete(item: string) {
       <el-checkbox v-model="notificationSetting.replicardEvent" label="沙盒宝箱提醒" />
       <el-checkbox v-model="notificationSetting.appearanceQuest" label="Hell提醒" />
       <el-checkbox v-model="notificationSetting.itemGoal" label="底部道具数量达到目标" />
+      <el-checkbox v-model="notificationSetting.isPointOverLimit" label="四象点数超过上限" />
     </div>
     <template #footer>
       <TheButton @click="checkPermission">

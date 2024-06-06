@@ -196,6 +196,7 @@ declare module 'myStorage' {
     replicardEvent: boolean
     appearanceQuest: boolean
     itemGoal: boolean
+    isPointOverLimit: boolean
   }
 }
 

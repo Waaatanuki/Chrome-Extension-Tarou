@@ -513,6 +513,9 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
         if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent)
           createNotification('沙盒宝箱提醒', 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png')
 
+        if (result_data.advent_info?.is_over_limit && notificationSetting.value.isPointOverLimit)
+          createNotification('四象点数已经超过上限!!!')
+
         const display_list = resp.display_list
         if (!display_list || !notificationSetting.value.itemGoal)
           return
