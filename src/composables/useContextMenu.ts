@@ -23,6 +23,9 @@ export default function useContextMenu() {
                 notificationItem.value.push(itemKey)
                 createNotification('添加成功', `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${itemKey}`)
               }
+              else {
+                createNotification('该物品已在提醒列表中')
+              }
             }
             else {
               createNotification('该物品不符合要求')
