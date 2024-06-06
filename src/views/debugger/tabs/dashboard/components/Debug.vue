@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import copy from 'copy-text-to-clipboard'
-import { battleMemo } from '~/logic'
+import { battleMemo, uid } from '~/logic'
 
 const visible = defineModel<boolean>({ required: true })
 
@@ -13,6 +13,7 @@ const info = ref({
 function copyInfo() {
   const data = {
     ...info.value,
+    uid: uid.value,
     battleMemo: battleMemo.value,
   }
   if (copy(JSON.stringify(data)))
