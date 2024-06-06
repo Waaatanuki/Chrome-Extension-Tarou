@@ -218,7 +218,7 @@ import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obT
       const count = $(elem).find('.prt-article-count')?.text().split('x')[1]
       const imgSrc = $(elem).find('.img-treasure-item')?.attr('src')
       if (imgSrc) {
-        const arr = imgSrc.split('/assets/img/sp/assets')
+        const arr = imgSrc.split(/\/assets(?:_en)?\/img(?:_low|_mid)?\/sp\/assets/)
         if (arr.length === 2) {
           const itemKey = arr[1].replace(/\/(m|b)\//, '/s/').replace('.png', '.jpg')
           if (notificationItem.value.includes(itemKey))

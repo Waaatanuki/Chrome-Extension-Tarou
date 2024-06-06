@@ -16,7 +16,7 @@ export default function useContextMenu() {
           break
         case 'pushInTargetItem':
           if (info.srcUrl) {
-            const arr = info.srcUrl.split('/assets/img/sp/assets')
+            const arr = info.srcUrl.split(/\/assets(?:_en)?\/img(?:_low|_mid)?\/sp\/assets/)
             if (arr.length === 2) {
               const itemKey = arr[1].replace(/\/(m|b)\//, '/s/').replace('.png', '.jpg')
               if (!notificationItem.value.includes(itemKey)) {
