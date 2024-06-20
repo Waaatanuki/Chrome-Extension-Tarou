@@ -100,7 +100,7 @@ import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obT
         const $ = load(res.domStr)
         const questName = $('.txt-enemy-name').text().trim()
         const finishTime = $('.txt-defeat-value').first().text()
-        const questImage = $('.img-defeat').attr('alt') ?? ''
+        const questImage = imgSrcToQuestImage($('.img-defeat').attr('src'))
         const treasureList: Treasure[] = getTreasureList(res.domStr)
 
         const dropInfo = {
@@ -197,7 +197,7 @@ import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obT
     $('.lis-raid').each((i, elem) => {
       const questName = $(elem).find('.txt-raid-name')?.text()
       const finishTime = $(elem).find('.prt-finish-time')?.text()
-      const questImage = $(elem).find('.img-raid-thumbnail').attr('alt') ?? ''
+      const questImage = imgSrcToQuestImage($(elem).find('.img-raid-thumbnail').attr('src'))
       res.push({
         battleId: String($(elem).data().raidId),
         questName: questName.trim(),
@@ -217,14 +217,9 @@ import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obT
     $('.btn-treasure-item').each((i, elem) => {
       const count = $(elem).find('.prt-article-count')?.text().split('x')[1]
       const imgSrc = $(elem).find('.img-treasure-item')?.attr('src')
-      if (imgSrc) {
-        const arr = imgSrc.split(/\/assets(?:_en)?\/img(?:_low|_mid)?\/sp\/assets/)
-        if (arr.length === 2) {
-          const itemKey = arr[1].replace(/\/(m|b)\//, '/s/').replace('.png', '.jpg')
-          if (notificationItem.value.includes(itemKey))
-            showNotifications(itemKey)
-        }
-      }
+      const itemKey = imgSrcToKey(imgSrc)
+      if (notificationItem.value.includes(itemKey))
+        showNotifications(itemKey)
       res.push({
         box: String($(elem).data().box),
         key: $(elem).data().key as string,

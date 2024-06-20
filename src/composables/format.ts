@@ -33,3 +33,18 @@ export function formatFinishTime(finishTime: string) {
     finishDate.setFullYear(currentYear - 1)
   return finishDate.valueOf()
 }
+
+export function imgSrcToKey(src = '') {
+  const arr = src.split(/\/assets(?:_en)?\/img(?:_low|_mid)?\/sp\/assets/)
+  if (arr.length === 2) {
+    const key = arr[1].replace(/\/(m|b)\//, '/s/').replace('.png', '.jpg')
+    return key
+  }
+  return ''
+}
+
+export function imgSrcToQuestImage(src = '') {
+  const separator = '/sp/'
+  const index = src.indexOf(separator)
+  return index === -1 ? '' : src.substring(index)
+}

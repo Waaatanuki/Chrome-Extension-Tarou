@@ -16,9 +16,8 @@ export default function useContextMenu() {
           break
         case 'pushInTargetItem':
           if (info.srcUrl) {
-            const arr = info.srcUrl.split(/\/assets(?:_en)?\/img(?:_low|_mid)?\/sp\/assets/)
-            if (arr.length === 2) {
-              const itemKey = arr[1].replace(/\/(m|b)\//, '/s/').replace('.png', '.jpg')
+            const itemKey = imgSrcToKey(info.srcUrl)
+            if (itemKey) {
               if (!notificationItem.value.includes(itemKey)) {
                 notificationItem.value.push(itemKey)
                 createNotification('添加成功', `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${itemKey}`)
@@ -28,7 +27,7 @@ export default function useContextMenu() {
               }
             }
             else {
-              createNotification('该物品不符合要求')
+              createNotification('该物品无法添加')
             }
           }
           break
