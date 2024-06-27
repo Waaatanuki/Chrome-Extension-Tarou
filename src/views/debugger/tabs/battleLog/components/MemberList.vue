@@ -66,7 +66,7 @@ const data = computed(() =>
                 {{ member.nickname }}
               </span>
               <span>
-                {{ member.point?.toLocaleString() }}
+                {{ member.point ? Math.floor(member.point).toLocaleString() : '' }}
               </span>
             </div>
 
