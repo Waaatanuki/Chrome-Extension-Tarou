@@ -12,63 +12,41 @@ export default function useUser() {
   }
 
   function sendInfo(dropInfo: DropInfo[]) {
-    const chunkList = splitDropInfo(failedDropInfoList.value.concat(dropInfo), 1000)
-    failedDropInfoList.value = []
-    const chunkRetry = 3
-    let retry = 0
-    return new Promise<void>((resolve, reject) => {
+    beforeSend(dropInfo)
+    const array = JSON.parse(JSON.stringify(failedDropInfoList.value))
+
+    return new Promise<void>((resolve) => {
       function handel() {
-        const chunk = chunkList.shift()
-        if (!chunk) {
+        if (array.length === 0) {
+          setBadge()
           resolve()
           return
         }
-        sendMultiDropInfo(chunk)
-          .then(() => {
-            if (chunkList.length > 0) {
-              handel()
-              retry = 0
-            }
-            else {
-              setBadge()
-              resolve()
-            }
-          })
-          .catch(() => {
-            retry++
-            chunkList.push(chunk)
-            if (retry > chunkRetry) {
-              mergeDropInfo(chunkList)
-              setBadge()
-              reject(new Error('上传失败'))
-              return
-            }
 
-            handel()
-          })
+        const batch = array.splice(0, 1000)
+
+        sendMultiDropInfo(batch)
+          .then(() => afterSend(batch))
+          .catch((err) => { console.log(err) })
+          .finally(() => handel())
       }
 
       handel()
     })
   }
 
-  function splitDropInfo(array: DropInfo[], groupSize: number) {
-    const result = []
-    for (let i = 0; i < array.length; i += groupSize) {
-      const group = array.slice(i, i + groupSize)
-      result.push(group)
-    }
-    return result
+  function beforeSend(array: DropInfo[]) {
+    array.forEach((b) => {
+      if (!failedDropInfoList.value.some(i => i.battleId === b.battleId))
+        failedDropInfoList.value.push(b)
+    })
   }
 
-  function mergeDropInfo(array: DropInfo[][]) {
-    const flattenedArray = array.reduce((pre, cur) => pre.concat(cur), [])
-    failedDropInfoList.value = flattenedArray.reduce<DropInfo[]>((pre, cur) => {
-      const ids = pre.map(item => item.battleId)
-      if (!ids.includes(cur.battleId))
-        pre.push(cur)
-      return pre
-    }, [])
+  function afterSend(array: DropInfo[]) {
+    const battleIds = array.map(a => a.battleId)
+    failedDropInfoList.value = failedDropInfoList.value.filter((info) => {
+      return !battleIds.includes(info.battleId)
+    })
   }
 
   function setBadge() {
