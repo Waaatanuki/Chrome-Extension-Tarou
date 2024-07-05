@@ -40,10 +40,15 @@ export default function useUser() {
   }
 
   function beforeSend(array: DropInfo[]) {
-    array.forEach((b) => {
-      if (!failedDropInfoList.value.some(i => i.battleId === b.battleId))
-        failedDropInfoList.value.push(b)
-    })
+    const total = [...array, ...failedDropInfoList.value]
+    const map = new Map()
+
+    for (const item of total) {
+      if (!map.has(item.battleId))
+        map.set(item.battleId, item)
+    }
+
+    failedDropInfoList.value = [...map.values()]
   }
 
   function afterSend(array: DropInfo[]) {
