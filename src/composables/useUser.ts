@@ -15,7 +15,7 @@ export default function useUser() {
     beforeSend(dropInfo)
     const array = JSON.parse(JSON.stringify(failedDropInfoList.value))
 
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       function handel() {
         if (array.length === 0) {
           setBadge()
@@ -26,9 +26,13 @@ export default function useUser() {
         const batch = array.splice(0, 1000)
 
         sendMultiDropInfo(batch)
-          .then(() => afterSend(batch))
-          .catch((err) => { console.log(err) })
-          .finally(() => handel())
+          .then(() => {
+            afterSend(batch)
+            handel()
+          })
+          .catch(() => {
+            reject(new Error('上传失败'))
+          })
       }
 
       handel()

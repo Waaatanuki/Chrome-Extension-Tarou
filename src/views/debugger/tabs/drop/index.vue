@@ -88,7 +88,7 @@ function handleUploadChange(uploadFile: any) {
       ElMessage.success('导入成功')
       handleQuery()
     }).catch((err) => {
-      console.log(err)
+      console.log(err.message)
     }).finally(() => {
       importBtnLoading.value = false
     })
