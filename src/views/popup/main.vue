@@ -102,7 +102,7 @@ onMounted(() => {
           </el-tooltip>
         </div>
         <div mr-2>
-          <el-link @click="showDialog">
+          <el-link :type="code ? 'success' : 'default'" @click="showDialog">
             玩家ID: {{ uid || '未获取' }}
           </el-link>
         </div>
