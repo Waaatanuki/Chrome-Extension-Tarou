@@ -43,7 +43,7 @@ defineProps<{
       </div>
     </div>
     <div h-full w-full flex items-center justify-between>
-      <div flex flex-col items-start px-2 text-lg>
+      <div flex flex-col items-start px-2 text-base>
         <div>预测伤害：{{ damageInfo.assumed_normal_damage.toLocaleString() }}</div>
         <div>克属伤害：{{ damageInfo.assumed_advantage_damage.toLocaleString() }}</div>
       </div>
