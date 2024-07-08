@@ -541,7 +541,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     action.list?.forEach((item) => {
       item.damage.forEach((hit) => {
         const playerNum = currentRaid.value!.formation[hit.pos]
-        currentRaid.value!.player[playerNum].damageTaken.super.value += hit.value
+        currentRaid.value!.player[playerNum] && (currentRaid.value!.player[playerNum].damageTaken.super.value += hit.value)
       })
     })
   }
