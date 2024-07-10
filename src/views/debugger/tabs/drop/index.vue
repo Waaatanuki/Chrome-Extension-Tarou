@@ -84,11 +84,11 @@ function handleUploadChange(uploadFile: any) {
 
     importBtnLoading.value = true
 
-    sendInfo(dataList).then(() => {
+    sendInfo(dataList, true).then(() => {
       ElMessage.success('导入成功')
       handleQuery()
-    }).catch((err) => {
-      console.log(err.message)
+    }).catch(() => {
+      ElMessage.error('导入失败')
     }).finally(() => {
       importBtnLoading.value = false
     })

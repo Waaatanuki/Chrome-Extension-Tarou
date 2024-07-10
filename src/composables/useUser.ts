@@ -11,9 +11,10 @@ export default function useUser() {
       code.value = uuidv4()
   }
 
-  function sendInfo(dropInfo: DropInfo[]) {
-    beforeSend(dropInfo)
-    const array = JSON.parse(JSON.stringify(failedDropInfoList.value))
+  function sendInfo(dropInfo: DropInfo[], upload = false) {
+    if (!upload)
+      beforeSend(dropInfo)
+    const array = JSON.parse(JSON.stringify(upload ? dropInfo : failedDropInfoList.value))
 
     return new Promise<void>((resolve, reject) => {
       function handel() {
@@ -31,6 +32,7 @@ export default function useUser() {
             handel()
           })
           .catch(() => {
+            setBadge()
             reject(new Error('上传失败'))
           })
       }
