@@ -4,7 +4,7 @@ import type { CalculateSetting, NpcAbility, NpcInfo } from 'source'
 import type { DropInfo } from 'api'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultNotificationItem, defaultNotificationSetting, defaultTodoList } from '~/constants'
-import { defaultEvokerInfo } from '~/constants/evoker'
+import { defaultEvokerInfo, defaultXenoGauge } from '~/constants/evoker'
 
 // Debugger
 export const code = useWebExtensionStorage<string>('code', '')
@@ -32,6 +32,7 @@ export const recoveryItemList = useWebExtensionStorage<RecoveryItem[]>('recovery
 // Evoker
 export const materialInfo = useWebExtensionStorage<MaterialInfo[]>('materialInfo', [])
 export const evokerInfo = useWebExtensionStorage('evokerInfo', defaultEvokerInfo)
+export const xenoGauge = useWebExtensionStorage('xenoGauge', defaultXenoGauge)
 
 // BattleLog
 export const battleRecord = useWebExtensionStorage<BattleRecord[]>('battleRecord', [])

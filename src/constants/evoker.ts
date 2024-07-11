@@ -183,6 +183,13 @@ export const sandBoxBossInfo = [
   [{ bossId: 5710170, itemList: ['25085', '25086', '25087', '25088'] }],
 ]
 
+export const defaultXenoGauge = [
+  { questId: '815131', gauge: 0 },
+  { questId: '816131', gauge: 0 },
+  { questId: '817131', gauge: 0 },
+  { questId: '818131', gauge: 0 },
+]
+
 export const evokerUncapData = [
   {
     name: 'no 0 女帝',

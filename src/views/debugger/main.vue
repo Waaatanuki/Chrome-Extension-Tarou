@@ -10,7 +10,7 @@ import BattleLog from './tabs/battleLog/index.vue'
 import Party from './tabs/party/index.vue'
 import BattleRecord from './tabs/battleRecord/index.vue'
 import MarkedUser from './tabs/markedUser/index.vue'
-import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, windowSize } from '~/logic'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, windowSize, xenoGauge } from '~/logic'
 import { sendBossInfo } from '~/api'
 
 const paylaod = ref<any>()
@@ -233,6 +233,21 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           localNpcList.value.push(npcInfo)
         else
           localNpcList.value[hitIndex] = npcInfo
+      })
+    }
+
+    // Evoker 获取沙盒4个六道boss进度条
+    if (responseUrl.includes('/rest/replicard/stage')) {
+      getResponse(tabId, requestId, (resp) => {
+        if ([6, 7, 8, 9].includes(Number(resp.stage.stage_id))) {
+          for (const division of Object.values(resp.map.division_list)) {
+            const hitQuest = (division as any).quest_list.find((quest: any) => xenoGauge.value.some(xeno => xeno.questId === quest.quest_id))
+            if (hitQuest) {
+              xenoGauge.value.find(xeno => xeno.questId === hitQuest.quest_id)!.gauge = hitQuest.xeno_sephira_gauge || 0
+              break
+            }
+          }
+        }
       })
     }
 
