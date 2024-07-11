@@ -671,6 +671,7 @@ declare module 'source'{
      id: number
      image_id_3: string
      has_npcaugment_constant: boolean
+     npc_arousal_form?: string
      master: {
        id: string
        name: string

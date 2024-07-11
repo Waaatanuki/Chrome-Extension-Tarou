@@ -208,6 +208,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           id: npcDetail.id,
           image_id_3: '',
           has_npcaugment_constant: npcDetail.has_npcaugment_constant,
+          npc_arousal_form: String(npcDetail.npc_arousal_form),
           master: {
             id: npcDetail.master.id,
             name: npcDetail.master.name,

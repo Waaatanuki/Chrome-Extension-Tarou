@@ -24,8 +24,10 @@ export const usePartyStore = defineStore('party', () => {
           action_ability: [],
         }
         const hit = localNpcList.value.find(n => n.id === newNpc.id)
-        if (hit)
+        if (hit) {
           newNpc.action_ability = hit.action_ability
+          newNpc.npc_arousal_form = hit.npc_arousal_form
+        }
         newNpcs.push(newNpc)
       }
     }
