@@ -50,13 +50,13 @@ const totalDamageTaken = computed(() =>
         <div fc flex-col gap-5px>
           <div relative w-60px>
             <img w-full :src="getLocalImg('ability-count-bg')">
-            <div absolute bottom-0 right-7px top-0 fc text-sm>
+            <div absolute inset-y-0 right-7px fc text-sm>
               {{ player.use_ability_count }}
             </div>
           </div>
           <div relative w-60px>
             <img w-full :src="getLocalImg('special-count-bg')">
-            <div absolute bottom-0 right-7px top-0 fc text-sm>
+            <div absolute inset-y-0 right-7px fc text-sm>
               {{ player.use_special_skill_count }}
             </div>
           </div>
