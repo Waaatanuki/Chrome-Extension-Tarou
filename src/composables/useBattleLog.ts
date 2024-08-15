@@ -393,7 +393,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       if (action.cmd === 'attack' && action.from === 'player') {
         const hitPlayer = currentRaid.value!.player[action.num]
         if (hitPlayer) {
-          hitPlayer.damage.attack.value += action.damage!.reduce((pre, cur) => {
+          hitPlayer.damage.attack.value += Object.values(action.damage)!.reduce((pre, cur) => {
             pre += cur.reduce((p, c) => {
               p += c.value
               return p
@@ -527,7 +527,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   function processLoopDamageScenario(action: LoopDamageScenario, num: number, type: 'ability' | 'other' = 'ability') {
     const hitPlayer = currentRaid.value!.player[num]
     if (hitPlayer) {
-      hitPlayer.damage[type].value += action.list.reduce((pre, cur) => {
+      hitPlayer.damage[type].value += Object.values(action.list).reduce((pre, cur) => {
         pre += cur.reduce((p, c) => {
           p += c.value!
           return p
