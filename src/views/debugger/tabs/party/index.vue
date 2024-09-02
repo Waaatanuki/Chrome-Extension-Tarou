@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { VueDraggableNext } from 'vue-draggable-next'
 import type { CardInstance, CheckboxValueType } from 'element-plus'
 import Effect from './components/Effect.vue'
 import Weapon from './components/Weapon.vue'
@@ -6,7 +7,8 @@ import Npc from './components/Npc.vue'
 import Summon from './components/Summon.vue'
 import BuildCompare from './components/BuildCompare.vue'
 
-const { deckList } = usePartyStore()
+const partyStore = usePartyStore()
+const { deckList } = storeToRefs(partyStore)
 const simpleChecked = ref(false)
 const weaponChecked = ref(true)
 const summonChecked = ref(true)
@@ -23,7 +25,7 @@ function triggerSimpleModel(value: CheckboxValueType) {
 }
 
 async function capture() {
-  if (deckList.length === 0)
+  if (deckList.value.length === 0)
     return ElMessage.info('请先读取队伍信息')
   const el = cardEl.value![0].$el
 
@@ -94,19 +96,23 @@ async function capture() {
     <div v-if="deckList.length === 0" m-auto w-100>
       <el-alert type="info" effect="dark" show-icon center :closable="false" title="进入编成界面读取队伍信息" />
     </div>
-    <ElCard v-for="deck, idx in deckList" ref="cardEl" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px>
-      <div relative fc flex-col gap-2>
-        <div fc flex-wrap gap-2>
-          <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
-          <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />
-          <Npc v-show="npcChecked" :npcs="deck.npcs" :leader-ability-list="deck.leaderAbilityList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
-        </div>
-        <div fc>
-          <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />
-        </div>
-        <div i-carbon:close-outline absolute bottom--8px right--8px text-sm icon-btn @click="deckList.splice(idx, 1)" />
-      </div>
-    </ElCard>
+    <VueDraggableNext v-model="deckList" flex flex-wrap gap-10px>
+      <transition-group name="list">
+        <ElCard v-for="deck, idx in deckList" ref="cardEl" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px cursor-pointer select-none>
+          <div relative fc flex-col gap-2>
+            <div fc flex-wrap gap-2>
+              <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
+              <Summon v-show="summonChecked" :summons="deck.summons" :sub-summons="deck.subSummons" :calculate-setting="deck.calculateSetting" :quick-summoni-id="deck.quickSummoniId" />
+              <Npc v-show="npcChecked" :npcs="deck.npcs" :leader-ability-list="deck.leaderAbilityList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
+            </div>
+            <div fc>
+              <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />
+            </div>
+            <div i-carbon:close-outline absolute bottom--8px right--8px text-sm icon-btn @click="deckList.splice(idx, 1)" />
+          </div>
+        </ElCard>
+      </transition-group>
+    </VueDraggableNext>
   </div>
 
   <ElDialog v-model="dialogVisiable" width="1300">
