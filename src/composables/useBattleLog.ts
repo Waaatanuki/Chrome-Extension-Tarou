@@ -450,11 +450,13 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         processSummonScenario(action as SummonScenario)
       if ((action.cmd === 'die' || action.cmd === 'die_back') && action.to === 'player') {
         const hitPlayer = currentRaid.value!.player[Number(action.index)]
-        hitPlayer && (hitPlayer.is_dead = true)
+        if (hitPlayer)
+          hitPlayer.is_dead = true
       }
       if (action.cmd === 'resurrection') {
         const hitPlayer = currentRaid.value!.player[Number(action.index)]
-        hitPlayer && (hitPlayer.is_dead = false)
+        if (hitPlayer)
+          hitPlayer.is_dead = false
       }
       if (action.cmd === 'rematch')
         currentRaid.value!.player.forEach(p => p.is_dead = false)
@@ -541,7 +543,8 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     action.list?.forEach((item) => {
       item.damage.forEach((hit) => {
         const playerNum = currentRaid.value!.formation[hit.pos]
-        currentRaid.value!.player[playerNum] && (currentRaid.value!.player[playerNum].damageTaken.super.value += hit.value)
+        if (currentRaid.value!.player[playerNum])
+          (currentRaid.value!.player[playerNum].damageTaken.super.value += hit.value)
       })
     })
   }

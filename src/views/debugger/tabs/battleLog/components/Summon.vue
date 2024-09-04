@@ -7,7 +7,8 @@ const { summonInfo } = storeToRefs(battleLogStore)
 
 const summonList = computed(() => {
   const res = summonInfo.value?.summon.reduce<Summon[]>((pre, cur) => {
-    cur.id && pre.push(cur)
+    if (cur.id)
+      pre.push(cur)
     return pre
   }, []) ?? []
 

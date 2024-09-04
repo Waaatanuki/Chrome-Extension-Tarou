@@ -15,8 +15,12 @@ export default function useDashboard() {
         if (windowInfo) {
           obTabId.value = tab.id
           obWindowId.value = windowInfo.id
-          try { await chrome.debugger.detach({ tabId: tab.id }) }
-          catch (error) { }
+          try {
+            await chrome.debugger.detach({ tabId: tab.id })
+          }
+          catch (error) {
+            console.log(error)
+          }
           await chrome.debugger.attach({ tabId: tab.id }, '1.2')
           await chrome.debugger.sendCommand({ tabId: tab.id }, 'Network.enable')
         }

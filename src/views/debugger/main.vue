@@ -32,14 +32,18 @@ async function getResponse(tabId: number, requestId: string, cb: (resp: any) => 
       try {
         cb(JSON.parse(resp.body))
       }
-      catch (error) { }
+      catch (error) {
+        console.log(error)
+      }
       return
     }
     try {
       count++
       resp = await chrome.debugger.sendCommand({ tabId }, 'Network.getResponseBody', { requestId })
     }
-    catch (error) { }
+    catch (error) {
+      console.log(error)
+    }
   }, 100)
 }
 
