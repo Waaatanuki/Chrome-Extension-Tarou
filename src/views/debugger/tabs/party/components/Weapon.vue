@@ -10,6 +10,9 @@ defineProps<{
 
 function getSkillAlias(weapon: WeaponDetail) {
   const series_id = weapon?.master?.series_id
+  if (!series_id)
+    return
+
   const hit = weaponSkill.find(category => category.series_id.includes(series_id))
   if (!hit)
     return
