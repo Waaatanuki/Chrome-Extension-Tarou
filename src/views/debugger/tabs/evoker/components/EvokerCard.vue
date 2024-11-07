@@ -88,12 +88,8 @@ const evoker = defineModel<EvokerInfo>({ required: true })
   </ElCard>
 </template>
 
-<style lang="scss">
-.evoker-card {
-  .el-select.completed {
-    .el-select__wrapper {
-      background-color: rgba(255, 166, 0, 0.7);
-    }
-  }
+<style>
+.evoker-card .el-select.completed .el-select__wrapper {
+  background-color: rgba(255, 166, 0, 0.7);
 }
 </style>

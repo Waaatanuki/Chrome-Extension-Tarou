@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import type { BattleStartJson, GachaResult, NpcAbility, NpcInfo } from 'source'
 import type { Player } from 'myStorage'
+import type { BattleStartJson, GachaResult, NpcAbility, NpcInfo } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
-import Dashborad from './tabs/dashboard/index.vue'
-import EvokerPage from './tabs/evoker/index.vue'
-import Drop from './tabs/drop/index.vue'
-import BattleLog from './tabs/battleLog/index.vue'
-import Party from './tabs/party/index.vue'
-import BattleRecord from './tabs/battleRecord/index.vue'
-import MarkedUser from './tabs/markedUser/index.vue'
-import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, windowSize, xenoGauge } from '~/logic'
 import { sendBossInfo } from '~/api'
+import { battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, windowSize, xenoGauge } from '~/logic'
+import BattleLog from './tabs/battleLog/index.vue'
+import BattleRecord from './tabs/battleRecord/index.vue'
+import Dashborad from './tabs/dashboard/index.vue'
+import Drop from './tabs/drop/index.vue'
+import EvokerPage from './tabs/evoker/index.vue'
+import MarkedUser from './tabs/markedUser/index.vue'
+import Party from './tabs/party/index.vue'
 
 const paylaod = ref<any>()
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { VueDraggableNext } from 'vue-draggable-next'
 import type { DropInfo, RawDrop, Stat } from 'api'
-import { questConfig } from '~/logic/storage'
+import { VueDraggableNext } from 'vue-draggable-next'
 import { listDrop, listQuest } from '~/api'
+import { questConfig } from '~/logic/storage'
 
 const { sendInfo } = useUser()
 const questData = ref<Stat[]>([])

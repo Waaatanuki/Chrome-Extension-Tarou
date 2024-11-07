@@ -1,7 +1,7 @@
-import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'source'
 import type { Deck } from 'party'
-import { defineStore } from 'pinia'
+import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'source'
 import { cloneDeep } from 'lodash-es'
+import { defineStore } from 'pinia'
 import { calculateSettingList, jobAbilityList, localNpcList } from '~/logic'
 
 export const usePartyStore = defineStore('party', () => {

@@ -1,6 +1,6 @@
+import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import type { Action, PartyCondition, Player } from 'myStorage'
 import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
-import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
 import { defineStore } from 'pinia'
 import { battleRecord, notificationSetting, uid } from '~/logic'
 

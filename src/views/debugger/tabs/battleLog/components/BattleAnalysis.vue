@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { BattleRecord } from 'myStorage'
-import PlayerStatus from './PlayerStatus.vue'
 import DamageRecord from './DamageRecord.vue'
 import DamageTaken from './DamageTaken.vue'
+import PlayerStatus from './PlayerStatus.vue'
 
 defineProps<{ battleRecord: BattleRecord, turn?: number }>()
 

@@ -1,12 +1,12 @@
+import type { UserConfig } from 'vite'
 import { extname } from 'node:path'
-import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import fg from 'fast-glob'
 import UnoCSS from 'unocss/vite'
-import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import type { UserConfig } from 'vite'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig } from 'vite'
 import { r } from './scripts/utils'
 
 export const sharedConfig: UserConfig = {

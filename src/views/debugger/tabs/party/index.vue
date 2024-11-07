@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { VueDraggableNext } from 'vue-draggable-next'
 import type { CardInstance, CheckboxValueType } from 'element-plus'
+import { VueDraggableNext } from 'vue-draggable-next'
+import BuildCompare from './components/BuildCompare.vue'
 import Effect from './components/Effect.vue'
-import Weapon from './components/Weapon.vue'
 import Npc from './components/Npc.vue'
 import Summon from './components/Summon.vue'
-import BuildCompare from './components/BuildCompare.vue'
+import Weapon from './components/Weapon.vue'
 
 const partyStore = usePartyStore()
 const { deckList } = storeToRefs(partyStore)

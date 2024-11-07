@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import EvokerCard from './components/EvokerCard.vue'
-import BossTriggers from './components/BossTriggers.vue'
-import { evokerInfo, materialInfo } from '~/logic'
 import { evokerUncapData } from '~/constants/evoker'
+import { evokerInfo, materialInfo } from '~/logic'
+import BossTriggers from './components/BossTriggers.vue'
+import EvokerCard from './components/EvokerCard.vue'
 
 const evokerPageResult = computed(() => {
   if (materialInfo.value.length === 0)

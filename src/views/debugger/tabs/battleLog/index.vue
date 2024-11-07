@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { battleRecord } from '~/logic'
+import ActionList from './components/ActionList.vue'
+import BattleAnalysis from './components/BattleAnalysis.vue'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
 import Summon from './components/Summon.vue'
-import BattleAnalysis from './components/BattleAnalysis.vue'
-import ActionList from './components/ActionList.vue'
-import { battleRecord } from '~/logic'
 
 const battleLogStore = useBattleLogStore()
 const { inLobby, bossInfo, lobbyMemberList, normalAttackInfo, memberInfo, mvpInfo, raidId } = storeToRefs(battleLogStore)

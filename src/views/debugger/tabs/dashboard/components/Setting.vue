@@ -28,7 +28,7 @@ function handleDelete(item: string) {
         <template #reference>
           <el-checkbox v-model="notificationSetting.targetItemDrop" label="掉落提醒">
             <div fc gap-1>
-              掉落提醒    <div icon i-carbon:information />
+              掉落提醒    <div i-carbon:information icon />
             </div>
           </el-checkbox>
         </template>

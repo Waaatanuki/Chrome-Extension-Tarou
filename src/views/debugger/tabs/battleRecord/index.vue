@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import type { BattleRecord } from 'myStorage'
+import dayjs from 'dayjs'
 // import { cloneDeep } from 'lodash-es'
 import copy from 'copy-text-to-clipboard'
-import BattleAnalysis from '../battleLog/components/BattleAnalysis.vue'
+import { battleRecord } from '~/logic'
 import ActionList from '../battleLog/components/ActionList.vue'
+import BattleAnalysis from '../battleLog/components/BattleAnalysis.vue'
 import Effect from '../party/components/Effect.vue'
-import Weapon from '../party/components/Weapon.vue'
 import Npc from '../party/components/Npc.vue'
 import Summon from '../party/components/Summon.vue'
-import { battleRecord } from '~/logic'
+import Weapon from '../party/components/Weapon.vue'
 
 const { height } = useWindowSize()
 const battleLogStore = useBattleLogStore()

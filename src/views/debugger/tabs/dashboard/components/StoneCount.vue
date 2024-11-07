@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import GachaInfo from './GachaInfo.vue'
 import { legendticket, legendticket10, saveStoneDate, stone } from '~/logic'
+import GachaInfo from './GachaInfo.vue'
 
 const totalStone = computed(() => legendticket10.value * 3000 + legendticket.value * 300 + stone.value)
 const recordVisiable = ref(false)

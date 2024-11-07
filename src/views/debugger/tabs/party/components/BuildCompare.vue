@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Deck } from 'party'
 import { cloneDeep } from 'lodash-es'
-import Weapon from './Weapon.vue'
 import Summon from './Summon.vue'
+import Weapon from './Weapon.vue'
 
 interface Result {
   icon_img: string

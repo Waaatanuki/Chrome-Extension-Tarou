@@ -18,8 +18,9 @@ async function request<T>(api: string, options?: RequestInit, maxCount = 0): Pro
     if (!response.ok)
       throw new Error(response.statusText || '请求失败')
     return response.json()
-  })
-    .catch(err => maxCount > 0 ? request(api, options, maxCount - 1) : Promise.reject(err))
+  }).catch(err => maxCount > 0
+    ? request(api, options, maxCount - 1)
+    : Promise.reject(err))
 }
 
 export default request

@@ -113,10 +113,9 @@ function handleOpen() {
   </ElDialog>
 </template>
 
-<style lang="scss">
+<style>
 .cell-class-name > .cell {
   height: 40px;
-  padding: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;

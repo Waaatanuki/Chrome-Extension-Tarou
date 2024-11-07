@@ -1,7 +1,7 @@
-import { StorageSerializers, throttleFilter } from '@vueuse/core'
-import { toValue, tryOnScopeDispose, watchWithFilter } from '@vueuse/shared'
 import type { StorageLikeAsync, UseStorageAsyncOptions } from '@vueuse/core'
 import type { MaybeRefOrGetter, RemovableRef } from '@vueuse/shared'
+import { StorageSerializers, throttleFilter } from '@vueuse/core'
+import { toValue, tryOnScopeDispose, watchWithFilter } from '@vueuse/shared'
 
 export type WebExtensionStorageOptions<T> = UseStorageAsyncOptions<T>
 

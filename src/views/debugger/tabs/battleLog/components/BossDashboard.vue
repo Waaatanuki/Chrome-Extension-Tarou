@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import copy from 'copy-text-to-clipboard'
+import { storeToRefs } from 'pinia'
 import Memo from './Memo.vue'
 
 const battleLogStore = useBattleLogStore()
