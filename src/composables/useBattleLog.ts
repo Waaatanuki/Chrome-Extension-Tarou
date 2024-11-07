@@ -421,28 +421,78 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         if (resultType === 'summon')
           processDamageScenario(action as DamageScenario, 0)
 
+        let flag = true
         for (let i = 1; i <= 4; i++) {
-          if (array[idx - i]?.cmd === 'wait')
+          const preAction = array[idx - i]
+
+          if (!preAction)
             break
-          if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].to !== 'boss')) {
-            processDamageScenario(action as DamageScenario, array[idx - i].num)
+          if (preAction.cmd === 'wait')
+            break
+          if ((preAction.to !== 'boss') && beforeAbilityDamageCmdList.includes(preAction.cmd)) {
+            processDamageScenario(action as DamageScenario, preAction.num)
+            flag = false
             break
           }
-
-          if (array[idx - i] && array[idx - i].cmd === 'chain_cutin') {
+          if (preAction.cmd === 'chain_cutin') {
             const pos0NpcNum = currentRaid.value!.formation[0]
             processDamageScenario(action as DamageScenario, pos0NpcNum, 'other')
+            flag = false
             break
+          }
+        }
+        if (flag) {
+          for (let i = 1; i <= 4; i++) {
+            const preAction = array[idx - i]
+
+            if (!preAction)
+              break
+            if (preAction.cmd === 'wait')
+              break
+            if (preAction.cmd === 'windoweffect' && preAction.kind) {
+              const pid = preAction.kind.split('_')[2]
+              const hitIndex = currentRaid.value!.player.findIndex(p => p.pid === pid)
+
+              if (hitIndex !== -1) {
+                processDamageScenario(action as DamageScenario, hitIndex)
+                break
+              }
+            }
           }
         }
       }
       if (action.cmd === 'loop_damage' && action.to === 'boss') {
+        let flag = true
         for (let i = 1; i <= 4; i++) {
-          if (array[idx - i]?.cmd === 'wait')
+          const preAction = array[idx - i]
+
+          if (!preAction)
             break
-          if (array[idx - i] && beforeAbilityDamageCmdList.includes(array[idx - i].cmd) && (array[idx - i].to !== 'boss')) {
-            processLoopDamageScenario(action as LoopDamageScenario, array[idx - i].num)
+          if (preAction.cmd === 'wait')
             break
+          if ((preAction.to !== 'boss') && beforeAbilityDamageCmdList.includes(preAction.cmd)) {
+            processLoopDamageScenario(action as LoopDamageScenario, preAction.num)
+            flag = false
+            break
+          }
+        }
+        if (flag) {
+          for (let i = 1; i <= 4; i++) {
+            const preAction = array[idx - i]
+
+            if (!preAction)
+              break
+            if (preAction.cmd === 'wait')
+              break
+            if (preAction.cmd === 'windoweffect' && preAction.kind) {
+              const pid = preAction.kind.split('_')[2]
+              const hitIndex = currentRaid.value!.player.findIndex(p => p.pid === pid)
+
+              if (hitIndex !== -1) {
+                processLoopDamageScenario(action as LoopDamageScenario, hitIndex)
+                break
+              }
+            }
           }
         }
       }

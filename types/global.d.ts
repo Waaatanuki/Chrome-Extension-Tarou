@@ -478,6 +478,7 @@ declare module 'source'{
        ja: string
        en: string
      }
+     kind?: string
      hp?: number
      hpmax?: number
      pos: number
