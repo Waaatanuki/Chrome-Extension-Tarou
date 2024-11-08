@@ -422,6 +422,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
           processDamageScenario(action as DamageScenario, 0)
 
         let flag = true
+        let playerIndex = -1
         for (let i = 1; i <= 4; i++) {
           const preAction = array[idx - i]
 
@@ -440,29 +441,22 @@ export const useBattleLogStore = defineStore('battleLog', () => {
             flag = false
             break
           }
-        }
-        if (flag) {
-          for (let i = 1; i <= 4; i++) {
-            const preAction = array[idx - i]
+          if (preAction.cmd === 'windoweffect' && preAction.kind) {
+            const pid = preAction.kind.split('_')[2]
+            const hitIndex = currentRaid.value!.player.findIndex(p => p.pid === pid)
 
-            if (!preAction)
-              break
-            if (preAction.cmd === 'wait')
-              break
-            if (preAction.cmd === 'windoweffect' && preAction.kind) {
-              const pid = preAction.kind.split('_')[2]
-              const hitIndex = currentRaid.value!.player.findIndex(p => p.pid === pid)
-
-              if (hitIndex !== -1) {
-                processDamageScenario(action as DamageScenario, hitIndex)
-                break
-              }
+            if (playerIndex === -1 && hitIndex !== -1) {
+              playerIndex = hitIndex
             }
           }
+        }
+        if (flag && playerIndex !== -1) {
+          processDamageScenario(action as DamageScenario, playerIndex)
         }
       }
       if (action.cmd === 'loop_damage' && action.to === 'boss') {
         let flag = true
+        let playerIndex = -1
         for (let i = 1; i <= 4; i++) {
           const preAction = array[idx - i]
 
@@ -475,25 +469,17 @@ export const useBattleLogStore = defineStore('battleLog', () => {
             flag = false
             break
           }
-        }
-        if (flag) {
-          for (let i = 1; i <= 4; i++) {
-            const preAction = array[idx - i]
+          if (preAction.cmd === 'windoweffect' && preAction.kind) {
+            const pid = preAction.kind.split('_')[2]
+            const hitIndex = currentRaid.value!.player.findIndex(p => p.pid === pid)
 
-            if (!preAction)
-              break
-            if (preAction.cmd === 'wait')
-              break
-            if (preAction.cmd === 'windoweffect' && preAction.kind) {
-              const pid = preAction.kind.split('_')[2]
-              const hitIndex = currentRaid.value!.player.findIndex(p => p.pid === pid)
-
-              if (hitIndex !== -1) {
-                processLoopDamageScenario(action as LoopDamageScenario, hitIndex)
-                break
-              }
+            if (playerIndex === -1 && hitIndex !== -1) {
+              playerIndex = hitIndex
             }
           }
+        }
+        if (flag && playerIndex !== -1) {
+          processLoopDamageScenario(action as LoopDamageScenario, playerIndex)
         }
       }
       if (action.cmd === 'summon' && action.list.length > 0)
