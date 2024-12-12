@@ -184,7 +184,7 @@ declare module 'myStorage' {
     [key: string]: {
       imgId: string
       name: string
-      rank: stirng
+      rank: string
       necessary: boolean
     }
   }
