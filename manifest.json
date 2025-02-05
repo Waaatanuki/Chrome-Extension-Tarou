@@ -12,8 +12,6 @@
   "host_permissions": [
     "*://*.granbluefantasy.jp/*",
     "*://gbf.game.mbga.jp/*",
-    "*://waaatanuki.github.io/gbf-app/*",
-    "*://waaatanuki.gitee.io/gbf-app/*",
     "*://localhost/*"
   ],
   "background": {
@@ -25,8 +23,6 @@
       "matches": [
         "*://*.granbluefantasy.jp/*",
         "*://gbf.game.mbga.jp/*",
-        "*://waaatanuki.github.io/gbf-app/*",
-        "*://waaatanuki.gitee.io/gbf-app/*",
         "*://localhost/*"
       ],
       "js": ["content_script.mjs"],
