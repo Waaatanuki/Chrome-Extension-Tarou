@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Contact from '~/views/debugger/tabs/dashboard/components/Contact.vue'
-import Debug from '~/views/debugger/tabs/dashboard/components/Debug.vue'
 
 const visible = ref(false)
 </script>
@@ -12,7 +11,6 @@ const visible = ref(false)
       <TheButton @click="visible = true">
         ceshi
       </TheButton>
-      <Debug v-model="visible" />
     </div>
   </div>
 </template>

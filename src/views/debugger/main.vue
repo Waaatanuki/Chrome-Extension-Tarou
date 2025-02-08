@@ -528,13 +528,18 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
       getResponse(tabId, requestId, (resp) => {
         const result_data = resp.option.result_data
         if (result_data.appearance?.is_quest && notificationSetting.value.appearanceQuest)
-          createNotification('Hell提醒')
+          createNotification({ message: 'Hell提醒', sound: 'hell' })
 
-        if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent)
-          createNotification('沙盒宝箱提醒', 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png')
+        if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent) {
+          createNotification({
+            message: '沙盒宝箱提醒',
+            iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png',
+            sound: 'hell',
+          })
+        }
 
         if (result_data.advent_info?.is_over_limit && notificationSetting.value.isPointOverLimit)
-          createNotification('四象点数已经超过上限!!!')
+          createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
 
         const display_list = resp.display_list
         if (!display_list || !notificationSetting.value.itemGoal)
@@ -544,7 +549,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           const current = Number(item.number)
           const goal = Number(item.registration_number)
           if (goal > 0 && goal <= current)
-            createNotification(`${item.name}达到目标数量`)
+            createNotification({ message: `${item.name}达到目标数量`, sound: 'warning' })
         })
       })
     }

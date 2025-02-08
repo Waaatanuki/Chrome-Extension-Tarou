@@ -13,6 +13,7 @@ export const defaultTodoList = [
 // ]
 
 export const defaultNotificationSetting = {
+  silent: false,
   battleWin: true,
   battleLose: true,
   targetItemDrop: true,
@@ -26,3 +27,12 @@ export const defaultNotificationItem = [
   '/item/evolution/s/20004.jpg',
   '/item/article/s/215.jpg',
 ]
+
+export const notificationSound = {
+  drop: 'treasure_se_6',
+  win: 'win_se_1',
+  lose: 'gameover_se_1',
+  tip: 'chat_se_1',
+  hell: 'raid_appear_highlevel_se_1',
+  warning: 'help_se_2',
+}

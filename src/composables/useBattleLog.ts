@@ -97,12 +97,13 @@ export const useBattleLogStore = defineStore('battleLog', () => {
     }
 
     const isWin = data.scenario.some(item => item.cmd === 'win' && item.is_last_raid)
-    if (isWin && notificationSetting.value.battleWin)
-      createNotification('战斗结束')
+    if (isWin && notificationSetting.value.battleWin) {
+      createNotification({ message: `战斗结束`, sound: 'win' })
+    }
 
     const isLose = data.scenario.some(item => item.cmd === 'lose')
     if (isLose && notificationSetting.value.battleLose)
-      createNotification('队伍全灭')
+      createNotification({ message: `队伍全灭`, sound: 'lose' })
 
     if (summonInfo.value) {
       status?.summon.forEach((summon, idx) => {

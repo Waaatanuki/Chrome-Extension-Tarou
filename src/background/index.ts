@@ -244,7 +244,11 @@ import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obT
     for (let i = 0; i < length; i++)
       str += 'e'
 
-    createNotification(`G${str}t☆Daze!`, `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`)
+    createNotification({
+      message: `G${str}t☆Daze!`,
+      iconUrl: `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`,
+      sound: 'drop',
+    })
   }
 
   chrome.runtime.onInstalled.addListener(() => {

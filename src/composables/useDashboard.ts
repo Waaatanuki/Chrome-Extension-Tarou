@@ -5,7 +5,7 @@ export default function useDashboard() {
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
     if (tab?.url?.includes('game.granbluefantasy.jp')) {
       chrome.windows.get(obWindowId.value).then(() => {
-        createNotification('已开启详细面板')
+        createNotification({ message: '已开启详细面板' })
       }).catch(() => {
         return chrome.windows.create({ url: `src/views/debugger/main.html?${tab.id}`, type: 'popup', ...windowSize.value })
       }).catch(() => {
@@ -25,11 +25,11 @@ export default function useDashboard() {
           await chrome.debugger.sendCommand({ tabId: tab.id }, 'Network.enable')
         }
       }).catch((err) => {
-        createNotification(String(err))
+        createNotification({ message: String(err) })
       })
     }
     else {
-      createNotification('请先进入游戏页面')
+      createNotification({ message: '请先进入游戏页面' })
     }
   }
 

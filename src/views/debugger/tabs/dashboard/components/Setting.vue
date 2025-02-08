@@ -20,7 +20,17 @@ function handleDelete(item: string) {
 
 <template>
   <el-dialog v-model="visible" width="300">
-    <el-alert title="弹窗通知" :closable="false" />
+    <el-alert :closable="false">
+      <template #title>
+        <div fc gap-2>
+          弹窗通知
+          <div
+            :class="{ 'i-ri:volume-up-fill': !notificationSetting.silent, 'i-ri:volume-mute-fill': notificationSetting.silent }"
+            icon-btn @click="notificationSetting.silent = !notificationSetting.silent"
+          />
+        </div>
+      </template>
+    </el-alert>
     <div flex flex-col pl-5>
       <el-checkbox v-model="notificationSetting.battleWin" label="战斗结束提醒" />
       <el-checkbox v-model="notificationSetting.battleLose" label="队伍全灭提醒" />

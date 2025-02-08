@@ -20,14 +20,18 @@ export default function useContextMenu() {
             if (itemKey) {
               if (!notificationItem.value.includes(itemKey)) {
                 notificationItem.value.push(itemKey)
-                createNotification('添加成功', `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${itemKey}`)
+                createNotification({
+                  message: '添加成功',
+                  iconUrl: `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${itemKey}`,
+                  sound: 'tip',
+                })
               }
               else {
-                createNotification('该物品已在提醒列表中')
+                createNotification({ message: '该物品已在提醒列表中' })
               }
             }
             else {
-              createNotification('该物品无法添加')
+              createNotification({ message: '该物品无法添加' })
             }
           }
           break

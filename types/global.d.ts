@@ -190,6 +190,7 @@ declare module 'myStorage' {
   }
 
   interface NotificationSetting {
+    silent: boolean
     battleWin: boolean
     battleLose: boolean
     targetItemDrop: boolean
