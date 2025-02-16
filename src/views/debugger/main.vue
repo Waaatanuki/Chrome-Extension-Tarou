@@ -53,6 +53,9 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     const tabId = source.tabId
     const requestId = params.requestId
 
+    if (responseUrl.endsWith('.js'))
+      return
+
     // Dashboard 抽卡数据
     if (responseUrl.includes('game.granbluefantasy.jp/gacha/list')) {
       getResponse(tabId, requestId, (resp) => {
@@ -288,8 +291,10 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
               icon_type: actionAbility.action_icon.split('_')[1],
               user_full_auto_setting_flag: actionAbility.user_full_auto_setting_flag,
             }
-            if (i === 1)
+            if (i === 1) {
               ab.job_param_id = job_param_id
+              jobAbilityList.value = jobAbilityList.value.filter(a => !(a.job_param_id === job_param_id && a.action_id !== ab.action_id))
+            }
             const hitIndex = jobAbilityList.value.findIndex(a => a.action_id === ab.action_id)
             if (hitIndex === -1)
               jobAbilityList.value.push(ab)
