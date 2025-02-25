@@ -12,6 +12,7 @@
   "host_permissions": [
     "*://*.granbluefantasy.jp/*",
     "*://gbf.game.mbga.jp/*",
+    "*://*.akamaized.net/*",
     "*://localhost/*"
   ],
   "background": {
