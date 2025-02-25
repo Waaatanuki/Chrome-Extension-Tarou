@@ -17,12 +17,9 @@ const state = reactive({
 
 const { inputValue, inputVisible, delBtnVisible } = toRefs(state)
 
-watch(
-  () => todoList,
-  () => {
-    lastUpdateTodo.value = dayjs().unix()
-  },
-)
+function handleTaskChange() {
+  lastUpdateTodo.value = dayjs().unix()
+}
 
 function addTask() {
   inputVisible.value = true
@@ -30,6 +27,7 @@ function addTask() {
     InputRef.value!.input!.focus()
   })
 }
+
 function delTask(index: number) {
   todoList.value.splice(index, 1)
 }
@@ -42,9 +40,9 @@ function handleInputConfirm() {
 }
 
 onMounted(() => {
-  if (dayjs().tz().isAfter(dayjs().tz().hour(4).minute(0).second(0))
-    && dayjs.unix(lastUpdateTodo.value).tz().isBefore(dayjs().tz().hour(4).minute(0).second(0))
-  ) {
+  const isAfter4hour = dayjs().tz().isAfter(dayjs().tz().hour(4).minute(0).second(0))
+  const isLastUpdateBefore4hour = dayjs.unix(lastUpdateTodo.value).tz().isBefore(dayjs().tz().hour(4).minute(0).second(0))
+  if (isAfter4hour && isLastUpdateBefore4hour) {
     lastUpdateTodo.value = dayjs().unix()
     todoList.value.forEach(task => (task.done = false))
   }
@@ -73,6 +71,7 @@ onMounted(() => {
       <ElCheckbox
         v-for="task, idx in todoList" :key="idx"
         v-model="task.done" :label="task.content"
+        @change="handleTaskChange"
       >
         <template #default>
           <div flex items-center justify-between>
