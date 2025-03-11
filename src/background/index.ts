@@ -216,18 +216,41 @@ import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obT
     const $ = load(domStr)
     const res: Treasure[] = []
 
-    $('.btn-treasure-item').each((i, elem) => {
-      const count = $(elem).find('.prt-article-count')?.text().split('x')[1]
-      const imgSrc = $(elem).find('.img-treasure-item')?.attr('src')
-      const itemKey = imgSrcToKey(imgSrc)
-      if (notificationItem.value.includes(itemKey))
-        showNotifications(itemKey)
-      res.push({
-        box: String($(elem).data().box),
-        key: $(elem).data().key as string,
-        count: count ? Number(count) : 1,
-      })
+    $('.prt-item-list').children('.lis-treasure').each((i, elem) => {
+      const isItem = $(elem).hasClass('btn-treasure-item')
+      const isArtifact = $(elem).hasClass('btn-artifact')
+
+      if (isItem) {
+        const imgSrc = $(elem).find('.img-treasure-item').attr('src')
+        const itemKey = imgSrcToKey(imgSrc)
+        if (notificationItem.value.includes(itemKey))
+          showNotifications(itemKey)
+
+        const count = $(elem).find('.prt-article-count').text().split('x')[1]
+        res.push({
+          box: String($(elem).data().box),
+          key: $(elem).data().key as string,
+          count: count ? Number(count) : 1,
+        })
+      }
+
+      if (isArtifact) {
+        const imgSrc = $(elem).find('.img-artifact').attr('src')
+        const itemKey = imgSrcToKey(imgSrc)
+        if (notificationItem.value.includes(itemKey))
+          showNotifications(itemKey)
+
+        const artifact = $(elem).find('.img-artifact').attr('alt')
+        const attr = $(elem).find('.ico-attr').attr('alt')
+        const kind = $(elem).find('.ico-kind').attr('alt')
+        res.push({
+          box: 'artifact',
+          key: `${artifact}-${attr}-${kind}`,
+          count: 1,
+        })
+      }
     })
+
     return res
   }
 

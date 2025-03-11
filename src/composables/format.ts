@@ -37,7 +37,7 @@ export function formatFinishTime(finishTime: string) {
 export function imgSrcToKey(src = '') {
   const arr = src.split(/\/assets(?:_en)?\/img(?:_low|_mid)?\/sp\/assets/)
   if (arr.length === 2) {
-    const key = arr[1].replace(/\/(m|b)\//, '/s/').replace('.png', '.jpg')
+    const key = arr[1].replace(/\/(m|b)\//, '/s/').replace('.png', '.jpg').replace(/\/artifact\/s\/\d+(\.[^/]+)$/, '/artifact/s/301010101$1')
     return key
   }
   return ''
