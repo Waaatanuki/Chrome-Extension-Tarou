@@ -11,7 +11,7 @@ const props = defineProps<{
   }[]
 }>()
 
-const maxRank = '375'
+const MAX_RANK = '400'
 
 function goProfilePage(userId: string) {
   window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
@@ -70,7 +70,7 @@ const data = computed(() =>
               </span>
             </div>
 
-            <ElTag effect="dark" size="small" :type="member.userRank === maxRank ? 'warning' : 'info'" absolute right--1px top--10px>
+            <ElTag effect="dark" size="small" :type="member.userRank === MAX_RANK ? 'warning' : 'info'" absolute right--1px top--10px>
               {{ `Lv${member.userRank}` }}
             </ElTag>
             <ElTag v-if="member.rank && member.rank !== 999" effect="dark" size="small" type="danger" absolute left--15px my-auto>
