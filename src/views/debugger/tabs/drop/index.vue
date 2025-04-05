@@ -104,6 +104,10 @@ function manageQuest() {
       if (!questConfig.value.some(q => quest.questId === q.questId))
         questConfig.value.push({ ...quest, visible: false })
     })
+
+    questConfig.value = questConfig.value.filter(q =>
+      data.some(quest => quest.questId === q.questId),
+    )
   }).catch((err) => {
     ElMessage.error(err.message)
   }).finally(() => {
