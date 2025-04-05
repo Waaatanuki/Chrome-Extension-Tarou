@@ -1,4 +1,4 @@
-import type { Deck } from 'party'
+import type { BuildSummon, Deck } from 'party'
 import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'source'
 import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
@@ -55,6 +55,8 @@ export const usePartyStore = defineStore('party', () => {
 
     const hitSetting = calculateSettingList.value.find(item => item.priority === String(data.priority))
 
+    const { mainSummon, subSummon } = processSummon(data, hitSetting)
+
     deckList.value.unshift({
       priority: String(data.priority),
       leader: data.pc.param,
@@ -62,11 +64,10 @@ export const usePartyStore = defineStore('party', () => {
       npcs: newNpcs,
       setAction,
       weapons: data.pc.weapons,
-      summons: data.pc.summons,
-      quickSummoniId: String(data.pc.quick_user_summon_id),
-      subSummons: data.pc.sub_summons,
       damageInfo: Object.keys(data.pc.after_damage_info || []).length === 0 ? data.pc.damage_info : data.pc.after_damage_info,
       calculateSetting: cloneDeep(hitSetting),
+      mainSummon,
+      subSummon,
     })
 
     if (deckList.value.length > 10)
@@ -79,6 +80,42 @@ export const usePartyStore = defineStore('party', () => {
       hit.setting = { ...data.setting }
     else
       calculateSettingList.value.push(cloneDeep(data))
+  }
+
+  function processSummon(data: DeckJson, setting?: CalculateSetting) {
+    const summons = data.pc.summons
+    const sub_summons = data.pc.sub_summons
+    const quickSummonId = Number(data.pc.quick_user_summon_id)
+
+    const mainSummon: (BuildSummon | null)[] = [{ imageId: summons[1].param!.image_id, paramId: Number(summons[1].param!.id), isQuick: quickSummonId === Number(summons[1].param!.id) }]
+    const subSummon: (BuildSummon | null)[] = []
+
+    for (let i = 2; i <= 5; i++) {
+      const summon = summons[i]
+      if (summon.param) {
+        const isQuick = quickSummonId === Number(summon.param.id)
+        subSummon.push({ imageId: summon.param.image_id, paramId: Number(summon.param.id), isQuick })
+      }
+      else {
+        subSummon.push(null)
+      }
+    }
+
+    for (let i = 1; i <= 2; i++) {
+      const summon = sub_summons[i]
+      if (summon.param) {
+        const isQuick = quickSummonId === Number(summon.param.id)
+        subSummon.push({ imageId: summon.param.image_id, paramId: Number(summon.param.id), isQuick })
+      }
+      else {
+        subSummon.push(null)
+      }
+    }
+
+    if (setting?.setting.summon_id)
+      mainSummon[1] = { imageId: setting.setting.image_id!, paramId: 0, isQuick: false }
+
+    return { mainSummon, subSummon }
   }
 
   return {

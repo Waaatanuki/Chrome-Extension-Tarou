@@ -594,7 +594,7 @@ declare module 'source'{
 
    interface DeckSummon {
      [key: string]: {
-       param: SummonParam
+       param?: SummonParam
      }
    }
 
@@ -663,7 +663,8 @@ declare module 'source'{
    interface CalculateSetting {
      priority: string
      setting: {
-       image_id: string
+       image_id: string | null
+       summon_id: number | null
        group_priority?: string
        priority?: string
      }
@@ -830,7 +831,7 @@ declare module 'battleLog'{
 }
 
 declare module 'party'{
-  import type { CalculateSetting, DamageInfo, DeckSummon, DeckWeapon, NpcAbility, NpcInfo } from 'source'
+  import type { CalculateSetting, DamageInfo, DeckWeapon, NpcAbility, NpcInfo } from 'source'
 
   interface Deck {
     priority: string
@@ -839,11 +840,16 @@ declare module 'party'{
     npcs: NpcInfo[]
     setAction: { name: string, set_action_id: string }[]
     weapons: DeckWeapon
-    summons: DeckSummon
-    quickSummoniId: string
-    subSummons: DeckSummon
     damageInfo: DamageInfo
     calculateSetting?: CalculateSetting
+    mainSummon: (BuildSummon | null)[]
+    subSummon: (BuildSummon | null)[]
+  }
+
+  interface BuildSummon {
+    paramId: number
+    imageId: string
+    isQuick: boolean
   }
 }
 

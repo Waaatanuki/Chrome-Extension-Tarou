@@ -1,31 +1,26 @@
 <script setup lang="ts">
-import type { CalculateSetting, DeckSummon } from 'source'
+import type { BuildSummon } from 'party'
 
 defineProps<{
-  summons: DeckSummon
-  subSummons: DeckSummon
-  calculateSetting?: CalculateSetting
-  quickSummoniId?: string
+  mainSummon: (BuildSummon | null)[]
+  subSummon: (BuildSummon | null)[]
 }>()
 </script>
 
 <template>
   <div h-210px fc>
     <div relative h-full w-100px>
-      <img w-full :src="getAssetImg('summon', summons[1].param.image_id, 'ls')">
-      <img v-if="quickSummoniId === summons[1].param.id" :src="getLocalImg('ico-summon-quick')" absolute left-1 top-1 h-30px w-30px>
+      <img w-full :src="getAssetImg('summon', mainSummon[0]!.imageId, 'ls')">
+      <img v-if="mainSummon[0]!.isQuick" :src="getLocalImg('ico-summon-quick')" absolute left-1 top-1 h-30px w-30px>
     </div>
     <div w-250px fc flex-wrap gap-5px>
-      <div v-for="idx in 4" :key="idx" class="party_summon_wrapper">
-        <img v-if="summons[idx + 1]?.param?.image_id" w-full :src="getAssetImg('summon', summons[idx + 1]?.param?.image_id)">
-        <img v-if="quickSummoniId === summons[idx + 1]?.param?.id" :src="getLocalImg('ico-summon-quick')" absolute left-1 top-1 h-20px w-20px>
-      </div>
-      <div v-for="idx in 2" :key="idx" class="party_summon_wrapper">
-        <img v-if="subSummons[idx ]?.param?.image_id" w-full :src="getAssetImg('summon', subSummons[idx ]?.param?.image_id)">
+      <div v-for="summon, idx in subSummon" :key="idx" class="party_summon_wrapper">
+        <img v-if="summon?.imageId" w-full :src="getAssetImg('summon', summon.imageId)">
+        <img v-if="summon?.isQuick" :src="getLocalImg('ico-summon-quick')" absolute left-1 top-1 h-20px w-20px>
       </div>
     </div>
-    <div v-if="calculateSetting?.setting.image_id" h-full w-100px>
-      <img h-full w-full :src="getAssetImg('summon', calculateSetting.setting.image_id, 'ls')">
+    <div v-if="mainSummon[1]" h-full w-100px>
+      <img h-full w-full :src="getAssetImg('summon', mainSummon[1].imageId, 'ls')">
     </div>
   </div>
 </template>

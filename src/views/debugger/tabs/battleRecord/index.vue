@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import type { BattleRecord } from 'myStorage'
 // import { cloneDeep } from 'lodash-es'
-import copy from 'copy-text-to-clipboard'
+// import copy from 'copy-text-to-clipboard'
 import dayjs from 'dayjs'
 import { battleRecord } from '~/logic'
 import ActionList from '../battleLog/components/ActionList.vue'
 import BattleAnalysis from '../battleLog/components/BattleAnalysis.vue'
-import Effect from '../party/components/Effect.vue'
-import Npc from '../party/components/Npc.vue'
-import Summon from '../party/components/Summon.vue'
-import Weapon from '../party/components/Weapon.vue'
+// import Effect from '../party/components/Effect.vue'
+// import Npc from '../party/components/Npc.vue'
+// import Summon from '../party/components/Summon.vue'
+// import Weapon from '../party/components/Weapon.vue'
 
 const { height } = useWindowSize()
 const battleLogStore = useBattleLogStore()
-const partyStore = usePartyStore()
-const dialogVisible = ref(false)
+// const partyStore = usePartyStore()
+// const dialogVisible = ref(false)
 
-const currentRecord = ref<BattleRecord>()
-const currentDeck = computed(() => partyStore.deckList[0])
+// const currentRecord = ref<BattleRecord>()
+// const currentDeck = computed(() => partyStore.deckList[0])
 
 function triggerLock(row: BattleRecord) {
   const lockedNum = battleRecord.value.filter(record => record.reserve).length
@@ -64,13 +64,13 @@ function clear() {
 //   currentRecord.value = cloneDeep(row)
 // }
 
-function handleCopyBuild() {
-  if (!currentDeck.value)
-    return ElMessage.warning('请先获取队伍信息')
+// function handleCopyBuild() {
+//   if (!currentDeck.value)
+//     return ElMessage.warning('请先获取队伍信息')
 
-  if (copy(JSON.stringify({ deckInfo: currentDeck.value, recordInfo: currentRecord.value })))
-    ElMessage.success(`已成功复制配置信息`)
-}
+//   if (copy(JSON.stringify({ deckInfo: currentDeck.value, recordInfo: currentRecord.value })))
+//     ElMessage.success(`已成功复制配置信息`)
+// }
 </script>
 
 <template>
@@ -131,7 +131,7 @@ function handleCopyBuild() {
     </TheButton>
   </div>
 
-  <el-dialog v-model="dialogVisible" width="510" :show-close="false" top="5vh">
+  <!-- <el-dialog v-model="dialogVisible" width="510" :show-close="false" top="5vh">
     <div mb-4 flex items-center justify-between>
       <div>
         <el-alert title="切换至战斗记录所使用的的队伍" type="info" show-icon :closable="false" />
@@ -153,5 +153,5 @@ function handleCopyBuild() {
         </div>
       </div>
     </el-card>
-  </el-dialog>
+  </el-dialog> -->
 </template>
