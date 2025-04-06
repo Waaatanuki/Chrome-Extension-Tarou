@@ -48,3 +48,11 @@ export function listDrop(questIds: string[]) {
     body: JSON.stringify(questIds),
   })
 }
+
+// 上传配置
+export function uploadBuild(data: any) {
+  return request('/ext/build', {
+    method: 'post',
+    body: JSON.stringify(data),
+  })
+}

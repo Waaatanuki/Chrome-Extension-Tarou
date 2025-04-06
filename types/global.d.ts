@@ -95,10 +95,31 @@ declare module 'myStorage' {
     damage?: string
     point?: number
     duration?: string
-    speed?: string
     treasureList?: { src: string, number: string, boxClass: string }[]
     abilityList: Action[]
     reserve: boolean
+    isUploaded?: boolean
+  }
+
+  interface UploadRecord {
+    questId: string
+    raidId: number
+    raidName: string
+    bossImage?: string
+    turn: number
+    startTime?: number
+    realSpeed: string
+    fullSpeed: string
+    player: Omit<Player, 'condition'>[]
+    actionQueue: {
+      turn: number
+      bossHpPercent: number
+      special_skill_flag: number
+      guard_status: { is_guard_status: number, num: number }[]
+      acitonList: Action[]
+    }[]
+    damage?: string
+    point?: number
   }
 
   interface Player {
@@ -821,12 +842,11 @@ declare module 'battleLog'{
 declare module 'party'{
   interface Deck {
     priority: string
-    leader: BuildLeader
-    effects: BuildEffect[]
-    summons: BuildSummon[]
     weapons: BuildWeapon[]
+    summons: BuildSummon[]
     leader: BuildLeader
     npcs: BuildNpc[]
+    effects: BuildEffect[]
   }
 
   type SkillType = 'skill1' | 'skill2' | 'skill3'

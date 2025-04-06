@@ -1,23 +1,22 @@
 <script setup lang="ts">
-import type { BattleRecord } from 'myStorage'
-// import { cloneDeep } from 'lodash-es'
-// import copy from 'copy-text-to-clipboard'
+import type { BattleRecord, UploadRecord } from 'myStorage'
 import dayjs from 'dayjs'
+import { uploadBuild } from '~/api'
 import { battleRecord } from '~/logic'
 import ActionList from '../battleLog/components/ActionList.vue'
 import BattleAnalysis from '../battleLog/components/BattleAnalysis.vue'
-// import Effect from '../party/components/Effect.vue'
-// import Npc from '../party/components/Npc.vue'
-// import Summon from '../party/components/Summon.vue'
-// import Weapon from '../party/components/Weapon.vue'
+import Npc from '../party/components/Npc.vue'
+import Summon from '../party/components/Summon.vue'
+import Weapon from '../party/components/Weapon.vue'
 
 const { height } = useWindowSize()
 const battleLogStore = useBattleLogStore()
-// const partyStore = usePartyStore()
-// const dialogVisible = ref(false)
+const partyStore = usePartyStore()
+const dialogVisible = ref(false)
+const loading = ref(false)
 
-// const currentRecord = ref<BattleRecord>()
-// const currentDeck = computed(() => partyStore.deckList[0])
+const currentRecord = ref<BattleRecord>()
+const currentDeck = computed(() => partyStore.deckList[0])
 
 function triggerLock(row: BattleRecord) {
   const lockedNum = battleRecord.value.filter(record => record.reserve).length
@@ -59,18 +58,63 @@ function clear() {
   battleRecord.value = battleRecord.value.filter(record => record.reserve)
 }
 
-// function handleShare(row: BattleRecord) {
-//   dialogVisible.value = true
-//   currentRecord.value = cloneDeep(row)
-// }
+function handleShare(row: BattleRecord) {
+  dialogVisible.value = true
+  currentRecord.value = row
+}
 
-// function handleCopyBuild() {
-//   if (!currentDeck.value)
-//     return ElMessage.warning('请先获取队伍信息')
+function handleCopyBuild() {
+  if (!currentRecord.value)
+    return
 
-//   if (copy(JSON.stringify({ deckInfo: currentDeck.value, recordInfo: currentRecord.value })))
-//     ElMessage.success(`已成功复制配置信息`)
-// }
+  if (!currentDeck.value)
+    return ElMessage.warning('请先切换到游戏里的编成界面')
+
+  ElMessageBox.confirm(
+    '确认使用该队伍配置进行上传?',
+    '通知',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    },
+  )
+    .then(() => {
+      loading.value = true
+      uploadBuild(processData()).then(() => {
+        ElMessage.success('上传成功')
+        currentRecord.value!.isUploaded = true
+        dialogVisible.value = false
+      }).finally(() => {
+        loading.value = false
+      })
+    })
+    .catch(() => { })
+}
+
+function processData(): { deck: any, record: UploadRecord } {
+  const uploadRecord: BattleRecord = JSON.parse(JSON.stringify(currentRecord.value))
+  return {
+    deck: currentDeck.value,
+    record: {
+      questId: uploadRecord.quest_id,
+      raidId: uploadRecord.raid_id,
+      raidName: uploadRecord.raid_name,
+      bossImage: uploadRecord.imgId,
+      turn: uploadRecord.turn,
+      startTime: Math.floor((uploadRecord.startTimestamp ?? Date.now()) / 1000),
+      realSpeed: getRealTimeSpeed(uploadRecord),
+      fullSpeed: getFullTimeSpeed(uploadRecord),
+      player: uploadRecord.player?.map((player) => {
+        const { condition, ...rest } = player // 解构排除 image_id
+        return rest
+      }),
+      actionQueue: uploadRecord.actionQueue,
+      point: uploadRecord.point,
+      damage: uploadRecord.damage,
+    },
+  }
+}
 </script>
 
 <template>
@@ -114,7 +158,7 @@ function clear() {
     <ElTableColumn label="操作" align="center" width="150">
       <template #default="{ row, $index }">
         <div fc gap-20px p-10px text-base>
-          <!-- <div i-carbon:share icon-btn @click="handleShare(row)" /> -->
+          <div v-if="!row.isUploaded" i-carbon:share icon-btn @click="handleShare(row)" />
           <div v-if="row.reserve" i-carbon:locked icon-btn @click="triggerLock(row)" />
           <div v-else i-carbon:unlocked icon-btn @click="triggerLock(row)" />
           <div v-show="!row.reserve" i-carbon:trash-can icon-btn @click="battleRecord.splice($index, 1)" />
@@ -131,27 +175,24 @@ function clear() {
     </TheButton>
   </div>
 
-  <!-- <el-dialog v-model="dialogVisible" width="510" :show-close="false" top="5vh">
+  <el-dialog v-model="dialogVisible" width="510" :show-close="false" top="5vh">
     <div mb-4 flex items-center justify-between>
       <div>
         <el-alert title="切换至战斗记录所使用的的队伍" type="info" show-icon :closable="false" />
       </div>
-      <TheButton @click="handleCopyBuild">
-        复制配置信息
+      <TheButton :loading="loading" @click="handleCopyBuild">
+        上传配置信息
       </TheButton>
     </div>
 
     <el-card v-if="currentDeck" :body-style="{ padding: '10px' }" m-auto w-480px>
       <div relative fc flex-col gap-2>
         <div fc flex-wrap gap-2>
-          <Weapon :weapons="currentDeck.weapons" :damage-info="currentDeck.damageInfo" />
-          <Summon :summons="currentDeck.summons" :sub-summons="currentDeck.subSummons" :calculate-setting="currentDeck.calculateSetting" :quick-summoni-id="currentDeck.quickSummoniId" />
-          <Npc :npcs="currentDeck.npcs" :leader-ability-list="currentDeck.leaderAbilityList" :leader="currentDeck.leader" :set-action="currentDeck.setAction" :damage-info="currentDeck.damageInfo" />
-        </div>
-        <div fc>
-          <Effect :effect-value-info="currentDeck.damageInfo.effect_value_info" />
+          <Weapon :weapons="currentDeck.weapons" />
+          <Summon :summons="currentDeck.summons" />
+          <Npc :leader="currentDeck.leader" :npcs="currentDeck.npcs" />
         </div>
       </div>
     </el-card>
-  </el-dialog> -->
+  </el-dialog>
 </template>
