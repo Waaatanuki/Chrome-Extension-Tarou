@@ -94,7 +94,7 @@ async function capture() {
               <Npc v-show="npcChecked" :leader="deck.leader" :npcs="deck.npcs" />
             </div>
             <div fc>
-              <Effect v-show="effectChecked" :effect-value-info="deck.damageInfo.effect_value_info" />
+              <Effect v-show="effectChecked" :effects="deck.effects" />
             </div>
             <div i-carbon:close-outline absolute bottom--8px right--8px text-sm icon-btn @click="deckList.splice(idx, 1)" />
           </div>

@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import type { EffectValueInfo } from 'source'
+import type { BuildEffect } from 'party'
 
 defineProps<{
-  effectValueInfo: EffectValueInfo[]
+  effects: BuildEffect[]
 }>()
 </script>
 
 <template>
   <div flex flex-wrap justify-start gap-1 px-8 py-2>
     <div
-      v-for="effect in effectValueInfo" :key="effect.icon_img"
+      v-for="effect, idx in effects" :key="idx"
       w-190px flex items-center justify-between text-base
     >
-      <img w-100px :src="getSkillLabelIcon(effect.icon_img)">
-      <div :class="{ max: effect.is_max }">
+      <img w-100px :src="getSkillLabelIcon(effect.iconImg)">
+      <div :class="{ max: effect.isMax }">
         {{ effect.value }}
       </div>
     </div>

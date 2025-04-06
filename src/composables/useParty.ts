@@ -14,7 +14,7 @@ export const usePartyStore = defineStore('party', () => {
       priority: String(data.priority),
       leader: processLeader(data),
       npcs: processNpc(data),
-      damageInfo: Object.keys(data.pc.after_damage_info || []).length === 0 ? data.pc.damage_info : data.pc.after_damage_info,
+      effects: processEffect(data),
       calculateSetting: cloneDeep(hitSetting),
       weapon: processWeapon(data),
       summon: processSummon(data, hitSetting),
@@ -146,6 +146,11 @@ export const usePartyStore = defineStore('party', () => {
       }
     }
     return newNpcs
+  }
+
+  function processEffect(data: DeckJson) {
+    const damageInfo = Object.keys(data.pc.after_damage_info).length === 0 ? data.pc.damage_info : data.pc.after_damage_info
+    return damageInfo.effect_value_info.map(e => ({ iconImg: e.icon_img, isMax: e.is_max, value: e.value }))
   }
 
   return {

@@ -819,12 +819,12 @@ declare module 'battleLog'{
 }
 
 declare module 'party'{
-  import type { CalculateSetting, DamageInfo } from 'source'
+  import type { CalculateSetting } from 'source'
 
   interface Deck {
     priority: string
     leader: BuildLeader
-    damageInfo: DamageInfo
+    effects: BuildEffect[]
     calculateSetting?: CalculateSetting
     summon: BuildSummon[]
     weapon: BuildWeapon[]
@@ -884,6 +884,12 @@ declare module 'party'{
     imageId: string
     isMain: boolean
     isQuick: boolean
+  }
+
+  interface BuildEffect {
+    iconImg: string
+    isMax: boolean
+    value: string
   }
 }
 
