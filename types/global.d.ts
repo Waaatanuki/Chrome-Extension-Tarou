@@ -99,6 +99,7 @@ declare module 'myStorage' {
     abilityList: Action[]
     reserve: boolean
     isUploaded?: boolean
+    isFa?: boolean
   }
 
   interface UploadRecord {

@@ -61,6 +61,7 @@ function clear() {
 function handleShare(row: BattleRecord) {
   dialogVisible.value = true
   currentRecord.value = row
+  currentRecord.value.isFa = currentRecord.value.isFa ?? true
 }
 
 function handleCopyBuild() {
@@ -180,9 +181,21 @@ function processData(): { deck: any, record: UploadRecord } {
       <div>
         <el-alert title="切换至战斗记录所使用的的队伍" type="info" show-icon :closable="false" />
       </div>
-      <TheButton :loading="loading" @click="handleCopyBuild">
-        上传配置信息
-      </TheButton>
+
+      <div fc gap-6>
+        <div fc gap-2>
+          FA
+          <el-switch
+            v-model="currentRecord!.isFa"
+            inline-prompt
+            active-text="是"
+            inactive-text="否"
+          />
+        </div>
+        <TheButton :loading="loading" @click="handleCopyBuild">
+          上传配置信息
+        </TheButton>
+      </div>
     </div>
 
     <el-card v-if="currentDeck" :body-style="{ padding: '10px' }" m-auto w-480px>
