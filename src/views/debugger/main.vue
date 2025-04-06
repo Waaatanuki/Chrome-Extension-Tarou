@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Player } from 'myStorage'
-import type { BattleStartJson, GachaResult, NpcAbility, NpcInfo } from 'source'
+import type { BuildLeaderAbility, BuildNpc } from 'party'
+import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
@@ -211,35 +212,31 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           hitEvoker.isAbility4Release = !!(npcDetail.ability[4] && npcDetail.ability[4].quest?.is_clear)
 
         // 记录角色信息
-        const npcInfo: NpcInfo = {
-          id: npcDetail.id,
-          image_id_3: '',
-          has_npcaugment_constant: npcDetail.has_npcaugment_constant,
-          npc_arousal_form: String(npcDetail.npc_arousal_form),
-          master: {
-            id: npcDetail.master.id,
-            name: npcDetail.master.name,
-          },
-          action_ability: [],
+        const npcInfo: BuildNpc = {
+          paramId: npcDetail.id,
+          masterId: Number(npcDetail.master.id),
+          imageId: '',
+          isAugment: npcDetail.has_npcaugment_constant,
+          arousalForm: npcDetail.npc_arousal_form,
+          ability: [],
         }
 
         for (let i = 1; i <= 4; i++) {
           const currentAbility = npcDetail.ability[i]
           if (currentAbility) {
-            npcInfo.action_ability.push({
-              action_id: currentAbility.action_id,
-              icon_id: currentAbility.class_name,
-              name: currentAbility.name,
-              icon_type: currentAbility.icon_type,
-              user_full_auto_setting_flag: currentAbility.user_full_auto_setting_flag,
+            npcInfo.ability.push({
+              iconType: currentAbility.icon_type,
+              fa: !!currentAbility.user_full_auto_setting_flag,
             })
           }
         }
-        const hitIndex = localNpcList.value.findIndex(npc => npc.id === npcDetail.id)
+        const hitIndex = localNpcList.value.findIndex(npc => npc.paramId === npcDetail.id)
         if (hitIndex === -1)
           localNpcList.value.push(npcInfo)
         else
           localNpcList.value[hitIndex] = npcInfo
+
+        localNpcList.value = localNpcList.value.filter(n => !Object.hasOwn(n, 'id'))
       })
     }
 
@@ -279,29 +276,31 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     if (responseUrl.includes('/party/job_equipped')) {
       getResponse(tabId, requestId, (resp) => {
         const jobInfo = resp.job
-        const job_param_id = String(jobInfo.param.id)
+        const job_param_id = jobInfo.param.id
 
         for (let i = 1; i <= 4; i++) {
           const actionAbility = jobInfo.ability[i]
           if (actionAbility) {
-            const ab: NpcAbility = {
-              action_id: String(actionAbility.action_id),
-              icon_id: actionAbility.class_name,
+            const ab: BuildLeaderAbility = {
+              jobParamId: i === 1 ? job_param_id : 0,
+              actionId: String(actionAbility.action_id),
+              iconId: actionAbility.class_name,
               name: actionAbility.name,
-              icon_type: actionAbility.action_icon.split('_')[1],
-              user_full_auto_setting_flag: actionAbility.user_full_auto_setting_flag,
+              iconType: actionAbility.action_icon.split('_')[1],
+              fa: !!actionAbility.user_full_auto_setting_flag,
             }
-            if (i === 1) {
-              ab.job_param_id = job_param_id
-              jobAbilityList.value = jobAbilityList.value.filter(a => !(a.job_param_id === job_param_id && a.action_id !== ab.action_id))
-            }
-            const hitIndex = jobAbilityList.value.findIndex(a => a.action_id === ab.action_id)
+
+            if (i === 1)
+              jobAbilityList.value = jobAbilityList.value.filter(a => !(a.jobParamId === job_param_id && a.actionId !== ab.actionId))
+
+            const hitIndex = jobAbilityList.value.findIndex(a => a.actionId === ab.actionId)
             if (hitIndex === -1)
               jobAbilityList.value.push(ab)
             else
               jobAbilityList.value[hitIndex] = ab
           }
         }
+        jobAbilityList.value = jobAbilityList.value.filter(a => !Object.hasOwn(a, 'action_id'))
       })
     }
 
@@ -566,17 +565,17 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     // Party 角色技能切换fa开关
     if (requestUrl.includes('/npc/full_auto_ability_setting')) {
       const faAbilitySetting = JSON.parse(params.request.postData)
-      const hit = localNpcList.value.find(npc => npc.id === faAbilitySetting.user_npc_id)
+      const hit = localNpcList.value.find(npc => npc.paramId === faAbilitySetting.user_npc_id)
       if (hit)
-        hit.action_ability[faAbilitySetting.ability_num - 1].user_full_auto_setting_flag = faAbilitySetting.auto_execute_flag
+        hit.ability[faAbilitySetting.ability_num - 1].fa = !!faAbilitySetting.auto_execute_flag
     }
 
     //  Party 主角技能切换fa开关
     if (requestUrl.includes('/job/fullautosetting/pc_full_auto_setting')) {
       const faAbilitySetting = JSON.parse(params.request.postData)
-      const hit = jobAbilityList.value.find(a => a.action_id === String(faAbilitySetting.ability_id))
+      const hit = jobAbilityList.value.find(a => a.actionId === String(faAbilitySetting.ability_id))
       if (hit)
-        hit.user_full_auto_setting_flag = faAbilitySetting.auto_execute_flag
+        hit.fa = !!faAbilitySetting.auto_execute_flag
     }
 
     // Party 记录更改伤害计算设置

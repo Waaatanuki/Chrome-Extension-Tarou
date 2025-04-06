@@ -1,5 +1,5 @@
-import type { BuildSummon, BuildWeapon, Deck, SkillType } from 'party'
-import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'source'
+import type { BuildLeaderAbility, BuildNpc, BuildSummon, BuildWeapon, Deck, SkillType } from 'party'
+import type { CalculateSetting, DeckJson } from 'source'
 import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { calculateSettingList, jobAbilityList, localNpcList } from '~/logic'
@@ -8,59 +8,12 @@ export const usePartyStore = defineStore('party', () => {
   const deckList = ref<Deck[]>([])
 
   function handleDeckJson(data: DeckJson) {
-    const npcs = data.npc
-    const newNpcs: NpcInfo[] = []
-    for (let i = 1; i <= 5; i++) {
-      const npc = npcs[i]
-      if (npc?.param) {
-        const newNpc: NpcInfo = {
-          id: npc.param.id,
-          image_id_3: npc.param.image_id_3,
-          has_npcaugment_constant: npc.param.has_npcaugment_constant,
-          master: {
-            id: npc.master.id,
-            name: npc.master.name,
-          },
-          action_ability: [],
-        }
-        const hit = localNpcList.value.find(n => n.id === newNpc.id)
-        if (hit) {
-          newNpc.action_ability = hit.action_ability
-          newNpc.npc_arousal_form = hit.npc_arousal_form
-        }
-        newNpcs.push(newNpc)
-      }
-    }
-
-    // 获取主角技能
-    const job_param_id = String(data.pc.job.param.id)
-    const jobFirstAbility = jobAbilityList.value.find(a => a.job_param_id === job_param_id)
-
-    const leaderAbilityList: NpcAbility[] = []
-    const setAction: { name: string, set_action_id: string, icon_id?: string }[] = []
-    if (jobFirstAbility) {
-      leaderAbilityList[0] = jobFirstAbility
-      data.pc.set_action.forEach((ab, idx) => {
-        if (!ab.set_action_id)
-          return
-        const hitAb = jobAbilityList.value.find(a => a.action_id === ab.set_action_id)
-        const action: { name: string, set_action_id: string, icon_id?: string } = { name: ab.name, set_action_id: ab.set_action_id }
-        if (hitAb) {
-          leaderAbilityList[idx + 1] = { ...hitAb }
-          action.icon_id = hitAb.icon_id
-        }
-        setAction.push({ ...action })
-      })
-    }
-
     const hitSetting = calculateSettingList.value.find(item => item.priority === String(data.priority))
 
     deckList.value.unshift({
       priority: String(data.priority),
-      leader: data.pc.param,
-      leaderAbilityList,
-      npcs: newNpcs,
-      setAction,
+      leader: processLeader(data),
+      npcs: processNpc(data),
       damageInfo: Object.keys(data.pc.after_damage_info || []).length === 0 ? data.pc.damage_info : data.pc.after_damage_info,
       calculateSetting: cloneDeep(hitSetting),
       weapon: processWeapon(data),
@@ -142,6 +95,57 @@ export const usePartyStore = defineStore('party', () => {
     }
 
     return summon
+  }
+
+  function processLeader(data: DeckJson) {
+    const { job, param } = data.pc
+    const damageInfo = Object.keys(data.pc.after_damage_info).length === 0 ? data.pc.damage_info : data.pc.after_damage_info
+    const jobFirstAbility = jobAbilityList.value.find(a => a.jobParamId === job.param.id)
+
+    const leaderAbilityList: (BuildLeaderAbility | null)[] = []
+
+    leaderAbilityList[0] = jobFirstAbility ? { ...jobFirstAbility } : null
+    data.pc.set_action.forEach((ab) => {
+      if (!ab.set_action_id)
+        return
+      const hitAb = jobAbilityList.value.find(a => a.actionId === ab.set_action_id)
+      leaderAbilityList.push({
+        jobParamId: hitAb?.jobParamId ?? 0,
+        name: ab.name,
+        actionId: ab.set_action_id,
+        iconId: hitAb?.iconId ?? '',
+        iconType: hitAb?.iconType ?? '',
+        fa: hitAb?.fa ?? false,
+      })
+    })
+
+    return {
+      masterId: job.master.id,
+      imageId: param.image,
+      normalDamage: damageInfo.assumed_normal_damage,
+      advantageDamage: damageInfo.assumed_advantage_damage,
+      ability: leaderAbilityList,
+    }
+  }
+
+  function processNpc(data: DeckJson) {
+    const newNpcs: BuildNpc[] = []
+    for (let i = 1; i <= 5; i++) {
+      const npc = data.npc[i]
+      if (npc?.param) {
+        const hit = localNpcList.value.find(n => n.paramId === npc.param.id)
+
+        newNpcs.push({
+          paramId: npc.param.id,
+          masterId: Number(npc.master.id),
+          imageId: npc.param.image_id_3,
+          isAugment: npc.param.has_npcaugment_constant,
+          arousalForm: hit ? hit.arousalForm : 0,
+          ability: hit ? [...hit.ability] : [],
+        })
+      }
+    }
+    return newNpcs
   }
 
   return {

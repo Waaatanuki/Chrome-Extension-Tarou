@@ -587,6 +587,9 @@ declare module 'source'{
      quick_user_summon_id: number
      job: {
        param: {
+         id: number
+       }
+       master: {
          id: string
        }
      }
@@ -674,27 +677,6 @@ declare module 'source'{
        group_priority?: string
        priority?: string
      }
-   }
-
-   interface NpcInfo {
-     id: number
-     image_id_3: string
-     has_npcaugment_constant: boolean
-     npc_arousal_form?: string
-     master: {
-       id: string
-       name: string
-     }
-     action_ability: NpcAbility[]
-   }
-
-   interface NpcAbility {
-     action_id: string
-     icon_id: string
-     name: string
-     icon_type: string
-     user_full_auto_setting_flag: number
-     job_param_id?: string
    }
 
    interface SpecialSkillSetting {
@@ -837,21 +819,49 @@ declare module 'battleLog'{
 }
 
 declare module 'party'{
-  import type { CalculateSetting, DamageInfo, NpcAbility, NpcInfo } from 'source'
+  import type { CalculateSetting, DamageInfo } from 'source'
 
   interface Deck {
     priority: string
-    leader: { image: string }
-    leaderAbilityList: NpcAbility[]
-    npcs: NpcInfo[]
-    setAction: { name: string, set_action_id: string }[]
+    leader: BuildLeader
     damageInfo: DamageInfo
     calculateSetting?: CalculateSetting
     summon: BuildSummon[]
     weapon: BuildWeapon[]
+    leader: BuildLeader
+    npcs: BuildNpc[]
   }
 
   type SkillType = 'skill1' | 'skill2' | 'skill3'
+
+  interface BuildLeader {
+    masterId: string
+    imageId: string
+    normalDamage: number
+    advantageDamage: number
+    ability: (BuildLeaderAbility | null)[]
+  }
+
+  interface BuildLeaderAbility {
+    jobParamId: number
+    name: string
+    actionId: string
+    iconId: string
+    iconType: string
+    fa: boolean
+  }
+
+  interface BuildNpc {
+    paramId: number
+    masterId: number
+    imageId: string
+    isAugment: boolean
+    arousalForm?: number
+    ability: {
+      iconType: string
+      fa: boolean
+    }[]
+  }
 
   interface BuildWeapon {
     seriesId: number

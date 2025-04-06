@@ -1,6 +1,7 @@
 import type { DropInfo } from 'api'
 import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, NotificationSetting, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
-import type { CalculateSetting, NpcAbility, NpcInfo } from 'source'
+import type { BuildLeaderAbility, BuildNpc } from 'party'
+import type { CalculateSetting } from 'source'
 import dayjs from 'dayjs'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultNotificationItem, defaultNotificationSetting, defaultTodoList } from '~/constants'
@@ -47,8 +48,8 @@ export const battleMemo = useWebExtensionStorage<BattleMemo[]>('battleMemo', [])
 export const failedDropInfoList = useWebExtensionStorage<DropInfo[]>('failedDropInfoList', [])
 
 // Party
-export const jobAbilityList = useWebExtensionStorage<NpcAbility[]>('jobAbilityList', [])
-export const localNpcList = useWebExtensionStorage<NpcInfo[]>('localNpcList', [])
+export const jobAbilityList = useWebExtensionStorage<BuildLeaderAbility[]>('jobAbilityList', [])
+export const localNpcList = useWebExtensionStorage<BuildNpc[]>('localNpcList', [])
 export const calculateSettingList = useWebExtensionStorage<CalculateSetting[]>('calculateSettingList', [])
 
 // MarkedUser
