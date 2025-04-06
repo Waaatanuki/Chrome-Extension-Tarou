@@ -102,7 +102,7 @@ async function capture() {
           <div relative fc flex-col gap-2>
             <div fc flex-wrap gap-2>
               <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
-              <Summon v-show="summonChecked" :main-summon="deck.mainSummon" :sub-summon="deck.subSummon" />
+              <Summon v-show="summonChecked" :summon="deck.summon" />
               <Npc v-show="npcChecked" :npcs="deck.npcs" :leader-ability-list="deck.leaderAbilityList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
             </div>
             <div fc>

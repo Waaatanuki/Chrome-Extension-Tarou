@@ -55,8 +55,6 @@ export const usePartyStore = defineStore('party', () => {
 
     const hitSetting = calculateSettingList.value.find(item => item.priority === String(data.priority))
 
-    const { mainSummon, subSummon } = processSummon(data, hitSetting)
-
     deckList.value.unshift({
       priority: String(data.priority),
       leader: data.pc.param,
@@ -66,8 +64,7 @@ export const usePartyStore = defineStore('party', () => {
       weapons: data.pc.weapons,
       damageInfo: Object.keys(data.pc.after_damage_info || []).length === 0 ? data.pc.damage_info : data.pc.after_damage_info,
       calculateSetting: cloneDeep(hitSetting),
-      mainSummon,
-      subSummon,
+      summon: processSummon(data, hitSetting),
     })
 
     if (deckList.value.length > 10)
@@ -83,39 +80,38 @@ export const usePartyStore = defineStore('party', () => {
   }
 
   function processSummon(data: DeckJson, setting?: CalculateSetting) {
-    const summons = data.pc.summons
-    const sub_summons = data.pc.sub_summons
-    const quickSummonId = Number(data.pc.quick_user_summon_id)
+    const { summons, sub_summons, quick_user_summon_id } = data.pc
+    const quickSummonId = Number(quick_user_summon_id)
 
-    const mainSummon: (BuildSummon | null)[] = [{ imageId: summons[1].param!.image_id, paramId: Number(summons[1].param!.id), isQuick: quickSummonId === Number(summons[1].param!.id) }]
-    const subSummon: (BuildSummon | null)[] = []
-
-    for (let i = 2; i <= 5; i++) {
-      const summon = summons[i]
-      if (summon.param) {
-        const isQuick = quickSummonId === Number(summon.param.id)
-        subSummon.push({ imageId: summon.param.image_id, paramId: Number(summon.param.id), isQuick })
-      }
-      else {
-        subSummon.push(null)
+    const createSummon = (summon: typeof summons[number], isMain: boolean): BuildSummon => {
+      return {
+        paramId: Number(summon.param?.id ?? 0),
+        masterId: Number(summon.master?.id ?? 0),
+        rarity: Number(summon.master?.rarity ?? 0),
+        imageId: summon.param?.image_id ?? '',
+        isMain,
+        isQuick: quickSummonId === Number(summon.param?.id),
       }
     }
 
-    for (let i = 1; i <= 2; i++) {
-      const summon = sub_summons[i]
-      if (summon.param) {
-        const isQuick = quickSummonId === Number(summon.param.id)
-        subSummon.push({ imageId: summon.param.image_id, paramId: Number(summon.param.id), isQuick })
-      }
-      else {
-        subSummon.push(null)
-      }
+    const summon: BuildSummon[] = [
+      createSummon(summons[1], true),
+      ...[2, 3, 4, 5].map(i => createSummon(summons[i], false)),
+      ...[1, 2].map(i => createSummon(sub_summons[i], false)),
+    ]
+
+    if (setting?.setting.summon_id) {
+      summon.push ({
+        paramId: 0,
+        masterId: 0,
+        rarity: 0,
+        imageId: setting.setting.image_id!,
+        isMain: true,
+        isQuick: false,
+      })
     }
 
-    if (setting?.setting.summon_id)
-      mainSummon[1] = { imageId: setting.setting.image_id!, paramId: 0, isQuick: false }
-
-    return { mainSummon, subSummon }
+    return summon
   }
 
   return {

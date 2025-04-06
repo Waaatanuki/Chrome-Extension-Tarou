@@ -595,6 +595,12 @@ declare module 'source'{
    interface DeckSummon {
      [key: string]: {
        param?: SummonParam
+       master?: {
+         attribute: string
+         id: string
+         name: string
+         rarity: string
+       }
      }
    }
 
@@ -842,13 +848,15 @@ declare module 'party'{
     weapons: DeckWeapon
     damageInfo: DamageInfo
     calculateSetting?: CalculateSetting
-    mainSummon: (BuildSummon | null)[]
-    subSummon: (BuildSummon | null)[]
+    summon: BuildSummon[]
   }
 
   interface BuildSummon {
     paramId: number
+    masterId: number
+    rarity: number
     imageId: string
+    isMain: boolean
     isQuick: boolean
   }
 }

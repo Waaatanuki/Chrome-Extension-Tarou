@@ -138,7 +138,7 @@ const showDamage = computed(() => {
       <ElCard>
         <div v-if="deck1" fc gap-2>
           <Weapon :weapons="deck1.weapons" :simple-checked="false" :damage-info="deck1.damageInfo" />
-          <Summon :main-summon="deck1.mainSummon" :sub-summon="deck1.subSummon" />
+          <Summon :summon="deck1.summon" />
         </div>
         <div v-else m-auto w-100>
           <el-alert type="info" effect="dark" show-icon center :closable="false" title="进入编成界面,读取队伍信息,设定队伍1" />
@@ -167,7 +167,7 @@ const showDamage = computed(() => {
       <ElCard>
         <div v-if="deck2" fc gap-2>
           <Weapon :weapons="deck2.weapons" :simple-checked="false" :damage-info="deck2.damageInfo" />
-          <Summon :main-summon="deck2.mainSummon" :sub-summon="deck2.subSummon" />
+          <Summon :summon="deck2.summon" />
         </div>
         <div v-else m-auto w-100>
           <el-alert type="info" effect="dark" show-icon center :closable="false" title="点击中间箭头锁定队伍1,切换队伍,设定队伍2" />

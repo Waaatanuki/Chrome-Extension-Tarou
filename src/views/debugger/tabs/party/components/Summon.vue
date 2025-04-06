@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { BuildSummon } from 'party'
 
-defineProps<{
-  mainSummon: (BuildSummon | null)[]
-  subSummon: (BuildSummon | null)[]
-}>()
+const { summon } = defineProps<{ summon: BuildSummon[] }>()
+
+const mainSummon = computed(() => summon.filter(summon => summon.isMain))
+const subSummon = computed(() => summon.filter(summon => !summon.isMain))
 </script>
 
 <template>
@@ -14,9 +14,9 @@ defineProps<{
       <img v-if="mainSummon[0]!.isQuick" :src="getLocalImg('ico-summon-quick')" absolute left-1 top-1 h-30px w-30px>
     </div>
     <div w-250px fc flex-wrap gap-5px>
-      <div v-for="summon, idx in subSummon" :key="idx" class="party_summon_wrapper">
-        <img v-if="summon?.imageId" w-full :src="getAssetImg('summon', summon.imageId)">
-        <img v-if="summon?.isQuick" :src="getLocalImg('ico-summon-quick')" absolute left-1 top-1 h-20px w-20px>
+      <div v-for="s, idx in subSummon" :key="idx" class="party_summon_wrapper">
+        <img v-if="s.imageId" w-full :src="getAssetImg('summon', s.imageId)">
+        <img v-if="s.isQuick" :src="getLocalImg('ico-summon-quick')" absolute left-1 top-1 h-20px w-20px>
       </div>
     </div>
     <div v-if="mainSummon[1]" h-full w-100px>
