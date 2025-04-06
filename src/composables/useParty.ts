@@ -16,8 +16,8 @@ export const usePartyStore = defineStore('party', () => {
       npcs: processNpc(data),
       effects: processEffect(data),
       calculateSetting: cloneDeep(hitSetting),
-      weapon: processWeapon(data),
-      summon: processSummon(data, hitSetting),
+      weapons: processWeapon(data),
+      summons: processSummon(data, hitSetting),
     })
 
     if (deckList.value.length > 10)

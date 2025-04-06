@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { BuildSummon } from 'party'
 
-const { summon } = defineProps<{ summon: BuildSummon[] }>()
+const { summons } = defineProps<{ summons: BuildSummon[] }>()
 
-const mainSummon = computed(() => summon.filter(summon => summon.isMain))
-const subSummon = computed(() => summon.filter(summon => !summon.isMain))
+const mainSummon = computed(() => summons.filter(summon => summon.isMain))
+const subSummon = computed(() => summons.filter(summon => !summon.isMain))
 </script>
 
 <template>

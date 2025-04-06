@@ -5,17 +5,17 @@ import Summon from './Summon.vue'
 import Weapon from './Weapon.vue'
 
 interface Result {
-  icon_img: string
+  iconImg: string
   diff: -1 | 0 | 1
   value1: {
     str: string
     value: number
-    is_max: boolean
+    isMax: boolean
   }
   value2: {
     str: string
     value: number
-    is_max: boolean
+    isMax: boolean
   }
 }
 
@@ -52,41 +52,41 @@ function toggleLock() {
 const compareResult = computed<Result[]>(() => {
   if (!deck1.value || !deck2.value)
     return []
-  const list: Result[] = deck1.value.damageInfo.effect_value_info.map(v => ({
-    icon_img: v.icon_img,
+  const list: Result[] = deck1.value.effects.map(v => ({
+    iconImg: v.iconImg,
     value1: {
       str: v.value,
       value: Number(String(v.value).match(regex)![0]),
-      is_max: v.is_max,
+      isMax: v.isMax,
     },
     value2: {
       str: String(v.value).replace(regex, '0'),
       value: 0,
-      is_max: false,
+      isMax: false,
     },
     diff: 0,
   }))
-  deck2.value.damageInfo.effect_value_info.forEach((v) => {
-    const hit = list.find(item => item.icon_img === v.icon_img)
+  deck2.value.effects.forEach((v) => {
+    const hit = list.find(item => item.iconImg === v.iconImg)
     if (hit) {
       hit.value2 = {
         str: v.value,
         value: Number(String(v.value).match(regex)![0]),
-        is_max: v.is_max,
+        isMax: v.isMax,
       }
     }
     else {
       list.push({
-        icon_img: v.icon_img,
+        iconImg: v.iconImg,
         value1: {
           str: String(v.value).replace(regex, '0'),
           value: 0,
-          is_max: false,
+          isMax: false,
         },
         value2: {
           str: v.value,
           value: Number(String(v.value).match(regex)![0]),
-          is_max: v.is_max,
+          isMax: v.isMax,
         },
         diff: 0,
       })
@@ -104,8 +104,8 @@ function dataSort(data: Result[]) {
     if (diffOrder[a.diff] > diffOrder[b.diff])
       return 1
 
-    const aIconPrefix = Number.parseInt(a.icon_img.substring(0, 2))
-    const bIconPrefix = Number.parseInt(b.icon_img.substring(0, 2))
+    const aIconPrefix = Number.parseInt(a.iconImg.substring(0, 2))
+    const bIconPrefix = Number.parseInt(b.iconImg.substring(0, 2))
 
     return aIconPrefix - bIconPrefix
   })
@@ -114,17 +114,17 @@ function dataSort(data: Result[]) {
 const showDamage = computed(() => {
   if (!deck1.value || !deck2.value)
     return
-  const assumed_normal_damage_diff = deck1.value.damageInfo.assumed_normal_damage - deck2.value.damageInfo.assumed_normal_damage
-  const assumed_advantage_damage_diff = deck1.value.damageInfo.assumed_advantage_damage - deck2.value.damageInfo.assumed_advantage_damage
+  const assumed_normal_damage_diff = deck1.value.leader.normalDamage - deck2.value.leader.normalDamage
+  const assumed_advantage_damage_diff = deck1.value.leader.advantageDamage - deck2.value.leader.advantageDamage
 
   return {
     assumed_normal_damage: {
-      base: deck1.value.damageInfo.assumed_normal_damage.toLocaleString(),
+      base: deck1.value.leader.normalDamage.toLocaleString(),
       diff: Math.abs(assumed_normal_damage_diff).toLocaleString(),
       mark: assumed_normal_damage_diff > 0 ? -1 : 1,
     },
     assumed_advantage_damage: {
-      base: deck1.value.damageInfo.assumed_advantage_damage.toLocaleString(),
+      base: deck1.value.leader.advantageDamage.toLocaleString(),
       diff: Math.abs(assumed_advantage_damage_diff).toLocaleString(),
       mark: assumed_advantage_damage_diff > 0 ? -1 : 1,
     },
@@ -137,8 +137,8 @@ const showDamage = computed(() => {
     <div fc flex-col gap-10px>
       <ElCard>
         <div v-if="deck1" fc gap-2>
-          <Weapon :weapon="deck1.weapon" />
-          <Summon :summon="deck1.summon" />
+          <Weapon :weapons="deck1.weapons" />
+          <Summon :summons="deck1.summons" />
         </div>
         <div v-else m-auto w-100>
           <el-alert type="info" effect="dark" show-icon center :closable="false" title="进入编成界面,读取队伍信息,设定队伍1" />
@@ -166,8 +166,8 @@ const showDamage = computed(() => {
       </div>
       <ElCard>
         <div v-if="deck2" fc gap-2>
-          <Weapon :weapon="deck2.weapon" />
-          <Summon :summon="deck2.summon" />
+          <Weapon :weapons="deck2.weapons" />
+          <Summon :summons="deck2.summons" />
         </div>
         <div v-else m-auto w-100>
           <el-alert type="info" effect="dark" show-icon center :closable="false" title="点击中间箭头锁定队伍1,切换队伍,设定队伍2" />
@@ -178,17 +178,17 @@ const showDamage = computed(() => {
       <ElScrollbar max-height="556px">
         <div w-306px fc flex-col gap-10px p-3px>
           <div
-            v-for="effect in dataSort(compareResult)" :key="effect.icon_img"
+            v-for="effect in dataSort(compareResult)" :key="effect.iconImg"
             w-300px flex items-center justify-between text-base
             :class="{ effect_up: effect.diff === 1, effect_down: effect.diff === -1 }"
           >
-            <img w-100px :src="getSkillLabelIcon(effect.icon_img)">
+            <img w-100px :src="getSkillLabelIcon(effect.iconImg)">
             <div fc>
-              <div :class="{ max: effect.value1.is_max }">
+              <div :class="{ max: effect.value1.isMax }">
                 {{ effect.value1.str }}
               </div>
               <div i-carbon:direction-straight-right mx-5px />
-              <div :class="{ max: effect.value2.is_max }">
+              <div :class="{ max: effect.value2.isMax }">
                 {{ effect.value2.str }}
               </div>
             </div>

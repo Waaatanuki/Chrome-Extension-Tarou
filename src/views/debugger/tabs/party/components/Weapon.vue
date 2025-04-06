@@ -2,10 +2,10 @@
 import type { BuildWeapon } from 'party'
 import { weaponSkill } from '~/constants/skill'
 
-const { weapon } = defineProps<{ weapon: BuildWeapon[] }>()
+const { weapons } = defineProps<{ weapons: BuildWeapon[] }>()
 
-const mainWeapon = computed(() => weapon.find(weapon => weapon.isMain)!)
-const subWeapon = computed(() => weapon.filter(weapon => !weapon.isMain))
+const mainWeapon = computed(() => weapons.find(weapon => weapon.isMain)!)
+const subWeapon = computed(() => weapons.filter(weapon => !weapon.isMain))
 
 function getSkillAlias(weapon: BuildWeapon) {
   const seriesId = String(weapon.seriesId)

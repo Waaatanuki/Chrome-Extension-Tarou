@@ -826,8 +826,8 @@ declare module 'party'{
     leader: BuildLeader
     effects: BuildEffect[]
     calculateSetting?: CalculateSetting
-    summon: BuildSummon[]
-    weapon: BuildWeapon[]
+    summons: BuildSummon[]
+    weapons: BuildWeapon[]
     leader: BuildLeader
     npcs: BuildNpc[]
   }
