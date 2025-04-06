@@ -1,4 +1,4 @@
-import type { BuildSummon, Deck } from 'party'
+import type { BuildSummon, BuildWeapon, Deck, SkillType } from 'party'
 import type { CalculateSetting, DeckJson, NpcAbility, NpcInfo } from 'source'
 import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
@@ -61,9 +61,9 @@ export const usePartyStore = defineStore('party', () => {
       leaderAbilityList,
       npcs: newNpcs,
       setAction,
-      weapons: data.pc.weapons,
       damageInfo: Object.keys(data.pc.after_damage_info || []).length === 0 ? data.pc.damage_info : data.pc.after_damage_info,
       calculateSetting: cloneDeep(hitSetting),
+      weapon: processWeapon(data),
       summon: processSummon(data, hitSetting),
     })
 
@@ -77,6 +77,36 @@ export const usePartyStore = defineStore('party', () => {
       hit.setting = { ...data.setting }
     else
       calculateSettingList.value.push(cloneDeep(data))
+  }
+
+  function processWeapon(data: DeckJson) {
+    const { weapons } = data.pc
+
+    const createWeapon = (weapon: typeof weapons[number], isMain: boolean): BuildWeapon => {
+      return weapon
+        ? {
+            seriesId: Number(weapon.master?.series_id),
+            masterId: Number(weapon.master?.id),
+            imageId: weapon.param?.image_id ?? '',
+            level: weapon.param?.level ?? '',
+            arousalForm: weapon.param?.arousal.form ?? 0,
+            skill: [1, 2, 3].map((num) => {
+              const skillType = `skill${num}` as SkillType
+              const skill = weapon[skillType]
+              return skill
+                ? {
+                    type: skillType,
+                    description: skill.description,
+                    image: skill.image,
+                  }
+                : null
+            }).filter(s => s !== null),
+            isMain,
+          }
+        : { seriesId: 0, masterId: 0, imageId: '', level: '', arousalForm: 0, skill: [], isMain }
+    }
+
+    return Array.from({ length: 13 }, (_, i) => i + 1).map(i => createWeapon(weapons[i], i === 1))
   }
 
   function processSummon(data: DeckJson, setting?: CalculateSetting) {

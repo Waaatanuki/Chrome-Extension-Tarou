@@ -1,37 +1,41 @@
 <script setup lang="ts">
-import type { DeckWeapon, WeaponDetail } from 'source'
+import type { BuildWeapon } from 'party'
 import { weaponSkill } from '~/constants/skill'
 
-defineProps<{ weapons: DeckWeapon }>()
+const { weapon } = defineProps<{ weapon: BuildWeapon[] }>()
 
-function getSkillAlias(weapon: WeaponDetail) {
-  const series_id = weapon?.master?.series_id
-  if (!series_id)
+const mainWeapon = computed(() => weapon.find(weapon => weapon.isMain)!)
+const subWeapon = computed(() => weapon.filter(weapon => !weapon.isMain))
+
+function getSkillAlias(weapon: BuildWeapon) {
+  const seriesId = String(weapon.seriesId)
+  if (!seriesId)
     return
 
-  const hit = weaponSkill.find(category => category.series_id.includes(series_id))
-  if (!hit)
+  const hitWeaponSkill = weaponSkill.find(category => category.series_id.includes(seriesId))
+  if (!hitWeaponSkill)
     return
 
-  const description = weapon[hit.type as 'skill2' | 'skill3']?.description
+  const hitSkilll = weapon.skill.find(skill => hitWeaponSkill.type === skill.type)
+  const description = hitSkilll?.description
   if (!description)
     return
 
-  return hit.list.find(skill => description.includes(skill.comment) || description.includes(skill.comment_en))?.alias
+  return hitWeaponSkill.list.find(skill => description.includes(skill.comment) || description.includes(skill.comment_en))?.alias
 }
 
 // 判断是不是U武(13)
-function isUW(weapon: WeaponDetail) {
-  return weapon?.master?.series_id === '13'
+function isUW(weapon: BuildWeapon) {
+  return weapon.seriesId === 13
 }
 
 // 判断是不是法武(3)
-function isFW(weapon: WeaponDetail) {
-  return weapon?.master?.series_id === '3'
+function isFW(weapon: BuildWeapon) {
+  return weapon.seriesId === 3
 }
 
 // 判断是不是法武(3)或者U武(13)
-function isFWorUW(weapon: WeaponDetail) {
+function isFWorUW(weapon: BuildWeapon) {
   return isFW(weapon) || isUW(weapon)
 }
 </script>
@@ -40,29 +44,29 @@ function isFWorUW(weapon: WeaponDetail) {
   <div fc flex-col>
     <div h-210px fc>
       <div relative w-100px>
-        <img w-full :src="getAssetImg('weapon', weapons[1].param.image_id, 'ls')">
+        <img w-full :src="getAssetImg('weapon', mainWeapon.imageId, 'ls')">
         <div class="prt-ultimate-star-wrapper">
-          <div class="prt-ultimate-star-on" :data-level=" weapons[1].param.level" />
+          <div class="prt-ultimate-star-on" :data-level="mainWeapon.level" />
         </div>
-        <img v-if="weapons[1]?.param?.arousal.form" class="ico-arousal-main-type" :src="getArousalIcon(weapons[1]?.param?.arousal.form)">
-        <ElTag v-if="getSkillAlias (weapons[1])" type="danger" size="small" class="skill-tag">
-          {{ getSkillAlias (weapons[1]) }}
+        <img v-if="mainWeapon.arousalForm" class="ico-arousal-main-type" :src="getArousalIcon(mainWeapon.arousalForm)">
+        <ElTag v-if="getSkillAlias (mainWeapon)" type="danger" size="small" class="skill-tag">
+          {{ getSkillAlias (mainWeapon) }}
         </ElTag>
-        <img v-if="weapons[1]?.skill1?.image && isUW(weapons[1])" class="skill1-icon" :src="getSkillIcon(weapons[1]?.skill1?.image)">
-        <img v-if="weapons[1]?.skill2?.image && isFWorUW(weapons[1])" class="skill2-icon" :src="getSkillIcon(weapons[1]?.skill2?.image)">
+        <img v-if="mainWeapon.skill.find(s => s.type === 'skill1')?.image && isUW(mainWeapon)" class="skill1-icon" :src="getSkillIcon(mainWeapon, 'skill1')">
+        <img v-if="mainWeapon.skill.find(s => s.type === 'skill2')?.image && isFWorUW(mainWeapon)" class="skill2-icon" :src="getSkillIcon(mainWeapon, 'skill2')">
       </div>
       <div w-275px fc flex-wrap gap-5px>
-        <div v-for="idx in 12" :key="idx" class="party_weapon_wrapper">
-          <img v-if="weapons[idx + 1]?.param?.image_id" w-full :src="getAssetImg('weapon', weapons[idx + 1]?.param?.image_id)">
+        <div v-for="w, idx in subWeapon" :key="idx" class="party_weapon_wrapper">
+          <img v-if="w.imageId" w-full :src="getAssetImg('weapon', w.imageId)">
           <div class="prt-ultimate-star-wrapper">
-            <div class="prt-ultimate-star-on" :data-level="weapons[idx + 1]?.param?.level" />
+            <div class="prt-ultimate-star-on" :data-level="w.level" />
           </div>
-          <img v-if="weapons[idx + 1]?.param?.arousal.form" class="ico-arousal-type" :src="getArousalIcon(weapons[idx + 1]?.param?.arousal.form)">
-          <ElTag v-if="getSkillAlias (weapons[idx + 1])" type="danger" size="small" class="skill-tag">
-            {{ getSkillAlias (weapons[idx + 1]) }}
+          <img v-if="w.arousalForm" class="ico-arousal-type" :src="getArousalIcon(w.arousalForm)">
+          <ElTag v-if="getSkillAlias (w)" type="danger" size="small" class="skill-tag">
+            {{ getSkillAlias(w) }}
           </ElTag>
-          <img v-if="weapons[idx + 1]?.skill1?.image && isUW(weapons[idx + 1])" class="skill1-icon" :src="getSkillIcon(weapons[idx + 1]?.skill1?.image)">
-          <img v-if="weapons[idx + 1]?.skill2?.image && isFWorUW(weapons[idx + 1])" class="skill2-icon" :src="getSkillIcon(weapons[idx + 1]?.skill2?.image)">
+          <img v-if="w.skill.find(s => s.type === 'skill1')?.image && isUW(w)" class="skill1-icon" :src="getSkillIcon(w, 'skill1')">
+          <img v-if="w.skill.find(s => s.type === 'skill2')?.image && isFWorUW(w)" class="skill2-icon" :src="getSkillIcon(w, 'skill2')">
         </div>
       </div>
     </div>

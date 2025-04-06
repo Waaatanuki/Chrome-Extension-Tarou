@@ -137,7 +137,7 @@ const showDamage = computed(() => {
     <div fc flex-col gap-10px>
       <ElCard>
         <div v-if="deck1" fc gap-2>
-          <Weapon :weapons="deck1.weapons" :simple-checked="false" :damage-info="deck1.damageInfo" />
+          <Weapon :weapon="deck1.weapon" />
           <Summon :summon="deck1.summon" />
         </div>
         <div v-else m-auto w-100>
@@ -166,7 +166,7 @@ const showDamage = computed(() => {
       </div>
       <ElCard>
         <div v-if="deck2" fc gap-2>
-          <Weapon :weapons="deck2.weapons" :simple-checked="false" :damage-info="deck2.damageInfo" />
+          <Weapon :weapon="deck2.weapon" />
           <Summon :summon="deck2.summon" />
         </div>
         <div v-else m-auto w-100>

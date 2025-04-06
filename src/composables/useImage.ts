@@ -1,4 +1,5 @@
 import type { Action } from 'myStorage'
+import type { BuildWeapon, SkillType } from 'party'
 import type { Buff } from 'source'
 
 const imgUri = 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img'
@@ -39,8 +40,9 @@ export function getAbilityIcon(id: string) {
   return `${imgUri}/sp/ui/icon/ability/m/${id}.png`
 }
 
-export function getSkillIcon(id: string) {
-  return `${imgUri}/sp/ui/icon/skill/${id}.png`
+export function getSkillIcon(weapon: BuildWeapon, skillType: SkillType) {
+  const skill = weapon.skill.find(s => s.type === skillType)
+  return `${imgUri}/sp/ui/icon/skill/${skill?.image}.png`
 }
 
 export function getSkillLabelIcon(id: string) {

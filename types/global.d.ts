@@ -621,11 +621,11 @@ declare module 'source'{
    }
 
    interface WeaponDetail {
-     master: WeaponMaster
-     param: WeaponParam
-     skill1: WeaponSkill
-     skill2: WeaponSkill
-     skill3: WeaponSkill
+     master?: WeaponMaster
+     param?: WeaponParam
+     skill1?: WeaponSkill
+     skill2?: WeaponSkill
+     skill3?: WeaponSkill
    }
 
    interface WeaponMaster {
@@ -837,7 +837,7 @@ declare module 'battleLog'{
 }
 
 declare module 'party'{
-  import type { CalculateSetting, DamageInfo, DeckWeapon, NpcAbility, NpcInfo } from 'source'
+  import type { CalculateSetting, DamageInfo, NpcAbility, NpcInfo } from 'source'
 
   interface Deck {
     priority: string
@@ -845,10 +845,26 @@ declare module 'party'{
     leaderAbilityList: NpcAbility[]
     npcs: NpcInfo[]
     setAction: { name: string, set_action_id: string }[]
-    weapons: DeckWeapon
     damageInfo: DamageInfo
     calculateSetting?: CalculateSetting
     summon: BuildSummon[]
+    weapon: BuildWeapon[]
+  }
+
+  type SkillType = 'skill1' | 'skill2' | 'skill3'
+
+  interface BuildWeapon {
+    seriesId: number
+    masterId: number
+    imageId: string
+    level: string
+    arousalForm?: number
+    skill: {
+      type: SkillType
+      description: string
+      image: string
+    }[]
+    isMain: boolean
   }
 
   interface BuildSummon {

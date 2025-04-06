@@ -89,7 +89,7 @@ async function capture() {
         <ElCard v-for="deck, idx in deckList" ref="cardEl" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px cursor-pointer select-none>
           <div relative fc flex-col gap-2>
             <div fc flex-wrap gap-2>
-              <Weapon v-show="weaponChecked" :weapons="deck.weapons" />
+              <Weapon v-show="weaponChecked" :weapon="deck.weapon" />
               <Summon v-show="summonChecked" :summon="deck.summon" />
               <Npc v-show="npcChecked" :npcs="deck.npcs" :leader-ability-list="deck.leaderAbilityList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
             </div>
