@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import type { DamageInfo, DeckWeapon, WeaponDetail } from 'source'
+import type { DeckWeapon, WeaponDetail } from 'source'
 import { weaponSkill } from '~/constants/skill'
 
-defineProps<{
-  weapons: DeckWeapon
-  simpleChecked?: boolean
-  damageInfo: DamageInfo
-}>()
+defineProps<{ weapons: DeckWeapon }>()
 
 function getSkillAlias(weapon: WeaponDetail) {
   const series_id = weapon?.master?.series_id
@@ -69,10 +65,6 @@ function isFWorUW(weapon: WeaponDetail) {
           <img v-if="weapons[idx + 1]?.skill2?.image && isFWorUW(weapons[idx + 1])" class="skill2-icon" :src="getSkillIcon(weapons[idx + 1]?.skill2?.image)">
         </div>
       </div>
-    </div>
-    <div v-show="simpleChecked" w-full flex items-center justify-between p-10px text-base>
-      <div>预测伤害：{{ damageInfo.assumed_normal_damage.toLocaleString() }}</div>
-      <div>克属伤害：{{ damageInfo.assumed_advantage_damage.toLocaleString() }}</div>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CardInstance, CheckboxValueType } from 'element-plus'
+import type { CardInstance } from 'element-plus'
 import { VueDraggableNext } from 'vue-draggable-next'
 import BuildCompare from './components/BuildCompare.vue'
 import Effect from './components/Effect.vue'
@@ -9,20 +9,12 @@ import Weapon from './components/Weapon.vue'
 
 const partyStore = usePartyStore()
 const { deckList } = storeToRefs(partyStore)
-const simpleChecked = ref(false)
 const weaponChecked = ref(true)
 const summonChecked = ref(true)
 const npcChecked = ref(true)
 const effectChecked = ref(true)
 const dialogVisiable = ref(false)
 const cardEl = ref<CardInstance[]>()
-
-function triggerSimpleModel(value: CheckboxValueType) {
-  weaponChecked.value = !value
-  summonChecked.value = !value
-  npcChecked.value = !value
-  effectChecked.value = !value
-}
 
 async function capture() {
   if (deckList.value.length === 0)
@@ -58,23 +50,19 @@ async function capture() {
 <template>
   <div mb-2 flex items-center justify-between px-5>
     <div fc>
-      <ElCheckboxButton v-model="simpleChecked" @change="triggerSimpleModel">
-        简略模式
-      </ElCheckboxButton>
-
-      <ElCheckboxButton v-model="weaponChecked" :disabled="simpleChecked">
+      <ElCheckboxButton v-model="weaponChecked">
         武器
       </ElCheckboxButton>
 
-      <ElCheckboxButton v-model="summonChecked" :disabled="simpleChecked">
+      <ElCheckboxButton v-model="summonChecked">
         召唤
       </ElCheckboxButton>
 
-      <ElCheckboxButton v-model="npcChecked" :disabled="simpleChecked">
+      <ElCheckboxButton v-model="npcChecked">
         队伍
       </ElCheckboxButton>
 
-      <ElCheckboxButton v-model="effectChecked" :disabled="simpleChecked">
+      <ElCheckboxButton v-model="effectChecked">
         效果量
       </ElCheckboxButton>
 
@@ -92,7 +80,7 @@ async function capture() {
       清空队伍
     </TheButton>
   </div>
-  <div fc flex-col gap-2 :class="{ simpleMode: simpleChecked }">
+  <div fc flex-col gap-2>
     <div v-if="deckList.length === 0" m-auto w-100>
       <el-alert type="info" effect="dark" show-icon center :closable="false" title="进入编成界面读取队伍信息" />
     </div>
@@ -101,7 +89,7 @@ async function capture() {
         <ElCard v-for="deck, idx in deckList" ref="cardEl" :key="idx" :body-style="{ padding: '10px' }" max-w-1300px cursor-pointer select-none>
           <div relative fc flex-col gap-2>
             <div fc flex-wrap gap-2>
-              <Weapon v-show="weaponChecked || simpleChecked" :weapons="deck.weapons" :simple-checked="simpleChecked" :damage-info="deck.damageInfo" />
+              <Weapon v-show="weaponChecked" :weapons="deck.weapons" />
               <Summon v-show="summonChecked" :summon="deck.summon" />
               <Npc v-show="npcChecked" :npcs="deck.npcs" :leader-ability-list="deck.leaderAbilityList" :leader="deck.leader" :set-action="deck.setAction" :damage-info="deck.damageInfo" />
             </div>
@@ -119,10 +107,3 @@ async function capture() {
     <BuildCompare :last-deck="deckList[0]" />
   </ElDialog>
 </template>
-
-<style scoped>
-.simpleMode{
-  flex-wrap: wrap;
-  flex-direction: row !important
-}
-</style>
