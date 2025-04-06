@@ -8,16 +8,13 @@ export const usePartyStore = defineStore('party', () => {
   const deckList = ref<Deck[]>([])
 
   function handleDeckJson(data: DeckJson) {
-    const hitSetting = calculateSettingList.value.find(item => item.priority === String(data.priority))
-
     deckList.value.unshift({
       priority: String(data.priority),
+      weapons: processWeapon(data),
+      summons: processSummon(data),
       leader: processLeader(data),
       npcs: processNpc(data),
       effects: processEffect(data),
-      calculateSetting: cloneDeep(hitSetting),
-      weapons: processWeapon(data),
-      summons: processSummon(data, hitSetting),
     })
 
     if (deckList.value.length > 10)
@@ -62,7 +59,9 @@ export const usePartyStore = defineStore('party', () => {
     return Array.from({ length: 13 }, (_, i) => i + 1).map(i => createWeapon(weapons[i], i === 1))
   }
 
-  function processSummon(data: DeckJson, setting?: CalculateSetting) {
+  function processSummon(data: DeckJson) {
+    const hitSetting = calculateSettingList.value.find(item => item.priority === String(data.priority))
+
     const { summons, sub_summons, quick_user_summon_id } = data.pc
     const quickSummonId = Number(quick_user_summon_id)
 
@@ -83,12 +82,12 @@ export const usePartyStore = defineStore('party', () => {
       ...[1, 2].map(i => createSummon(sub_summons[i], false)),
     ]
 
-    if (setting?.setting.summon_id) {
+    if (hitSetting?.setting.summon_id) {
       summon.push ({
         paramId: 0,
         masterId: 0,
         rarity: 0,
-        imageId: setting.setting.image_id!,
+        imageId: hitSetting.setting.image_id!,
         isMain: true,
         isQuick: false,
       })

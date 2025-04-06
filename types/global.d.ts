@@ -819,13 +819,10 @@ declare module 'battleLog'{
 }
 
 declare module 'party'{
-  import type { CalculateSetting } from 'source'
-
   interface Deck {
     priority: string
     leader: BuildLeader
     effects: BuildEffect[]
-    calculateSetting?: CalculateSetting
     summons: BuildSummon[]
     weapons: BuildWeapon[]
     leader: BuildLeader
