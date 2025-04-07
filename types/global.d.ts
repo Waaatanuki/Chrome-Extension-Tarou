@@ -102,15 +102,7 @@ declare module 'myStorage' {
     isFa?: boolean
   }
 
-  interface UploadRecord {
-    questId: string
-    raidId: number
-    raidName: string
-    bossImage?: string
-    turn: number
-    startTime?: number
-    realSpeed: string
-    fullSpeed: string
+  interface BuildDetail {
     player: Omit<Player, 'condition'>[]
     actionQueue: {
       turn: number
@@ -119,9 +111,6 @@ declare module 'myStorage' {
       guard_status: { is_guard_status: number, num: number }[]
       acitonList: Action[]
     }[]
-    damage?: string
-    point?: number
-    isFa: boolean
   }
 
   interface Player {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { BattleRecord, UploadRecord } from 'myStorage'
+import type { BattleRecord, BuildDetail } from 'myStorage'
+import type { Deck } from 'party'
 import dayjs from 'dayjs'
 import { uploadBuild } from '~/api'
 import { battleRecord } from '~/logic'
@@ -96,29 +97,45 @@ function handleCopyBuild() {
     .catch(() => { })
 }
 
-function processData(): { deck: any, record: UploadRecord } {
+function processData(): Build {
   const uploadRecord: BattleRecord = JSON.parse(JSON.stringify(currentRecord.value))
   return {
+    questId: uploadRecord.quest_id,
+    raidId: uploadRecord.raid_id,
+    raidName: uploadRecord.raid_name,
+    bossImage: uploadRecord.imgId,
+    turn: uploadRecord.turn,
+    startTime: Math.floor((uploadRecord.startTimestamp ?? Date.now()) / 1000),
+    realSpeed: getRealTimeSpeed(uploadRecord),
+    fullSpeed: getFullTimeSpeed(uploadRecord),
+    point: uploadRecord.point,
+    damage: uploadRecord.damage,
+    isFa: uploadRecord.isFa ?? true,
     deck: currentDeck.value,
-    record: {
-      questId: uploadRecord.quest_id,
-      raidId: uploadRecord.raid_id,
-      raidName: uploadRecord.raid_name,
-      bossImage: uploadRecord.imgId,
-      turn: uploadRecord.turn,
-      startTime: Math.floor((uploadRecord.startTimestamp ?? Date.now()) / 1000),
-      realSpeed: getRealTimeSpeed(uploadRecord),
-      fullSpeed: getFullTimeSpeed(uploadRecord),
+    detail: {
       player: uploadRecord.player?.map((player) => {
-        const { condition, ...rest } = player // 解构排除 image_id
+        const { condition, ...rest } = player
         return rest
       }),
       actionQueue: uploadRecord.actionQueue,
-      point: uploadRecord.point,
-      damage: uploadRecord.damage,
-      isFa: uploadRecord.isFa ?? true,
     },
   }
+}
+
+interface Build {
+  questId: string
+  raidId: number
+  raidName: string
+  bossImage?: string
+  turn: number
+  startTime?: number
+  realSpeed: string
+  fullSpeed: string
+  damage?: string
+  point?: number
+  isFa: boolean
+  deck: Deck
+  detail: BuildDetail
 }
 </script>
 
