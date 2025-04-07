@@ -59,9 +59,9 @@ function clear() {
 }
 
 function handleShare(row: BattleRecord) {
+  row.isFa = row.isFa ?? true
   dialogVisible.value = true
   currentRecord.value = row
-  currentRecord.value.isFa = currentRecord.value.isFa ?? true
 }
 
 function handleCopyBuild() {
@@ -84,7 +84,10 @@ function handleCopyBuild() {
       loading.value = true
       uploadBuild(processData()).then(() => {
         ElMessage.success('上传成功')
-        currentRecord.value!.isUploaded = true
+        const record = battleRecord.value.find(record => record.raid_id === currentRecord.value?.raid_id)
+        if (record)
+          record.isUploaded = true
+
         dialogVisible.value = false
       }).finally(() => {
         loading.value = false
@@ -113,6 +116,7 @@ function processData(): { deck: any, record: UploadRecord } {
       actionQueue: uploadRecord.actionQueue,
       point: uploadRecord.point,
       damage: uploadRecord.damage,
+      isFa: uploadRecord.isFa ?? true,
     },
   }
 }

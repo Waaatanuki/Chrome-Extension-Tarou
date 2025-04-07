@@ -121,6 +121,7 @@ declare module 'myStorage' {
     }[]
     damage?: string
     point?: number
+    isFa: boolean
   }
 
   interface Player {
