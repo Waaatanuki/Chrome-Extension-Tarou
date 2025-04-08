@@ -121,6 +121,7 @@ export const usePartyStore = defineStore('party', () => {
     return {
       masterId: job.master.id,
       imageId: param.image,
+      familiarId: data.pc.familiar_id,
       normalDamage: damageInfo.assumed_normal_damage,
       advantageDamage: damageInfo.assumed_advantage_damage,
       ability: leaderAbilityList,

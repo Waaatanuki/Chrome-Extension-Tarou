@@ -597,6 +597,7 @@ declare module 'source'{
      after_damage_info: DamageInfo
      set_action: { name: string, set_action_id: string }[]
      quick_user_summon_id: number
+     familiar_id?: number
      job: {
        param: {
          id: number
@@ -845,6 +846,7 @@ declare module 'party'{
   interface BuildLeader {
     masterId: string
     imageId: string
+    familiarId?: number
     normalDamage: number
     advantageDamage: number
     ability: (BuildLeaderAbility | null)[]

@@ -16,7 +16,7 @@ export function getBossImg(type: string, id: string, size = 'm') {
   return `${imgUri}/sp/assets/${type}/${size}/${id}.png`
 }
 
-export function getAssetImg(type: string, id: string, size = 'm') {
+export function getAssetImg(type: string, id: string | number, size = 'm') {
   return `${imgUri}/sp/assets/${type}/${size}/${id}.jpg`
 }
 

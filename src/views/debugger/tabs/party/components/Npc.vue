@@ -20,6 +20,7 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
       <div relative h-122px w-60px>
         <img w-full :src="getAssetImg('leader', leader.imageId, 'quest')">
         <img absolute left-1 top-1 w-20px :src="getJobIcon(leader.masterId)">
+        <img v-if="leader.familiarId" absolute bottom-14px right-0 w-40px :src="getAssetImg('familiar', leader.familiarId, 's')">
         <div mt-1px h-12px flex items-center justify-start>
           <div v-for="ability, idx in leader.ability" :key="idx" relative w-15px fc>
             <div v-if="ability?.iconType" :class="`ability_icon_type_${ability.iconType}`" h-12px w-12px border-1 rounded-sm />
