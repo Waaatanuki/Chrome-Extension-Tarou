@@ -5,7 +5,7 @@ defineProps<{ border?: boolean, normalAttackInfo: NormalAttackInfo }>()
 </script>
 
 <template>
-  <div my-2 fc flex-wrap gap-2>
+  <div m-2 fc flex-wrap gap-2>
     <el-tag type="primary" effect="dark">
       {{ `hit: ${normalAttackInfo.hit}` }}
     </el-tag>
