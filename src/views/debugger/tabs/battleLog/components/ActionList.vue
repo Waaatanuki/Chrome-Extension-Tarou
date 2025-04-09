@@ -15,7 +15,7 @@ watch(() => props.battleRecord, () => {
 
 <template>
   <ElCard v-if="battleRecord" min-w-400px :body-style="{ padding: '10px 5px 10px 5px' }">
-    <ElScrollbar ref="scrollbarRef" height="554px">
+    <ElScrollbar ref="scrollbarRef" height="574px">
       <div ref="innerRef" px-3>
         <div v-if="battleRecord.actionQueue.length === 0">
           未上传操作信息
