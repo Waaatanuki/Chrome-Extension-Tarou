@@ -90,6 +90,7 @@ declare module 'myStorage' {
       special_skill_flag: number
       guard_status: { is_guard_status: number, num: number }[]
       acitonList: Action[]
+      interrupt_display_text?: string
     }[]
     hasResult?: boolean
     damage?: string

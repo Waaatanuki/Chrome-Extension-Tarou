@@ -344,6 +344,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       special_skill_flag: Number(data.special_skill_flag),
       acitonList: [],
       guard_status,
+      interrupt_display_text: bossInfo.value!.interrupt_display_text,
     }]
 
     const abilityList = getAbilityList(data.ability)
@@ -609,7 +610,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
 
     if (currentTurn !== currentRaid.value.actionQueue.at(-1)?.turn) {
       const guard_status = Object.values(data.status.ability)
-        .reduce< { is_guard_status: number, num: number }[]>((pre, cur) => {
+        .reduce<{ is_guard_status: number, num: number }[]>((pre, cur) => {
           pre.push({
             num: cur.pos,
             is_guard_status: 0,
@@ -623,6 +624,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
         special_skill_flag: currentRaid.value.special_skill_flag!,
         acitonList: [],
         guard_status,
+        interrupt_display_text: bossInfo.value!.interrupt_display_text,
       })
     }
 
