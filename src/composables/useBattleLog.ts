@@ -1,4 +1,4 @@
-import type { BossInfo, BuffInfo, MemberInfo, SummonInfo } from 'battleLog'
+import type { BossInfo, BuffInfo, MemberInfo, NormalAttackInfo, SummonInfo } from 'battleLog'
 import type { Action, PartyCondition, Player } from 'myStorage'
 import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
 import { defineStore } from 'pinia'
@@ -16,7 +16,7 @@ export const useBattleLogStore = defineStore('battleLog', () => {
   const mvpInfo = ref<{ userId: string, rank: number, point: number }[]>()
   const battleRecordLimit = 30
   const resultJsonPayload = ref<ResultJsonPayload>()
-  const normalAttackInfo = ref({ hit: 0, ability: 0, special: 0, total: 0 })
+  const normalAttackInfo = ref<NormalAttackInfo>({ hit: 0, ability: 0, special: 0, total: 0 })
 
   const currentRaid = computed(() => battleRecord.value.find(b => b.raid_id === raidId.value))
 
@@ -694,8 +694,12 @@ export const useBattleLogStore = defineStore('battleLog', () => {
       currentRaid.value.actionQueue.at(-1)?.acitonList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
 
     if (type === 'normal') {
+      handleNormalAttackJson(data)
       const index = dieIndex !== -1 ? -1 : -2
-      currentRaid.value.actionQueue.at(index)?.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
+      if (currentRaid.value.actionQueue.at(index)) {
+        currentRaid.value.actionQueue.at(index)!.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
+        currentRaid.value.actionQueue.at(index)!.normalAttackInfo = { ...normalAttackInfo.value }
+      }
     }
 
     // 更新技能列表

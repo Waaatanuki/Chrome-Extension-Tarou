@@ -364,7 +364,6 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
     if (/\/rest\/(?:raid|multiraid)\/normal_attack_result\.json/.test(responseUrl)) {
       getResponse(tabId, requestId, (resp) => {
         battleLogStore.handleAttackRusultJson('normal', resp)
-        battleLogStore.handleNormalAttackJson(resp)
       })
     }
 

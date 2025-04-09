@@ -1,4 +1,5 @@
 declare module 'myStorage' {
+  import type { NormalAttackInfo } from 'battleLog'
   import type { Buff } from 'source'
 
   interface Profile {
@@ -91,6 +92,7 @@ declare module 'myStorage' {
       guard_status: { is_guard_status: number, num: number }[]
       acitonList: Action[]
       interrupt_display_text?: string
+      normalAttackInfo?: NormalAttackInfo
     }[]
     hasResult?: boolean
     damage?: string
@@ -111,6 +113,8 @@ declare module 'myStorage' {
       special_skill_flag: number
       guard_status: { is_guard_status: number, num: number }[]
       acitonList: Action[]
+      interrupt_display_text?: string
+      normalAttackInfo?: NormalAttackInfo
     }[]
   }
 
@@ -829,6 +833,13 @@ declare module 'battleLog'{
     is_host?: boolean
     point?: number
     rank?: number
+  }
+
+  interface NormalAttackInfo {
+    hit: number
+    ability: number
+    special: number
+    total: number
   }
 }
 

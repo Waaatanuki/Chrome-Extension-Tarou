@@ -6,6 +6,7 @@ import BattleAnalysis from './components/BattleAnalysis.vue'
 import BossDashboard from './components/BossDashboard.vue'
 import BuffBar from './components/BuffBar.vue'
 import MemberList from './components/MemberList.vue'
+import NormalAttackInfo from './components/NormalAttackInfo.vue'
 import Summon from './components/Summon.vue'
 
 const battleLogStore = useBattleLogStore()
@@ -28,25 +29,7 @@ const { inLobby, bossInfo, lobbyMemberList, normalAttackInfo, memberInfo, mvpInf
       <BattleAnalysis :battle-record="battleRecord.find(record => record.raid_id === raidId)!" :turn="bossInfo.turn" />
       <ActionList :battle-record="battleRecord.find(record => record.raid_id === raidId)!" />
     </div>
-    <ElDescriptions border :column="1">
-      <ElDescriptionsItem label="攻击结果">
-        <div fc gap-2>
-          <el-tag type="primary" effect="dark">
-            {{ `hit: ${normalAttackInfo.hit}` }}
-          </el-tag>
-          <el-tag type="success" effect="dark">
-            {{ `技伤: ${normalAttackInfo.ability.toLocaleString()}` }}
-          </el-tag>
-          <el-tag type="warning" effect="dark">
-            {{ `奥伤: ${normalAttackInfo.special.toLocaleString()}` }}
-          </el-tag>
-          <el-tag type="danger" effect="dark">
-            {{ `总伤害: ${normalAttackInfo.total.toLocaleString()}` }}
-          </el-tag>
-        </div>
-      </ElDescriptionsItem>
-    </ElDescriptions>
-
+    <NormalAttackInfo :normal-attack-info="normalAttackInfo" />
     <MemberList :member-info="memberInfo" :mvp-info="mvpInfo" />
   </div>
   <div v-else m-auto w-100>
