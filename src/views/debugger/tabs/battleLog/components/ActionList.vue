@@ -14,15 +14,18 @@ watch(() => props.battleRecord, () => {
 </script>
 
 <template>
-  <ElCard v-if="battleRecord" min-w-400px>
+  <ElCard v-if="battleRecord" min-w-400px :body-style="{ padding: '10px 5px 10px 5px' }">
     <ElScrollbar ref="scrollbarRef" height="554px">
-      <div ref="innerRef">
+      <div ref="innerRef" px-3>
+        <div v-if="battleRecord.actionQueue.length === 0">
+          未上传操作信息
+        </div>
         <ElCard
           v-for="list, idx in battleRecord.actionQueue" :key="idx"
-          :body-style="{ padding: '0px' }" shadow="hover"
+          :body-style="{ padding: '0px' }" shadow="hover" mb-2
         >
           <div flex flex-col>
-            <div flex>
+            <div flex border-b="1  solid #e4e7ed" class="dark:border-b-#414243">
               <div relative w-200px fc shrink-0 flex-col gap-10px p-10px class="bg-#f5f7fa dark:bg-#262727">
                 <div text-base font-bold>
                   {{ `第${list.turn}回合` }}
