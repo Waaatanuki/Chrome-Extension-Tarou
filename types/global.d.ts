@@ -883,6 +883,22 @@ declare module 'party'{
       iconType: string
       fa: boolean
     }[]
+    artifact?: {
+      value: string
+      icon: string
+      level: number
+      name: string
+    }[]
+    exlb?: Exlb[]
+  }
+
+  interface Exlb {
+    type: string
+    bonuse: {
+      icon: string
+      name: string
+      value: string
+    }[]
   }
 
   interface BuildWeapon {

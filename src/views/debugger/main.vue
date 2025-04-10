@@ -219,6 +219,7 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
           isAugment: npcDetail.has_npcaugment_constant,
           arousalForm: npcDetail.npc_arousal_form,
           ability: [],
+          artifact: [],
         }
 
         for (let i = 1; i <= 4; i++) {
@@ -227,6 +228,16 @@ chrome.debugger.onEvent.addListener((source, method, params: any) => {
             npcInfo.ability.push({
               iconType: currentAbility.icon_type,
               fa: !!currentAbility.user_full_auto_setting_flag,
+            })
+          }
+
+          const artifactSkillInfo = npcDetail.artifact[`skill${i}_info`]
+          if (artifactSkillInfo) {
+            npcInfo.artifact!.push({
+              value: artifactSkillInfo.effect_value,
+              icon: artifactSkillInfo.icon_image,
+              level: artifactSkillInfo.level,
+              name: artifactSkillInfo.name,
             })
           }
         }

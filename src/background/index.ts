@@ -1,9 +1,10 @@
 import type { Treasure } from 'api'
 import type { BattleMemo } from 'myStorage'
+import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendMessage } from 'webext-bridge/background'
-import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
+import { battleMemo, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
 
 (() => {
   const MaxMemoLength = 50
@@ -186,6 +187,42 @@ import { battleMemo, mySupportSummon, notificationItem, notificationSetting, obT
             }
           }
         }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
+    // 记录角色信息
+    if (details.url.includes('/npczenith/content/index')) {
+      sendMessage('getNpczenith', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
+        if (!res?.domStr)
+          return
+
+        const $ = load(res.domStr)
+        const paramId = Number($(`div.cnt-zenith.npc`).data()?.userNpcId)
+        if (!paramId)
+          return
+
+        const hitNpc = localNpcList.value.find(n => n.paramId === paramId)
+        if (!hitNpc)
+          return
+
+        const exlb: Exlb[] = []
+        $('#prt-extra-lb-list').children('.prt-extra-lb-title').each((i, elem) => {
+          const type = $(elem).text()
+          const lb: Exlb = { type, bonuse: [] }
+          exlb.push(lb)
+          $(elem).next('.prt-extra-lb-info').children('.prt-bonus-detail').each((i, elem) => {
+            if (!$(elem).hasClass('is-master')) {
+              lb.bonuse.push({
+                icon: $(elem).find('.prt-bonus-icon').attr('class')?.replace('prt-bonus-icon ', '') || '',
+                name: $(elem).find('.txt-bonus-name').text().trim(),
+                value: $(elem).find('.txt-current-bonus').text().trim(),
+              })
+            }
+          })
+        })
+        hitNpc.exlb = exlb.filter(i => i.bonuse.length !== 0)
       }).catch((err) => {
         console.log(err)
       })

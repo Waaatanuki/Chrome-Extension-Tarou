@@ -104,4 +104,25 @@ import { onMessage } from 'webext-bridge/content-script'
       }, 200)
     })
   })
+
+  // 获取角色信息
+  onMessage('getNpczenith', () => {
+    return new Promise((resolve) => {
+      const start = setInterval(() => {
+        if (!document.URL.includes('#zenith')) {
+          console.log('角色检测中断', document.URL)
+          clearInterval(start)
+          resolve({})
+        }
+
+        console.log('监测到角色详情')
+        const targetEl = document.querySelector('div.cnt-zenith.npc')
+
+        if (targetEl) {
+          clearInterval(start)
+          resolve({ domStr: targetEl.outerHTML })
+        }
+      }, 200)
+    })
+  })
 })()

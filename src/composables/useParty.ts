@@ -142,6 +142,8 @@ export const usePartyStore = defineStore('party', () => {
           isAugment: npc.param.has_npcaugment_constant,
           arousalForm: hit ? hit.arousalForm : 0,
           ability: hit ? [...hit.ability] : [],
+          exlb: hit?.exlb,
+          artifact: hit?.artifact,
         })
       }
     }

@@ -49,6 +49,10 @@ export function getSkillLabelIcon(id: string) {
   return `${imgUri}/sp/ui/icon/weapon_skill_label/${id}`
 }
 
+export function getBonusIcon(id: string) {
+  return `${imgUri}/sp/ui/icon/bonus/${id}.png`
+}
+
 export function getActionIcon(action: Action) {
   if (action.type === 'ability') {
     return action.isSub

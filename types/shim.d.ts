@@ -7,5 +7,6 @@ declare module 'webext-bridge' {
     getBattleHistoryResult: ProtocolWithReturn<null, void | { domStr?: string }>
     getUnclaimedList: ProtocolWithReturn<null, void | { domStr?: string }>
     getSupportSummon: ProtocolWithReturn<null, void | { domStr?: string }>
+    getNpczenith: ProtocolWithReturn<null, void | { domStr?: string }>
   }
 }
