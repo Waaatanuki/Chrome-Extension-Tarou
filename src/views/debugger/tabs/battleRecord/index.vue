@@ -15,6 +15,7 @@ const battleLogStore = useBattleLogStore()
 const partyStore = usePartyStore()
 const dialogVisible = ref(false)
 const loading = ref(false)
+const anonymous = ref(false)
 
 const currentRecord = ref<BattleRecord>()
 const currentDeck = computed(() => partyStore.deckList[0])
@@ -32,7 +33,6 @@ function getRealTimeSpeed(row: BattleRecord) {
   if (!seconds || !row.damage)
     return '-'
   const damage = Number(row.damage?.split(',').join(''))
-
   return `${formatTime(seconds)} / ${(damage / (seconds / 60) / 1000000).toFixed(0)}`
 }
 
@@ -41,7 +41,6 @@ function getFullTimeSpeed(row: BattleRecord) {
     return '-'
 
   const damage = Number(row.damage?.split(',').join(''))
-
   let formatted_time = row.duration
 
   if (row.duration.split(':').length === 2)
@@ -73,9 +72,10 @@ function handleCopyBuild() {
     return ElMessage.warning('请先切换到游戏里的编成界面')
 
   ElMessageBox.confirm(
-    '确认使用该队伍配置进行上传?',
+    '确认使用当前队伍配置进行上传?<br>(可在游戏中切换队伍)',
     '通知',
     {
+      dangerouslyUseHTMLString: true,
       confirmButtonText: '确认',
       cancelButtonText: '取消',
       type: 'warning',
@@ -83,7 +83,7 @@ function handleCopyBuild() {
   )
     .then(() => {
       loading.value = true
-      uploadBuild(processData()).then(() => {
+      uploadBuild({ ...processData(), anonymous: anonymous.value }).then(() => {
         ElMessage.success('上传成功')
         const record = battleRecord.value.find(record => record.raid_id === currentRecord.value?.raid_id)
         if (record)
@@ -199,11 +199,16 @@ interface Build {
 
   <el-dialog v-model="dialogVisible" width="510" :show-close="false" top="5vh">
     <div mb-4 flex items-center justify-between>
-      <div>
-        <el-alert title="切换至战斗记录所使用的的队伍" type="info" show-icon :closable="false" />
-      </div>
-
-      <div fc gap-6>
+      <div v-if="currentDeck" fc gap-8>
+        <div fc gap-2>
+          匿名上传
+          <el-switch
+            v-model="anonymous"
+            inline-prompt
+            active-text="是"
+            inactive-text="否"
+          />
+        </div>
         <div fc gap-2>
           FA
           <el-switch
@@ -213,10 +218,14 @@ interface Build {
             inactive-text="否"
           />
         </div>
-        <TheButton :loading="loading" @click="handleCopyBuild">
-          上传配置信息
-        </TheButton>
       </div>
+      <div v-else>
+        <el-alert title="切换至战斗记录所使用的的队伍" type="info" show-icon :closable="false" />
+      </div>
+
+      <TheButton :loading="loading" @click="handleCopyBuild">
+        上传配置信息
+      </TheButton>
     </div>
 
     <el-card v-if="currentDeck" :body-style="{ padding: '10px' }" m-auto w-480px>
