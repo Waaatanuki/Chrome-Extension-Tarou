@@ -1,4 +1,4 @@
-import { onMessage } from 'webext-bridge/content-script'
+import { onMessage, sendMessage } from 'webext-bridge/content-script'
 
 (() => {
   // 获取副本名称
@@ -125,4 +125,20 @@ import { onMessage } from 'webext-bridge/content-script'
       }, 200)
     })
   })
+
+  function injectScript() {
+    const script = document.createElement('script')
+    script.async = true
+    const params = new URLSearchParams({
+      extensionId: chrome.runtime.id,
+    })
+    script.src = chrome.runtime.getURL(`inject.js?${params}`)
+    const doc = document.head || document.documentElement
+    doc.appendChild(script)
+    document.addEventListener(chrome.runtime.id, async (e) => {
+      sendMessage('express', (e as CustomEvent).detail, 'background')
+    })
+  }
+
+  injectScript()
 })()

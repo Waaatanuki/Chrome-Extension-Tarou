@@ -30,6 +30,16 @@
       "run_at": "document_end"
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": [
+        "*://*.granbluefantasy.jp/*",
+        "*://gbf.game.mbga.jp/*",
+        "*://localhost/*"
+      ]
+    }
+  ],
   "action": {
     "default_title": "Tarou",
     "default_popup": "src/views/popup/main.html",

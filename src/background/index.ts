@@ -3,13 +3,22 @@ import type { BattleMemo } from 'myStorage'
 import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
-import { sendMessage } from 'webext-bridge/background'
+import { onMessage, sendMessage } from 'webext-bridge/background'
 import { battleMemo, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
 
 (() => {
   const MaxMemoLength = 50
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
   const { checkUser, sendInfo } = useUser()
+
+  onMessage('express', (res) => {
+    const { url, requestData, responseData } = JSON.parse(res.data as string)
+    console.log('==================================================')
+    console.log('url', url)
+    console.log('requestData', requestData)
+    console.log('responseData', responseData)
+    console.log('==================================================')
+  })
 
   chrome.tabs.onUpdated.addListener(() => {
     console.log('wake up!')
