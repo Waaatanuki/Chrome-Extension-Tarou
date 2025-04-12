@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import type { CardInstance } from 'element-plus'
 import { VueDraggableNext } from 'vue-draggable-next'
+import { deckList } from '~/logic'
 import BuildCompare from './components/BuildCompare.vue'
 import Effect from './components/Effect.vue'
 import Npc from './components/Npc.vue'
 import Summon from './components/Summon.vue'
 import Weapon from './components/Weapon.vue'
 
-const partyStore = usePartyStore()
-const { deckList } = storeToRefs(partyStore)
 const weaponChecked = ref(true)
 const summonChecked = ref(true)
 const npcChecked = ref(true)

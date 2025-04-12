@@ -1,6 +1,7 @@
 import type { DropInfo } from 'api'
+import type { BattleInfo } from 'battleLog'
 import type { BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, NotificationSetting, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
-import type { BuildLeaderAbility, BuildNpc } from 'party'
+import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { CalculateSetting } from 'source'
 import dayjs from 'dayjs'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
@@ -36,6 +37,7 @@ export const evokerInfo = useWebExtensionStorage('evokerInfo', defaultEvokerInfo
 export const xenoGauge = useWebExtensionStorage('xenoGauge', defaultXenoGauge)
 
 // BattleLog
+export const battleInfo = useWebExtensionStorage<Partial<BattleInfo>>('BattleInfo', {})
 export const battleRecord = useWebExtensionStorage<BattleRecord[]>('battleRecord', [])
 export const specBossBuff = useWebExtensionStorage<string[]>('specBossBuff', [])
 export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff', [])
@@ -48,6 +50,7 @@ export const battleMemo = useWebExtensionStorage<BattleMemo[]>('battleMemo', [])
 export const failedDropInfoList = useWebExtensionStorage<DropInfo[]>('failedDropInfoList', [])
 
 // Party
+export const deckList = useWebExtensionStorage<Deck[]>('deckList', [])
 export const jobAbilityList = useWebExtensionStorage<BuildLeaderAbility[]>('jobAbilityList', [])
 export const localNpcList = useWebExtensionStorage<BuildNpc[]>('localNpcList', [])
 export const calculateSettingList = useWebExtensionStorage<CalculateSetting[]>('calculateSettingList', [])

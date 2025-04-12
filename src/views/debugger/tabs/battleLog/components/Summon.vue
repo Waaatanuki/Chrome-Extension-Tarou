@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import type { Summon } from 'source'
-import { storeToRefs } from 'pinia'
-
-const battleLogStore = useBattleLogStore()
-const { summonInfo } = storeToRefs(battleLogStore)
+import { battleInfo } from '~/logic'
 
 const summonList = computed(() => {
-  const res = summonInfo.value?.summon.reduce<Summon[]>((pre, cur) => {
+  const res = battleInfo.value.summonInfo?.summon.reduce<Summon[]>((pre, cur) => {
     if (cur.id)
       pre.push(cur)
     return pre
   }, []) ?? []
 
-  if (summonInfo.value?.supporter.id)
-    res.push(summonInfo.value.supporter)
+  if (battleInfo.value.summonInfo?.supporter.id)
+    res.push(battleInfo.value.summonInfo.supporter)
 
   return res
 })

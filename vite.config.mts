@@ -18,7 +18,7 @@ export const sharedConfig: UserConfig = {
   plugins: [
     Vue(),
     AutoImport({
-      imports: ['vue', '@vueuse/core', 'pinia'],
+      imports: ['vue', '@vueuse/core'],
       dirs: [r('src/composables')],
       resolvers: [ElementPlusResolver()],
       vueTemplate: true,

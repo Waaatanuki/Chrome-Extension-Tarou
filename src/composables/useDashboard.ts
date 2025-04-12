@@ -1,4 +1,4 @@
-import { obTabId, obWindowId, windowSize } from '~/logic/storage'
+import { battleInfo, deckList, obTabId, obWindowId, windowSize } from '~/logic/storage'
 
 export default function useDashboard() {
   async function openDashboard() {
@@ -15,6 +15,8 @@ export default function useDashboard() {
         if (windowInfo) {
           obTabId.value = tab.id
           obWindowId.value = windowInfo.id
+          battleInfo.value = {}
+          deckList.value = []
           try {
             await chrome.debugger.detach({ tabId: tab.id })
           }

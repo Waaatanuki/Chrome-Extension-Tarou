@@ -3,7 +3,7 @@ import type { BattleRecord, BuildDetail } from 'myStorage'
 import type { Deck } from 'party'
 import dayjs from 'dayjs'
 import { uploadBuild } from '~/api'
-import { battleRecord } from '~/logic'
+import { battleRecord, deckList } from '~/logic'
 import ActionList from '../battleLog/components/ActionList.vue'
 import BattleAnalysis from '../battleLog/components/BattleAnalysis.vue'
 import Npc from '../party/components/Npc.vue'
@@ -11,18 +11,17 @@ import Summon from '../party/components/Summon.vue'
 import Weapon from '../party/components/Weapon.vue'
 
 const { height } = useWindowSize()
-const battleLogStore = useBattleLogStore()
-const partyStore = usePartyStore()
 const dialogVisible = ref(false)
 const loading = ref(false)
 const anonymous = ref(false)
 
+const battleRecordLimit = 30
 const currentRecord = ref<BattleRecord>()
-const currentDeck = computed(() => partyStore.deckList[0])
+const currentDeck = computed(() => deckList.value[0])
 
 function triggerLock(row: BattleRecord) {
   const lockedNum = battleRecord.value.filter(record => record.reserve).length
-  if (lockedNum + 1 >= battleLogStore.battleRecordLimit && !row.reserve)
+  if ((lockedNum + 1 >= battleRecordLimit) && !row.reserve)
     ElMessage.info('已达锁定上限')
   else
     row.reserve = !row.reserve
@@ -190,7 +189,7 @@ interface Build {
   </ElTable>
   <div flex items-center justify-end gap-10px p-10px text-base>
     <div>
-      {{ `数量 : ${battleRecord.length}/${battleLogStore.battleRecordLimit}` }}
+      {{ `数量 : ${battleRecord.length}/${battleRecordLimit}` }}
     </div>
     <TheButton @click="clear">
       清空列表

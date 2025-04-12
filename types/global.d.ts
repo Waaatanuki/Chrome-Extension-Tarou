@@ -216,6 +216,7 @@ declare module 'myStorage' {
     itemGoal: boolean
     isPointOverLimit: boolean
   }
+
 }
 
 declare module 'source'{
@@ -793,9 +794,22 @@ declare module 'source'{
 declare module 'battleLog'{
   import type { Buff, Summon } from 'source'
 
+  interface BattleInfo {
+    inLobby: boolean
+    lobbyMemberList: MemberInfo[]
+    bossInfo: BossInfo
+    memberInfo: MemberInfo[]
+    mvpInfo: { userId: string, rank: number, point: number }[]
+    summonInfo: SummonInfo
+    buffInfo: BuffInfo
+    leaderAttr: string
+    normalAttackInfo: NormalAttackInfo
+  }
+
   interface BossInfo {
     questId: string
-    battleId?: string
+    battleId: string
+    shareId?: string
     imgId: string
     name: string
     hp: number

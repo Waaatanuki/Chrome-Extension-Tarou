@@ -4,7 +4,7 @@ import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { onMessage, sendMessage } from 'webext-bridge/background'
-import { battleMemo, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
+import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
 
 (() => {
   const MaxMemoLength = 50
@@ -12,12 +12,12 @@ import { battleMemo, localNpcList, mySupportSummon, notificationItem, notificati
   const { checkUser, sendInfo } = useUser()
 
   onMessage('express', (res) => {
-    const { url, requestData, responseData } = JSON.parse(res.data as string)
-    console.log('==================================================')
-    console.log('url', url)
-    console.log('requestData', requestData)
-    console.log('responseData', responseData)
-    console.log('==================================================')
+    try {
+      unpack(res.data as string)
+    }
+    catch (error) {
+      console.log(String(error))
+    }
   })
 
   chrome.tabs.onUpdated.addListener(() => {
@@ -27,6 +27,14 @@ import { battleMemo, localNpcList, mySupportSummon, notificationItem, notificati
   chrome.tabs.onRemoved.addListener((tabId) => {
     if (tabId === obTabId.value)
       chrome.windows.remove(obWindowId.value).catch(() => {})
+  })
+
+  chrome.windows.onRemoved.addListener((windowId) => {
+    if (windowId === obWindowId.value) {
+      obWindowId.value = 0
+      battleInfo.value = {}
+      deckList.value = []
+    }
   })
 
   chrome.webRequest.onBeforeRequest.addListener((details) => {
