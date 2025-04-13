@@ -7,12 +7,9 @@ export default function useUser() {
   function checkUser(url: string) {
     const searchParams = new URLSearchParams(url)
     uid.value = searchParams.get('uid') || ''
-    if (!uuidValidate(code.value))
-      code.value = uuidv4()
   }
 
-  function checkUserV2(id: string) {
-    uid.value = id
+  function checkCode() {
     if (!uuidValidate(code.value))
       code.value = uuidv4()
   }
@@ -75,7 +72,7 @@ export default function useUser() {
 
   return {
     checkUser,
-    checkUserV2,
+    checkCode,
     sendInfo,
   }
 }

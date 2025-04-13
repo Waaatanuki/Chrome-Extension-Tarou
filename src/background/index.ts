@@ -6,7 +6,7 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
 
 (() => {
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
-  const { checkUser, sendInfo } = useUser()
+  const { checkUser, checkCode, sendInfo } = useUser()
 
   onMessage('express', (res) => {
     try {
@@ -14,23 +14,6 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
     }
     catch (error) {
       console.log(String(error))
-    }
-  })
-
-  chrome.tabs.onUpdated.addListener(() => {
-    console.log('wake up!')
-  })
-
-  chrome.tabs.onRemoved.addListener((tabId) => {
-    if (tabId === obTabId.value)
-      chrome.windows.remove(obWindowId.value).catch(() => {})
-  })
-
-  chrome.windows.onRemoved.addListener((windowId) => {
-    if (windowId === obWindowId.value) {
-      obWindowId.value = 0
-      battleInfo.value = {}
-      deckList.value = []
     }
   })
 
@@ -240,7 +223,25 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
   }
 
   chrome.runtime.onInstalled.addListener(() => {
+    checkCode()
     registerContextMenu()
+  })
+
+  chrome.tabs.onUpdated.addListener(() => {
+    console.log('wake up!')
+  })
+
+  chrome.tabs.onRemoved.addListener((tabId) => {
+    if (tabId === obTabId.value)
+      chrome.windows.remove(obWindowId.value).catch(() => {})
+  })
+
+  chrome.windows.onRemoved.addListener((windowId) => {
+    if (windowId === obWindowId.value) {
+      obWindowId.value = 0
+      battleInfo.value = {}
+      deckList.value = []
+    }
   })
 
   addMenuClickListener()

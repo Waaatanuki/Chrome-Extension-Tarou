@@ -4,7 +4,7 @@ import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
-import { battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, windowSize, xenoGauge } from '~/logic'
+import { battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -327,11 +327,6 @@ export async function unpack(parcel: string) {
 
   // BattleLog 记录副本start信息
   if (/\/rest\/(?:raid|multiraid)\/start\.json/.test(url)) {
-    const { checkUserV2 } = useUser()
-
-    const uid = responseData.user_id
-    checkUserV2(uid)
-
     const battleId = String(responseData.raid_id)
     const timestamp = new Date().valueOf()
     const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
