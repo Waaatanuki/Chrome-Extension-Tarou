@@ -15,7 +15,7 @@ const currentRecord = computed(() => battleRecord.value.find(record => String(re
     <MemberList :member-info="battleInfo.lobbyMemberList" />
   </div>
   <div v-if="battleInfo.bossInfo" w-full fc flex-col gap-10px>
-    <div w-full fc gap-2 p-2>
+    <div w-full flex items-center justify-start gap-2 p-2>
       <BossDashboard />
       <div w-full flex flex-col items-center justify-start>
         <BuffBar />

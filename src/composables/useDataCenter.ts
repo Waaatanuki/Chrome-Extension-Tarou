@@ -216,7 +216,6 @@ export async function unpack(parcel: string) {
   // Party 记录更改伤害计算设置
   if (url.includes('party/save_calculate_setting')) {
     const setting = JSON.parse(requestData!)
-    console.log('setting', setting)
     handleCalculateSetting({ priority: String(setting.group_priority) + String(setting.priority), setting })
   }
 
@@ -330,18 +329,17 @@ export async function unpack(parcel: string) {
     const battleId = String(responseData.raid_id)
     const timestamp = new Date().valueOf()
     const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
-    if (hitMemo)
-      return
+    if (!hitMemo) {
+      const questName = responseData.boss.param[0].monster
 
-    const questName = responseData.boss.param[0].monster
+      const memo = { battleId, questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') }
+      battleMemo.value.push(memo)
+      console.log('新增memo==>', memo)
 
-    const memo = { battleId, questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') }
-    battleMemo.value.push(memo)
-    console.log('新增memo==>', memo)
-
-    if (battleMemo.value.length > MaxMemoLength)
-      battleMemo.value.shift()
-    console.log('memoList==>', battleMemo.value)
+      if (battleMemo.value.length > MaxMemoLength)
+        battleMemo.value.shift()
+      console.log('memoList==>', battleMemo.value)
+    }
 
     if (!obWindowId.value)
       return
