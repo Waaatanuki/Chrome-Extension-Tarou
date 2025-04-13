@@ -43,27 +43,6 @@ import { onMessage, sendMessage } from 'webext-bridge/content-script'
     })
   })
 
-  // 获取未结算战斗数据
-  onMessage('getUnclaimedList', () => {
-    return new Promise((resolve) => {
-      const start = setInterval(() => {
-        if (!document.URL.includes('#quest/assist/unclaimed')) {
-          console.log('未结算战斗检测中断', document.URL)
-          clearInterval(start)
-          resolve({})
-        }
-
-        console.log('监测到未结算战斗页面')
-        const targetEl = document.querySelector('#prt-unclaimed-list')
-
-        if (targetEl) {
-          clearInterval(start)
-          resolve({ domStr: targetEl.outerHTML })
-        }
-      }, 200)
-    })
-  })
-
   // 获取友招信息
   onMessage('getSupportSummon', () => {
     return new Promise((resolve) => {

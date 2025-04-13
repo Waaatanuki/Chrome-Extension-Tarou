@@ -381,6 +381,32 @@ export async function unpack(parcel: string) {
     sendBossInfo(bossInfo).catch((err) => { console.log(err.message) })
   }
 
+  // Drop 记录未结算战斗信息
+  if (url.includes('/quest/unclaimed_reward')) {
+    for (const battle of responseData.list) {
+      const hitMemo = battleMemo.value.find(memo => memo.battleId === String(battle.raid_id))
+      if (hitMemo)
+        continue
+
+      const battleInfo = {
+        battleId: String(battle.raid_id),
+        questName: battle.chapter_name,
+        questType: '1',
+        timestamp: formatFinishTime(battle.finish_time),
+        date: dayjs(formatFinishTime(battle.finish_time)).format('YYYY-MM-DD HH:mm:ss'),
+      }
+
+      console.log('未记录过的战斗信息', battleInfo)
+
+      battleMemo.value.push({ ...battleInfo })
+    }
+
+    while (battleMemo.value.length > MaxMemoLength)
+      battleMemo.value.shift()
+
+    console.log('memoList==>', battleMemo.value)
+  }
+
   // ===============详细面板打开时进行以下接口分析=====================
   // ===============详细面板打开时进行以下接口分析=====================
   // ===============详细面板打开时进行以下接口分析=====================

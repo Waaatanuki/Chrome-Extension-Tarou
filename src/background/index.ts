@@ -1,13 +1,10 @@
 import type { Treasure } from 'api'
-import type { BattleMemo } from 'myStorage'
 import type { Exlb } from 'party'
 import { load } from 'cheerio'
-import dayjs from 'dayjs'
 import { onMessage, sendMessage } from 'webext-bridge/background'
 import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
 
 (() => {
-  const MaxMemoLength = 50
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
   const { checkUser, sendInfo } = useUser()
 
@@ -101,34 +98,6 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
       })
     }
 
-    // 记录未结算战斗信息
-    if (details.url.includes('/quest/unclaimed_reward')) {
-      checkUser(details.url)
-      sendMessage('getUnclaimedList', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
-        if (!res?.domStr)
-          return
-
-        const unclaimedList = getBattleList(res.domStr)
-
-        unclaimedList.forEach((battle) => {
-          const hitMemo = battleMemo.value.find(memo => memo.battleId === battle.battleId)
-          if (hitMemo)
-            return
-
-          console.log('未记录过的战斗信息', battle)
-
-          battleMemo.value.push({ ...battle })
-        })
-
-        while (battleMemo.value.length > MaxMemoLength)
-          battleMemo.value.shift()
-
-        console.log('memoList==>', battleMemo.value)
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
-
     // 记录友招信息
     if (details.url.includes('/profile/content/index')) {
       const searchParams = new URLSearchParams(details.url)
@@ -207,26 +176,6 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
       })
     }
   }, { urls: ['*://*.granbluefantasy.jp/*'] })
-
-  function getBattleList(domStr: string) {
-    const $ = load(domStr)
-    const res: BattleMemo[] = []
-
-    $('.lis-raid').each((i, elem) => {
-      const questName = $(elem).find('.txt-raid-name')?.text()
-      const finishTime = $(elem).find('.prt-finish-time')?.text()
-      const questImage = imgSrcToQuestImage($(elem).find('.img-raid-thumbnail').attr('src'))
-      res.push({
-        battleId: String($(elem).data().raidId),
-        questName: questName.trim(),
-        questType: '1',
-        questImage,
-        timestamp: formatFinishTime(finishTime),
-        date: dayjs(formatFinishTime(finishTime)).format('YYYY-MM-DD HH:mm:ss'),
-      })
-    })
-    return res
-  }
 
   function getTreasureList(domStr: string) {
     const $ = load(domStr)
