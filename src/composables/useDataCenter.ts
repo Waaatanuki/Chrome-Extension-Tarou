@@ -4,7 +4,9 @@ import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
-import { battleInfo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, windowSize, xenoGauge } from '~/logic'
+import { battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, windowSize, xenoGauge } from '~/logic'
+
+const MaxMemoLength = 50
 
 export async function unpack(parcel: string) {
   if (typeof parcel !== 'string')
@@ -323,6 +325,62 @@ export async function unpack(parcel: string) {
     })
   }
 
+  // BattleLog 记录副本start信息
+  if (/\/rest\/(?:raid|multiraid)\/start\.json/.test(url)) {
+    const { checkUserV2 } = useUser()
+
+    const uid = responseData.user_id
+    checkUserV2(uid)
+
+    const battleId = String(responseData.raid_id)
+    const timestamp = new Date().valueOf()
+    const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
+    if (hitMemo)
+      return
+
+    const questName = responseData.boss.param[0].monster
+
+    const memo = { battleId, questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') }
+    battleMemo.value.push(memo)
+    console.log('新增memo==>', memo)
+
+    if (battleMemo.value.length > MaxMemoLength)
+      battleMemo.value.shift()
+    console.log('memoList==>', battleMemo.value)
+
+    if (!obWindowId.value)
+      return
+
+    battleInfo.value.inLobby = false
+
+    const battleStartJson: BattleStartJson = responseData
+
+    handleStartJson(battleStartJson)
+
+    const matchName = battleStartJson.boss.param.reduce<string[]>((pre, cur) => {
+      pre.push(cur.name.ja, cur.name.en)
+      return pre
+    }, [])
+    const bossInfo = {
+      battleId: String(battleStartJson.raid_id),
+      userId: battleStartJson.user_id,
+      questId: battleStartJson.quest_id,
+      battleTotal: Number(battleStartJson.battle.total),
+      battleCount: Number(battleStartJson.battle.count),
+      matchName,
+      boss: battleStartJson.boss.param.map(boss => ({
+        id: boss.enemy_id,
+        name: boss.name.ja,
+        lv: boss.Lv,
+        attr: boss.attr,
+        cjs: boss.cjs,
+        hp: Number(boss.hpmax),
+      })),
+    }
+    console.log('sendBossInfo', bossInfo)
+    sendBossInfo(bossInfo).catch((err) => { console.log(err.message) })
+  }
+
   // ===============详细面板打开时进行以下接口分析=====================
   // ===============详细面板打开时进行以下接口分析=====================
   // ===============详细面板打开时进行以下接口分析=====================
@@ -357,38 +415,6 @@ export async function unpack(parcel: string) {
         is_dead: false,
       })
     })
-  }
-
-  // BattleLog 记录副本start信息
-  if (/\/rest\/(?:raid|multiraid)\/start\.json/.test(url)) {
-    battleInfo.value.inLobby = false
-
-    const battleStartJson: BattleStartJson = responseData
-
-    handleStartJson(battleStartJson)
-
-    const matchName = battleStartJson.boss.param.reduce<string[]>((pre, cur) => {
-      pre.push(cur.name.ja, cur.name.en)
-      return pre
-    }, [])
-    const bossInfo = {
-      battleId: String(battleStartJson.raid_id),
-      userId: battleStartJson.user_id,
-      questId: battleStartJson.quest_id,
-      battleTotal: Number(battleStartJson.battle.total),
-      battleCount: Number(battleStartJson.battle.count),
-      matchName,
-      boss: battleStartJson.boss.param.map(boss => ({
-        id: boss.enemy_id,
-        name: boss.name.ja,
-        lv: boss.Lv,
-        attr: boss.attr,
-        cjs: boss.cjs,
-        hp: Number(boss.hpmax),
-      })),
-    }
-    console.log('sendBossInfo', bossInfo)
-    sendBossInfo(bossInfo).catch((err) => { console.log(err.message) })
   }
 
   // BattleLog 记录子技能日志

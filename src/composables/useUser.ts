@@ -11,6 +11,12 @@ export default function useUser() {
       code.value = uuidv4()
   }
 
+  function checkUserV2(id: string) {
+    uid.value = id
+    if (!uuidValidate(code.value))
+      code.value = uuidv4()
+  }
+
   function sendInfo(dropInfo: DropInfo[], upload = false) {
     if (!upload)
       beforeSend(dropInfo)
@@ -69,6 +75,7 @@ export default function useUser() {
 
   return {
     checkUser,
+    checkUserV2,
     sendInfo,
   }
 }

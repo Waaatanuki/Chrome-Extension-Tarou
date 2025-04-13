@@ -1,26 +1,6 @@
 import { onMessage, sendMessage } from 'webext-bridge/content-script'
 
 (() => {
-  // 获取副本名称
-  onMessage('getRaidName', () => {
-    return new Promise((resolve) => {
-      const start = setInterval(() => {
-        if (!/\/#raid(?:_multi)?\/\d+/.test(document.URL)) {
-          console.log('战斗开始检测中断', document.URL)
-          clearInterval(start)
-          resolve({})
-        }
-
-        console.log('监测到战斗开始')
-        const targetEl = document.querySelector('.enemy-info .name')
-        if (targetEl && targetEl.innerHTML) {
-          clearInterval(start)
-          resolve({ questName: targetEl.innerHTML })
-        }
-      }, 200)
-    })
-  })
-
   // 获取掉落数据
   onMessage('getBattleResult', () => {
     return new Promise((resolve) => {

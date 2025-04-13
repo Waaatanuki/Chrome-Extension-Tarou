@@ -37,44 +37,6 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
     }
   })
 
-  chrome.webRequest.onBeforeRequest.addListener((details) => {
-    // 记录战斗id与副本名称
-    if (/\/rest\/(?:raid|multiraid)\/start\.json/.test(details.url)) {
-      checkUser(details.url)
-
-      if (!details.requestBody?.raw) {
-        console.log('details.requestBody==>', details.requestBody)
-        return
-      }
-      const arrayBuffer = details.requestBody.raw[0].bytes!
-
-      const decoder = new TextDecoder('utf-8')
-      const uint8Array = new Uint8Array(arrayBuffer)
-      const jsonString = decoder.decode(uint8Array)
-      const requestBody: RequestBody = JSON.parse(jsonString)
-      const battleId = String(requestBody.raid_id)
-      const timestamp = Number(requestBody.time)
-      const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
-      if (hitMemo)
-        return
-      console.log('gogogo')
-
-      sendMessage('getRaidName', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
-        if (!res?.questName)
-          return
-        console.log('新增memo==>', { battleId, quest_name: res.questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') })
-
-        battleMemo.value.push({ battleId, questName: res.questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') })
-
-        if (battleMemo.value.length > MaxMemoLength)
-          battleMemo.value.shift()
-        console.log('memoList==>', battleMemo.value)
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
-  }, { urls: ['*://*.granbluefantasy.jp/*'] }, ['requestBody'])
-
   chrome.webRequest.onCompleted.addListener((details) => {
     // 记录掉落结果
     if (/\/result(?:multi)?\/content\/index/.test(details.url)) {
@@ -334,11 +296,3 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
 
   addMenuClickListener()
 })()
-
-interface RequestBody {
-  special_token: any
-  raid_id: string
-  action: string
-  is_multi: boolean
-  time: number
-}
