@@ -4,7 +4,7 @@ import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
-import { battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obWindowId, recoveryItemList, stone, xenoGauge } from '~/logic'
+import { battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -411,6 +411,15 @@ export async function unpack(parcel: string) {
 
   if (!obWindowId.value)
     return
+
+  // 判断是否开启debugger
+  if (url.includes('/socket/uri')) {
+    chrome.debugger.detach({ tabId: obTabId.value })
+      .catch(error => console.log(error))
+      .then(() => chrome.debugger.attach({ tabId: obTabId.value }, '1.2'))
+      .then(() => chrome.debugger.sendCommand({ tabId: obTabId.value }, 'Network.enable'))
+      .catch(error => console.log(error))
+  }
 
   // Party 记录当前队伍信息
   if (url.includes('party/deck')) {

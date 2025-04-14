@@ -241,6 +241,12 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
       obWindowId.value = 0
       battleInfo.value = {}
       deckList.value = []
+
+      chrome.debugger.detach({ tabId: obTabId.value }).then(() => {
+        console.log('断开debugger')
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   })
 

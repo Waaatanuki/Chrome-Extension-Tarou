@@ -17,14 +17,6 @@ export default function useDashboard() {
           obWindowId.value = windowInfo.id
           battleInfo.value = {}
           deckList.value = []
-          try {
-            await chrome.debugger.detach({ tabId: tab.id })
-          }
-          catch (error) {
-            console.log(error)
-          }
-          await chrome.debugger.attach({ tabId: tab.id }, '1.2')
-          await chrome.debugger.sendCommand({ tabId: tab.id }, 'Network.enable')
         }
       }).catch((err) => {
         createNotification({ message: String(err) })
