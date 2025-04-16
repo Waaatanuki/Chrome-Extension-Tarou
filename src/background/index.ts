@@ -158,7 +158,7 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
         console.log(err)
       })
     }
-  }, { urls: ['*://*.granbluefantasy.jp/*'] })
+  }, { urls: ['*://*.granbluefantasy.jp/*', '*://gbf.game.mbga.jp/*'] })
 
   function getTreasureList(domStr: string) {
     const $ = load(domStr)
