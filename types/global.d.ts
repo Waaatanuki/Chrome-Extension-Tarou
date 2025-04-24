@@ -217,6 +217,11 @@ declare module 'myStorage' {
     isPointOverLimit: boolean
   }
 
+  interface ArtifactRule {
+    kind: Record<string, number>
+    attribute: Record<string, number>
+    skill: Record<string, number>
+  }
 }
 
 declare module 'source'{
@@ -788,6 +793,37 @@ declare module 'source'{
        timestamp: string
        user_id: string
      }
+   }
+
+   interface Artifact {
+     artifact_id: number
+     max_level: number
+     name: string
+     comment: string
+     rarity: string
+     skill1_info: ArtifactSkillInfo
+     skill2_info: ArtifactSkillInfo
+     skill3_info: ArtifactSkillInfo
+     skill4_info: ArtifactSkillInfo
+     id: number
+     level: string
+     kind: string
+     attribute: string
+     next_exp: number
+     remain_next_exp: number
+     exp_width: number
+     is_used: boolean
+     is_locked: boolean
+     is_unnecessary: boolean
+   }
+
+   interface ArtifactSkillInfo {
+     skill_id: number
+     level: number
+     name: string
+     is_max_quality: boolean
+     effect_value: string
+     icon_image: string
    }
 }
 

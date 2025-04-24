@@ -1,4 +1,4 @@
-import { battleInfo, deckList, obTabId, obWindowId, windowSize } from '~/logic/storage'
+import { artifactList, battleInfo, deckList, obTabId, obWindowId, windowSize } from '~/logic/storage'
 
 export default function useDashboard() {
   async function openDashboard() {
@@ -17,6 +17,7 @@ export default function useDashboard() {
           obWindowId.value = windowInfo.id
           battleInfo.value = {}
           deckList.value = []
+          artifactList.value = []
         }
       }).catch((err) => {
         createNotification({ message: String(err) })

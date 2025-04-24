@@ -36,3 +36,22 @@ body {
   top: -1px;
   left: 0px;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar:horizontal {
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #0003;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background-color: #0000004d;
+}

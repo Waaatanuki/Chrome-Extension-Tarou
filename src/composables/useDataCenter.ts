@@ -4,7 +4,7 @@ import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
-import { battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, xenoGauge } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -419,6 +419,11 @@ export async function unpack(parcel: string) {
       .then(() => chrome.debugger.attach({ tabId: obTabId.value }, '1.2'))
       .then(() => chrome.debugger.sendCommand({ tabId: obTabId.value }, 'Network.enable'))
       .catch(error => console.log(error))
+  }
+
+  // Artifact 记录当前神器信息
+  if (url.includes('/rest/artifact/list')) {
+    artifactList.value = responseData.list
   }
 
   // Party 记录当前队伍信息
