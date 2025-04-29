@@ -88,9 +88,9 @@ onMounted(() => {
       <div v-for="artifact in artifactList" :key="artifact.id" class="border-#4C4D4F" relative w-200px border-1 rounded-lg border-solid py-2>
         <div fc gap-4>
           <div relative h-60px w-60px>
-            <img w-60px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/artifact/s/${artifact.artifact_id}.jpg`" width="100%" height="100%" alt="">
-            <img absolute bottom-0 left-0 :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/artifact/ui/icon/icn_type_${artifact.attribute}.png`" width="30%" height="30%" alt="">
-            <img absolute right-0 top-0 :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/artifact/ui/icon/icn_weapon_${artifact.kind.padStart(2, '0')}.png`" width="30%" height="30%" alt="">
+            <img w-60px :src="getAssetImg('artifact', artifact.artifact_id, 's')" width="100%" height="100%">
+            <img absolute bottom-0 left-0 :src="getArtifactIcon(`icn_type_${artifact.attribute}`)" width="30%" height="30%">
+            <img absolute right-0 top-0 :src="getArtifactIcon(`icn_weapon_${artifact.kind.padStart(2, '0')}`) " width="30%" height="30%">
           </div>
           <div v-if="artifact.rarity === '3'" w-100px text-base>
             <div>得分：{{ getPoint(artifact) }}</div>

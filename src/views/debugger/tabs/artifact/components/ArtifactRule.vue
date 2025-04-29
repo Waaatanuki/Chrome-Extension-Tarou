@@ -51,7 +51,7 @@ onMounted(() => {
               </div>
               <div flex flex-col gap-4>
                 <div v-for="value, key in rule.attribute" :key="key" flex gap-2>
-                  <img w-24px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/artifact/ui/icon/icn_type_${key}.png`">
+                  <img w-24px :src="getArtifactIcon(`icn_type_${key}`)">
                   <el-input-number
                     v-model="rule.attribute[key]"
                     :min="1"
@@ -68,7 +68,7 @@ onMounted(() => {
               </div>
               <div flex flex-col gap-4>
                 <div v-for="value, key in rule.kind" :key="key" flex gap-2>
-                  <img w-24px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/artifact/ui/icon/icn_weapon_${key}.png`">
+                  <img w-24px :src="getArtifactIcon(`icn_weapon_${key}`)">
                   <el-input-number
                     v-model="rule.kind[key]"
                     :min="1"
