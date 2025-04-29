@@ -17,19 +17,31 @@ function getPoint(artifact: any) {
   const artifactAttribute = String(artifact.attribute)
   let count = artifactRule.value.kind[artifactKind] + artifactRule.value.attribute[artifactAttribute]
 
+  artifactRule.value.extra = artifactRule.value.extra || {}
+
   for (const skillName of skillNameList) {
     const skill_id = String(Math.floor(artifact[skillName].skill_id / 10))
     count += artifactRule.value.skill[skill_id] ?? 0
+    const key = `${artifactAttribute}:${artifactKind}:${skill_id}`
+    console.log(key)
+
+    console.log(artifactRule.value.extra)
+
+    if (artifactRule.value.extra[key])
+      count += artifactRule.value.extra[key]
   }
   return count
 }
 
 function getQuality(artifact: any) {
   let count = 0
-  for (const skillName of skillNameList) {
+  for (const skillName of ['skill1_info', 'skill2_info']) {
     count += (artifact[skillName].skill_id % 10)
   }
-  return `${count}/16`
+  for (const skillName of ['skill3_info']) {
+    count += (artifact[skillName].skill_id % 10 * 2)
+  }
+  return `${count}/20`
 }
 
 function handleCopy() {
@@ -84,9 +96,9 @@ onMounted(() => {
         </TheButton>
       </div>
     </div>
-    <div m-auto mt-2 w-1020px flex shrink-0 flex-wrap gap-5px>
-      <div v-for="artifact in artifactList" :key="artifact.id" class="border-#4C4D4F" relative w-200px border-1 rounded-lg border-solid py-2>
-        <div fc gap-4>
+    <div m-auto mt-2 w-1300px flex shrink-0 flex-wrap gap-5px>
+      <div v-for="artifact in artifactList" :key="artifact.id" class="border-#4C4D4F" relative w-250px border-1 rounded-lg border-solid py-2>
+        <div fc gap-6>
           <div relative h-60px w-60px>
             <img w-60px :src="getAssetImg('artifact', artifact.artifact_id, 's')" width="100%" height="100%">
             <img absolute bottom-0 left-0 :src="getArtifactIcon(`icn_type_${artifact.attribute}`)" width="30%" height="30%">
@@ -101,7 +113,7 @@ onMounted(() => {
           </div>
         </div>
         <div mt-2 flex flex-col>
-          <div v-for="skillName in skillNameList" :key="skillName" flex items-center justify-start gap-1 px-10px text-10px>
+          <div v-for="skillName in skillNameList" :key="skillName" flex items-center justify-start gap-1 px-10px text-12px>
             <div self-start leading-15px>
               {{ `Lv${artifact[skillName].level}` }}
             </div>

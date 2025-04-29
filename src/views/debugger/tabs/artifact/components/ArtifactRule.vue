@@ -1,15 +1,35 @@
 <script setup lang="ts">
-import type { ArtifactRule } from 'myStorage'
+import type { ArtifactRule, ExtraRule } from 'myStorage'
 import { artifactSkillList } from '~/constants/artifact'
-import { artifactRule } from '~/logic'
+import { artifactRule, language } from '~/logic'
 
 const emits = defineEmits(['close'])
 const dialogVisible = defineModel<boolean>()
 const tabName = ref('skill1')
+const rule = ref<Required<ArtifactRule>>()
 const skillTabs: ('skill1' | 'skill2' | 'skill3')[] = ['skill1', 'skill2', 'skill3']
-const rule = ref<ArtifactRule>()
+const attrList = ['火', '水', '土', '风', '光', '暗']
+const kindList = ['剑', '短', '枪', '斧', '杖', '铳', '拳', '弓', '琴', '刀']
+
+const extraList = ref<Partial<ExtraRule>[]>([])
+
+function handleAdd(index: number) {
+  extraList.value.splice(index, 0, {})
+}
+
+function handleDelete(index: number) {
+  extraList.value.splice(index, 1)
+}
 
 function onSubmit() {
+  rule.value!.extra = {}
+  for (const extra of extraList.value) {
+    if (!extra.attribute || !extra.kind || !extra.skillId || !extra.value)
+      continue
+    const key = `${extra.attribute}:${extra.kind}:${extra.skillId}`
+    rule.value!.extra[key] = extra.value
+  }
+
   artifactRule.value = JSON.parse(JSON.stringify(rule.value))
   emits('close')
   dialogVisible.value = false
@@ -17,6 +37,11 @@ function onSubmit() {
 
 onMounted(() => {
   rule.value = JSON.parse(JSON.stringify(artifactRule.value))
+  rule.value!.extra = rule.value!.extra || {}
+  for (const [key, value] of Object.entries(rule.value!.extra)) {
+    const [attribute, kind, skillId] = key.split(':')
+    extraList.value.push({ attribute, kind, skillId: Number(skillId), value })
+  }
 })
 </script>
 
@@ -40,6 +65,70 @@ onMounted(() => {
                 />
               </div>
             </div>
+          </div>
+        </el-tab-pane>
+
+        <el-tab-pane label="额外权重" name="extra">
+          <el-scrollbar height="460" pr-1>
+            <el-form :inline="true" size="small" label-width="40">
+              <div flex flex-col gap-2 py-2 pr-2>
+                <el-card v-for="extra, index in extraList" :key="index" body-style="padding:10px 0 0 10px" shadow="never">
+                  <el-form-item label="属性">
+                    <el-select v-model="extra.attribute" style="width: 55px;" placeholder="">
+                      <el-option v-for="item, idx in attrList" :key="item" :value="String(idx + 1)" :label="item" />
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="类型">
+                    <el-select v-model="extra.kind" style="width: 55px;" placeholder="">
+                      <el-option v-for="item, idx in kindList" :key="item" :value="String(idx + 1).padStart(2, '0')" :label="item" />
+                    </el-select>
+                  </el-form-item>
+
+                  <el-form-item label="权重">
+                    <el-input-number
+                      v-model="extra.value"
+                      :min="1"
+                      size="small"
+                      style="width: 80px;"
+                      controls-position="right"
+                    />
+                  </el-form-item>
+
+                  <el-form-item label="技能">
+                    <el-select v-model="extra.skillId" style="width: 250px;" filterable placeholder="">
+                      <el-option-group
+                        v-for="skillType in Object.keys(artifactSkillList)"
+                        :key="skillType"
+                        :label="skillType"
+                      >
+                        <el-option
+                          v-for="item in artifactSkillList[skillType as keyof typeof artifactSkillList]"
+                          :key="item.skill_id"
+                          class="artifact-skill-select"
+                          :label="item.name"
+                          :value="item.skill_id"
+                        >
+                          <el-tooltip placement="top-start" effect="dark" :content="item.name">
+                            {{ item.name }}
+                          </el-tooltip>
+                        </el-option>
+                      </el-option-group>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item>
+                    <div flex gap-4 text-lg>
+                      <div i-carbon:add-alt icon-btn @click="handleAdd(index + 1)" />
+                      <div i-carbon:subtract-alt icon-btn @click="handleDelete(index)" />
+                    </div>
+                  </el-form-item>
+                </el-card>
+              </div>
+            </el-form>
+          </el-scrollbar>
+          <div mb-2 pl--10px pr-10px>
+            <TheButton w-full text-center size="default" @click="handleAdd(extraList.length)">
+              新增额外权重
+            </TheButton>
           </div>
         </el-tab-pane>
 
@@ -85,12 +174,36 @@ onMounted(() => {
     </div>
 
     <template #footer>
-      <TheButton @click="dialogVisible = false">
-        取消
-      </TheButton>
-      <TheButton @click="onSubmit">
-        确认
-      </TheButton>
+      <div flex items-center justify-between>
+        <el-switch
+          v-model="language"
+          pl-4
+          active-value="zh"
+          inactive-value="ja"
+          style="--el-switch-on-color: oklch(70.4% 0.04 256.788); --el-switch-off-color: oklch(55.4% 0.046 257.417)"
+        >
+          <template #active-action>
+            <div i-emojione:flag-for-china />
+          </template>
+          <template #inactive-action>
+            <div i-emojione:flag-for-japan />
+          </template>
+        </el-switch>
+        <div>
+          <TheButton @click="dialogVisible = false">
+            取消
+          </TheButton>
+          <TheButton @click="onSubmit">
+            确认
+          </TheButton>
+        </div>
+      </div>
     </template>
   </el-dialog>
 </template>
+
+<style>
+.artifact-skill-select {
+  --uno: 'w-350px!';
+}
+</style>

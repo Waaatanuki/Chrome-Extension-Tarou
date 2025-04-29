@@ -221,6 +221,14 @@ declare module 'myStorage' {
     kind: Record<string, number>
     attribute: Record<string, number>
     skill: Record<string, number>
+    extra?: Record<string, number>
+  }
+
+  interface ExtraRule {
+    attribute: string
+    kind: string
+    skillId: number
+    value: number
   }
 }
 

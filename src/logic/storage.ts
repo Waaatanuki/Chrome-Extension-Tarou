@@ -60,5 +60,6 @@ export const calculateSettingList = useWebExtensionStorage<CalculateSetting[]>('
 export const markedUserList = useWebExtensionStorage<MarkedUser[]>('markedUserList', [])
 
 // Artifact
+export const language = useWebExtensionStorage<'zh' | 'ja'>('language', 'zh')
 export const artifactList = useWebExtensionStorage<Artifact[]>('artifactList', [])
 export const artifactRule = useWebExtensionStorage<ArtifactRule>('artifactRule', defaultArtifactRule)

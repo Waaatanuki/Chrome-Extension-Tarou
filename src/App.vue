@@ -5,7 +5,7 @@ const visible = ref(false)
 </script>
 
 <template>
-  <div flex flex-wrap gap-3>
+  <div flex flex-wrap gap-3 p-10>
     <Contact absolute right-15px top-15px />
     <div>
       <TheButton @click="visible = true">
