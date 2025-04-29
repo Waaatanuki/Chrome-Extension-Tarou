@@ -24,10 +24,7 @@ function handleDelete(item: string) {
       <template #title>
         <div fc gap-2>
           弹窗通知
-          <div
-            :class="{ 'i-ri:volume-up-fill': !notificationSetting.silent, 'i-ri:volume-mute-fill': notificationSetting.silent }"
-            icon-btn @click="notificationSetting.silent = !notificationSetting.silent"
-          />
+          <VolumeControl />
         </div>
       </template>
     </el-alert>

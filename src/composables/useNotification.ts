@@ -1,5 +1,5 @@
 import { notificationSound } from '~/constants'
-import { notificationSetting } from '~/logic'
+import { volume } from '~/logic'
 
 async function playSoundInTab(sound: keyof typeof notificationSound) {
   const [tab] = await chrome.tabs.query({ url: ['*://*.granbluefantasy.jp/*', '*://gbf.game.mbga.jp/*'] })
@@ -8,22 +8,23 @@ async function playSoundInTab(sound: keyof typeof notificationSound) {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: playSound,
-      args: [`https://prd-game-a5-granbluefantasy.akamaized.net/assets/sound/se/${notificationSound[sound]}.mp3`],
+      args: [`https://prd-game-a5-granbluefantasy.akamaized.net/assets/sound/se/${notificationSound[sound]}.mp3`, volume.value],
     }).catch((err) => {
       console.log(err)
     })
   }
 }
 
-function playSound(audioUrl: string) {
+function playSound(audioUrl: string, volume: number) {
   const audio = new Audio(audioUrl)
+  audio.volume = volume
   audio.play()
 }
 
 export function createNotification(options: NotificationOptions) {
   const { message, iconUrl = '/assets/icon-48.png', sound } = options
 
-  if (sound && !notificationSetting.value.silent)
+  if (sound)
     playSoundInTab(sound)
   chrome.notifications.create({
     iconUrl,

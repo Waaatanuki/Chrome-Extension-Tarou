@@ -17,6 +17,7 @@ export const obWindowId = useWebExtensionStorage<number>('obWindowId', 0)
 export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top: 0, width: 800, height: 600 })
 
 // Setting
+export const volume = useWebExtensionStorage<number>('volume', 0.5)
 export const notificationSetting = useWebExtensionStorage<NotificationSetting>('notificationSetting', defaultNotificationSetting)
 export const notificationItem = useWebExtensionStorage<string[]>('notificationItem', defaultNotificationItem)
 
