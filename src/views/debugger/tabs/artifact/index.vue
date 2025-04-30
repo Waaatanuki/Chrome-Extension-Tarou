@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import copy from 'copy-text-to-clipboard'
 import md5 from 'md5'
-import { artifactList, artifactRule } from '~/logic'
+import { artifactSkillList } from '~/constants/artifact'
+import { artifactList, artifactRule, language } from '~/logic'
 import ArtifactRule from './components/ArtifactRule.vue'
 
 type SkillName = 'skill1_info' | 'skill2_info' | 'skill3_info' | 'skill4_info'
@@ -11,6 +12,13 @@ const dialogVisible = ref(false)
 const inputVisible = ref(false)
 const textarea = ref('')
 const ruleMd5 = ref('')
+
+const artifactSkillFlatList = computed(() => Object.values(artifactSkillList).flat())
+
+function getSkillName(skill_id: number) {
+  const hitSkill = artifactSkillFlatList.value.find(item => item.skill_id === Math.floor(skill_id / 10))
+  return language.value === 'zh' ? hitSkill?.name_zh : hitSkill?.name
+}
 
 function getPoint(artifact: any) {
   const artifactKind = artifact.kind.padStart(2, '0')
@@ -88,6 +96,21 @@ onMounted(() => {
         </div>
       </div>
       <div fc gap-2>
+        <el-switch
+          v-model="language"
+          pl-4
+          active-value="zh"
+          inactive-value="ja"
+          style="--el-switch-on-color: #0D9488; --el-switch-off-color: #32C0B3"
+        >
+          <template #active-action>
+            <div i-emojione:flag-for-china />
+          </template>
+          <template #inactive-action>
+            <div i-emojione:flag-for-japan />
+          </template>
+        </el-switch>
+
         <TheButton icon="carbon:copy" @click="handleCopy">
           复制规则
         </TheButton>
@@ -120,7 +143,7 @@ onMounted(() => {
             </div>
             <img self-start width="16" height="16" :src="getBonusIcon(artifact[skillName].icon_image)">
             <div>
-              {{ `${artifact[skillName].name} ${artifact[skillName].effect_value}` }}
+              {{ `${getSkillName(artifact[skillName].skill_id) ?? ''} ${artifact[skillName].effect_value}` }}
             </div>
           </div>
         </div>

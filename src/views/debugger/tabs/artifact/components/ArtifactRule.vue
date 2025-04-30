@@ -53,7 +53,7 @@ onMounted(() => {
           <div h-500px flex flex-col gap-2 overflow-auto>
             <div v-for="skill in artifactSkillList[tab]" :key="skill.skill_id" flex justify-between border-b-1 class="border-#4C4D4F" p-2>
               <div w-300px text-sm>
-                {{ skill.name }}
+                {{ language === 'zh' ? skill.name_zh : skill.name }}
               </div>
               <div fc>
                 <el-input-number
@@ -108,8 +108,8 @@ onMounted(() => {
                           :label="item.name"
                           :value="item.skill_id"
                         >
-                          <el-tooltip placement="top-start" effect="dark" :content="item.name">
-                            {{ item.name }}
+                          <el-tooltip placement="top-start" effect="dark" :content="language === 'zh' ? item.name_zh : item.name">
+                            {{ language === 'zh' ? item.name_zh : item.name }}
                           </el-tooltip>
                         </el-option>
                       </el-option-group>
@@ -174,30 +174,12 @@ onMounted(() => {
     </div>
 
     <template #footer>
-      <div flex items-center justify-between>
-        <el-switch
-          v-model="language"
-          pl-4
-          active-value="zh"
-          inactive-value="ja"
-          style="--el-switch-on-color: oklch(70.4% 0.04 256.788); --el-switch-off-color: oklch(55.4% 0.046 257.417)"
-        >
-          <template #active-action>
-            <div i-emojione:flag-for-china />
-          </template>
-          <template #inactive-action>
-            <div i-emojione:flag-for-japan />
-          </template>
-        </el-switch>
-        <div>
-          <TheButton @click="dialogVisible = false">
-            取消
-          </TheButton>
-          <TheButton @click="onSubmit">
-            确认
-          </TheButton>
-        </div>
-      </div>
+      <TheButton @click="dialogVisible = false">
+        取消
+      </TheButton>
+      <TheButton @click="onSubmit">
+        确认
+      </TheButton>
     </template>
   </el-dialog>
 </template>
