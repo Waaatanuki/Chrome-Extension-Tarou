@@ -98,6 +98,7 @@ onMounted(() => {
     </div>
     <div m-auto mt-2 w-1300px flex shrink-0 flex-wrap gap-5px>
       <div v-for="artifact in artifactList" :key="artifact.id" class="border-#4C4D4F" relative w-250px border-1 rounded-lg border-solid py-2>
+        <div v-if="artifact.is_locked" i-material-symbols:award-star absolute right-2 top-2 h-20px w-20px text-amber />
         <div fc gap-6>
           <div relative h-60px w-60px>
             <img w-60px :src="getAssetImg('artifact', artifact.artifact_id, 's')" width="100%" height="100%">
