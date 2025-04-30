@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { ArtifactRule, ExtraRule } from 'myStorage'
+import type { ArtifactRuleInfo, ExtraRule } from 'myStorage'
 import { artifactSkillList } from '~/constants/artifact'
-import { artifactRule, language } from '~/logic'
+import { artifactRuleIndex, artifactRuleList, language } from '~/logic'
 
-const emits = defineEmits(['close'])
 const dialogVisible = defineModel<boolean>()
 const tabName = ref('skill1')
-const rule = ref<Required<ArtifactRule>>()
+const ruleName = ref('')
+const ruleInfo = ref<ArtifactRuleInfo>()
 const skillTabs: ('skill1' | 'skill2' | 'skill3')[] = ['skill1', 'skill2', 'skill3']
 const attrList = ['火', '水', '土', '风', '光', '暗']
 const kindList = ['剑', '短', '枪', '斧', '杖', '铳', '拳', '弓', '琴', '刀']
@@ -22,23 +22,26 @@ function handleDelete(index: number) {
 }
 
 function onSubmit() {
-  rule.value!.extra = {}
+  ruleInfo.value!.extra = {}
   for (const extra of extraList.value) {
     if (!extra.attribute || !extra.kind || !extra.skillId || !extra.value)
       continue
     const key = `${extra.attribute}:${extra.kind}:${extra.skillId}`
-    rule.value!.extra[key] = extra.value
+    ruleInfo.value!.extra[key] = extra.value
   }
 
-  artifactRule.value = JSON.parse(JSON.stringify(rule.value))
-  emits('close')
+  artifactRuleList.value[artifactRuleIndex.value] = {
+    name: ruleName.value,
+    info: JSON.parse(JSON.stringify(ruleInfo.value)),
+  }
   dialogVisible.value = false
 }
 
 onMounted(() => {
-  rule.value = JSON.parse(JSON.stringify(artifactRule.value))
-  rule.value!.extra = rule.value!.extra || {}
-  for (const [key, value] of Object.entries(rule.value!.extra)) {
+  ruleName.value = artifactRuleList.value[artifactRuleIndex.value].name
+  ruleInfo.value = JSON.parse(JSON.stringify(artifactRuleList.value[artifactRuleIndex.value].info))
+
+  for (const [key, value] of Object.entries(ruleInfo.value!.extra)) {
     const [attribute, kind, skillId] = key.split(':')
     extraList.value.push({ attribute, kind, skillId: Number(skillId), value })
   }
@@ -47,7 +50,13 @@ onMounted(() => {
 
 <template>
   <el-dialog v-model="dialogVisible" title="神器权重设置" width="600" :show-close="false">
-    <div v-if="rule" m-auto h-500px w-550px border-1 class="border-#4C4D4F" rounded-lg>
+    <template #header>
+      <div flex items-center gap-2>
+        <div>规则名称: </div>
+        <el-input v-model="ruleName" style="width: 150px;" size="small" />
+      </div>
+    </template>
+    <div v-if="ruleInfo" m-auto h-500px w-550px border-1 class="border-#4C4D4F" rounded-lg>
       <el-tabs v-model="tabName" tab-position="left" h-full>
         <el-tab-pane v-for="tab, i in skillTabs" :key="tab" :label="`${'I'.repeat(i + 1)}类技能`" :name="tab">
           <div h-500px flex flex-col gap-2 overflow-auto>
@@ -57,7 +66,7 @@ onMounted(() => {
               </div>
               <div fc>
                 <el-input-number
-                  v-model="rule.skill[skill.skill_id]"
+                  v-model="ruleInfo.skill[skill.skill_id]"
                   :min="1"
                   size="small"
                   style="width: 80px;"
@@ -105,7 +114,7 @@ onMounted(() => {
                           v-for="item in artifactSkillList[skillType as keyof typeof artifactSkillList]"
                           :key="item.skill_id"
                           class="artifact-skill-select"
-                          :label="item.name"
+                          :label="language === 'zh' ? item.name_zh : item.name"
                           :value="item.skill_id"
                         >
                           <el-tooltip placement="top-start" effect="dark" :content="language === 'zh' ? item.name_zh : item.name">
@@ -139,10 +148,10 @@ onMounted(() => {
                 属性
               </div>
               <div flex flex-col gap-4>
-                <div v-for="value, key in rule.attribute" :key="key" flex gap-2>
+                <div v-for="value, key in ruleInfo.attribute" :key="key" flex gap-2>
                   <img w-24px :src="getArtifactIcon(`icn_type_${key}`)">
                   <el-input-number
-                    v-model="rule.attribute[key]"
+                    v-model="ruleInfo.attribute[key]"
                     :min="1"
                     size="small"
                     style="width: 80px;"
@@ -156,10 +165,10 @@ onMounted(() => {
                 类型
               </div>
               <div flex flex-col gap-4>
-                <div v-for="value, key in rule.kind" :key="key" flex gap-2>
+                <div v-for="value, key in ruleInfo.kind" :key="key" flex gap-2>
                   <img w-24px :src="getArtifactIcon(`icn_weapon_${key}`)">
                   <el-input-number
-                    v-model="rule.kind[key]"
+                    v-model="ruleInfo.kind[key]"
                     :min="1"
                     size="small"
                     style="width: 80px;"

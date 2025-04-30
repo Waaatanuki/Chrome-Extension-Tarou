@@ -6,7 +6,7 @@ import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultNotificationItem, defaultNotificationSetting, defaultTodoList } from '~/constants'
-import { defaultArtifactRule } from '~/constants/artifact'
+import { defaultArtifactRuleList } from '~/constants/artifact'
 import { defaultEvokerInfo, defaultXenoGauge } from '~/constants/evoker'
 
 // Debugger
@@ -63,4 +63,5 @@ export const markedUserList = useWebExtensionStorage<MarkedUser[]>('markedUserLi
 // Artifact
 export const language = useWebExtensionStorage<'zh' | 'ja'>('language', 'zh')
 export const artifactList = useWebExtensionStorage<Artifact[]>('artifactList', [])
-export const artifactRule = useWebExtensionStorage<ArtifactRule>('artifactRule', defaultArtifactRule)
+export const artifactRuleIndex = useWebExtensionStorage<number>('artifactRuleIndex', 0)
+export const artifactRuleList = useWebExtensionStorage<ArtifactRule[]>('artifactRuleList', defaultArtifactRuleList)

@@ -218,10 +218,15 @@ declare module 'myStorage' {
   }
 
   interface ArtifactRule {
+    name: string
+    info: ArtifactRuleInfo
+  }
+
+  interface ArtifactRuleInfo {
     kind: Record<string, number>
     attribute: Record<string, number>
     skill: Record<string, number>
-    extra?: Record<string, number>
+    extra: Record<string, number>
   }
 
   interface ExtraRule {

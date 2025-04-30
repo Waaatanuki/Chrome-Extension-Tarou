@@ -1,6 +1,6 @@
 import type { ArtifactRule } from 'myStorage'
 
-export const defaultArtifactRule: ArtifactRule = {
+const defaultArtifactRule = {
   skill: {
     1001: 50,
     2001: 50,
@@ -68,7 +68,13 @@ export const defaultArtifactRule: ArtifactRule = {
   },
   kind: { '01': 100, '02': 100, '03': 100, '04': 100, '05': 100, '06': 100, '07': 100, '08': 100, '09': 100, '10': 100 },
   attribute: { 1: 100, 2: 100, 3: 100, 4: 100, 5: 100, 6: 100 },
+  extra: {},
 }
+
+export const defaultArtifactRuleList: ArtifactRule[] = Array.from({ length: 6 }, (_, i) => ({
+  name: `规则${i + 1}`,
+  info: JSON.parse(JSON.stringify(defaultArtifactRule)),
+}))
 
 export const artifactSkillList = {
   skill1: [
@@ -202,12 +208,12 @@ export const artifactSkillList = {
     {
       skill_id: 3024,
       name: 'HPが50%以上の時、トリプルアタック確率UP',
-      name_zh: '50血以上时TA几率UP',
+      name_zh: '血量50%以上时TA几率UP',
     },
     {
       skill_id: 3025,
       name: 'HPが50%以下の時、被ダメージを軽減',
-      name_zh: '50血以下时受伤减轻',
+      name_zh: '血量50%以下时受伤减轻',
     },
     {
       skill_id: 3026,

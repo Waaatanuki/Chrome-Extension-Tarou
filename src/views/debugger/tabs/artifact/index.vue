@@ -2,7 +2,7 @@
 import copy from 'copy-text-to-clipboard'
 import md5 from 'md5'
 import { artifactSkillList } from '~/constants/artifact'
-import { artifactList, artifactRule, language } from '~/logic'
+import { artifactList, artifactRuleIndex, artifactRuleList, language } from '~/logic'
 import ArtifactRule from './components/ArtifactRule.vue'
 
 type SkillName = 'skill1_info' | 'skill2_info' | 'skill3_info' | 'skill4_info'
@@ -11,9 +11,10 @@ const skillNameList: SkillName[] = ['skill1_info', 'skill2_info', 'skill3_info',
 const dialogVisible = ref(false)
 const inputVisible = ref(false)
 const textarea = ref('')
-const ruleMd5 = ref('')
 
+const currentArtifaceRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 const artifactSkillFlatList = computed(() => Object.values(artifactSkillList).flat())
+const ruleMd5 = computed(() => md5(JSON.stringify(currentArtifaceRuleInfo.value)).slice(-10))
 
 function getSkillName(skill_id: number) {
   const hitSkill = artifactSkillFlatList.value.find(item => item.skill_id === Math.floor(skill_id / 10))
@@ -23,20 +24,15 @@ function getSkillName(skill_id: number) {
 function getPoint(artifact: any) {
   const artifactKind = artifact.kind.padStart(2, '0')
   const artifactAttribute = String(artifact.attribute)
-  let count = artifactRule.value.kind[artifactKind] + artifactRule.value.attribute[artifactAttribute]
-
-  artifactRule.value.extra = artifactRule.value.extra || {}
+  let count = currentArtifaceRuleInfo.value.kind[artifactKind] + currentArtifaceRuleInfo.value.attribute[artifactAttribute]
 
   for (const skillName of skillNameList) {
     const skill_id = String(Math.floor(artifact[skillName].skill_id / 10))
-    count += artifactRule.value.skill[skill_id] ?? 0
+    count += currentArtifaceRuleInfo.value.skill[skill_id] ?? 0
     const key = `${artifactAttribute}:${artifactKind}:${skill_id}`
-    console.log(key)
 
-    console.log(artifactRule.value.extra)
-
-    if (artifactRule.value.extra[key])
-      count += artifactRule.value.extra[key]
+    if (currentArtifaceRuleInfo.value.extra[key])
+      count += currentArtifaceRuleInfo.value.extra[key]
   }
   return count
 }
@@ -53,7 +49,7 @@ function getQuality(artifact: any) {
 }
 
 function handleCopy() {
-  if (copy(JSON.stringify(artifactRule.value)))
+  if (copy(JSON.stringify(currentArtifaceRuleInfo.value)))
     ElMessage.success(`已复制当前权重规则`)
 }
 
@@ -64,8 +60,7 @@ function handlePaste() {
 
 function onPasteSubmit() {
   try {
-    artifactRule.value = JSON.parse(textarea.value)
-    generateMd5()
+    artifactRuleList.value[artifactRuleIndex.value].info = JSON.parse(textarea.value)
     inputVisible.value = false
     ElMessage.success('导入成功')
   }
@@ -74,31 +69,26 @@ function onPasteSubmit() {
     ElMessage.error('数据异常，复制失败')
   }
 }
-
-function generateMd5() {
-  ruleMd5.value = md5(JSON.stringify(artifactRule.value))
-}
-
-onMounted(() => {
-  generateMd5()
-})
 </script>
 
 <template>
   <main overflow-auto>
-    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-violet px-4 text-base>
+    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded class="bg-violet dark:bg-#2d1e3a" px-4 text-base>
       <div flex items-center gap-4>
+        <el-select v-model="artifactRuleIndex" size="small" style="width: 150px;">
+          <el-option v-for="rule, idx in artifactRuleList" :key="idx" :value="idx" :label="rule.name" />
+        </el-select>
         <TheButton @click="dialogVisible = true">
           配置权重
         </TheButton>
-        <div text-base>
-          当前规则Key: {{ ruleMd5.slice(-10) }}
+        <div text-sm>
+          当前规则Key: {{ ruleMd5 }}
         </div>
       </div>
       <div fc gap-2>
         <el-switch
           v-model="language"
-          pl-4
+          mr-2
           active-value="zh"
           inactive-value="ja"
           style="--el-switch-on-color: #0D9488; --el-switch-off-color: #32C0B3"
@@ -117,9 +107,12 @@ onMounted(() => {
         <TheButton icon="carbon:paste" @click="handlePaste">
           导入规则
         </TheButton>
+        <el-link ml-2 href="https://bbs.nga.cn/read.php?tid=43964410" target="_blank">
+          NGA规则分享楼
+        </el-link>
       </div>
     </div>
-    <div m-auto mt-2 w-1300px flex shrink-0 flex-wrap gap-5px>
+    <div m-auto mt-2 w-1270px flex shrink-0 flex-wrap gap-5px>
       <div v-for="artifact in artifactList" :key="artifact.id" class="border-#4C4D4F" relative w-250px border-1 rounded-lg border-solid py-2>
         <div v-if="artifact.is_locked" i-material-symbols:award-star absolute right-2 top-2 h-20px w-20px text-amber />
         <div fc gap-6>
@@ -149,7 +142,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <ArtifactRule v-if="dialogVisible" v-model="dialogVisible" @close="generateMd5" />
+    <ArtifactRule v-if="dialogVisible" v-model="dialogVisible" />
 
     <el-dialog v-model="inputVisible">
       <el-input v-model="textarea" :rows="6" type="textarea" />

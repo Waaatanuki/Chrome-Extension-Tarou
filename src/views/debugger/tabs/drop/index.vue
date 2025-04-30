@@ -124,7 +124,7 @@ onMounted(() => {
 
 <template>
   <main>
-    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-violet px-4 text-base>
+    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded class="bg-violet dark:bg-#2d1e3a" px-4 text-base>
       <TheButton icon="carbon:update-now" :loading="queryBtnLoading" @click="handleQuery">
         刷新
       </TheButton>
