@@ -2,7 +2,7 @@
 import type { DropInfo, RawDrop, Stat } from 'api'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { listDrop, listQuest } from '~/api'
-import { questConfig } from '~/logic/storage'
+import { code, questConfig, uid } from '~/logic/storage'
 
 const { sendInfo } = useUser()
 const questData = ref<Stat[]>([])
@@ -25,6 +25,12 @@ function toggleVisible(questId: string) {
 function handleQuery() {
   if (queryBtnLoading.value)
     return
+
+  if (!code.value || !uid.value) {
+    ElMessage.error('请先获取引继码和玩家ID')
+    return
+  }
+
   const questIds = questConfig.value.filter(q => q.visible).map(q => q.questId)
   if (questIds.length === 0) {
     console.log('还未收藏副本')
