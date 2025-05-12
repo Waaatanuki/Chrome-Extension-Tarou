@@ -473,6 +473,12 @@ export async function unpack(parcel: string) {
     handleGuardSettingJson({ raid_id: paylaod.raid_id, guard_status: responseData.guard_status })
   }
 
+  // BattleLog 记录切换奥义温存日志
+  if (/\/rest\/(?:raid|multiraid)\/special_skill_setting/.test(url)) {
+    const paylaod = JSON.parse(requestData!)
+    handleSpecialSkillSettingJson(paylaod)
+  }
+
   // BattleLog 记录战斗结果
   if (url.includes('resultmulti/content/detail')) {
     const regex = /\/detail\/(\d+)\?/
