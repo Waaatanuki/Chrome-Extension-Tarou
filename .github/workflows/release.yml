@@ -24,6 +24,12 @@ jobs:
         run: pnpm run bp
       - name: Zip
         run: pnpm run zip
+      - name: Log
+        env:
+          OSS_ACCESSKEY_ID: ${{ secrets.OSS_ACCESSKEY_ID }}
+          OSS_ACCESSKEY_SECRET: ${{ secrets.OSS_ACCESSKEY_SECRET }}
+          OSS_BUCKET_FILE: ${{ secrets.OSS_BUCKET_FILE }}
+        run: pnpm run log
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
