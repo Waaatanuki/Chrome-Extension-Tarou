@@ -1,8 +1,9 @@
 import type { Treasure } from 'api'
+import type { NumberLimitPair } from 'myStorage'
 import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import { onMessage, sendMessage } from 'webext-bridge/background'
-import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile } from '~/logic/storage'
+import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile, userInfo } from '~/logic/storage'
 
 (() => {
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
@@ -158,6 +159,36 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
         console.log(err)
       })
     }
+
+    // 记录首页信息
+    if (details.url.includes('/user/content/index')) {
+      sendMessage('getMypage', null, { context: 'content-script', tabId: details.tabId }).then((res) => {
+        if (!res?.domStr)
+          return
+
+        const $ = load(res.domStr)
+
+        const $popArcarum = load($('#tpl-pop-arcarum-point-detail').text())
+        const $popFollow = load($('#tpl-pop-follow-point-detail').text())
+
+        userInfo.value.arcarum = {
+          passport: parseNumberLimit($('.prt-arcarum-passport-box').text()),
+          point: {
+            weekly: parseNumberLimit($popArcarum('.txt-point-num').text()),
+            total: parseNumberLimit($('.prt-arcarum-point-box').text()),
+          },
+        }
+
+        userInfo.value.artifact = parseNumberLimit($('.prt-artifact-dropcount-info-box').text())
+
+        userInfo.value.followPoint = {
+          weekly: parseNumberLimit($popFollow('.txt-point-num').text()),
+          total: parseNumberLimit($('.prt-follow-point-box').text()),
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
   }, { urls: ['*://*.granbluefantasy.jp/*', '*://gbf.game.mbga.jp/*'] })
 
   function getTreasureList(domStr: string) {
@@ -220,6 +251,11 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
       iconUrl: `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`,
       sound: 'drop',
     })
+  }
+
+  function parseNumberLimit(text: string): NumberLimitPair {
+    const [number, limit] = text.split('/').map(Number)
+    return { number: Number.isNaN(number) ? 0 : number, limit: Number.isNaN(limit) ? 0 : limit }
   }
 
   chrome.runtime.onInstalled.addListener(() => {

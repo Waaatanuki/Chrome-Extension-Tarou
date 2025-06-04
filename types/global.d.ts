@@ -2,6 +2,42 @@ declare module 'myStorage' {
   import type { NormalAttackInfo } from 'battleLog'
   import type { Buff } from 'source'
 
+  interface UserInfo {
+    uid: string
+    mbp: {
+      daily: NumberLimitPair
+      weekly: NumberLimitPair
+      bonus: {
+        r: NumberLimitPair
+        sr: NumberLimitPair
+      }
+      total: NumberLimitPair
+    }
+    hmbp: {
+      weekly: NumberLimitPair
+      bonus: {
+        crew: NumberLimitPair
+      }
+      total: NumberLimitPair
+    }
+    arcarum: {
+      passport: NumberLimitPair
+      point: {
+        weekly: NumberLimitPair
+        total: NumberLimitPair
+      }
+    }
+    artifact: NumberLimitPair
+    followPoint: {
+      weekly: NumberLimitPair
+      total: NumberLimitPair
+    }
+  }
+  interface NumberLimitPair {
+    number: number
+    limit: number
+  }
+
   interface Profile {
     uid: string
     name: string

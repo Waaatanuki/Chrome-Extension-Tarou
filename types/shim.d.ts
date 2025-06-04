@@ -8,5 +8,6 @@ declare module 'webext-bridge' {
     getUnclaimedList: ProtocolWithReturn<null, void | { domStr?: string }>
     getSupportSummon: ProtocolWithReturn<null, void | { domStr?: string }>
     getNpczenith: ProtocolWithReturn<null, void | { domStr?: string }>
+    getMypage: ProtocolWithReturn<null, void | { domStr?: string }>
   }
 }

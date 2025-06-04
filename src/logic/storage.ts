@@ -1,6 +1,6 @@
 import type { DropInfo } from 'api'
 import type { BattleInfo } from 'battleLog'
-import type { ArtifactRule, BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, NotificationSetting, Profile, Quest, QuestMemo, RecoveryItem } from 'myStorage'
+import type { ArtifactRule, BattleMemo, BattleRecord, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, NotificationSetting, Profile, Quest, QuestMemo, RecoveryItem, UserInfo } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
@@ -10,6 +10,7 @@ import { defaultArtifactRuleList } from '~/constants/artifact'
 import { defaultEvokerInfo, defaultXenoGauge } from '~/constants/evoker'
 
 // Debugger
+export const userInfo = useWebExtensionStorage<Partial<UserInfo>>('userInfo', {})
 export const code = useWebExtensionStorage<string>('code', '')
 export const uid = useWebExtensionStorage<string>('uid', '')
 export const obTabId = useWebExtensionStorage<number>('obTabId', 0)

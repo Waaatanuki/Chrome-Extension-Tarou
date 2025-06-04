@@ -4,7 +4,7 @@ import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
-import { artifactList, battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, xenoGauge } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, userInfo, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -13,6 +13,54 @@ export async function unpack(parcel: string) {
     return
 
   const { url, requestData, responseData } = JSON.parse(parcel) as { url: string, requestData?: string, responseData?: any }
+
+  // Dashboard 首页勋章数据
+  if (url.includes('/user/content/index')) {
+    const urlObj = new URL(url)
+    userInfo.value.uid = urlObj.searchParams.get('uid')!
+    const mbp_limit_info = responseData.option.mbp_limit_info
+    userInfo.value.mbp = {
+      daily: {
+        number: Number(mbp_limit_info[92001].limit_info[10100].data.daily.get_number),
+        limit: Number(mbp_limit_info[92001].limit_info[10100].data.daily.get_limit),
+      },
+      weekly: {
+        number: Number(mbp_limit_info[92001].limit_info[10100].data.weekly.get_number),
+        limit: Number(mbp_limit_info[92001].limit_info[10100].data.weekly.get_limit),
+      },
+      bonus: {
+        r: {
+          number: Number(mbp_limit_info[92001].limit_info[20100].data.weekly.get_number),
+          limit: Number(mbp_limit_info[92001].limit_info[20100].data.weekly.get_limit),
+        },
+        sr: {
+          number: Number(mbp_limit_info[92001].limit_info[20200].data.weekly.get_number),
+          limit: Number(mbp_limit_info[92001].limit_info[20200].data.weekly.get_limit),
+        },
+      },
+      total: {
+        number: Number(mbp_limit_info[92001].article.number),
+        limit: Number(mbp_limit_info[92001].article.limit),
+      },
+    }
+
+    userInfo.value.hmbp = {
+      weekly: {
+        number: Number(mbp_limit_info[92002].limit_info[10100].data.weekly.get_number),
+        limit: Number(mbp_limit_info[92002].limit_info[10100].data.weekly.get_limit),
+      },
+      bonus: {
+        crew: {
+          number: Number(mbp_limit_info[92002].limit_info[20300].data.weekly.get_number),
+          limit: Number(mbp_limit_info[92002].limit_info[20300].data.weekly.get_limit),
+        },
+      },
+      total: {
+        number: Number(mbp_limit_info[92002].article.number),
+        limit: Number(mbp_limit_info[92002].article.limit),
+      },
+    }
+  }
 
   // Dashboard 抽卡数据
   if (url.includes('game.granbluefantasy.jp/gacha/list')) {

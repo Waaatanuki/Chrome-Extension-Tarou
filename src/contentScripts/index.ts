@@ -85,6 +85,28 @@ import { onMessage, sendMessage } from 'webext-bridge/content-script'
     })
   })
 
+  // 获取首页信息
+  onMessage('getMypage', () => {
+    return new Promise((resolve) => {
+      const start = setInterval(() => {
+        if (!document.URL.includes('#mypage')) {
+          console.log('首页检测中断', document.URL)
+          clearInterval(start)
+          resolve({})
+        }
+
+        console.log('监测到主页')
+        const targetEl = document.querySelector('#status-accordion-wrapper')
+        const contentEl = document.querySelector('.contents')
+
+        if (targetEl && contentEl) {
+          clearInterval(start)
+          resolve({ domStr: contentEl.outerHTML })
+        }
+      }, 200)
+    })
+  })
+
   function injectScript() {
     const script = document.createElement('script')
     script.async = true
