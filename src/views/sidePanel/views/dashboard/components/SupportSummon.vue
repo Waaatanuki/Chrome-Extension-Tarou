@@ -5,7 +5,7 @@ const order = [1, 2, 3, 4, 5, 6]
 </script>
 
 <template>
-  <div v-if="profile.uid" relative>
+  <div v-if="profile.uid" relative h-285px w-530px>
     <img absolute h-full w-full :src="getLocalImg('frame')">
     <div relative z-10 flex gap-10px px-25px py-20px>
       <div>

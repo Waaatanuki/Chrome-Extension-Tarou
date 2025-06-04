@@ -26,14 +26,14 @@ const downViewList = [
     <div h-150 w-200 flex rounded-xl bg-neutral>
       <div w-full flex-1 overflow-hidden bg-rose p-2>
         <div flex flex-wrap>
-          <el-card body-style="padding: 10px" header-class="my-card-header" h-full>
+          <el-card body-style="padding: 10px" header-class="my-card-header" h-full w-340px>
             <template #header>
               <div flex justify-between>
                 <div>      攒井第2天</div>
                 <div>3井</div>
               </div>
             </template>
-            <div flex gap-5 text-12px>
+            <div flex justify-around gap-5 text-12px>
               <div w-50px fc flex-col>
                 <img :src="getLocalImg('20010', 'ticket')">
                 <span text-center>

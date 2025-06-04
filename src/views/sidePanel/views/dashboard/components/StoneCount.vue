@@ -11,7 +11,7 @@ function reset() {
 </script>
 
 <template>
-  <el-card body-style="padding: 10px" header-class="my-card-header" h-full>
+  <el-card body-style="padding: 10px" header-class="my-card-header" h-full w-340px>
     <template #header>
       <div flex justify-between>
         <div fc gap-2>
@@ -29,7 +29,7 @@ function reset() {
         </div>
       </div>
     </template>
-    <div flex gap-5 text-12px>
+    <div flex justify-around gap-5 text-12px>
       <div w-50px fc flex-col>
         <img :src="getLocalImg('20010', 'ticket')">
         <span text-center>

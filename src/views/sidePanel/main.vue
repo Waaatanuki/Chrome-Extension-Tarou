@@ -23,8 +23,8 @@ const downViewList = [
 
 <template>
   <el-config-provider :locale="zhCn">
-    <div h-vh w-vw flex>
-      <div flex-1 p-10px>
+    <div h-full w-full flex>
+      <div min-w-310px flex-1 p-10px>
         <keep-alive>
           <component :is="componentMap[currentView]" />
         </keep-alive>
