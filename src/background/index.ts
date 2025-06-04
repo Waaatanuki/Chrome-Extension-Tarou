@@ -225,10 +225,21 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
   chrome.runtime.onInstalled.addListener(() => {
     checkCode()
     registerContextMenu()
+    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
   })
 
-  chrome.tabs.onUpdated.addListener(() => {
+  chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
     console.log('wake up!')
+
+    if (!tab.url)
+      return
+    const url = new URL(tab.url)
+    const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
+    await chrome.sidePanel.setOptions({
+      tabId,
+      path: 'src/views/sidePanel/main.html',
+      enabled: HOST.includes(url.host),
+    })
   })
 
   chrome.tabs.onRemoved.addListener((tabId) => {

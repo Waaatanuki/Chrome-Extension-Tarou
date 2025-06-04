@@ -6,17 +6,6 @@ import { code, questConfig, uid } from '~/logic/storage'
 
 const questData = ref<Stat[]>([])
 
-function handleCommand(command: string) {
-  switch (command) {
-    case 'toggleDark':
-      toggleDark()
-      break
-    case 'test':
-      handleQuery()
-      break
-  }
-}
-
 const dialogVisible = ref(false)
 const form = reactive({
   oldValue: '',
@@ -89,11 +78,6 @@ onMounted(() => {
       </ElScrollbar>
 
       <div flex items-center justify-between px-15px py-10px>
-        <div fc gap-20px text-lg>
-          <el-tooltip content="切换模式" placement="bottom">
-            <div i-carbon-sun dark:i-carbon-moon icon-btn @click="handleCommand('toggleDark')" />
-          </el-tooltip>
-        </div>
         <div mr-2>
           <el-link :type="code ? 'success' : 'default'" @click="showDialog">
             玩家ID: {{ uid || '未获取' }}
