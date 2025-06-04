@@ -24,9 +24,9 @@ const downViewList = [
 <template>
   <el-config-provider :locale="zhCn">
     <div h-vh w-vw flex>
-      <div h-vh w-full flex flex-1 overflow-hidden p-2>
+      <div flex-1 p-10px>
         <keep-alive>
-          <component :is="componentMap[currentView]" flex-1 />
+          <component :is="componentMap[currentView]" />
         </keep-alive>
       </div>
       <div class="bg-#3C3C3C" w-50px flex shrink-0 flex-col justify-between p-10px>
