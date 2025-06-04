@@ -1,107 +1,50 @@
 <script setup lang="ts">
-import type { Stat } from 'api'
-import copy from 'copy-text-to-clipboard'
-import { listDrop, updateCode } from '~/api'
-import { code, questConfig, uid } from '~/logic/storage'
+import { Icon } from '@iconify/vue'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import Dashborad from './views/dashboard/index.vue'
+import Drop from './views/drop/index.vue'
+import Setting from './views/setting/index.vue'
 
-const questData = ref<Stat[]>([])
-
-const dialogVisible = ref(false)
-const form = reactive({
-  oldValue: '',
-  newValue: '',
-})
-const loading = ref(false)
-const btnLoading = ref(false)
-
-function showDialog() {
-  if (!code.value || !uid.value)
-    return ElMessage.info('进入战斗获取信息')
-
-  dialogVisible.value = true
-  form.oldValue = code.value
-  form.newValue = ''
+const componentMap: Record<string, Component> = {
+  Dashborad,
+  Drop,
+  Setting,
 }
+const currentView = ref('Dashborad')
 
-function handleCopy(text: string) {
-  if (copy(text))
-    ElMessage.success(`已复制引继码`)
-}
-
-function submit() {
-  if (btnLoading.value)
-    return
-  btnLoading.value = true
-  updateCode({ code: form.newValue }).then((data) => {
-    code.value = data.code
-    dialogVisible.value = false
-    ElMessage.success('迁移成功')
-  }).catch((err) => {
-    ElMessage.error(err.message)
-  }).finally(() => {
-    btnLoading.value = false
-  })
-}
-
-function handleQuery() {
-  const questIds = questConfig.value.filter(q => q.visible).map(q => q.questId)
-  if (questIds.length === 0)
-    return
-
-  loading.value = true
-  listDrop(questIds).then(({ data }) => {
-    questData.value = data
-  }).catch(() => {
-    ElMessage.error('请求失败')
-  }).finally(() => {
-    loading.value = false
-  })
-}
-
-onMounted(() => {
-  setTimeout(() => {
-    handleQuery()
-  }, 0)
-})
+const upViewList = [
+  { key: 'Dashborad', lable: '基础信息', icon: 'material-symbols:dashboard' },
+  { key: 'Drop', lable: '掉落信息', icon: 'material-symbols:bookmark-star-sharp' },
+]
+const downViewList = [
+  { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
+]
 </script>
 
 <template>
-  <main>
-    <div w-380px>
-      <ElScrollbar v-loading="loading" max-height="450px">
-        <div min-h-350px flex flex-col>
-          <QuestCard v-for="quest in questData" :key="quest.questId" :data="quest" />
-          <div v-if="questConfig.filter(q => q.visible).length === 0" m-auto h-50px text-center text-xl>
-            还未收藏副本
-          </div>
+  <el-config-provider :locale="zhCn">
+    <div h-vh w-vw flex>
+      <div h-vh w-full flex flex-1 overflow-hidden p-2>
+        <keep-alive>
+          <component :is="componentMap[currentView]" flex-1 />
+        </keep-alive>
+      </div>
+      <div class="bg-#3C3C3C" w-50px flex shrink-0 flex-col justify-between p-10px>
+        <div flex flex-col items-center gap-10px>
+          <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
+            <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
+              <Icon :icon="view.icon" text-20px />
+            </div>
+          </el-tooltip>
         </div>
-      </ElScrollbar>
-
-      <div flex items-center justify-between px-15px py-10px>
-        <div mr-2>
-          <el-link :type="code ? 'success' : 'default'" @click="showDialog">
-            玩家ID: {{ uid || '未获取' }}
-          </el-link>
+        <div flex flex-col items-center gap-10px>
+          <el-tooltip v-for="view in downViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
+            <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
+              <Icon :icon="view.icon" text-20px />
+            </div>
+          </el-tooltip>
         </div>
       </div>
     </div>
-    <el-dialog v-model="dialogVisible" width="350">
-      <el-form :model="form" label-position="top">
-        <el-form-item label="当前引继码">
-          <el-link ml-2 type="primary" @click="handleCopy(form.oldValue)">
-            {{ form.oldValue }}
-          </el-link>
-        </el-form-item>
-        <el-form-item label="迁移引继码">
-          <el-input v-model="form.newValue" />
-        </el-form-item>
-      </el-form>
-
-      <template #footer>
-        <TheButton :loading="btnLoading" @click="submit">
-          确定
-        </TheButton>
-      </template>
-    </el-dialog>
-  </main>
+  </el-config-provider>
 </template>

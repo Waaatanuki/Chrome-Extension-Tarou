@@ -4,8 +4,8 @@ export default function useContextMenu() {
   const { openDashboard } = useDashboard()
 
   function registerContextMenu() {
-    chrome.contextMenus.create({ id: 'openDetail', title: '开启详细面板', contexts: ['all'] })
     chrome.contextMenus.create({ id: 'openSidePanel', title: '开启侧边栏', contexts: ['all'] })
+    chrome.contextMenus.create({ id: 'openDetail', title: '开启详细面板', contexts: ['all'] })
     chrome.contextMenus.create({ id: 'pushInTargetItem', title: '加入掉落监控', contexts: ['image'] })
   }
 
