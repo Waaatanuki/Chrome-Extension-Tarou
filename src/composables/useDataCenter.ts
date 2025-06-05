@@ -18,7 +18,7 @@ export async function unpack(parcel: string) {
   if (url.includes('/user/content/index')) {
     const urlObj = new URL(url)
     userInfo.value.uid = urlObj.searchParams.get('uid')!
-    const mbp_limit_info = responseData.option.mbp_limit_info
+    const mbp_limit_info = responseData.option?.mbp_limit_info
 
     if (!mbp_limit_info)
       return

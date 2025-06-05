@@ -3,12 +3,14 @@ import { Icon } from '@iconify/vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import Dashborad from './views/dashboard/index.vue'
 import Drop from './views/drop/index.vue'
+import Info from './views/info/index.vue'
 import Setting from './views/setting/index.vue'
 
 const componentMap: Record<string, Component> = {
   Dashborad,
   Drop,
   Setting,
+  Info,
 }
 const currentView = ref('Dashborad')
 
@@ -17,6 +19,7 @@ const upViewList = [
   { key: 'Drop', lable: '掉落信息', icon: 'material-symbols:bookmark-star-sharp' },
 ]
 const downViewList = [
+  { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
 </script>
