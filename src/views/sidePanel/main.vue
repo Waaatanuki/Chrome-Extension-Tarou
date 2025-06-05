@@ -24,12 +24,12 @@ const downViewList = [
 <template>
   <el-config-provider :locale="zhCn">
     <div h-full w-full flex>
-      <div min-w-310px flex-1 p-10px>
+      <div min-w-320px flex-1 p-10px>
         <keep-alive>
           <component :is="componentMap[currentView]" />
         </keep-alive>
       </div>
-      <div class="bg-#3C3C3C" w-50px flex shrink-0 flex-col justify-between p-10px>
+      <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
         <div flex flex-col items-center gap-10px>
           <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
             <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">

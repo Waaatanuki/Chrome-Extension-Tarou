@@ -3,7 +3,7 @@ import { userInfo } from '~/logic'
 </script>
 
 <template>
-  <el-descriptions :column="2" :border="true" direction="vertical" w-290px size="small">
+  <el-descriptions :column="2" :border="true" direction="vertical" w-300px size="small">
     <el-descriptions-item label="武勋" label-width="200" :rowspan="2">
       <div>
         <div flex justify-between>

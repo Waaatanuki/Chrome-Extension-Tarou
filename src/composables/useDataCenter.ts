@@ -19,6 +19,10 @@ export async function unpack(parcel: string) {
     const urlObj = new URL(url)
     userInfo.value.uid = urlObj.searchParams.get('uid')!
     const mbp_limit_info = responseData.option.mbp_limit_info
+
+    if (!mbp_limit_info)
+      return
+
     userInfo.value.mbp = {
       daily: {
         number: Number(mbp_limit_info[92001].limit_info[10100].data.daily.get_number),
