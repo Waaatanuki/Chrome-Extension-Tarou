@@ -33,6 +33,7 @@ export const saveStoneDate = useWebExtensionStorage('saveStoneDate', dayjs().uni
 export const lastUpdateTodo = useWebExtensionStorage('lastUpdateTodo', dayjs().unix())
 export const todoList = useWebExtensionStorage('todoList', defaultTodoList)
 export const recoveryItemList = useWebExtensionStorage<RecoveryItem[]>('recoveryItemList', [])
+export const eventList = useWebExtensionStorage<string[]>('eventList', [])
 
 // Evoker
 export const materialInfo = useWebExtensionStorage<MaterialInfo[]>('materialInfo', [])

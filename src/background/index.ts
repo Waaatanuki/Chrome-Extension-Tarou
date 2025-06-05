@@ -3,7 +3,7 @@ import type { NumberLimitPair } from 'myStorage'
 import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import { onMessage, sendMessage } from 'webext-bridge/background'
-import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile, userInfo } from '~/logic/storage'
+import { battleInfo, battleMemo, deckList, eventList, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile, userInfo } from '~/logic/storage'
 
 (() => {
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
@@ -185,6 +185,16 @@ import { battleInfo, battleMemo, deckList, localNpcList, mySupportSummon, notifi
           weekly: parseNumberLimit($popFollow('.txt-point-num').text()),
           total: parseNumberLimit($('.prt-follow-point-box').text()),
         }
+
+        // 获取当前进行中的活动信息
+        eventList.value = []
+        $('.btn-global-banner').each((index, element) => {
+          const dataHref = $(element).data('href') as string | undefined
+          if (dataHref && dataHref.startsWith('event')) {
+            const eventType = dataHref.split('/')[1]!.replace(/\d/g, '')
+            eventList.value.push(eventType)
+          }
+        })
       }).catch((err) => {
         console.log(err)
       })

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import Contact from '~/views/debugger/tabs/dashboard/components/Contact.vue'
-import Mission from '~/views/sidePanel/views/dashboard/components/Mission.vue'
+import Treasureraid from '~/views/sidePanel/views/dashboard/components/Treasureraid.vue'
 
 const visible = ref(false)
 const currentView = ref('Dashborad')
@@ -27,7 +27,7 @@ const downViewList = [
     <div h-150 w-360px flex rounded-xl bg-neutral>
       <div w-full flex-1 overflow-hidden bg-rose p-10px>
         <div flex flex-wrap>
-          <Mission />
+          <Treasureraid />
         </div>
       </div>
       <!-- <div flex-1 bg-rose>
