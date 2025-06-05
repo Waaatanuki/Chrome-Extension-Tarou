@@ -350,6 +350,9 @@ export async function unpack(parcel: string) {
   // Notification 战斗结果特殊事件提醒
   if (/\/result(?:multi)?\/content\/index\/\d+/.test(url)) {
     const result_data = responseData.option.result_data
+    if (!result_data)
+      return
+
     if (result_data.appearance?.is_quest && notificationSetting.value.appearanceQuest)
       createNotification({ message: 'Hell提醒', sound: 'hell' })
 
@@ -363,6 +366,19 @@ export async function unpack(parcel: string) {
 
     if (result_data.advent_info?.is_over_limit && notificationSetting.value.isPointOverLimit)
       createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
+
+    if (result_data.follow_point_info && Object.keys(result_data.follow_point_info).length > 0) {
+      userInfo.value.followPoint = {
+        weekly: {
+          number: Number(result_data.follow_point_info.weekly_get_number),
+          limit: Number(result_data.follow_point_info.weekly_limit_number),
+        },
+        total: {
+          number: Number(result_data.follow_point_info.amount),
+          limit: Number(result_data.follow_point_info.limit_number),
+        },
+      }
+    }
 
     const display_list = responseData.display_list
     if (!display_list || !notificationSetting.value.itemGoal)
