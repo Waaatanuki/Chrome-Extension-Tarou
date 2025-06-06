@@ -48,6 +48,8 @@ declare module 'myStorage' {
       desc: string
       number: number
       limit: number
+      isAllComplete: boolean
+      isDailyMission: boolean
     }[]
   }
 

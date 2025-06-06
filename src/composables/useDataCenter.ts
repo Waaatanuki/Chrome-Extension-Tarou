@@ -169,6 +169,8 @@ export async function unpack(parcel: string) {
         desc: m.level_details[m.level].description,
         number: Number(m.progress),
         limit: Number(m.max_progress),
+        isAllComplete: m.is_all_complete,
+        isDailyMission: m.is_daily_mission,
       })),
       count: getEventGachaBoxNum({ eventType: 'treasureraid', currentToken: gachaPoint, drawnBox: boxNum }),
       updateTime: dayjs().valueOf(),

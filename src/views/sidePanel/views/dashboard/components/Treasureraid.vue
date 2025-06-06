@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue'
 import { eventList } from '~/logic'
 
 const eventInfo = computed(() => eventList.value.find(event => event.type === 'treasureraid'))
@@ -24,7 +25,14 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 't
           raw-content
           placement="top-start"
         >
-          <div v-html="mission.desc" />
+          <div fc gap-1>
+            <Icon
+              :icon="mission.isAllComplete ? 'material-symbols:check-box' : 'material-symbols:check-box-outline-blank'"
+              :color="mission.isDailyMission ? '#60a5fa' : '#facc15'"
+              size="5"
+            />
+            <div v-html="mission.desc" />
+          </div>
         </el-tooltip>
 
         <NumberLimitDisplay :value="{ number: mission.number, limit: mission.limit }" />

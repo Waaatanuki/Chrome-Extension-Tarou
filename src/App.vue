@@ -95,14 +95,21 @@ const result = computed(() => {
       </TheButton>
     </div>
 
-    <div h-320px w-360px flex rounded-xl bg-neutral>
-      <el-scrollbar flex-1 bg-white>
+    <div h-320px w-360px flex rounded-xl>
+      <el-scrollbar flex-1>
         <div p-10px>
-          <div h-200px flex flex-wrap bg-amber>
-            {{ result }}
+          <div h-50px fc flex-wrap>
+            <Icon icon="material-symbols:check-box" size="5" />
+            <div i-material-symbols:check-box text-yellow />
+            <div>你好</div>
           </div>
-          <div h-200px flex flex-wrap bg-rose>
-            {{ result }}
+          <div h-50px flex flex-wrap>
+            <div i-material-symbols:check-box-outline-blank text-blue />
+            <div>你好</div>
+          </div>
+          <div h-50px flex flex-wrap>
+            <div i-material-symbols:check-box text-blue />
+            <div>你好</div>
           </div>
         </div>
       </el-scrollbar>
