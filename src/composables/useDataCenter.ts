@@ -397,6 +397,7 @@ export async function unpack(parcel: string) {
     if (result_data.advent_info?.is_over_limit && notificationSetting.value.isPointOverLimit)
       createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
 
+    // 更新FP点数信息
     if (result_data.follow_point_info && Object.keys(result_data.follow_point_info).length > 0) {
       userInfo.value.followPoint = {
         weekly: {
@@ -407,6 +408,26 @@ export async function unpack(parcel: string) {
           number: Number(result_data.follow_point_info.amount),
           limit: Number(result_data.follow_point_info.limit_number),
         },
+      }
+    }
+
+    // 更新战货活动任务信息
+    if (result_data.popup_data?.treasureraid_mission && Object.keys(result_data.popup_data?.treasureraid_mission).length > 0) {
+      const eventInfo = eventList.value.find(event => event.type === 'treasureraid')
+      const progress = result_data.popup_data.treasureraid_mission.progress ?? []
+      const achieve_mission = result_data.popup_data.treasureraid_mission.achieve_mission ?? []
+      for (const item of progress) {
+        const mission = eventInfo?.mission.find(m => m.desc === item.description)
+        if (mission) {
+          mission.number = Number(item.numerator)
+          mission.limit = Number(item.denominator)
+        }
+      }
+      for (const item of achieve_mission) {
+        const mission = eventInfo?.mission.find(m => m.desc === item.description)
+        if (mission) {
+          mission.number = mission.limit
+        }
       }
     }
 
