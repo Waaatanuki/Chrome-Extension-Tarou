@@ -2,7 +2,7 @@
 import { Icon } from '@iconify/vue'
 import { eventList } from '~/logic'
 
-const eventInfo = computed(() => eventList.value.find(event => event.type === 'treasureraid'))
+const eventInfo = computed(() => eventList.value.find(event => event.type === 'godslayer'))
 </script>
 
 <template>
@@ -10,7 +10,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 't
     <template #header>
       <div flex justify-between>
         <div>
-          战货活动({{ eventInfo?.count }}箱)
+          神灭战(Lv{{ eventInfo?.count }})
         </div>
         <div>
           {{ useDateFormat(eventInfo.updateTime, 'MM-DD HH:mm') }}
@@ -35,7 +35,15 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 't
           </div>
         </el-tooltip>
 
-        <NumberLimitDisplay :value="{ number: mission.number, limit: mission.limit }" />
+        <div fc gap-1>
+          <Icon
+            v-for="i in mission.limit"
+            :key="i"
+            color="#f0cb4f"
+            size="5"
+            :icon="String(mission.number).padStart(mission.limit, '0').charAt(i - 1) === '1' ? 'material-symbols:star-rounded' : 'material-symbols:star-outline-rounded' "
+          />
+        </div>
       </div>
     </div>
   </el-card>

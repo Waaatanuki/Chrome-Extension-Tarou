@@ -3,6 +3,7 @@ import RecoveryItemTable from './components/RecoveryItemTable.vue'
 import Status from './components/Status.vue'
 import StoneCount from './components/StoneCount.vue'
 import Alchemist from './event/Alchemist.vue'
+import Godslayer from './event/Godslayer.vue'
 import Treasureraid from './event/Treasureraid.vue'
 </script>
 
@@ -12,6 +13,7 @@ import Treasureraid from './event/Treasureraid.vue'
     <Status />
     <Treasureraid />
     <Alchemist />
+    <Godslayer />
     <!-- <RecoveryItemTable /> -->
     <!-- <Contact absolute right-15px top-15px @open="handleOpen" /> -->
   </div>

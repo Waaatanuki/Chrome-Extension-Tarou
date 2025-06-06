@@ -28,7 +28,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
           <div fc gap-1>
             <Icon
               :icon="mission.isAllComplete ? 'material-symbols:check-box' : 'material-symbols:check-box-outline-blank'"
-              :color="mission.isDailyMission ? '#60a5fa' : '#facc15'"
+              :color="mission.isDailyMission ? '#60a5fa' : '#f0cb4f'"
               size="5"
             />
             <div v-html="mission.desc" />

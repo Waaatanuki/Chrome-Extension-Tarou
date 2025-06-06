@@ -211,6 +211,32 @@ export async function unpack(parcel: string) {
     }
   }
 
+  // Event 获取神灭战活动信息
+  if (url.includes('rest/godslayer/top/quest_list')) {
+    const eventInfo = {
+      type: 'godslayer',
+      isActive: true,
+      mission: responseData.boss_quest_mission.map((m: any) => ({
+        reward: m.item_message,
+        desc: m.quest_name,
+        number: Number(m.is_clear.map((b: boolean) => b ? '1' : '0').join('')),
+        limit: m.is_clear.length,
+        isAllComplete: m.is_clear.every((b: boolean) => b),
+        isDailyMission: !!m.is_daily_mission,
+      })),
+      count: Number(responseData.memorial_info.memorial_level),
+      updateTime: dayjs().valueOf(),
+    }
+
+    const index = eventList.value.findIndex(event => event.type === 'godslayer')
+    if (index === -1) {
+      eventList.value.push(eventInfo)
+    }
+    else {
+      eventList.value[index] = eventInfo
+    }
+  }
+
   // Evoker 素材数据
   if (url.includes('/item/article_list_by_filter_mode')) {
     materialInfo.value = responseData
