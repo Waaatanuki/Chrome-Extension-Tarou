@@ -154,7 +154,7 @@ export async function unpack(parcel: string) {
     recoveryItemList.value.unshift(res)
   }
 
-  // 获取战货活动信息
+  // Event 获取战货活动信息
   if (/\/treasureraid\d+\/top\/content\/newindex/.test(url)) {
     const htmlString = decodeURIComponent(responseData.data)
     const $ = load(htmlString)
@@ -177,6 +177,32 @@ export async function unpack(parcel: string) {
     }
 
     const index = eventList.value.findIndex(event => event.type === 'treasureraid')
+    if (index === -1) {
+      eventList.value.push(eventInfo)
+    }
+    else {
+      eventList.value[index] = eventInfo
+    }
+  }
+
+  // Event 获取炼金活动信息
+  if (url.includes('/frontier/alchemy/content/index')) {
+    const eventInfo = {
+      type: 'alchemist',
+      isActive: true,
+      mission: responseData.option.event_mission_list.map((m: any) => ({
+        reward: m.level_details[m.level].reward_name,
+        desc: m.level_details[m.level].description,
+        number: Number(m.progress),
+        limit: Number(m.max_progress),
+        isAllComplete: m.is_all_complete,
+        isDailyMission: !!m.is_daily_mission,
+      })),
+      count: Number(responseData.option.event_item.item_num),
+      updateTime: dayjs().valueOf(),
+    }
+
+    const index = eventList.value.findIndex(event => event.type === 'alchemist')
     if (index === -1) {
       eventList.value.push(eventInfo)
     }
@@ -431,6 +457,13 @@ export async function unpack(parcel: string) {
           mission.number = mission.limit
         }
       }
+    }
+
+    // 更新炼金活动token数量
+    if (result_data.alchemist?.lottery_reward_info && Object.keys(result_data.alchemist?.lottery_reward_info).length > 0) {
+      const eventInfo = eventList.value.find(event => event.type === 'alchemist')
+      if (eventInfo)
+        eventInfo.count = Number(result_data.alchemist.lottery_reward_info[0].possession_num)
     }
 
     const display_list = responseData.display_list
