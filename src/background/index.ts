@@ -187,14 +187,16 @@ import { battleInfo, battleMemo, deckList, eventList, localNpcList, mySupportSum
         }
 
         // 获取当前进行中的活动信息
-        eventList.value = []
+        const currentEventList: string[] = []
         $('.btn-global-banner').each((index, element) => {
           const dataHref = $(element).data('href') as string | undefined
           if (dataHref && dataHref.startsWith('event')) {
             const eventType = dataHref.split('/')[1]!.replace(/\d/g, '')
-            eventList.value.push(eventType)
+            currentEventList.push(eventType)
           }
         })
+
+        eventList.value.forEach((event) => { event.isActive = currentEventList.includes(event.type) })
       }).catch((err) => {
         console.log(err)
       })

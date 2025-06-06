@@ -4,7 +4,8 @@ import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
-import { artifactList, battleInfo, battleMemo, battleRecord, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, userInfo, xenoGauge } from '~/logic'
+import { getEventGachaBoxNum } from '~/constants/event'
+import { artifactList, battleInfo, battleMemo, battleRecord, eventList, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, userInfo, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -151,6 +152,35 @@ export async function unpack(parcel: string) {
       })
     }
     recoveryItemList.value.unshift(res)
+  }
+
+  // 获取战货活动信息
+  if (/\/treasureraid\d+\/top\/content\/newindex/.test(url)) {
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+    const gachaInfo = $('.prt-gacha-infomation')
+    const boxNum = Number((gachaInfo.data('box-num') as string).match(/\d+/)![0])
+    const gachaPoint = Number(gachaInfo.find('.txt-gacha-point').text())
+    const eventInfo = {
+      type: 'treasureraid',
+      isActive: true,
+      mission: responseData.option.event_mission_list.map((m: any) => ({
+        reward: m.level_details[m.level].reward_name,
+        desc: m.level_details[m.level].description,
+        number: Number(m.progress),
+        limit: Number(m.max_progress),
+      })),
+      count: getEventGachaBoxNum({ eventType: 'treasureraid', currentToken: gachaPoint, drawnBox: boxNum }),
+      updateTime: dayjs().valueOf(),
+    }
+
+    const index = eventList.value.findIndex(event => event.type === 'treasureraid')
+    if (index === -1) {
+      eventList.value.push(eventInfo)
+    }
+    else {
+      eventList.value[index] = eventInfo
+    }
   }
 
   // Evoker 素材数据

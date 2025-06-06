@@ -38,6 +38,19 @@ declare module 'myStorage' {
     limit: number
   }
 
+  interface EventInfo {
+    type: string
+    count: number
+    isActive: boolean
+    updateTime: number
+    mission: {
+      reward: string
+      desc: string
+      number: number
+      limit: number
+    }[]
+  }
+
   interface Profile {
     uid: string
     name: string

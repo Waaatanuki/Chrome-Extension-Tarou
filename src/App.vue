@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import Contact from '~/views/debugger/tabs/dashboard/components/Contact.vue'
-import Treasureraid from '~/views/sidePanel/views/dashboard/components/Treasureraid.vue'
+// import Treasureraid from '~/views/sidePanel/views/dashboard/components/Treasureraid.vue'
 
 const visible = ref(false)
 const currentView = ref('Dashborad')
@@ -13,6 +13,77 @@ const upViewList = [
 const downViewList = [
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
+
+const eventInfo = [
+  {
+    name: '古战场',
+    type: 0,
+    boxToken: [
+      [1600, 1],
+      [2400, 3],
+      [2000, 41],
+      [10000, 35],
+    ],
+    last: 15000,
+  },
+  {
+    name: '月末战货',
+    type: 'treasureraid',
+    boxToken: [
+      [1200, 1],
+      [1580, 1],
+      [1980, 1],
+      [2112, 17],
+    ],
+    last: 2104,
+  },
+  {
+    name: '公会战',
+    type: 2,
+    boxToken: [
+      [1600, 1],
+      [2400, 3],
+      [2000, 16],
+      [10000, 20],
+    ],
+    last: 15000,
+  },
+]
+
+const form = reactive({
+  type: 'treasureraid',
+  currentToken: 42500,
+  drawnBox: 0,
+})
+
+const result = computed(() => {
+  const event = eventInfo.find(e => e.type === form.type)
+  if (!event) {
+    return { totalBox: 0 }
+  }
+
+  const tokenList = event.boxToken.flatMap(([token, count]) => Array.from<number>({ length: count }).fill(token))
+  let remainingToken = form.currentToken
+  let totalBox = form.drawnBox
+
+  for (let i = form.drawnBox; i < tokenList.length; i++) {
+    const token = tokenList[i]
+    if (remainingToken >= token) {
+      totalBox++
+      remainingToken -= token
+    }
+    else {
+      break
+    }
+  }
+
+  // 计算额外可开启的宝箱数量
+  if (totalBox >= tokenList.length) {
+    totalBox += Math.floor(remainingToken / event.last)
+  }
+
+  return { totalBox }
+})
 </script>
 
 <template>
@@ -24,12 +95,17 @@ const downViewList = [
       </TheButton>
     </div>
 
-    <div h-150 w-360px flex rounded-xl bg-neutral>
-      <div w-full flex-1 overflow-hidden bg-rose p-10px>
-        <div flex flex-wrap>
-          <Treasureraid />
+    <div h-320px w-360px flex rounded-xl bg-neutral>
+      <el-scrollbar flex-1 bg-white>
+        <div p-10px>
+          <div h-200px flex flex-wrap bg-amber>
+            {{ result }}
+          </div>
+          <div h-200px flex flex-wrap bg-rose>
+            {{ result }}
+          </div>
         </div>
-      </div>
+      </el-scrollbar>
       <!-- <div flex-1 bg-rose>
 
       </div> -->

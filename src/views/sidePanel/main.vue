@@ -27,11 +27,14 @@ const downViewList = [
 <template>
   <el-config-provider :locale="zhCn">
     <div h-full w-full flex>
-      <div min-w-320px flex-1 p-10px>
-        <keep-alive>
-          <component :is="componentMap[currentView]" />
-        </keep-alive>
-      </div>
+      <el-scrollbar w-full>
+        <div p-10px>
+          <keep-alive>
+            <component :is="componentMap[currentView]" />
+          </keep-alive>
+        </div>
+      </el-scrollbar>
+
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
         <div flex flex-col items-center gap-10px>
           <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
