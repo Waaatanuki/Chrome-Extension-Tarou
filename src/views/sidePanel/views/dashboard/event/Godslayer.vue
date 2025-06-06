@@ -22,6 +22,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'g
         <el-tooltip
           effect="dark"
           :content="mission.reward"
+          :disabled="!mission.reward"
           raw-content
           placement="top-start"
         >
