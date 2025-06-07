@@ -15,8 +15,8 @@ const componentMap: Record<string, Component> = {
 const currentView = ref('Dashborad')
 
 const upViewList = [
-  { key: 'Dashborad', lable: '基础信息', icon: 'material-symbols:dashboard' },
-  { key: 'Drop', lable: '掉落信息', icon: 'material-symbols:bookmark-star-sharp' },
+  { key: 'Dashborad', lable: '常用信息', icon: 'material-symbols:dashboard' },
+  { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
 ]
 const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },

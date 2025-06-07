@@ -1,29 +1,25 @@
 <script setup lang="ts">
-import type { DropInfo, RawDrop, Stat } from 'api'
+import type { Stat } from 'api'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { listDrop, listQuest } from '~/api'
 import { code, questConfig, uid } from '~/logic/storage'
 
-const { sendInfo } = useUser()
 const questData = ref<Stat[]>([])
-const queryBtnLoading = ref(false)
-const importBtnLoading = ref(false)
-const dialogVisible = ref(false)
-const dialogLoading = ref(false)
-const filesList = ref([])
+const isMange = ref(false)
+const loading = ref(false)
 
 function toggleVisible(questId: string) {
   const hit = questConfig.value.find(q => q.questId === questId)
   if (hit) {
     if (!hit.visible && questConfig.value.filter(q => q.visible).length >= 7)
-      return ElMessage.info('最多只能收藏7个副本')
+      return ElMessage.info('最多选择7个副本')
 
     hit.visible = !hit.visible
   }
 }
 
 function handleQuery() {
-  if (queryBtnLoading.value)
+  if (loading.value)
     return
 
   if (!code.value || !uid.value) {
@@ -36,74 +32,19 @@ function handleQuery() {
     console.log('还未收藏副本')
     return
   }
-  queryBtnLoading.value = true
+  loading.value = true
   listDrop(questIds).then(({ data }) => {
     questData.value = data
   }).catch(() => {
     ElMessage.error('请求失败')
   }).finally(() => {
-    queryBtnLoading.value = false
+    loading.value = false
   })
 }
 
-function handleUploadChange(uploadFile: any) {
-  const selectedFile = uploadFile.raw
-  const reader = new FileReader()
-  reader.readAsText(selectedFile)
-
-  reader.onload = function () {
-    const Quest_GoldBrick = [
-      { questId: '301061', questName: '邂逅、黒銀の翼ＨＬ', raidName: 'tuyobaha' },
-      { questId: '303251', questName: '崩天、虚空の兆', raidName: 'akx' },
-      { questId: '305161', questName: '降臨、調停の翼ＨＬ', raidName: 'gurande' },
-      { questId: '303141', questName: '神撃、究極の竜ＨＬ', raidName: 'cb' },
-    ]
-
-    const dataSet: RawDrop[] = JSON.parse(reader.result as string)
-    const dataList: DropInfo[] = []
-
-    dataSet.forEach((item) => {
-      for (const [key, value] of Object.entries(item)) {
-        const hit = Quest_GoldBrick.find(raid => raid.raidName === value.raidName)
-        if (hit) {
-          const reward = []
-          if (value.blueChests)
-            reward.push({ box: '11', key: value.blueChests, count: 1 })
-
-          if (value.goldBrick && !value.blueChests)
-            reward.push({ box: value.goldBrick, key: '17_20004', count: 1 })
-
-          const battle: DropInfo = {
-            battleId: key,
-            questName: hit.questName,
-            timestamp: value.timestamp,
-            reward,
-          }
-
-          dataList.push({ ...battle })
-        }
-      }
-    })
-
-    if (dataList.length === 0)
-      return ElMessage.error('没有可导入的数据')
-
-    importBtnLoading.value = true
-
-    sendInfo(dataList, true).then(() => {
-      ElMessage.success('导入成功')
-      handleQuery()
-    }).catch(() => {
-      ElMessage.error('导入失败')
-    }).finally(() => {
-      importBtnLoading.value = false
-    })
-  }
-}
-
 function manageQuest() {
-  dialogVisible.value = true
-  dialogLoading.value = true
+  isMange.value = !isMange.value
+  loading.value = true
 
   listQuest().then(({ data }) => {
     data.forEach((quest) => {
@@ -117,49 +58,59 @@ function manageQuest() {
   }).catch((err) => {
     ElMessage.error(err.message)
   }).finally(() => {
-    dialogLoading.value = false
+    loading.value = false
   })
 }
 
+function goBack() {
+  isMange.value = !isMange.value
+  handleQuery()
+}
+
 onMounted(() => {
-  setTimeout(() => {
-    handleQuery()
-  }, 0)
+  handleQuery()
 })
 </script>
 
 <template>
   <main>
-    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded class="bg-violet dark:bg-#2d1e3a" px-4 text-base>
-      <TheButton icon="carbon:update-now" :loading="queryBtnLoading" @click="handleQuery">
-        刷新
-      </TheButton>
+    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-4 text-base>
       <div fc gap-2>
-        <TheButton icon="carbon:document-download" @click="manageQuest">
+        <TheButton v-if="isMange" :loading="loading" icon="material-symbols:arrow-back-ios" @click="goBack">
+          返回
+        </TheButton>
+        <TheButton v-else :loading="loading" icon="carbon:document-download" @click="manageQuest">
           管理副本
         </TheButton>
-        <ElUpload
-          v-model:file-list="filesList" :on-change="handleUploadChange"
-          :show-file-list="false" :limit="1" :auto-upload="false" accept=".json" :disabled="importBtnLoading"
-        >
-          <template #trigger>
-            <TheButton icon="carbon:document-import" :loading="importBtnLoading" @click="filesList = []">
-              导入
-            </TheButton>
-          </template>
-        </ElUpload>
       </div>
+      <TheButton v-if="!isMange" icon="carbon:update-now" :loading="loading" @click="handleQuery">
+        刷新
+      </TheButton>
     </div>
 
-    <el-skeleton :loading="queryBtnLoading" animated :throttle="500">
+    <el-skeleton :loading="loading" animated my-10px>
       <template #template>
-        <div my-10px w-500px w-full fc flex-wrap gap-10px>
-          <el-skeleton-item v-for="i in questConfig.filter(q => q.visible).length" :key="i" variant="p" style="width: 370px; height: 110px" />
+        <div w-full fc flex-wrap gap-10px>
+          <el-skeleton-item variant="p" style="width: 100%; height: 400px" />
         </div>
       </template>
-
       <template #default>
-        <div my-10px fc flex-wrap gap-10px>
+        <el-card v-if="isMange" body-style="padding: 10px" my-10px h-full w-300px>
+          <VueDraggableNext v-model="questConfig" flex flex-wrap gap-12px>
+            <transition-group name="list">
+              <div
+                v-for="quest in questConfig" :key="quest.questId"
+                :class="{ 'brightness-50': !quest.visible }"
+                cursor-pointer select-none
+                @click="toggleVisible(quest.questId)"
+              >
+                <img w-60px :src="getQuestImg(quest.questId, 'lobby')">
+              </div>
+            </transition-group>
+          </VueDraggableNext>
+        </el-card>
+
+        <div v-else my-10px fc flex-wrap gap-10px>
           <QuestCard v-for="quest in questData" :key="quest.questId" :data="quest" />
           <div v-if="questConfig.filter(q => q.visible).length === 0" mt-10px h-50px text-center text-xl>
             还未收藏副本
@@ -167,29 +118,6 @@ onMounted(() => {
         </div>
       </template>
     </el-skeleton>
-
-    <el-dialog v-model="dialogVisible" width="700" @close="handleQuery">
-      <el-skeleton :loading="dialogLoading" animated>
-        <template #template>
-          <div w-full fc flex-wrap gap-10px>
-            <el-skeleton-item variant="p" style="width: 100%; height: 400px" />
-          </div>
-        </template>
-
-        <VueDraggableNext v-model="questConfig" flex flex-wrap gap-10px>
-          <transition-group name="list">
-            <div
-              v-for="quest in questConfig" :key="quest.questId"
-              :class="{ 'brightness-50': !quest.visible }"
-              cursor-pointer select-none
-              @click="toggleVisible(quest.questId)"
-            >
-              <img w-100px :src="getQuestImg(quest.questId, 'lobby')">
-            </div>
-          </transition-group>
-        </VueDraggableNext>
-      </el-skeleton>
-    </el-dialog>
   </main>
 </template>
 

@@ -34,16 +34,16 @@ const msg = computed(() => {
     return `还未出过${itemName}`
 
   const type = props.data.isBlueTreasure ? '蓝箱' : '场'
-  const prefix = props.data.lastDropTake ? `上次出${itemName}${props.data.lastDropTake}${type}，` : ''
-  return `${prefix}已经${props.data.lastDropCount}${type}没出过了`
+  const prefix = props.data.lastDropTake ? `上次${props.data.lastDropTake}${type}，` : ''
+  return `${prefix}当前${props.data.lastDropCount}${type}`
 })
 </script>
 
 <template>
-  <ElCard :body-style="{ padding: '5px' }">
-    <div relative h-100px fc gap-10px text-sm>
-      <div relative shrink-0>
-        <img w-100px draggable="false" :src="getQuestImg(data.questId, 'lobby')">
+  <el-card body-style="padding: 10px" h-full w-300px>
+    <div flex gap-10px text-sm>
+      <div w-90px shrink-0>
+        <img w-full draggable="false" :src="getQuestImg(data.questId, 'lobby')">
         <div mt-2px fc gap-2px>
           <div i-game-icons:crossed-swords />
           <div text-orange font-black>
@@ -52,7 +52,7 @@ const msg = computed(() => {
           <div i-game-icons:crossed-swords />
         </div>
       </div>
-      <div w-250px fc flex-col>
+      <div fc flex-1 flex-col>
         <div w-full flex items-center justify-around>
           <div v-if="data.isBlueBox" class="desc-item">
             <el-badge :value="data?.blueChest" type="danger" :max="999999">
@@ -83,7 +83,7 @@ const msg = computed(() => {
         </div>
       </div>
     </div>
-  </ElCard>
+  </el-card>
 </template>
 
 <style scoped>

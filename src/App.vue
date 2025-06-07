@@ -19,6 +19,7 @@ const notificationSetting = ref<any>({})
   <div flex flex-wrap gap-3 p-10>
     <Contact absolute right-15px top-15px />
     <div>
+      <img w-60px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/quest/assets/lobby/303141.png" alt="" srcset="">
       <TheButton @click="visible = true">
         ceshi
       </TheButton>
