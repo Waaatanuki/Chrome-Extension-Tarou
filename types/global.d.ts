@@ -286,6 +286,13 @@ declare module 'myStorage' {
     skillId: number
     value: number
   }
+
+  interface DisplayItem {
+    itemKey: string
+    imageId: string
+    number: number
+    limit: number
+  }
 }
 
 declare module 'source'{

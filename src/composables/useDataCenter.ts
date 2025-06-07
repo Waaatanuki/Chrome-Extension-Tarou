@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, eventList, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, userInfo, xenoGauge } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, userInfo, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -15,7 +15,7 @@ export async function unpack(parcel: string) {
 
   const { url, requestData, responseData } = JSON.parse(parcel) as { url: string, requestData?: string, responseData?: any }
 
-  // Dashboard 首页勋章数据
+  // Dashboard 首页数据
   if (url.includes('/user/content/index')) {
     const urlObj = new URL(url)
     userInfo.value.uid = urlObj.searchParams.get('uid')!
@@ -65,6 +65,18 @@ export async function unpack(parcel: string) {
         limit: Number(mbp_limit_info[92002].article.limit),
       },
     }
+
+    getDisplayList(responseData)
+  }
+
+  // Dashboard 监视底部物品栏
+  if (url.includes('/item/add_display_select_item')) {
+    getDisplayList(responseData)
+  }
+
+  // Dashboard 监视底部物品栏
+  if (url.includes('/item/remove_display_select_item')) {
+    getDisplayList(responseData)
   }
 
   // Dashboard 抽卡数据
@@ -433,6 +445,7 @@ export async function unpack(parcel: string) {
 
   // Notification 战斗结果特殊事件提醒
   if (/\/result(?:multi)?\/content\/index\/\d+/.test(url)) {
+    getDisplayList(responseData)
     const result_data = responseData.option.result_data
     if (!result_data)
       return
@@ -754,5 +767,20 @@ export async function unpack(parcel: string) {
         hit.treasureList = treasureList
       }
     }
+  }
+}
+
+// 获取设定道具数量信息
+function getDisplayList(responseData: any) {
+  displayList.value = []
+  if (!responseData.display_list)
+    return
+  for (const [key, value] of Object.entries(responseData.display_list)) {
+    displayList.value.push({
+      itemKey: key,
+      imageId: (value as any).image,
+      number: Number((value as any).number),
+      limit: Number((value as any).registration_number),
+    })
   }
 }

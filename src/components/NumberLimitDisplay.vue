@@ -6,7 +6,7 @@ defineProps<{ value?: NumberLimitPair }>()
 
 <template>
   <span v-if="value">
-    <span :class="{ max: value.number >= value.limit }">
+    <span :class="{ 'text-max': value.number >= value.limit }">
       {{ value.number }}
     </span>
     <span>
@@ -17,9 +17,3 @@ defineProps<{ value?: NumberLimitPair }>()
     0/0
   </span>
 </template>
-
-<style scoped>
-.max {
-  color: #f0cb4f;
-}
-</style>

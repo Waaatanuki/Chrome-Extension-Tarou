@@ -42,3 +42,7 @@ body {
 .my-card-header{
   padding: 10px !important;
 }
+
+.text-max {
+  color: #f0cb4f;
+}
