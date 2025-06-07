@@ -10,7 +10,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'g
     <template #header>
       <div flex justify-between>
         <div>
-          神灭战(Lv{{ eventInfo?.count }})
+          神灭战(印章Lv{{ eventInfo?.count }})
         </div>
         <div>
           {{ useDateFormat(eventInfo.updateTime, 'MM-DD HH:mm') }}
