@@ -12,6 +12,7 @@ const upViewList = [
 const downViewList = [
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
+const notificationSetting = ref<any>({})
 </script>
 
 <template>
@@ -26,7 +27,43 @@ const downViewList = [
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <!-- <TreasureMonitor /> -->
+          <el-alert :closable="false">
+            <template #title>
+              <div w-268px flex items-center justify-between gap-2>
+                <div>
+                  弹窗通知
+                </div>
+                <el-switch />
+              </div>
+            </template>
+          </el-alert>
+          <div flex flex-col pl-5>
+            <el-checkbox v-model="notificationSetting.battleWin" label="战斗结束提醒" />
+            <el-checkbox v-model="notificationSetting.battleLose" label="队伍全灭提醒" />
+            <el-checkbox v-model="notificationSetting.replicardEvent" label="沙盒宝箱提醒" />
+            <el-checkbox v-model="notificationSetting.appearanceQuest" label="Hell提醒" />
+            <el-checkbox v-model="notificationSetting.itemGoal" label="底部道具数量达到目标" />
+            <el-checkbox v-model="notificationSetting.isPointOverLimit" label="四象点数超过上限" />
+          </div>
+          <el-alert :closable="false">
+            <template #title>
+              <div w-268px flex items-center justify-between gap-2>
+                <div>
+                  掉落提醒
+                </div>
+                <el-switch />
+              </div>
+            </template>
+          </el-alert>
+          <div px-5>
+            <el-card my-10px body-style="padding: 10px">
+              <div flex flex-wrap gap-12px>
+                <div v-for="i in 10" :key="i" relative fc flex-col select-none class="group">
+                  <div h-50px w-50px bg-amber-2 />
+                </div>
+              </div>
+            </el-card>
+          </div>
         </div>
       </el-scrollbar>
       <!-- <div flex-1 bg-rose>

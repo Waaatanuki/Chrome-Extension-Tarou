@@ -29,6 +29,15 @@ function submit() {
     btnLoading.value = false
   })
 }
+
+function checkPermission() {
+  chrome.notifications.getPermissionLevel((level) => {
+    if (level === 'granted')
+      ElMessage.success('当前弹窗权限正常')
+    else
+      ElMessage.error('当前弹窗权限被禁止')
+  })
+}
 </script>
 
 <template>
@@ -45,5 +54,9 @@ function submit() {
 
   <TheButton :loading="btnLoading" @click="submit">
     确定
+  </TheButton>
+
+  <TheButton @click="checkPermission">
+    检查弹窗权限
   </TheButton>
 </template>
