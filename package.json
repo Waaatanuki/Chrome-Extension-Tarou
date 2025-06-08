@@ -52,6 +52,7 @@
     "dayjs": "^1.11.13",
     "element-plus": "^2.9.11",
     "eslint": "^9.28.0",
+    "eslint-plugin-format": "^1.0.1",
     "fast-glob": "^3.3.3",
     "lodash-es": "^4.17.21",
     "md5": "^2.3.0",

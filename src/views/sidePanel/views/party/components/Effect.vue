@@ -7,12 +7,12 @@ defineProps<{
 </script>
 
 <template>
-  <div flex flex-wrap justify-start gap-1 px-8 py-2>
+  <div w-300px flex flex-wrap justify-start gap-2px>
     <div
       v-for="effect, idx in effects" :key="idx"
-      w-190px flex items-center justify-between text-base
+      w-149px flex items-center justify-between text-12px
     >
-      <img w-100px :src="getSkillLabelIcon(effect.iconImg)">
+      <img w-85px :src="getSkillLabelIcon(effect.iconImg)">
       <div :class="{ max: effect.isMax }">
         {{ effect.value }}
       </div>

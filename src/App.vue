@@ -27,7 +27,7 @@ const downViewList = [
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          132
+          123
         </div>
       </el-scrollbar>
       <!-- <div flex-1 bg-rose>

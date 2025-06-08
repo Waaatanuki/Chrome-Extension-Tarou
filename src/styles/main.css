@@ -33,6 +33,28 @@ body {
   position: relative;
 }
 
+.side_weapon_wrapper {
+  background: url('../assets/image/common/base_empty.png');
+  background-size: 70px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 40px;
+  position: relative;
+}
+
+.side_summon_wrapper {
+  background: url('../assets/image/common/base_empty.png');
+  background-size: 77px 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 77px;
+  height: 44px;
+  position: relative;
+}
+
 .prt-ultimate-star-wrapper{
   position: absolute;
   top: -1px;

@@ -42,8 +42,8 @@ function isFWorUW(weapon: BuildWeapon) {
 
 <template>
   <div fc flex-col>
-    <div h-210px fc>
-      <div relative w-100px>
+    <div w-300px fc gap-2px>
+      <div relative w-80px shrink-0>
         <img w-full :src="getAssetImg('weapon', mainWeapon.imageId, 'ls')">
         <div class="prt-ultimate-star-wrapper">
           <div class="prt-ultimate-star-on" :data-level="mainWeapon.level" />
@@ -55,14 +55,14 @@ function isFWorUW(weapon: BuildWeapon) {
         <img v-if="mainWeapon.skill.find(s => s.type === 'skill1')?.image && isUW(mainWeapon)" class="skill1-icon" :src="getSkillIcon(mainWeapon, 'skill1')">
         <img v-if="mainWeapon.skill.find(s => s.type === 'skill2')?.image && isFWorUW(mainWeapon)" class="skill2-icon" :src="getSkillIcon(mainWeapon, 'skill2')">
       </div>
-      <div w-275px fc flex-wrap gap-5px>
-        <div v-for="w, idx in subWeapon" :key="idx" class="party_weapon_wrapper">
-          <img v-if="w.imageId" w-full :src="getAssetImg('weapon', w.imageId)">
+      <div fc flex-wrap gap-3px>
+        <div v-for="w, idx in subWeapon" :key="idx" class="side_weapon_wrapper">
+          <img v-if="w.imageId" h-full :src="getAssetImg('weapon', w.imageId)">
           <div class="prt-ultimate-star-wrapper">
             <div class="prt-ultimate-star-on" :data-level="w.level" />
           </div>
           <img v-if="w.arousalForm" class="ico-arousal-type" :src="getArousalIcon(w.arousalForm)">
-          <ElTag v-if="getSkillAlias (w)" type="danger" size="small" class="skill-tag">
+          <ElTag v-if="getSkillAlias(w)" type="danger" size="small" class="skill-tag">
             {{ getSkillAlias(w) }}
           </ElTag>
           <img v-if="w.skill.find(s => s.type === 'skill1')?.image && isUW(w)" class="skill1-icon" :src="getSkillIcon(w, 'skill1')">

@@ -15,33 +15,46 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
 </script>
 
 <template>
-  <div h-210px w-380px fc flex-col justify-start>
-    <div w-full flex items-start justify-start gap-4px>
-      <div relative h-122px w-60px>
+  <div w-300px flex flex-col gap-10px>
+    <div flex gap-10>
+      <div relative w-56px>
         <img w-full :src="getAssetImg('leader', leader.imageId, 'quest')">
         <img absolute left-1 top-1 w-20px :src="getJobIcon(leader.masterId)">
         <img v-if="leader.familiarId" absolute bottom-14px right-0 w-40px :src="getAssetImg('familiar', leader.familiarId, 's')">
-        <div mt-1px h-12px flex items-center justify-start>
-          <div v-for="ability, idx in leader.ability" :key="idx" relative w-15px fc>
-            <div v-if="ability?.iconType" :class="`ability_icon_type_${ability.iconType}`" h-12px w-12px border-1 rounded-sm />
+        <div mt-1px h-12px flex items-center justify-start gap-4px>
+          <div v-for="ability, idx in leader.ability" :key="idx" relative fc>
+            <div v-if="ability?.iconType" :class="`ability_icon_type_${ability.iconType}`" h-11px w-11px rounded-sm ring-1 />
             <div v-if="ability && !ability.fa" i-carbon:close absolute text-13px text-black />
           </div>
         </div>
       </div>
+      <div h-101px fc flex-col gap-5px>
+        <ElTag v-for="ability, idx in leader.ability.slice(1)" :key="idx" type="info">
+          <div fc gap-4px>
+            <img v-if="ability?.iconId" w-20px :src="getAbilityIcon(ability.iconId)">
+            <span>{{ ability?.name }}</span>
+          </div>
+        </ElTag>
+      </div>
+    </div>
+    <div flex gap-5px>
       <template v-for="npc in npcs" :key="npc.paramId">
         <el-popover placement="top-start" width="274">
           <template #reference>
-            <div relative h-122px w-60px>
-              <img h-109px w-full :src="getAssetImg('npc', npc.imageId, 'quest')">
+            <div relative w-56px>
+              <img w-full :src="getAssetImg('npc', npc.imageId, 'quest')">
               <img v-if="npc.isAugment" absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
-              <div v-if="npc.arousalForm" :class="`txt-form-color-${npc.arousalForm}`" absolute bottom-13px right-0 rounded bg-slate px-1 text-14px>
+              <div
+                v-if="npc.arousalForm" :class="`txt-form-color-${npc.arousalForm}`"
+                absolute bottom-13px right-0 rounded bg-neutral px-1 text-12px
+              >
                 {{ NPC_AROUSAL_FORM[npc.arousalForm] }}
               </div>
-              <div mt-1px h-12px flex items-center justify-start>
-                <div v-for="ability, i in npc.ability" :key="i" relative w-15px fc>
+              <div mt-1px h-12px flex items-center justify-start gap-4px>
+                <div v-for="ability, i in npc.ability" :key="i" relative fc>
                   <div
                     :class="`ability_icon_type_${ability.iconType}`"
-                    h-12px w-12px border-1 rounded-sm
+                    h-11px w-11px rounded-sm ring-1
                   />
                   <div v-if="!ability.fa" i-carbon:close absolute text-13px text-black />
                 </div>
@@ -87,20 +100,6 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
           </div>
         </el-popover>
       </template>
-    </div>
-    <div h-full w-full flex items-center justify-between>
-      <div flex flex-col items-start px-2 text-base>
-        <div>预测伤害：{{ leader.normalDamage.toLocaleString() }}</div>
-        <div>克属伤害：{{ leader.advantageDamage.toLocaleString() }}</div>
-      </div>
-      <div flex flex-col gap-5px px-2 text-sm>
-        <ElTag v-for="ability, idx in leader.ability.slice(1)" :key="idx" type="info" effect="plain">
-          <div fc gap-4px>
-            <img v-if="ability?.iconId" w-20px :src="getAbilityIcon(ability.iconId)">
-            <span>{{ ability?.name }}</span>
-          </div>
-        </ElTag>
-      </div>
     </div>
   </div>
 </template>
