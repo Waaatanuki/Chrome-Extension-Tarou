@@ -95,7 +95,7 @@ onMounted(() => {
         </div>
       </template>
       <template #default>
-        <el-card v-if="isMange" body-style="padding: 10px" my-10px h-full w-300px>
+        <el-card v-if="isMange" body-style="padding: 10px" my-10px h-full>
           <VueDraggableNext v-model="questConfig" flex flex-wrap gap-12px>
             <transition-group name="list">
               <div

@@ -593,6 +593,12 @@ export async function unpack(parcel: string) {
     console.log('memoList==>', battleMemo.value)
   }
 
+  // Artifact 记录当前神器信息
+  if (url.includes('/rest/artifact/list')) {
+    artifactList.value = responseData.list
+    console.log(artifactList.value)
+  }
+
   // ===============详细面板打开时进行以下接口分析=====================
   // ===============详细面板打开时进行以下接口分析=====================
   // ===============详细面板打开时进行以下接口分析=====================
@@ -612,11 +618,6 @@ export async function unpack(parcel: string) {
       .then(() => chrome.debugger.attach({ tabId: obTabId.value }, '1.2'))
       .then(() => chrome.debugger.sendCommand({ tabId: obTabId.value }, 'Network.enable'))
       .catch(error => console.log(error))
-  }
-
-  // Artifact 记录当前神器信息
-  if (url.includes('/rest/artifact/list')) {
-    artifactList.value = responseData.list
   }
 
   // Party 记录当前队伍信息

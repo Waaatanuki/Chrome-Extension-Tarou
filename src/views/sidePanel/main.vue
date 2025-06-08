@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import Artifact from './views/artifact/index.vue'
 import Dashborad from './views/dashboard/index.vue'
 import Drop from './views/drop/index.vue'
 import Info from './views/info/index.vue'
@@ -9,6 +10,7 @@ import Setting from './views/setting/index.vue'
 const componentMap: Record<string, Component> = {
   Dashborad,
   Drop,
+  Artifact,
   Setting,
   Info,
 }
@@ -17,6 +19,7 @@ const currentView = ref('Dashborad')
 const upViewList = [
   { key: 'Dashborad', lable: '常用信息', icon: 'material-symbols:dashboard' },
   { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
+  { key: 'Artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
 ]
 const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
