@@ -3,7 +3,7 @@ import type { NumberLimitPair } from 'myStorage'
 import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import { onMessage, sendMessage } from 'webext-bridge/background'
-import { battleInfo, battleMemo, deckList, eventList, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile, userInfo } from '~/logic/storage'
+import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile, userInfo } from '~/logic/storage'
 
 (() => {
   const { registerContextMenu, addMenuClickListener } = useContextMenu()
@@ -274,6 +274,15 @@ import { battleInfo, battleMemo, deckList, eventList, localNpcList, mySupportSum
     checkCode()
     registerContextMenu()
     chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+  })
+
+  chrome.runtime.onConnect.addListener((port) => {
+    if (port.name === 'mySidepanel') {
+      isSidePanelOpened.value = true
+      port.onDisconnect.addListener(() => {
+        isSidePanelOpened.value = false
+      })
+    }
   })
 
   chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {

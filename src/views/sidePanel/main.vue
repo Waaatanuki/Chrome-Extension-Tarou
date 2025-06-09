@@ -28,6 +28,10 @@ const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
+
+onMounted(() => {
+  chrome.runtime.connect({ name: 'mySidepanel' })
+})
 </script>
 
 <template>

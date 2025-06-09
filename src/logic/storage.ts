@@ -16,6 +16,7 @@ export const uid = useWebExtensionStorage<string>('uid', '')
 export const obTabId = useWebExtensionStorage<number>('obTabId', 0)
 export const obWindowId = useWebExtensionStorage<number>('obWindowId', 0)
 export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top: 0, width: 800, height: 600 })
+export const isSidePanelOpened = useWebExtensionStorage('isSidePanelOpened', false)
 
 // Setting
 export const volume = useWebExtensionStorage<number>('volume', 0.5)
