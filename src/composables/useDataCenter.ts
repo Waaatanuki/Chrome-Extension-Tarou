@@ -478,6 +478,14 @@ export async function unpack(parcel: string) {
       }
     }
 
+    // 更新神器掉落结果
+    if (result_data.rewards?.artifact_drop_count_info) {
+      userInfo.value.artifact = {
+        number: Number(result_data.rewards.artifact_drop_count_info.current_count),
+        limit: Number(result_data.rewards.artifact_drop_count_info.max_count),
+      }
+    }
+
     // 更新战货活动任务信息
     if (result_data.popup_data?.treasureraid_mission && Object.keys(result_data.popup_data?.treasureraid_mission).length > 0) {
       const eventInfo = eventList.value.find(event => event.type === 'treasureraid')
