@@ -1,6 +1,6 @@
 import type { Action, BattleRecord, PartyCondition, Player } from 'myStorage'
 import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
-import { battleInfo, battleRecord, notificationSetting, obWindowId, uid } from '~/logic'
+import { battleInfo, battleRecord, notificationSetting, uid } from '~/logic'
 
 export function handleStartJson(data: BattleStartJson) {
   const boss = data.boss.param[0]
@@ -69,7 +69,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
 
   const currentRaid = battleRecord.value.find(b => String(b.raid_id) === battleInfo.value.bossInfo?.battleId)
 
-  if (!currentRaid || !obWindowId.value)
+  if (!currentRaid)
     return
 
   const bossGauge = data.scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)

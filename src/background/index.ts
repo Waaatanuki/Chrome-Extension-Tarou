@@ -341,6 +341,10 @@ import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNp
 
     const url = new URL(tab.url)
     const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
+
+    console.log('HOST.includes(url.host)', HOST.includes(url.host))
+    console.log({ url, isSidePanelOpened: isSidePanelOpened.value, tabId: tab.id, obTabId: obTabId.value })
+
     await chrome.sidePanel.setOptions({
       tabId: tab.id,
       path: 'src/views/sidePanel/main.html',

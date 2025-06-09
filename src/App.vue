@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import Contact from '~/views/debugger/tabs/dashboard/components/Contact.vue'
+import BattleAnalysis from '~/views/sidePanel/views/combat/components/BattleAnalysis.vue'
 import Npc from '~/views/sidePanel/views/party/components/Npc.vue'
 
 const visible = ref(false)
@@ -24,6 +25,8 @@ const timerValue = computed(() => Date.now() + battleInfo.bossInfo!.timer * 1000
 function handleTimeChange(millisecond: number) {
   remainderSecond.value = Math.round(millisecond / 1000)
 }
+
+const record = { quest_id: '990071', raid_id: 1820619963, raid_name: 'オールド・木人', imgId: '4200293', turn: 2, startTimestamp: 1749475184431, startTimer: 5399, endTimer: 5396, player: [{ pid: '310901', is_dead: false, is_npc: false, image_id: '310901_01', use_ability_count: 0, use_special_skill_count: 0, damage: { total: { comment: '总计', value: 1332023 }, attack: { comment: '通常攻击&反击', value: 1332023 }, ability: { comment: '技能伤害', value: 0 }, special: { comment: '奥义伤害', value: 0 }, other: { comment: '其他', value: 0 } }, damageTaken: { total: { comment: '总计', value: 0 }, attack: { comment: '通常攻击&反击', value: 0 }, super: { comment: '特动', value: 0 }, other: { comment: '其他', value: 0 } }, condition: { buff: [], coating_value: 0 }, attackInfo: { total: 1, sa: 0, da: 0, ta: 1 } }, { pid: '3040502000', is_dead: false, is_npc: true, image_id: '3040502000_01', use_ability_count: 0, use_special_skill_count: 0, damage: { total: { comment: '总计', value: 4034462 }, attack: { comment: '通常攻击&反击', value: 4034462 }, ability: { comment: '技能伤害', value: 0 }, special: { comment: '奥义伤害', value: 0 }, other: { comment: '其他', value: 0 } }, damageTaken: { total: { comment: '总计', value: 0 }, attack: { comment: '通常攻击&反击', value: 0 }, super: { comment: '特动', value: 0 }, other: { comment: '其他', value: 0 } }, condition: { buff: [], coating_value: 0 }, attackInfo: { total: 1, sa: 0, da: 0, ta: 1 } }, { pid: '3040492000', is_dead: false, is_npc: true, image_id: '3040492000_01', use_ability_count: 0, use_special_skill_count: 0, damage: { total: { comment: '总计', value: 461313 }, attack: { comment: '通常攻击&反击', value: 461313 }, ability: { comment: '技能伤害', value: 0 }, special: { comment: '奥义伤害', value: 0 }, other: { comment: '其他', value: 0 } }, damageTaken: { total: { comment: '总计', value: 0 }, attack: { comment: '通常攻击&反击', value: 0 }, super: { comment: '特动', value: 0 }, other: { comment: '其他', value: 0 } }, condition: { buff: [{ status: '77262', personal_buff_user_id: false, personal_status: '77262', personal_buff_end_turn: false, icon_add_turn_flag: '', display_priority: 0 }], coating_value: 0 }, attackInfo: { total: 1, sa: 1, da: 0, ta: 0 } }, { pid: '3040030000', is_dead: false, is_npc: true, image_id: '3040030000_01', use_ability_count: 0, use_special_skill_count: 0, damage: { total: { comment: '总计', value: 1736764 }, attack: { comment: '通常攻击&反击', value: 1736764 }, ability: { comment: '技能伤害', value: 0 }, special: { comment: '奥义伤害', value: 0 }, other: { comment: '其他', value: 0 } }, damageTaken: { total: { comment: '总计', value: 0 }, attack: { comment: '通常攻击&反击', value: 0 }, super: { comment: '特动', value: 0 }, other: { comment: '其他', value: 0 } }, condition: { buff: [{ status: '1244_13', personal_buff_user_id: false, personal_status: '1244_13', personal_buff_end_turn: false, icon_add_turn_flag: '', display_priority: 0 }, { status: '1073_1', personal_buff_user_id: false, personal_status: '1073_1', personal_buff_end_turn: false, icon_add_turn_flag: '', display_priority: 0 }], coating_value: 0 }, attackInfo: { total: 1, sa: 0, da: 1, ta: 0 } }, { pid: '3040168000', is_dead: false, is_npc: true, image_id: '3040168000_01', use_ability_count: 0, use_special_skill_count: 0, damage: { total: { comment: '总计', value: 0 }, attack: { comment: '通常攻击&反击', value: 0 }, ability: { comment: '技能伤害', value: 0 }, special: { comment: '奥义伤害', value: 0 }, other: { comment: '其他', value: 0 } }, damageTaken: { total: { comment: '总计', value: 0 }, attack: { comment: '通常攻击&反击', value: 0 }, super: { comment: '特动', value: 0 }, other: { comment: '其他', value: 0 } }, condition: { buff: [], coating_value: 0 } }, { pid: '3040160000', is_dead: false, is_npc: true, image_id: '3040160000_01', use_ability_count: 0, use_special_skill_count: 0, damage: { total: { comment: '总计', value: 0 }, attack: { comment: '通常攻击&反击', value: 0 }, ability: { comment: '技能伤害', value: 0 }, special: { comment: '奥义伤害', value: 0 }, other: { comment: '其他', value: 0 } }, damageTaken: { total: { comment: '总计', value: 0 }, attack: { comment: '通常攻击&反击', value: 0 }, super: { comment: '特动', value: 0 }, other: { comment: '其他', value: 0 } }, condition: { buff: [], coating_value: 0 } }], formation: [0, 1, 2, 3], special_skill_flag: 0, actionQueue: [{ turn: 1, bossHpPercent: 100, special_skill_flag: 0, acitonList: [{ icon: 'attack', id: 'attack', type: 'attack' }], guard_status: [{ num: 0, is_guard_status: 0 }, { num: 1, is_guard_status: 0 }, { num: 2, is_guard_status: 0 }, { num: 3, is_guard_status: 0 }], interrupt_display_text: '', normalAttackInfo: { hit: 18, ability: 0, special: 0, total: 7564562 } }, { turn: 2, bossHpPercent: 100, special_skill_flag: 0, acitonList: [], guard_status: [{ num: 0, is_guard_status: 0 }, { num: 1, is_guard_status: 0 }, { num: 2, is_guard_status: 0 }, { num: 3, is_guard_status: 0 }] }], reserve: false, abilityList: [{ type: 'ability', icon: '2110_3', id: '202721' }, { type: 'ability', icon: '2112_3', id: '8000' }, { type: 'ability', icon: '2113_3', id: '8001' }, { type: 'ability', icon: '2248_1', id: '238991' }, { type: 'ability', icon: '2249_3', id: '239011' }, { type: 'ability', icon: '2250_3', id: '239021' }, { type: 'ability', icon: '2192_1', id: '237891' }, { type: 'ability', icon: '2193_3', id: '237921' }, { type: 'ability', icon: '2194_1', id: '237901' }, { type: 'ability', icon: '389_1', id: '243511' }, { type: 'ability', icon: '1454_3', id: '243521' }, { type: 'ability', icon: '1455_3', id: '243531' }, { type: 'ability', icon: '360_3', id: '243541' }], point: 0, damage: '7,564,562' }
 </script>
 
 <template>
@@ -39,30 +42,41 @@ function handleTimeChange(millisecond: number) {
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <el-descriptions direction="vertical" :border="true" size="small">
+          <el-descriptions direction="vertical" :border="true" size="small" :column="2">
             <el-descriptions-item :rowspan="2" :width="70" :label="`TURN ${battleInfo.bossInfo.turn}`" align="center">
               <div fc flex-col>
                 <img :src="bossImgSrc">
                 <div>{{ `${battleInfo.bossInfo.hpPercent}%` }}</div>
               </div>
             </el-descriptions-item>
-            <el-descriptions-item :span="2" :label="battleInfo.bossInfo.name" align="center">
-              {{ `${battleInfo.bossInfo.hp.toLocaleString()}/${battleInfo.bossInfo.hpmax.toLocaleString()}` }}
+            <el-descriptions-item align="center">
+              <template #label>
+                <div v-if="battleInfo.bossInfo.hp === 0">
+                  {{ formatTime(remainderSecond) }}
+                </div>
+                <ElCountdown v-else value-style="font-size: 15px" :value="timerValue" @change="handleTimeChange" />
+              </template>
+              {{ battleInfo.bossInfo.name }}
             </el-descriptions-item>
-            <el-descriptions-item :label="battleInfo.bossInfo.lv" align="center">
-              <div v-if="battleInfo.bossInfo.hp === 0">
-                {{ formatTime(remainderSecond) }}
+            <el-descriptions-item align="center">
+              <template #label>
+                {{ `${battleInfo.bossInfo.hp.toLocaleString()}/${battleInfo.bossInfo.hpmax.toLocaleString()}` }}
+              </template>
+              <div flex justify-between :style="{ 'justify-content': currentRaid.point ? 'space-between' : 'center' }">
+                <el-tag v-if="currentRaid.point" type="success" effect="light">
+                  {{ Math.floor(currentRaid.point).toLocaleString() }}
+                </el-tag>
+                <el-tag type="danger">
+                  {{ Math.floor(currentRaid.point).toLocaleString() }}
+                </el-tag>
               </div>
-              <ElCountdown v-else :value="timerValue" @change="handleTimeChange" />
             </el-descriptions-item>
 
-            <el-descriptions-item :label="battleInfo.bossInfo.attribute" align="center">
-              123:99
-            </el-descriptions-item>
-            <el-descriptions-item :label="battleInfo.bossInfo.interrupt_display_text" :span="3">
+            <el-descriptions-item :label="battleInfo.bossInfo.interrupt_display_text" :span="2">
               123
             </el-descriptions-item>
           </el-descriptions>
+          <BattleAnalysis :battle-record="record" />
         </div>
       </el-scrollbar>
       <!-- <div flex-1 bg-rose>
