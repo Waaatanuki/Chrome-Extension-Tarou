@@ -10,9 +10,9 @@ const deck = computed(() => deckList.value[0])
 
 <template>
   <div v-if="deck" flex flex-col gap-10px>
+    <Npc :leader="deck.leader" :npcs="deck.npcs" />
     <Weapon :weapons="deck.weapons" />
     <Summon :summons="deck.summons" />
-    <Npc :leader="deck.leader" :npcs="deck.npcs" />
     <Effect :effects="deck.effects" />
   </div>
   <el-alert v-else type="info" effect="dark" show-icon center :closable="false" title="进入编成界面读取队伍信息" />

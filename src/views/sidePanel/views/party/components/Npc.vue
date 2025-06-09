@@ -16,20 +16,12 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
 
 <template>
   <div w-300px flex flex-col gap-10px>
-    <div flex gap-10>
-      <div relative w-56px>
-        <img w-full :src="getAssetImg('leader', leader.imageId, 'quest')">
-        <img absolute left-1 top-1 w-20px :src="getJobIcon(leader.masterId)">
-        <img v-if="leader.familiarId" absolute bottom-14px right-0 w-40px :src="getAssetImg('familiar', leader.familiarId, 's')">
-        <div mt-1px h-12px flex items-center justify-start gap-4px>
-          <div v-for="ability, idx in leader.ability" :key="idx" relative fc>
-            <div v-if="ability?.iconType" :class="`ability_icon_type_${ability.iconType}`" h-11px w-11px rounded-sm ring-1 />
-            <div v-if="ability && !ability.fa" i-carbon:close absolute text-13px text-black />
-          </div>
-        </div>
-      </div>
-      <div h-101px fc flex-col gap-5px>
-        <ElTag v-for="ability, idx in leader.ability.slice(1)" :key="idx" type="info">
+    <div relative>
+      <img w-full :src="getAssetImg('leader', leader.imageId, 'result_ml')">
+      <img absolute left-1 top-1 w-20px :src="getJobIcon(leader.masterId)">
+      <img v-if="leader.familiarId" absolute bottom-0px left-0px w-40px :src="getAssetImg('familiar', leader.familiarId, 's')">
+      <div absolute inset-y-0 right-5px fc flex-1 flex-col gap-2px>
+        <ElTag v-for="ability, idx in leader.ability" :key="idx" :type="ability?.fa ? 'warning' : 'info'" effect="light">
           <div fc gap-4px>
             <img v-if="ability?.iconId" w-20px :src="getAbilityIcon(ability.iconId)">
             <span>{{ ability?.name }}</span>

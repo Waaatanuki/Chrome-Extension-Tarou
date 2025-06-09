@@ -22,7 +22,7 @@ const upViewList = [
   { key: 'Dashborad', lable: '常用信息', icon: 'material-symbols:dashboard' },
   { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
   { key: 'Artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
-  { key: 'Party', lable: '队伍信息', icon: 'game-icons:person' },
+  { key: 'Party', lable: '队伍信息', icon: 'ri:team-fill' },
 ]
 const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
