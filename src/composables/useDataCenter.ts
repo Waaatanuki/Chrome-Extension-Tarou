@@ -542,7 +542,7 @@ export async function unpack(parcel: string) {
       console.log('memoList==>', battleMemo.value)
     }
 
-    if (!obWindowId.value)
+    if (!obTabId.value)
       return
 
     battleInfo.value.inLobby = false

@@ -28,6 +28,8 @@ export function handleStartJson(data: BattleStartJson) {
     turn: data.turn,
     addition,
     interrupt_display_text,
+    lv: boss.Lv,
+    attribute: boss.attribute,
   }
 
   battleInfo.value.summonInfo = {

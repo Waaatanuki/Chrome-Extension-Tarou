@@ -273,6 +273,7 @@ import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNp
   chrome.runtime.onInstalled.addListener(() => {
     checkCode()
     registerContextMenu()
+    isSidePanelOpened.value = false
     chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
   })
 
@@ -294,21 +295,13 @@ import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNp
 
   chrome.tabs.onActivated.addListener((activeInfo) => {
     chrome.tabs.get(activeInfo.tabId).then(async (tab) => {
-      if (!tab.url)
-        return
-
-      const url = new URL(tab.url)
-      const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
-      await chrome.sidePanel.setOptions({
-        tabId: tab.id,
-        path: 'src/views/sidePanel/main.html',
-        enabled: HOST.includes(url.host) && (!isSidePanelOpened.value || (tab.id === obTabId.value)),
-      })
+      await setOption(tab)
     })
   })
 
-  chrome.tabs.onUpdated.addListener(() => {
+  chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     console.log('wake up!')
+    await setOption(tab)
   })
 
   chrome.tabs.onRemoved.addListener((tabId) => {
@@ -341,4 +334,17 @@ import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNp
   })
 
   addMenuClickListener()
+
+  async function setOption(tab: chrome.tabs.Tab) {
+    if (!tab.url)
+      return
+
+    const url = new URL(tab.url)
+    const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
+    await chrome.sidePanel.setOptions({
+      tabId: tab.id,
+      path: 'src/views/sidePanel/main.html',
+      enabled: HOST.includes(url.host) && (!isSidePanelOpened.value || (tab.id === obTabId.value)),
+    })
+  }
 })()

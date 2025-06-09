@@ -77,7 +77,7 @@ function toggleImage(specBuff: string[], buffId: string) {
 </template>
 
 <style scoped>
-.buff-icon{
+.buff-icon {
   height: 2.5rem;
   cursor: pointer;
 }

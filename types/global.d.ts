@@ -930,6 +930,8 @@ declare module 'battleLog'{
     turn: number
     timer: number
     interrupt_display_text?: string
+    lv: string
+    attribute: string
     addition?: {
       unique_gauge_time_limit?: {
         default_time_limit: string
