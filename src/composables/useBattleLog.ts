@@ -499,6 +499,8 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
       if (hitPlayer)
         hitPlayer.is_dead = false
     }
+    if (action.cmd === 'resurrection_back')
+      currentRaid.player[0].is_dead = false
     if (action.cmd === 'rematch')
       currentRaid.player.forEach(p => p.is_dead = false)
 
