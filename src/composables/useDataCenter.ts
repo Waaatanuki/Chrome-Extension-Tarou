@@ -621,7 +621,6 @@ export async function unpack(parcel: string) {
   // Artifact 记录当前神器信息
   if (url.includes('/rest/artifact/list')) {
     artifactList.value = responseData.list
-    console.log(artifactList.value)
   }
 
   // 判断是否开启debugger

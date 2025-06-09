@@ -279,24 +279,36 @@ import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNp
   chrome.runtime.onConnect.addListener((port) => {
     if (port.name === 'mySidepanel') {
       isSidePanelOpened.value = true
+
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs.length > 0) {
+          obTabId.value = tabs[0].id!
+        }
+      })
       port.onDisconnect.addListener(() => {
         isSidePanelOpened.value = false
+        obTabId.value = 0
       })
     }
   })
 
-  chrome.tabs.onUpdated.addListener(async (tabId, info, tab) => {
-    console.log('wake up!')
+  chrome.tabs.onActivated.addListener((activeInfo) => {
+    chrome.tabs.get(activeInfo.tabId).then(async (tab) => {
+      if (!tab.url)
+        return
 
-    if (!tab.url)
-      return
-    const url = new URL(tab.url)
-    const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
-    await chrome.sidePanel.setOptions({
-      tabId,
-      path: 'src/views/sidePanel/main.html',
-      enabled: HOST.includes(url.host),
+      const url = new URL(tab.url)
+      const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
+      await chrome.sidePanel.setOptions({
+        tabId: tab.id,
+        path: 'src/views/sidePanel/main.html',
+        enabled: HOST.includes(url.host) && (!isSidePanelOpened.value || (tab.id === obTabId.value)),
+      })
     })
+  })
+
+  chrome.tabs.onUpdated.addListener(() => {
+    console.log('wake up!')
   })
 
   chrome.tabs.onRemoved.addListener((tabId) => {
