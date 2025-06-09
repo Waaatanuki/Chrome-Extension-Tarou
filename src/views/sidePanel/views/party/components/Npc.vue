@@ -20,11 +20,11 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
       <img w-full :src="getAssetImg('leader', leader.imageId, 'result_ml')">
       <img absolute left-1 top-1 w-20px :src="getJobIcon(leader.masterId)">
       <img v-if="leader.familiarId" absolute bottom-0px left-0px w-40px :src="getAssetImg('familiar', leader.familiarId, 's')">
-      <div absolute inset-y-0 right-5px fc flex-1 flex-col gap-2px>
+      <div absolute inset-y-0 right-1px flex flex-1 flex-col items-end justify-center gap-2px>
         <ElTag v-for="ability, idx in leader.ability" :key="idx" :type="ability?.fa ? 'warning' : 'info'" effect="light">
           <div fc gap-4px>
-            <img v-if="ability?.iconId" w-20px :src="getAbilityIcon(ability.iconId)">
             <span>{{ ability?.name }}</span>
+            <img v-if="ability?.iconId" w-20px :src="getAbilityIcon(ability.iconId)">
           </div>
         </ElTag>
       </div>
