@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { BattleRecord } from 'myStorage'
 import DamageRecord from './DamageRecord.vue'
+import DamageTaken from './DamageTaken.vue'
 import PlayerStatus from './PlayerStatus.vue'
 
 defineProps<{ battleRecord: BattleRecord, turn?: number }>()
@@ -16,6 +17,9 @@ const tabName = ref('damage')
       </ElTabPane>
       <ElTabPane label="伤害统计" name="damage">
         <DamageRecord :battle-record="battleRecord" />
+      </ElTabPane>
+      <ElTabPane label="承伤统计" name="damageTaken">
+        <DamageTaken :battle-record="battleRecord" />
       </ElTabPane>
     </ElTabs>
   </ElCard>

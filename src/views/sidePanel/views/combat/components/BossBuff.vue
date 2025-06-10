@@ -29,7 +29,7 @@ function toggleImage(specBuff: string[], buffId: string) {
 </script>
 
 <template>
-  <div w-300px flex flex-wrap rounded-md p-6px ring-1 ring-neutral-7>
+  <div v-if="battleInfo.buffInfo?.bossBuffs.length" w-300px flex flex-wrap rounded-md p-6px ring-1 ring-neutral-7>
     <img
       v-for="buff in importantBossBuffs"
       :key="buff.status"

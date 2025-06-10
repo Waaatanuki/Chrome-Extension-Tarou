@@ -4,16 +4,10 @@ import { battleInfo, battleRecord } from '~/logic'
 import Memo from './Memo.vue'
 
 const currentRaid = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId))
-const remainderSecond = ref<number>(0)
 const timerValue = computed(() => Date.now() + battleInfo.value.bossInfo!.timer * 1000)
 const endTimerValue = computed(() => Date.now() + Number(battleInfo.value.bossInfo!.addition?.unique_gauge_time_limit?.rest_time) * 1000 || 0)
 const bossImgSrc = computed(() => getBossImg('enemy', battleInfo.value.bossInfo!.imgId, 's'))
-
 const operationSecond = computed(() => currentRaid.value ? currentRaid.value.startTimer - currentRaid.value.endTimer : 0)
-
-function handleTimeChange(millisecond: number) {
-  remainderSecond.value = Math.round(millisecond / 1000)
-}
 
 function handleCopy(text: string) {
   if (copy(text))
@@ -29,9 +23,9 @@ function handleCopy(text: string) {
           <div fc gap-5 text-xl>
             {{ `TURN ${battleInfo.bossInfo.turn}` }}
             <div v-if="battleInfo.bossInfo.hp === 0">
-              {{ formatTime(remainderSecond) }}
+              {{ formatTime(battleInfo.bossInfo.timer) }}
             </div>
-            <ElCountdown v-else :value="timerValue" @change="handleTimeChange" />
+            <ElCountdown v-else :value="timerValue" />
           </div>
           <div fc>
             <img :src="bossImgSrc">

@@ -27,17 +27,17 @@ const downViewList = [
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <div relative h-200px w-200px flex flex-wrap content-start bg-amber>
-            <div v-for="i in 4" :key="i" h-40px w-20px bg-blue ring-1 />
-            <div v-for="i in 40" :key="i" flex flex-col bg-rose ring-1>
-              <div h-20px w-20px bg-rose ring-1>
-                {{ (i - 1) * 2 }}
-              </div>
-              <div h-20px w-20px bg-rose ring-1>
-                {{ (i - 1) * 2 + 1 }}
-              </div>
-            </div>
-          </div>
+          <el-tabs type="border-card" stretch>
+            <el-tab-pane label="User">
+              User
+            </el-tab-pane>
+            <el-tab-pane label="Role">
+              {{ formatTime(1131) }}
+            </el-tab-pane>
+            <el-tab-pane label="Task">
+              Task
+            </el-tab-pane>
+          </el-tabs>
 
           <!-- <div grid-cols-auto-fill min-cols-10px relative grid h-200px w-200px gap-1 bg-amber>
             <div v-for="i in 4" :key="i" h-20px w-20px bg-blue />

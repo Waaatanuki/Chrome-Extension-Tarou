@@ -18,6 +18,21 @@ const maxDamage = computed(() =>
   props.battleRecord.player.reduce((pre, cur) => pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value, 1),
 )
 
+const totalDamage = computed(() =>
+  damageTypeOptions.value.reduce<{ value: string, label: string, total: number }[]>((p, c) => {
+    p.push({
+      value: c.value,
+      label: c.label,
+      total: props.battleRecord.player.reduce((pre, cur) => {
+        pre += cur.damage[c.value].value
+        return pre
+      }, 0),
+    })
+
+    return p
+  }, []),
+)
+
 function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number, da: number, ta: number }) {
   return `${Math.floor(info[type] / info.total * 100)}%`
 }
@@ -77,6 +92,29 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
               {{ player.damage[damageType].value.toLocaleString() }}
             </div>
           </div>
+        </div>
+      </div>
+      <div mt-10px w-full flex justify-end text-base>
+        <div fc gap-10px>
+          合计： {{ totalDamage[0].total.toLocaleString() }}
+          <el-popover placement="top-end" width="200">
+            <template #reference>
+              <div i-carbon:information />
+            </template>
+            <el-descriptions direction="vertical" :column="1" size="small" border>
+              <el-descriptions-item v-for="i in 4" :key="i" label="Username">
+                <template #label>
+                  <div flex items-center justify-between>
+                    <div>{{ totalDamage[i].label }}</div>
+                    <div>{{ `${(totalDamage[i].total / totalDamage[0].total * 100).toFixed(2)}%` }}</div>
+                  </div>
+                </template>
+                <div>
+                  {{ `${totalDamage[i].total.toLocaleString()}` }}
+                </div>
+              </el-descriptions-item>
+            </el-descriptions>
+          </el-popover>
         </div>
       </div>
     </div>

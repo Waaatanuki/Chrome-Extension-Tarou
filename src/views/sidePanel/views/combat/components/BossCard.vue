@@ -3,14 +3,9 @@ import copy from 'copy-text-to-clipboard'
 import { battleInfo, battleRecord } from '~/logic'
 
 const currentRaid = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId))
-const remainderSecond = ref<number>(0)
 const timerValue = computed(() => Date.now() + battleInfo.value.bossInfo!.timer * 1000)
 const bossImgSrc = computed(() => getBossImg('enemy', battleInfo.value.bossInfo!.imgId, 's'))
 const operationSecond = computed(() => currentRaid.value ? currentRaid.value.startTimer - currentRaid.value.endTimer : 0)
-
-function handleTimeChange(millisecond: number) {
-  remainderSecond.value = Math.round(millisecond / 1000)
-}
 
 function handleCopy(text: string) {
   if (copy(text))
@@ -26,9 +21,9 @@ function handleCopy(text: string) {
           <div fc gap-5 text-20px>
             {{ `TURN ${battleInfo.bossInfo.turn}` }}
             <div v-if="battleInfo.bossInfo.hp === 0">
-              {{ formatTime(remainderSecond) }}
+              {{ formatTime(battleInfo.bossInfo.timer) }}
             </div>
-            <ElCountdown v-else :value="timerValue" @change="handleTimeChange" />
+            <ElCountdown v-else :value="timerValue" />
           </div>
           <div fc>
             <img w-55px :src="bossImgSrc">
@@ -51,7 +46,7 @@ function handleCopy(text: string) {
         {{ formatTime(operationSecond) }}
       </div>
     </el-tooltip>
-    <el-tooltip v-if="currentRaid?.point" content="贡献">
+    <el-tooltip v-if="currentRaid?.point" content="贡献" placement="top">
       <div absolute bottom-0 left-0 select-none>
         {{ Math.floor(currentRaid.point).toLocaleString() }}
       </div>
@@ -59,6 +54,11 @@ function handleCopy(text: string) {
     <el-tooltip v-if="battleInfo.bossInfo.shareId" content="救援码">
       <div absolute right-0 top-0 cursor-pointer hover:text-amber @click="handleCopy(battleInfo.bossInfo.shareId)">
         {{ battleInfo.bossInfo.shareId }}
+      </div>
+    </el-tooltip>
+    <el-tooltip v-if="battleInfo.bossInfo.limitNum !== 1" content="人数" placement="top">
+      <div absolute bottom-0 right-0>
+        {{ `${battleInfo.bossInfo.fellow}/${battleInfo.bossInfo.limitNum}` }}
       </div>
     </el-tooltip>
   </div>

@@ -30,6 +30,8 @@ export function handleStartJson(data: BattleStartJson) {
     interrupt_display_text,
     lv: boss.Lv,
     attribute: boss.attribute,
+    limitNum: Number(data.limit_number || 1),
+    fellow: data.multi_raid_member_info?.length || 1,
   }
 
   battleInfo.value.summonInfo = {
@@ -74,6 +76,9 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
 
   const bossGauge = data.scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)
   const status = data.status
+
+  if (status?.fellow && battleInfo.value.bossInfo)
+    battleInfo.value.bossInfo.fellow = Number(status?.fellow)
 
   if (status?.unique_gauge_time_limit && battleInfo.value.bossInfo)
     battleInfo.value.bossInfo.addition = { unique_gauge_time_limit: status.unique_gauge_time_limit }

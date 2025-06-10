@@ -335,6 +335,7 @@ declare module 'source'{
       total: number
       count: string
     }
+    limit_number?: string
     multi_raid_member_info?: MultiRaidMemberInfo[]
     twitter: { battle_id: string }
     summon: Summon[]
@@ -541,6 +542,7 @@ declare module 'source'{
     }[]
     timer: number
     turn: number
+    fellow: number
     is_guard_status: { is_guard_status: number }[]
     special_skill_indicate?: { interrupt_display_text: string }[]
     unique_gauge_time_limit?: {
@@ -939,6 +941,8 @@ declare module 'battleLog'{
         rest_time: number
       }
     }
+    limitNum: number
+    fellow: number
   }
 
   interface BuffInfo {
