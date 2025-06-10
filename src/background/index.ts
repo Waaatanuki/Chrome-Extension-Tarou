@@ -3,10 +3,10 @@ import type { NumberLimitPair } from 'myStorage'
 import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import { onMessage, sendMessage } from 'webext-bridge/background'
-import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile, userInfo } from '~/logic/storage'
+import { battleMemo, eventList, isSidePanelOpened, localNpcList, mySupportSummon, notificationItem, notificationSetting, obTabId, obWindowId, profile, userInfo } from '~/logic/storage'
 
 (() => {
-  const { registerContextMenu, addMenuClickListener } = useContextMenu()
+  const { registerContextMenu, addMenuClickListener, isGamePage, openSidePanel } = useContextMenu()
   const { checkUser, checkCode, sendInfo } = useUser()
 
   onMessage('express', (res) => {
@@ -273,40 +273,50 @@ import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNp
   chrome.runtime.onInstalled.addListener(() => {
     checkCode()
     registerContextMenu()
-    isSidePanelOpened.value = false
-    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false })
+    obTabId.value = 0
+    obWindowId.value = 0
   })
 
   chrome.runtime.onConnect.addListener((port) => {
     if (port.name === 'mySidepanel') {
-      isSidePanelOpened.value = true
-
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length > 0) {
           obTabId.value = tabs[0].id!
+          isSidePanelOpened.value = true
         }
       })
       port.onDisconnect.addListener(() => {
         isSidePanelOpened.value = false
-        obTabId.value = 0
+
+        if (!obWindowId.value) {
+          chrome.debugger.detach({ tabId: obTabId.value }).then(() => {
+            console.log('断开debugger')
+          }).catch((error) => {
+            console.log(error)
+          }).finally(() => {
+            obTabId.value = 0
+          })
+        }
       })
     }
   })
 
-  chrome.tabs.onActivated.addListener((activeInfo) => {
-    chrome.tabs.get(activeInfo.tabId).then(async (tab) => {
-      await setOption(tab)
+  chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+    console.log('wake up!')
+
+    await chrome.sidePanel.setOptions({
+      tabId: tab.id,
+      path: 'src/views/sidePanel/main.html',
+      enabled: isGamePage(tab.url),
     })
   })
 
-  chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    console.log('wake up!')
-    await setOption(tab)
-  })
-
   chrome.tabs.onRemoved.addListener((tabId) => {
-    if (tabId === obTabId.value)
+    if (tabId === obTabId.value) {
+      obTabId.value = 0
       chrome.windows.remove(obWindowId.value).catch(() => {})
+    }
   })
 
   chrome.debugger.onEvent.addListener((source, method, params: any) => {
@@ -322,33 +332,27 @@ import { battleInfo, battleMemo, deckList, eventList, isSidePanelOpened, localNp
   chrome.windows.onRemoved.addListener((windowId) => {
     if (windowId === obWindowId.value) {
       obWindowId.value = 0
-      battleInfo.value = {}
-      deckList.value = []
+
+      if (isSidePanelOpened.value)
+        return
 
       chrome.debugger.detach({ tabId: obTabId.value }).then(() => {
         console.log('断开debugger')
       }).catch((error) => {
         console.log(error)
+      }).finally(() => {
+        obTabId.value = 0
       })
     }
   })
 
-  addMenuClickListener()
-
-  async function setOption(tab: chrome.tabs.Tab) {
-    if (!tab.url)
+  chrome.action.onClicked.addListener((tab) => {
+    if (!isGamePage(tab?.url)) {
+      createNotification({ message: '请在游戏页面进行操作' })
       return
+    }
+    openSidePanel(tab)
+  })
 
-    const url = new URL(tab.url)
-    const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
-
-    console.log('HOST.includes(url.host)', HOST.includes(url.host))
-    console.log({ url, isSidePanelOpened: isSidePanelOpened.value, tabId: tab.id, obTabId: obTabId.value })
-
-    await chrome.sidePanel.setOptions({
-      tabId: tab.id,
-      path: 'src/views/sidePanel/main.html',
-      enabled: HOST.includes(url.host) && (!isSidePanelOpened.value || (tab.id === obTabId.value)),
-    })
-  }
+  addMenuClickListener()
 })()
