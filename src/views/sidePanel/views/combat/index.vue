@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { battleInfo, battleRecord } from '~/logic'
 import BattleAnalysis from './components/BattleAnalysis.vue'
+import BossBuff from './components/BossBuff.vue'
 import BossCard from './components/BossCard.vue'
 
 const currentRecord = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId))
@@ -9,6 +10,7 @@ const currentRecord = computed(() => battleRecord.value.find(record => String(re
 <template>
   <div v-if="currentRecord" fc flex-col gap-10px>
     <BossCard />
+    <BossBuff />
     <BattleAnalysis :battle-record="currentRecord" :turn="battleInfo.bossInfo?.turn" />
   </div>
   <div v-else m-auto w-full>
