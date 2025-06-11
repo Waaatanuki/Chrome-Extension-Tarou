@@ -1,4 +1,5 @@
 import type { DropInfo, StartJsonBoss, Stat } from 'api'
+import type { BuildResponse } from 'build'
 import type { Quest } from 'myStorage'
 import request from './request'
 
@@ -52,6 +53,14 @@ export function listDrop(questIds: string[]) {
 // 上传配置
 export function uploadBuild(data: any) {
   return request('/ext/build', {
+    method: 'post',
+    body: JSON.stringify(data),
+  })
+}
+
+// 上传配置
+export function lsitBuild(data: { questId: string, npcFilter: number[] }) {
+  return request<{ list: BuildResponse[], total: number }>('/ext/getBuild', {
     method: 'post',
     body: JSON.stringify(data),
   })

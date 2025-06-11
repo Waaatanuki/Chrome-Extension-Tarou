@@ -12,7 +12,7 @@ const currentRecord = computed(() => battleRecord.value.find(record => String(re
   <div v-if="currentRecord" fc flex-col gap-10px>
     <BossCard />
     <BossBuff />
-    <BattleAnalysis :battle-record="currentRecord" :turn="battleInfo.bossInfo?.turn" />
+    <BattleAnalysis :player="currentRecord.player" :turn="battleInfo.bossInfo?.turn" />
     <MemberList :member-info="battleInfo.memberInfo" :mvp-info="battleInfo.mvpInfo" />
   </div>
   <el-result v-else icon="info" sub-title="进入战斗时将会读取相关信息" />

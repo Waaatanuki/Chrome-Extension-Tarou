@@ -136,15 +136,7 @@ declare module 'myStorage' {
     endTimer: number
     formation: number[]
     player: Player[]
-    actionQueue: {
-      turn: number
-      bossHpPercent: number
-      special_skill_flag: number
-      guard_status: { is_guard_status: number, num: number }[]
-      acitonList: Action[]
-      interrupt_display_text?: string
-      normalAttackInfo?: NormalAttackInfo
-    }[]
+    actionQueue: ActionQueue[]
     hasResult?: boolean
     damage?: string
     point?: number
@@ -158,15 +150,17 @@ declare module 'myStorage' {
 
   interface BuildDetail {
     player: Omit<Player, 'condition'>[]
-    actionQueue: {
-      turn: number
-      bossHpPercent: number
-      special_skill_flag: number
-      guard_status: { is_guard_status: number, num: number }[]
-      acitonList: Action[]
-      interrupt_display_text?: string
-      normalAttackInfo?: NormalAttackInfo
-    }[]
+    actionQueue: ActionQueue[]
+  }
+
+  interface ActionQueue {
+    turn: number
+    bossHpPercent: number
+    special_skill_flag: number
+    guard_status: { is_guard_status: number, num: number }[]
+    acitonList: Action[]
+    interrupt_display_text?: string
+    normalAttackInfo?: NormalAttackInfo
   }
 
   interface Player {
@@ -185,7 +179,7 @@ declare module 'myStorage' {
       da: number
       ta: number
     }
-    condition: {
+    condition?: {
       buff: Buff[]
       coating_value: number
     }
@@ -1117,5 +1111,47 @@ declare module 'api'{
     blueChest: number
     lastDropCount: number
     lastDropTake: number
+  }
+}
+
+declare module 'build'{
+  import type { BuildDetail } from 'myStorage'
+  import type { Deck } from 'party'
+
+  interface BuildStorage {
+    questId: string
+    raidId: number
+    raidName: string
+    bossImage?: string
+    turn: number
+    startTime?: number
+    realSpeed: string
+    fullSpeed: string
+    damage?: string
+    point?: number
+    isFa: boolean
+    deck: Deck
+    detail: BuildDetail
+  }
+
+  interface BuildResponse {
+    key: string
+    questId: string
+    questName: string
+    questImage: string
+    account: string
+    createTime: number
+    raidId: number
+    raidName: string
+    bossImage?: string
+    turn: number
+    startTime?: number
+    realSpeed: string
+    fullSpeed: string
+    damage?: string
+    point?: number
+    isFa: boolean
+    deck: Deck
+    detail: BuildDetail
   }
 }

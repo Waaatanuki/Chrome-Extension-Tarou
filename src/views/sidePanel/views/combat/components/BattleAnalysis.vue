@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import type { BattleRecord } from 'myStorage'
+import type { Player } from 'myStorage'
 import DamageRecord from './DamageRecord.vue'
 import DamageTaken from './DamageTaken.vue'
 import PlayerStatus from './PlayerStatus.vue'
 
-defineProps<{ battleRecord: BattleRecord, turn?: number }>()
+defineProps<{ player: Player[], turn?: number }>()
 
 const tabName = ref('damage')
 </script>
 
 <template>
-  <ElCard v-if="battleRecord" w-300px shrink-0 body-style="padding: 5px">
+  <ElCard v-if="player" w-300px shrink-0 body-style="padding: 5px">
     <ElTabs v-model="tabName" stretch>
       <ElTabPane v-if="turn" label="角色状态" name="status">
-        <PlayerStatus :battle-record="battleRecord" :turn="turn" />
+        <PlayerStatus :player-info="player" :turn="turn" />
       </ElTabPane>
       <ElTabPane label="伤害统计" name="damage">
-        <DamageRecord :battle-record="battleRecord" />
+        <DamageRecord :player-info="player" />
       </ElTabPane>
       <ElTabPane label="承伤统计" name="damageTaken">
-        <DamageTaken :battle-record="battleRecord" />
+        <DamageTaken :player-info="player" />
       </ElTabPane>
     </ElTabs>
   </ElCard>

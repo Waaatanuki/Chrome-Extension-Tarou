@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { BattleRecord } from 'myStorage'
+import type { Player } from 'myStorage'
 
-const props = defineProps<{ battleRecord: BattleRecord }>()
+const props = defineProps<{ playerInfo: Player[] }>()
 
 type DamageType = 'total' | 'attack' | 'ability' | 'special' | 'other'
 const damageType = ref<DamageType>('total')
@@ -15,7 +15,7 @@ const damageTypeOptions = ref<{ value: DamageType, label: string }[]>([
 ])
 
 const maxDamage = computed(() =>
-  props.battleRecord.player.reduce((pre, cur) => pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value, 1),
+  props.playerInfo.reduce((pre, cur) => pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value, 1),
 )
 
 const totalDamage = computed(() =>
@@ -23,7 +23,7 @@ const totalDamage = computed(() =>
     p.push({
       value: c.value,
       label: c.label,
-      total: props.battleRecord.player.reduce((pre, cur) => {
+      total: props.playerInfo.reduce((pre, cur) => {
         pre += cur.damage[c.value].value
         return pre
       }, 0),
@@ -51,7 +51,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
       </ElSelect>
     </div>
     <div flex flex-col items-start justify-center gap-5px>
-      <div v-for="player in battleRecord.player" :key="player.pid" fc gap-5px>
+      <div v-for="player in playerInfo" :key="player.pid" fc gap-5px>
         <div relative w-45px>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
             <span text-12px text-red font-bold>Dead</span>

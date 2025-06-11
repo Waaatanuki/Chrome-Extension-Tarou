@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import type { BattleRecord, BuildDetail } from 'myStorage'
-import type { Deck } from 'party'
+import type { BuildStorage } from 'build'
+import type { BattleRecord } from 'myStorage'
 import { uploadBuild } from '~/api'
 import { battleRecord, deckList } from '~/logic'
 import Npc from '../party/components/Npc.vue'
 import Summon from '../party/components/Summon.vue'
 import Weapon from '../party/components/Weapon.vue'
 
-const battleRecordLimit = 30
 const dialogVisible = ref(false)
 const loading = ref(false)
 const anonymous = ref(false)
@@ -46,14 +45,6 @@ function handleShare(row: BattleRecord) {
   currentRecord.value = row
 }
 
-function triggerLock(row: BattleRecord) {
-  const lockedNum = battleRecord.value.filter(record => record.reserve).length
-  if ((lockedNum + 1 >= battleRecordLimit) && !row.reserve)
-    ElMessage.info('已达锁定上限')
-  else
-    row.reserve = !row.reserve
-}
-
 function handleCopyBuild() {
   if (!currentRecord.value)
     return
@@ -87,7 +78,7 @@ function handleCopyBuild() {
     .catch(() => { })
 }
 
-function processData(): PostBuild {
+function processData(): BuildStorage {
   const uploadRecord: BattleRecord = JSON.parse(JSON.stringify(currentRecord.value))
   return {
     questId: uploadRecord.quest_id,
@@ -110,22 +101,6 @@ function processData(): PostBuild {
       actionQueue: uploadRecord.actionQueue,
     },
   }
-}
-
-interface PostBuild {
-  questId: string
-  raidId: number
-  raidName: string
-  bossImage?: string
-  turn: number
-  startTime?: number
-  realSpeed: string
-  fullSpeed: string
-  damage?: string
-  point?: number
-  isFa: boolean
-  deck: Deck
-  detail: BuildDetail
 }
 </script>
 

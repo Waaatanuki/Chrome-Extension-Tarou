@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BattleRecord, Player } from 'myStorage'
+import type { Player } from 'myStorage'
 import type { Buff } from 'source'
 import { onlyShowSpecBuff, specPlayerBuff } from '~/logic'
 
@@ -12,12 +12,12 @@ interface DisplayPlayer extends Player {
   }
 }
 
-const { battleRecord } = defineProps<{ battleRecord: BattleRecord, turn: number }>()
+const { playerInfo } = defineProps<{ playerInfo: Player[], turn: number }>()
 
-const playerInfo = computed<DisplayPlayer[]>(() => {
-  const copyRecord = JSON.parse(JSON.stringify(battleRecord))
+const disPlayPlayer = computed<DisplayPlayer[]>(() => {
+  const copyPlayer = JSON.parse(JSON.stringify(playerInfo))
 
-  for (const player of copyRecord.player) {
+  for (const player of copyPlayer) {
     const importantBuffs = []
     const commonBuffs = []
     for (const buff of player.condition.buff) {
@@ -30,7 +30,7 @@ const playerInfo = computed<DisplayPlayer[]>(() => {
     player.condition.commonBuffs = commonBuffs
   }
 
-  return copyRecord.player
+  return copyPlayer
 })
 
 function toggleImage(specBuff: string[], buffId: string) {
@@ -51,7 +51,7 @@ function toggleImage(specBuff: string[], buffId: string) {
     </div>
 
     <div flex flex-col items-start justify-center gap-5px>
-      <div v-for="player in playerInfo" :key="player.pid" flex items-center justify-start gap-5px>
+      <div v-for="player in disPlayPlayer" :key="player.pid" flex items-center justify-start gap-5px>
         <div relative h-45px w-45px fc shrink-0>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
             <span text-12px text-red font-bold>Dead</span>

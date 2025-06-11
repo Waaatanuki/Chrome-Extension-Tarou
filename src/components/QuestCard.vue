@@ -87,7 +87,7 @@ const msg = computed(() => {
 </template>
 
 <style scoped>
-.desc-item{
+.desc-item {
   width: 60px;
   height: 60px;
   display: flex;
