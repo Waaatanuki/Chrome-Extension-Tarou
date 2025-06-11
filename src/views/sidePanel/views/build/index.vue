@@ -17,8 +17,8 @@ const currentBuild = ref<BuildResponse>()
 const detailType = ref<DetailType>('party')
 
 function handleQuery() {
-  lsitBuild({ questId: buildQuestId.value, npcFilter: [] }).then((resp) => {
-    buildList.value = resp.list
+  lsitBuild({ questId: buildQuestId.value, npcFilter: [] }).then(({ data }) => {
+    buildList.value = data.list
   })
 }
 

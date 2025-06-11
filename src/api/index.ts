@@ -60,7 +60,7 @@ export function uploadBuild(data: any) {
 
 // 上传配置
 export function lsitBuild(data: { questId: string, npcFilter: number[] }) {
-  return request<{ list: BuildResponse[], total: number }>('/ext/getBuild', {
+  return request<{ data: { list: BuildResponse[], total: number } }>('/ext/getBuild', {
     method: 'post',
     body: JSON.stringify(data),
   })
