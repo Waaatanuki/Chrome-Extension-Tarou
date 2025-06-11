@@ -8,7 +8,7 @@ import Npc from '../party/components/Npc.vue'
 import Summon from '../party/components/Summon.vue'
 import Weapon from '../party/components/Weapon.vue'
 
-type DetailType = 'party' | 'damage' | 'action'
+type DetailType = 'party' | 'action'
 
 const loading = ref(false)
 const buildList = ref<BuildResponse[]>([])
@@ -43,7 +43,7 @@ function handleCommand(command: DetailType, data: BuildResponse) {
       查询
     </TheButton>
   </div>
-  <div flex flex-col flex-wrap gap-10px>
+  <div mt-10px flex flex-col flex-wrap gap-10px>
     <el-card v-for="data, idx in buildList" :key="idx" w-300px body-style="padding: 5px">
       <el-descriptions size="small" direction="vertical" :column="3" border>
         <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
@@ -76,9 +76,6 @@ function handleCommand(command: DetailType, data: BuildResponse) {
               <el-dropdown-item command="party">
                 配置
               </el-dropdown-item>
-              <el-dropdown-item command="damage">
-                伤害
-              </el-dropdown-item>
               <el-dropdown-item command="action">
                 操作
               </el-dropdown-item>
@@ -94,8 +91,6 @@ function handleCommand(command: DetailType, data: BuildResponse) {
           <Npc :leader="currentBuild.deck.leader" :npcs="currentBuild.deck.npcs" />
           <Weapon :weapons="currentBuild.deck.weapons" />
           <Summon :summons="currentBuild.deck.summons" />
-        </template>
-        <template v-if="detailType === 'damage'">
           <BattleAnalysis :player="currentBuild.detail.player" />
         </template>
         <template v-if="detailType === 'action'">
