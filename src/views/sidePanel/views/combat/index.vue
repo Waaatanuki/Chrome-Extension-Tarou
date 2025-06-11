@@ -13,7 +13,5 @@ const currentRecord = computed(() => battleRecord.value.find(record => String(re
     <BossBuff />
     <BattleAnalysis :battle-record="currentRecord" :turn="battleInfo.bossInfo?.turn" />
   </div>
-  <div v-else m-auto w-full>
-    <el-alert type="info" effect="dark" show-icon center :closable="false" title="进入战斗时将会读取相关信息" />
-  </div>
+  <el-result v-else icon="info" sub-title="进入战斗时将会读取相关信息" />
 </template>

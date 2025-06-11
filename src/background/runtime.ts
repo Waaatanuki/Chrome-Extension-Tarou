@@ -10,6 +10,7 @@ export function setupRuntimeListener() {
     chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false })
     obTabId.value = 0
     obWindowId.value = 0
+    isSidePanelOpened.value = false
   })
 
   chrome.runtime.onConnect.addListener((port) => {

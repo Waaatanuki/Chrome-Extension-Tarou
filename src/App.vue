@@ -27,17 +27,7 @@ const downViewList = [
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <el-tabs type="border-card" stretch>
-            <el-tab-pane label="User">
-              User
-            </el-tab-pane>
-            <el-tab-pane label="Role">
-              {{ formatTime(1131) }}
-            </el-tab-pane>
-            <el-tab-pane label="Task">
-              Task
-            </el-tab-pane>
-          </el-tabs>
+          <el-result icon="info" sub-title="进入战斗读取相关信息" />
 
           <!-- <div grid-cols-auto-fill min-cols-10px relative grid h-200px w-200px gap-1 bg-amber>
             <div v-for="i in 4" :key="i" h-20px w-20px bg-blue />

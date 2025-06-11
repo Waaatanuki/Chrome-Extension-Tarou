@@ -98,6 +98,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
   if (isBossDie && battleInfo.value.bossInfo) {
     battleInfo.value.bossInfo.hp = 0
     battleInfo.value.bossInfo.hpPercent = 0
+    battleInfo.value.bossInfo.timer = status?.timer ?? battleInfo.value.bossInfo.timer
   }
 
   if (battleInfo.value.summonInfo) {

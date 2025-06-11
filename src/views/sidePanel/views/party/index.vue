@@ -15,5 +15,5 @@ const deck = computed(() => deckList.value[0])
     <Summon :summons="deck.summons" />
     <Effect :effects="deck.effects" />
   </div>
-  <el-alert v-else type="info" effect="dark" show-icon center :closable="false" title="进入编成界面读取队伍信息" />
+  <el-result v-else icon="info" sub-title="进入编成界面读取队伍信息" />
 </template>
