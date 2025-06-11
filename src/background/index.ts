@@ -302,6 +302,14 @@ import { battleMemo, eventList, isSidePanelOpened, localNpcList, mySupportSummon
     }
   })
 
+  chrome.tabs.onCreated.addListener(() => {
+    chrome.tabs.get(obTabId.value).catch(() => {
+      obTabId.value = 0
+      obWindowId.value = 0
+      isSidePanelOpened.value = false
+    })
+  })
+
   chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     console.log('wake up!')
 

@@ -6,4 +6,9 @@ export default antfu({
     css: true,
     html: true,
   },
+  rules: {
+    'no-unused-vars': 'warn',
+    'unused-imports/no-unused-vars': 'warn',
+    'node/prefer-global/process': 'off',
+  },
 })
