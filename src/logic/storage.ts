@@ -69,3 +69,6 @@ export const language = useWebExtensionStorage<'zh' | 'ja'>('language', 'zh')
 export const artifactList = useWebExtensionStorage<Artifact[]>('artifactList', [])
 export const artifactRuleIndex = useWebExtensionStorage<number>('artifactRuleIndex', 0)
 export const artifactRuleList = useWebExtensionStorage<ArtifactRule[]>('artifactRuleList', defaultArtifactRuleList)
+
+// Build
+export const buildQuestId = useWebExtensionStorage('buildQuestId', '')

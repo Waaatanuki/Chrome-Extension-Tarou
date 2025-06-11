@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, userInfo, xenoGauge } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, userInfo, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -612,6 +612,21 @@ export async function unpack(parcel: string) {
 
   if (!obWindowId.value && !obTabId.value)
     return
+
+  // Build 获取自发副本的questId
+  if (url.includes('/quest/content/supporter/')) {
+    const regex = /\/quest\/content\/supporter\/(\d+)\//
+    const match = url.match(regex)
+    if (match)
+      buildQuestId.value = match[1]
+  }
+
+  // Build 获取参战他人副本的questId
+  if (url.includes('/quest/check_multi_start')) {
+    const paylaod = JSON.parse(requestData!)
+    if (paylaod.quest_id)
+      buildQuestId.value = String(paylaod.quest_id)
+  }
 
   // Party 记录当前队伍信息
   if (url.includes('party/deck')) {

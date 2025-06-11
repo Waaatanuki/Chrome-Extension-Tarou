@@ -2,6 +2,7 @@
 import { Icon } from '@iconify/vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import Artifact from './views/artifact/index.vue'
+import Build from './views/build/index.vue'
 import Combat from './views/combat/index.vue'
 import Dashborad from './views/dashboard/index.vue'
 import Drop from './views/drop/index.vue'
@@ -16,6 +17,7 @@ const componentMap: Record<string, Component> = {
   Drop,
   Artifact,
   Party,
+  Build,
   Combat,
   History,
   Patient,
@@ -29,6 +31,7 @@ const upViewList = [
   { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
   { key: 'Artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
   { key: 'Party', lable: '队伍信息', icon: 'ri:team-fill' },
+  { key: 'Build', lable: '配置查询', icon: 'material-symbols:document-search' },
   { key: 'Combat', lable: '战斗信息', icon: 'game-icons:battle-axe' },
   { key: 'History', lable: '战斗记录', icon: 'game-icons:scroll-unfurled' },
   { key: 'Patient', lable: '标记玩家', icon: 'material-symbols:patient-list' },
