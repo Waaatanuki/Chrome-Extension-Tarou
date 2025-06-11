@@ -151,82 +151,11 @@ const data = computed(() =>
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <div flex flex-wrap gap-20px text-12px>
-            <el-tooltip v-for="member, idx in data" :key="idx">
-              <template #content>
-                <div mb-10px w-100px>
-                  {{ 123 }}
-                </div>
-                <div flex items-center justify-end gap-10px text-xl>
-                  <div i-carbon:identification icon-btn />
-                  <div i-carbon:bookmark-add icon-btn />
-                </div>
-              </template>
-              <div
-                :class="{ host: member.is_host }"
-                relative mb-10px h-65px w-140px flex cursor-pointer select-none items-center rounded-md bg-neutral-7 transition-all
-              >
-                <div v-if="member.is_dead" class="absolute h-full w-full fc bg-black/40">
-                  <span text-red font-bold>Dead</span>
-                </div>
-                <div ml-30px flex flex-col justify-center gap-5px text-start font-medium>
-                  <span w-100px overflow-hidden text-ellipsis whitespace-nowrap>
-                    {{ member.nickname }}
-                  </span>
-                  <span>
-                    {{ member.point ? Math.floor(member.point).toLocaleString() : '' }}
-                  </span>
-                </div>
-
-                <ElTag effect="dark" size="small" :type="member.userRank === '400' ? 'warning' : 'info'" absolute right--1px top--10px>
-                  {{ `Lv${member.userRank}` }}
-                </ElTag>
-                <ElTag v-if="member.rank && member.rank !== 999" effect="dark" size="small" type="danger" absolute left--8px my-auto>
-                  {{ `#${member.rank}` }}
-                </ElTag>
-                <img :src="member.jobIcon" absolute left-5px top--12px h-24px>
-                <div :class="member.attributeClass" scale-150 />
-                <div i-carbon:bookmark-filled absolute bottom--10px right-25px text-orange />
-              </div>
-            </el-tooltip>
-            <el-popover v-for="member, idx in data" :key="idx" placement="top" :width="150" trigger="hover" effect="dark">
-              <template #reference>
-                <div
-                  :class="{ host: member.is_host }"
-                  relative mb-10px h-65px w-140px flex cursor-pointer select-none items-center rounded-md bg-neutral-7 transition-all
-                >
-                  <div v-if="member.is_dead" class="absolute h-full w-full fc bg-black/40">
-                    <span text-red font-bold>Dead</span>
-                  </div>
-                  <div ml-30px flex flex-col justify-center gap-5px text-start font-medium>
-                    <span w-100px overflow-hidden text-ellipsis whitespace-nowrap>
-                      {{ member.nickname }}
-                    </span>
-                    <span>
-                      {{ member.point ? Math.floor(member.point).toLocaleString() : '' }}
-                    </span>
-                  </div>
-
-                  <ElTag effect="dark" size="small" :type="member.userRank === '400' ? 'warning' : 'info'" absolute right--1px top--10px>
-                    {{ `Lv${member.userRank}` }}
-                  </ElTag>
-                  <ElTag v-if="member.rank && member.rank !== 999" effect="dark" size="small" type="danger" absolute left--8px my-auto>
-                    {{ `#${member.rank}` }}
-                  </ElTag>
-                  <img :src="member.jobIcon" absolute left-5px top--12px h-24px>
-                  <div :class="member.attributeClass" scale-150 />
-                  <div i-carbon:bookmark-filled absolute bottom--10px right-25px text-orange />
-                </div>
-              </template>
-              <div mb-10px>
-                {{ 123 }}
-              </div>
-              <div flex items-center justify-end gap-10px text-xl>
-                <div i-carbon:identification icon-btn />
-                <div i-carbon:bookmark-add icon-btn />
-              </div>
-            </el-popover>
-          </div>
+          <el-descriptions :column="3" direction="vertical" size="small" w-100px border>
+            <el-descriptions-item label="ID" width="100" align="center">
+              123
+            </el-descriptions-item>
+          </el-descriptions>
         </div>
       </el-scrollbar>
       <!-- <div flex-1 bg-rose>

@@ -7,6 +7,7 @@ import Dashborad from './views/dashboard/index.vue'
 import Drop from './views/drop/index.vue'
 import Info from './views/info/index.vue'
 import Party from './views/party/index.vue'
+import Patient from './views/patient/index.vue'
 import Setting from './views/setting/index.vue'
 
 const componentMap: Record<string, Component> = {
@@ -15,6 +16,7 @@ const componentMap: Record<string, Component> = {
   Artifact,
   Party,
   Combat,
+  Patient,
   Setting,
   Info,
 }
@@ -26,6 +28,7 @@ const upViewList = [
   { key: 'Artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
   { key: 'Party', lable: '队伍信息', icon: 'ri:team-fill' },
   { key: 'Combat', lable: '战斗信息', icon: 'game-icons:battle-axe' },
+  { key: 'Patient', lable: '标记玩家', icon: 'material-symbols:patient-list' },
 ]
 const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
