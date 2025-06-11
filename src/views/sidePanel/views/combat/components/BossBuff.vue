@@ -37,7 +37,7 @@ function toggleImage(specBuff: string[], buffId: string) {
       :src="getBuffIcon(buff, battleInfo.bossInfo!.turn)"
       @click="toggleImage(specBossBuff, buff.status.split('_')[0])"
     >
-    <div v-for="i in commonBossBuffs.length" :key="i" flex flex-col>
+    <div v-for="i in Math.ceil(commonBossBuffs.length / 2)" :key="i" flex flex-col>
       <img
         v-if="commonBossBuffs[(i - 1) * 2]"
         h-24px w-24px cursor-pointer
