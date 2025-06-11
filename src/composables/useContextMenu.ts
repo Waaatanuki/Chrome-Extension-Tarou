@@ -1,64 +1,10 @@
-import { isSidePanelOpened, notificationItem, obTabId, obWindowId, windowSize } from '~/logic'
+import { isSidePanelOpened, obTabId, obWindowId, windowSize } from '~/logic'
 
 export default function useContextMenu() {
   function registerContextMenu() {
     chrome.contextMenus.create({ id: 'openSidePanel', title: '开启侧边栏', contexts: ['all'] })
     chrome.contextMenus.create({ id: 'openDashboard', title: '开启详细面板', contexts: ['all'] })
     chrome.contextMenus.create({ id: 'pushInTargetItem', title: '加入掉落监控', contexts: ['image'] })
-  }
-
-  function isGamePage(url?: string) {
-    if (!url)
-      return false
-
-    const urlObj = new URL(url)
-    const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
-    return HOST.includes(urlObj.host)
-  }
-
-  function addMenuClickListener() {
-    chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-      if (!isGamePage(tab?.url)) {
-        createNotification({ message: '请在游戏页面进行操作' })
-        return
-      }
-
-      if (!tab?.id) {
-        createNotification({ message: '请在游戏页面进行操作' })
-        return
-      }
-
-      switch (info.menuItemId) {
-        case 'openDashboard':
-          openDashboard(tab)
-          break
-        case 'openSidePanel':{
-          openSidePanel(tab)
-          break
-        }
-        case 'pushInTargetItem':
-          if (info.srcUrl) {
-            const itemKey = imgSrcToKey(info.srcUrl)
-
-            if (!itemKey) {
-              createNotification({ message: '该物品无法添加' })
-              return
-            }
-            if (notificationItem.value.includes(itemKey)) {
-              createNotification({ message: '该物品已在提醒列表中' })
-              return
-            }
-
-            notificationItem.value.push(itemKey)
-            createNotification({
-              message: '添加成功',
-              iconUrl: `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${itemKey}`,
-              sound: 'tip',
-            })
-          }
-          break
-      }
-    })
   }
 
   function openSidePanel(tab: chrome.tabs.Tab) {
@@ -103,5 +49,5 @@ export default function useContextMenu() {
       })
   }
 
-  return { registerContextMenu, openSidePanel, isGamePage, addMenuClickListener }
+  return { registerContextMenu, openSidePanel, openDashboard }
 }
