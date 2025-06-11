@@ -99,6 +99,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.bossInfo.hp = 0
     battleInfo.value.bossInfo.hpPercent = 0
     battleInfo.value.bossInfo.timer = status?.timer ?? battleInfo.value.bossInfo.timer
+    currentRaid.endTimestamp = Date.now()
   }
 
   if (battleInfo.value.summonInfo) {
@@ -607,11 +608,8 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
 
   const dieIndex = data.scenario.findIndex(action => action.cmd === 'die' && action.to === 'boss')
 
-  if (dieIndex !== -1) {
-    currentRaid.endTimestamp = Date.now()
-    if (dieIndex === 0)
-      return
-  }
+  if (dieIndex === 0)
+    return
 
   if (!data.status)
     return

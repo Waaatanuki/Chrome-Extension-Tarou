@@ -40,7 +40,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
 
 <template>
   <div>
-    <div h-50px w-full fc>
+    <div mb-15px w-full fc>
       <ElSelect v-model="damageType" style="width:150px" size="small">
         <ElOption
           v-for="item in damageTypeOptions"
@@ -50,7 +50,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
         />
       </ElSelect>
     </div>
-    <div my-10px flex flex-col items-start justify-center gap-5px>
+    <div flex flex-col items-start justify-center gap-5px>
       <div v-for="player in battleRecord.player" :key="player.pid" fc gap-5px>
         <div relative w-45px>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">

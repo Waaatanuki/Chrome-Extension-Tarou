@@ -28,7 +28,7 @@ const totalDamageTaken = computed(() =>
 
 <template>
   <div>
-    <div h-50px w-full fc>
+    <div mb-15px w-full fc>
       <ElSelect v-model="damageTakenType" style="width:150px" size="small">
         <ElOption
           v-for="item in damageTakenTypeOptions"
@@ -39,7 +39,7 @@ const totalDamageTaken = computed(() =>
       </ElSelect>
     </div>
 
-    <div v-if="hasDamageTaken" my-10px flex flex-col items-start justify-center gap-5px>
+    <div v-if="hasDamageTaken" flex flex-col items-start justify-center gap-5px>
       <div v-for="player in battleRecord.player" :key="player.pid" fc gap-5px>
         <div relative w-45px>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
