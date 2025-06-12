@@ -3,6 +3,8 @@ import type { BuildStorage } from 'build'
 import type { BattleRecord } from 'myStorage'
 import { uploadBuild } from '~/api'
 import { battleRecord, deckList } from '~/logic'
+import ActionList from '../combat/components/ActionList.vue'
+import BattleAnalysis from '../combat/components/BattleAnalysis.vue'
 import Npc from '../party/components/Npc.vue'
 import Summon from '../party/components/Summon.vue'
 import Weapon from '../party/components/Weapon.vue'
@@ -12,6 +14,7 @@ const loading = ref(false)
 const anonymous = ref(false)
 const currentRecord = ref<BattleRecord>()
 const currentDeck = computed(() => deckList.value[0])
+const dialogType = ref<'detail' | 'upload'>('detail')
 
 function getRealTimeSpeed(row: BattleRecord) {
   const seconds = row.startTimer - row.endTimer
@@ -39,10 +42,13 @@ function getFullTimeSpeed(row: BattleRecord) {
   return `${row.duration} / ${(damage / (seconds / 60) / 1000000).toFixed(0)}`
 }
 
-function handleShare(row: BattleRecord) {
-  row.isFa = row.isFa ?? true
+function handleCommand(command: 'detail' | 'upload', data: BattleRecord) {
+  if (command === 'upload')
+    data.isFa = data.isFa ?? true
+
+  dialogType.value = command
   dialogVisible.value = true
-  currentRecord.value = row
+  currentRecord.value = data
 }
 
 function handleCopyBuild() {
@@ -129,44 +135,57 @@ function processData(): BuildStorage {
           {{ data.startTimestamp ? useDateFormat(data.startTimestamp, 'MM/DD HH:mm') : '-' }}
         </div>
 
-        <TheButton size="small" :disabled="data.isUploaded" icon="carbon:share" @click="handleShare(data)">
-          {{ data.isUploaded ? '已上传' : '上传' }}
-        </TheButton>
+        <div fc>
+          <TheButton :disabled="data.isUploaded" @click="handleCommand('upload', data)">
+            {{ data.isUploaded ? '已上传' : '上传' }}
+          </TheButton>
+          <TheButton @click="handleCommand('detail', data)">
+            详情
+          </TheButton>
+        </div>
       </div>
     </el-card>
 
     <el-dialog v-model="dialogVisible" :fullscreen="true">
-      <div v-if="currentDeck" my-20px flex items-center justify-between>
-        <div fc gap-8>
-          <div fc gap-2>
-            匿名上传
-            <el-switch
-              v-model="anonymous"
-              inline-prompt
-              active-text="是"
-              inactive-text="否"
-            />
+      <div m-auto mt-20px w-300px flex flex-col gap-10px>
+        <template v-if="dialogType === 'detail' && currentRecord">
+          <BattleAnalysis :player="currentRecord?.player " />
+          <ActionList :action-queue="currentRecord?.actionQueue " />
+        </template>
+        <template v-if="dialogType === 'upload'">
+          <div v-if="currentDeck" my-20px flex items-center justify-between>
+            <div fc gap-4>
+              <div fc gap-2>
+                匿名上传
+                <el-switch
+                  v-model="anonymous"
+                  inline-prompt
+                  active-text="是"
+                  inactive-text="否"
+                />
+              </div>
+              <div fc gap-2>
+                FA
+                <el-switch
+                  v-model="currentRecord!.isFa"
+                  inline-prompt
+                  active-text="是"
+                  inactive-text="否"
+                />
+              </div>
+            </div>
+            <TheButton :loading="loading" @click="handleCopyBuild">
+              上传配置信息
+            </TheButton>
           </div>
-          <div fc gap-2>
-            FA
-            <el-switch
-              v-model="currentRecord!.isFa"
-              inline-prompt
-              active-text="是"
-              inactive-text="否"
-            />
-          </div>
-        </div>
-        <TheButton :loading="loading" @click="handleCopyBuild">
-          上传配置信息
-        </TheButton>
-      </div>
-      <el-result v-else icon="info" sub-title="切换至战斗记录所使用的的队伍" />
+          <el-result v-else icon="info" sub-title="切换至战斗记录所使用的的队伍" />
 
-      <div v-if="currentDeck" m-auto w-300px flex flex-col gap-10px>
-        <Npc :leader="currentDeck.leader" :npcs="currentDeck.npcs" />
-        <Weapon :weapons="currentDeck.weapons" />
-        <Summon :summons="currentDeck.summons" />
+          <div v-if="currentDeck" m-auto w-300px flex flex-col gap-10px>
+            <Npc :leader="currentDeck.leader" :npcs="currentDeck.npcs" />
+            <Weapon :weapons="currentDeck.weapons" />
+            <Summon :summons="currentDeck.summons" />
+          </div>
+        </template>
       </div>
     </el-dialog>
   </div>

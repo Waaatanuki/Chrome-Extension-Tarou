@@ -12,9 +12,9 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 't
         <div>
           战货活动({{ eventInfo?.count }}箱)
         </div>
-        <div>
+        <el-tooltip content="最后更新时间" placement="top">
           {{ useDateFormat(eventInfo.updateTime, 'MM-DD HH:mm') }}
-        </div>
+        </el-tooltip>
       </div>
     </template>
     <div flex flex-col gap-3 text-12px>
