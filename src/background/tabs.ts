@@ -22,6 +22,7 @@ export function setupTabsListener() {
   chrome.tabs.onRemoved.addListener((tabId) => {
     if (tabId === obTabId.value) {
       obTabId.value = 0
+      isSidePanelOpened.value = false
       chrome.windows.remove(obWindowId.value).catch(() => {})
     }
   })
