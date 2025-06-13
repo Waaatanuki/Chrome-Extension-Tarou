@@ -76,7 +76,7 @@ function onPasteSubmit() {
       </el-dropdown>
     </div>
 
-    <div my-10px flex flex-col gap-10px>
+    <div my-10px flex flex-wrap gap-10px>
       <ArtifactCard
         v-for="artifact, idx in artifactList" :key="artifact.id"
         :artifact="artifact"

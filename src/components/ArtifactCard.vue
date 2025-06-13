@@ -19,7 +19,7 @@ function getSkillName(skill_id: number) {
   return language.value === 'zh' ? hitSkill.name_zh : hitSkill.name
 }
 
-function getPoint(artifact: any) {
+function getPoint(artifact: Artifact) {
   const artifactKind = artifact.kind.padStart(2, '0')
   const artifactAttribute = String(artifact.attribute)
   let count = currentArtifaceRuleInfo.value.kind[artifactKind] + currentArtifaceRuleInfo.value.attribute[artifactAttribute]
@@ -34,6 +34,18 @@ function getPoint(artifact: any) {
   }
   return count
 }
+
+function getPointType(artifact: Artifact) {
+  if (!currentArtifaceRuleInfo.value.highlight)
+    return 'warning'
+
+  const { high, low } = currentArtifaceRuleInfo.value.highlight
+  if (high && getPoint(artifact) >= high)
+    return 'success'
+  if (low && getPoint(artifact) <= low)
+    return 'danger'
+  return 'warning'
+}
 </script>
 
 <template>
@@ -43,7 +55,7 @@ function getPoint(artifact: any) {
         {{ position }}
       </el-tag>
 
-      <el-tag absolute right-0 top-0 size="large" type="warning">
+      <el-tag absolute right-0 top-0 size="large" :type="getPointType(artifact)">
         得分: {{ artifact.rarity === '3' ? getPoint(artifact) : '∞' }}
       </el-tag>
 

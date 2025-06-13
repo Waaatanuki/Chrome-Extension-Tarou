@@ -272,6 +272,10 @@ declare module 'myStorage' {
     attribute: Record<string, number>
     skill: Record<string, number>
     extra: Record<string, number>
+    highlight: {
+      low?: number
+      high?: number
+    }
   }
 
   interface ExtraRule {

@@ -40,6 +40,7 @@ function onSubmit() {
 onMounted(() => {
   ruleName.value = artifactRuleList.value[artifactRuleIndex.value].name
   ruleInfo.value = JSON.parse(JSON.stringify(artifactRuleList.value[artifactRuleIndex.value].info))
+  ruleInfo.value!.highlight = ruleInfo.value!.highlight || {}
 
   for (const [key, value] of Object.entries(ruleInfo.value!.extra)) {
     const [attribute, kind, skillId] = key.split(':')
@@ -176,6 +177,35 @@ onMounted(() => {
                   />
                 </div>
               </div>
+            </div>
+          </div>
+        </el-tab-pane>
+
+        <el-tab-pane label="高亮" name="highlight">
+          <div flex flex-col gap-2 p-4>
+            <div flex gap-2>
+              <div>
+                低分高亮
+              </div>
+              <el-input-number
+                v-model="ruleInfo.highlight.low"
+                :min="1"
+                size="small"
+                style="width: 80px;"
+                controls-position="right"
+              />
+            </div>
+            <div flex gap-2>
+              <div>
+                高分高亮
+              </div>
+              <el-input-number
+                v-model="ruleInfo.highlight.high"
+                :min="1"
+                size="small"
+                style="width: 80px;"
+                controls-position="right"
+              />
             </div>
           </div>
         </el-tab-pane>

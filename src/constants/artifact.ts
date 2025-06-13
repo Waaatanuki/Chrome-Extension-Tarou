@@ -69,6 +69,7 @@ const defaultArtifactRule = {
   kind: { '01': 100, '02': 100, '03': 100, '04': 100, '05': 100, '06': 100, '07': 100, '08': 100, '09': 100, '10': 100 },
   attribute: { 1: 100, 2: 100, 3: 100, 4: 100, 5: 100, 6: 100 },
   extra: {},
+  highlight: {},
 }
 
 export const defaultArtifactRuleList: ArtifactRule[] = Array.from({ length: 6 }, (_, i) => ({

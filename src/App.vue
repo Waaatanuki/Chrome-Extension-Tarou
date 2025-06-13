@@ -5,7 +5,7 @@ import ActionList from '~/views/sidePanel/views/combat/components/ActionList.vue
 
 const visible = ref(false)
 const currentView = ref('Dashborad')
-
+const foo = ref(123)
 const upViewList = [
   { key: 'Dashborad', lable: '基础信息', icon: 'material-symbols:dashboard' },
   { key: 'Drop', lable: '掉落信息', icon: 'material-symbols:bookmark-star-sharp' },
@@ -13,6 +13,11 @@ const upViewList = [
 const downViewList = [
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
+
+function handle() {
+  console.log(foo.value)
+  console.log(typeof foo.value)
+}
 
 const data = [{ turn: 1, bossHpPercent: 99.84, special_skill_flag: 0, acitonList: [{ type: 'summon', id: '2040425000', icon: '2040425000' }, { icon: 'attack', id: 'attack', type: 'attack' }], guard_status: [{ num: 0, is_guard_status: 0 }, { num: 1, is_guard_status: 0 }, { num: 2, is_guard_status: 0 }, { num: 3, is_guard_status: 0 }], interrupt_display_text: '', normalAttackInfo: { hit: 86, ability: 73720740, special: 29607166, total: 128553236 } }, { turn: 2, bossHpPercent: 40.58, special_skill_flag: 0, acitonList: [], guard_status: [{ num: 0, is_guard_status: 0 }, { num: 1, is_guard_status: 0 }, { num: 2, is_guard_status: 0 }, { num: 4, is_guard_status: 0 }] }]
 </script>
@@ -22,7 +27,7 @@ const data = [{ turn: 1, bossHpPercent: 99.84, special_skill_flag: 0, acitonList
     <Contact absolute right-15px top-15px />
     <div>
       <img w-60px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/quest/assets/lobby/303141.png" alt="" srcset="">
-      <TheButton @click="visible = true">
+      <TheButton @click="handle">
         ceshi
       </TheButton>
     </div>
@@ -30,7 +35,33 @@ const data = [{ turn: 1, bossHpPercent: 99.84, special_skill_flag: 0, acitonList
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <ActionList :action-queue="data" />
+          <div flex flex-col gap-2 pl-4>
+            <div flex gap-2>
+              <div>
+                低分高亮
+              </div>
+              <el-input-number
+                v-model="foo"
+                clearable
+                :min="1"
+                size="small"
+                style="width: 80px;"
+                controls-position="right"
+              />
+            </div>
+            <div flex gap-2>
+              <div>
+                高分高亮
+              </div>
+              <el-input-number
+                v-model="foo"
+                :min="1"
+                size="small"
+                style="width: 80px;"
+                controls-position="right"
+              />
+            </div>
+          </div>
         </div>
       </el-scrollbar>
       <!-- <div flex-1 bg-rose>
@@ -55,3 +86,19 @@ const data = [{ turn: 1, bossHpPercent: 99.84, special_skill_flag: 0, acitonList
     </div>
   </div>
 </template>
+
+<style scoped>
+/* 低分样式 */
+.low-score {
+  background-color: #ff4d4f; /* 红色背景 */
+  color: white; /* 白色文字 */
+  border-color: #ff4d4f; /* 红色边框 */
+}
+
+/* 高分样式 */
+.high-score {
+  background-color: #52c41a; /* 绿色背景 */
+  color: white; /* 白色文字 */
+  border-color: #52c41a; /* 绿色边框 */
+}
+</style>
