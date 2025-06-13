@@ -17,6 +17,34 @@ const downViewList = [
 function handle() {
   console.log(foo.value)
   console.log(typeof foo.value)
+
+  ElMessageBox.prompt('请输入新的的引继码', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    beforeClose: (action, instance, done) => {
+      if (action === 'confirm') {
+        console.log(instance.inputValue)
+
+        instance.confirmButtonLoading = true
+        setTimeout(() => {
+          done()
+          setTimeout(() => {
+            instance.confirmButtonLoading = false
+          }, 300)
+        }, 3000)
+      }
+      else {
+        done()
+      }
+    },
+  })
+    .then(({ value }) => {
+      ElMessage({
+        type: 'success',
+        message: `Your email is:${value}`,
+      })
+    })
+    .catch(() => {})
 }
 
 const data = [{ turn: 1, bossHpPercent: 99.84, special_skill_flag: 0, acitonList: [{ type: 'summon', id: '2040425000', icon: '2040425000' }, { icon: 'attack', id: 'attack', type: 'attack' }], guard_status: [{ num: 0, is_guard_status: 0 }, { num: 1, is_guard_status: 0 }, { num: 2, is_guard_status: 0 }, { num: 3, is_guard_status: 0 }], interrupt_display_text: '', normalAttackInfo: { hit: 86, ability: 73720740, special: 29607166, total: 128553236 } }, { turn: 2, bossHpPercent: 40.58, special_skill_flag: 0, acitonList: [], guard_status: [{ num: 0, is_guard_status: 0 }, { num: 1, is_guard_status: 0 }, { num: 2, is_guard_status: 0 }, { num: 4, is_guard_status: 0 }] }]
@@ -35,14 +63,65 @@ const data = [{ turn: 1, bossHpPercent: 99.84, special_skill_flag: 0, acitonList
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <div relative w-56px class="group">
-            <img w-full :src="getAssetImg('npc', '3040595000_01', 'quest')">
-          </div>
+          <el-descriptions :column="1" :border="true" direction="vertical" w-300px>
+            <el-descriptions-item label="玩家ID">
+              123123
+            </el-descriptions-item>
+            <el-descriptions-item label="引继码">
+              <template #label>
+                <div flex justify-between>
+                  <div>引继码</div>
+                  <TheButton @click="handle">
+                    迁移
+                  </TheButton>
+                </div>
+              </template>
+              <div hover="text-teal-6" cursor-pointer>
+                6c1cac85-d062-4dfe-919f-a5b3e32959eb
+              </div>
+            </el-descriptions-item>
+            <el-descriptions-item label="权限">
+              <div flex flex-col>
+                <div flex justify-between>
+                  <div>通知权限</div>
+                  <el-tag type="success">
+                    正常
+                  </el-tag>
+                </div>
+              </div>
+            </el-descriptions-item>
+            <el-descriptions-item label="插件版本">
+              <div flex flex-col>
+                <div flex justify-between>
+                  <div>通知权限</div>
+                  <el-tag type="success">
+                    正常
+                  </el-tag>
+                </div>
+              </div>
+            </el-descriptions-item>
+            <el-descriptions-item label="UserAgent">
+              <div flex flex-col>
+                <div flex justify-between>
+                  <div>通知权限</div>
+                  <el-tag type="success">
+                    正常
+                  </el-tag>
+                </div>
+              </div>
+            </el-descriptions-item>
+          </el-descriptions>
+          <el-popover placement="top" width="300">
+            <template #reference>
+              <div hover="text-teal-6" m-auto mt-20px w-150px fc cursor-pointer gap-2>
+                <div i-carbon:help-filled />
+                <div>常见问题处理</div>
+              </div>
+            </template>
+            <img src="./assets/image/common/reload.jpg" alt="">
+          </el-popover>
         </div>
       </el-scrollbar>
-      <!-- <div flex-1 bg-rose>
-
-      </div> -->
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
         <div flex flex-col items-center gap-10px>
           <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
@@ -62,19 +141,3 @@ const data = [{ turn: 1, bossHpPercent: 99.84, special_skill_flag: 0, acitonList
     </div>
   </div>
 </template>
-
-<style scoped>
-/* 低分样式 */
-.low-score {
-  background-color: #ff4d4f; /* 红色背景 */
-  color: white; /* 白色文字 */
-  border-color: #ff4d4f; /* 红色边框 */
-}
-
-/* 高分样式 */
-.high-score {
-  background-color: #52c41a; /* 绿色背景 */
-  color: white; /* 白色文字 */
-  border-color: #52c41a; /* 绿色边框 */
-}
-</style>

@@ -1,62 +1,125 @@
 <script setup lang="ts">
 import copy from 'copy-text-to-clipboard'
 import { updateCode } from '~/api'
-import { code } from '~/logic/storage'
+import { code, uid } from '~/logic/storage'
 
-const form = reactive({
-  oldValue: code.value,
-  newValue: '',
+// TODO 友招检验 profile
+const info = ref({
+  permission: {
+    notifications: 'granted',
+  },
+  version: '',
+  userAgent: '',
 })
 
-const btnLoading = ref(false)
+const supportVisible = ref(false)
 
-function handleCopy(text: string) {
-  if (copy(text))
+function showSupport() {
+  supportVisible.value = true
+}
+
+function handleCopy() {
+  if (copy(code.value))
     ElMessage.success(`已复制引继码`)
 }
 
-function submit() {
-  if (btnLoading.value)
+function changeCode() {
+  if (!code.value) {
+    ElMessage.info(`还未生成引继码`)
     return
-  btnLoading.value = true
-  updateCode({ code: form.newValue }).then((data) => {
-    code.value = data.code
-    form.oldValue = data.code
-    ElMessage.success('迁移成功')
-  }).catch((err) => {
-    ElMessage.error(err.message)
-  }).finally(() => {
-    btnLoading.value = false
+  }
+
+  ElMessageBox.prompt('请输入新的的引继码', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    beforeClose: (action, instance, done) => {
+      if (action === 'confirm' && instance.inputValue) {
+        instance.confirmButtonLoading = true
+        updateCode({ code: instance.inputValue }).then((data) => {
+          code.value = data.code
+          done()
+        }).catch(() => {
+          ElMessage.error('迁移失败')
+        }).finally(() => {
+          instance.confirmButtonLoading = false
+        })
+      }
+      else {
+        done()
+      }
+    },
   })
+    .then(() => {
+      ElMessage.success('迁移成功')
+    })
+    .catch(() => {})
 }
 
-function checkPermission() {
+onMounted(() => {
   chrome.notifications.getPermissionLevel((level) => {
-    if (level === 'granted')
-      ElMessage.success('当前弹窗权限正常')
-    else
-      ElMessage.error('当前弹窗权限被禁止')
+    info.value.permission.notifications = level
   })
-}
+  const manifest = chrome.runtime.getManifest()
+  info.value.version = manifest.version
+  info.value.userAgent = window.navigator.userAgent
+})
 </script>
 
 <template>
-  <el-form :model="form" label-position="top">
-    <el-form-item label="当前引继码">
-      <el-link ml-2 type="primary" @click="handleCopy(form.oldValue)">
-        {{ form.oldValue }}
-      </el-link>
-    </el-form-item>
-    <el-form-item label="迁移引继码">
-      <el-input v-model="form.newValue" />
-    </el-form-item>
-  </el-form>
+  <el-descriptions :column="1" :border="true" direction="vertical" w-300px>
+    <el-descriptions-item label="玩家ID">
+      <template #label>
+        <div flex justify-between>
+          <div>玩家ID</div>
+          <TheButton @click="showSupport">
+            友招
+          </TheButton>
+        </div>
+      </template>
+      {{ uid ? uid : '未获取' }}
+    </el-descriptions-item>
+    <el-descriptions-item label="引继码">
+      <template #label>
+        <div flex justify-between>
+          <div>引继码</div>
+          <TheButton @click="changeCode">
+            迁移
+          </TheButton>
+        </div>
+      </template>
+      <div hover="text-teal-6" cursor-pointer @click="handleCopy">
+        {{ code ? code : '未生成' }}
+      </div>
+    </el-descriptions-item>
+    <el-descriptions-item label="权限">
+      <div flex flex-col>
+        <div flex justify-between>
+          <div>通知权限</div>
+          <el-tag :type="info.permission.notifications === 'granted' ? 'success' : 'danger'">
+            {{ info.permission.notifications === 'granted' ? '正常' : '禁用' }}
+          </el-tag>
+        </div>
+      </div>
+    </el-descriptions-item>
+    <el-descriptions-item label="插件版本">
+      {{ info.version }}
+    </el-descriptions-item>
+    <el-descriptions-item label="UserAgent">
+      {{ info.userAgent }}
+    </el-descriptions-item>
+  </el-descriptions>
 
-  <TheButton :loading="btnLoading" @click="submit">
-    确定
-  </TheButton>
+  <el-popover placement="top" width="300">
+    <template #reference>
+      <div hover="text-teal-6" m-auto mt-20px w-150px fc cursor-pointer gap-2>
+        <div i-carbon:help-filled />
+        <div>常见问题处理</div>
+      </div>
+    </template>
+    <img :src="getLocalImg('reload')">
+  </el-popover>
 
-  <TheButton @click="checkPermission">
-    检查弹窗权限
-  </TheButton>
+  <el-dialog v-model="supportVisible" :fullscreen="true">
+    <SupportSummon />
+  </el-dialog>
 </template>
