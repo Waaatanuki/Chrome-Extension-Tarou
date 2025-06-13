@@ -72,3 +72,4 @@ export const artifactRuleList = useWebExtensionStorage<ArtifactRule[]>('artifact
 
 // Build
 export const buildQuestId = useWebExtensionStorage('buildQuestId', '')
+export const buildNpcFilter = useWebExtensionStorage<number[]>('buildNpcFilter', [])

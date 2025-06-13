@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BuildResponse } from 'build'
 import { lsitBuild } from '~/api'
-import { buildQuestId } from '~/logic'
+import { buildNpcFilter, buildQuestId } from '~/logic'
 import ActionList from '../combat/components/ActionList.vue'
 import BattleAnalysis from '../combat/components/BattleAnalysis.vue'
 import Npc from '../party/components/Npc.vue'
@@ -15,10 +15,12 @@ const buildList = ref<BuildResponse[]>([])
 const dialogVisible = ref(false)
 const currentBuild = ref<BuildResponse>()
 const detailType = ref<DetailType>('party')
+const msg = ref('进入副本前自动获取副本ID')
 
 function handleQuery() {
-  lsitBuild({ questId: buildQuestId.value, npcFilter: [] }).then(({ data }) => {
+  lsitBuild({ questId: buildQuestId.value, npcFilter: buildNpcFilter.value }).then(({ data }) => {
     buildList.value = data.list
+    msg.value = buildList.value.length === 0 ? '未找到匹配的数据' : ''
   })
 }
 
@@ -44,6 +46,7 @@ function handleCommand(command: DetailType, data: BuildResponse) {
     </TheButton>
   </div>
   <div mt-10px flex flex-col flex-wrap gap-10px>
+    <el-result v-if="msg" icon="info" :sub-title="msg" />
     <el-card v-for="data, idx in buildList" :key="idx" w-300px body-style="padding: 5px">
       <el-descriptions size="small" direction="vertical" :column="3" border>
         <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
@@ -67,8 +70,12 @@ function handleCommand(command: DetailType, data: BuildResponse) {
           {{ useDateFormat(data.startTime! * 1000, 'MM/DD HH:mm') }}{{ ` @ ${data.account}` }}
         </div>
 
-        <el-dropdown @command="(command) => handleCommand(command, data)">
-          <TheButton>
+        <div fc>
+          <TheButton icon="material-symbols:sticky-note-2-outline" @click="handleCommand('party', data)" />
+          <TheButton icon="material-symbols:follow-the-signs" @click="handleCommand('action', data)" />
+        </div>
+        <!-- <el-dropdown @command="(command) => handleCommand(command, data)">
+          <TheButton icon="material-symbols:keyboard-external-input-outline">
             详细
           </TheButton>
           <template #dropdown>
@@ -81,14 +88,14 @@ function handleCommand(command: DetailType, data: BuildResponse) {
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown>
+        </el-dropdown> -->
       </div>
     </el-card>
 
     <el-dialog v-model="dialogVisible" :fullscreen="true">
       <div v-if="currentBuild" m-auto mt-20px w-300px flex flex-col gap-10px>
         <template v-if="detailType === 'party'">
-          <Npc :leader="currentBuild.deck.leader" :npcs="currentBuild.deck.npcs" />
+          <Npc :leader="currentBuild.deck.leader" :npcs="currentBuild.deck.npcs" :is-build="true" />
           <Weapon :weapons="currentBuild.deck.weapons" />
           <Summon :summons="currentBuild.deck.summons" />
           <BattleAnalysis :player="currentBuild.detail.player" />

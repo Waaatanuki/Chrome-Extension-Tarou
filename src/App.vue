@@ -35,32 +35,8 @@ const data = [{ turn: 1, bossHpPercent: 99.84, special_skill_flag: 0, acitonList
     <div h-320px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <div flex flex-col gap-2 pl-4>
-            <div flex gap-2>
-              <div>
-                低分高亮
-              </div>
-              <el-input-number
-                v-model="foo"
-                clearable
-                :min="1"
-                size="small"
-                style="width: 80px;"
-                controls-position="right"
-              />
-            </div>
-            <div flex gap-2>
-              <div>
-                高分高亮
-              </div>
-              <el-input-number
-                v-model="foo"
-                :min="1"
-                size="small"
-                style="width: 80px;"
-                controls-position="right"
-              />
-            </div>
+          <div relative w-56px class="group">
+            <img w-full :src="getAssetImg('npc', '3040595000_01', 'quest')">
           </div>
         </div>
       </el-scrollbar>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { BuildLeader, BuildNpc } from 'party'
+import { buildNpcFilter } from '~/logic'
 
-defineProps<{
+const { isBuild = false } = defineProps<{
   leader: BuildLeader
   npcs: BuildNpc[]
+  isBuild?: boolean
 }>()
 
 const NPC_AROUSAL_FORM: Record<string, string> = {
@@ -11,6 +13,16 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
   2: '攻击',
   3: '防御',
   4: '连击',
+}
+
+function updateNpcFilter(masterId: number) {
+  if (buildNpcFilter.value.includes(masterId)) {
+    ElMessage.success('已添加至未拥有角色')
+  }
+  else {
+    buildNpcFilter.value.push(masterId)
+    ElMessage.success('成功添加至未拥有角色')
+  }
 }
 </script>
 
@@ -33,8 +45,11 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
       <template v-for="npc in npcs" :key="npc.paramId">
         <el-popover placement="top-start" width="274">
           <template #reference>
-            <div relative w-56px>
+            <div relative w-56px class="group">
               <img w-full :src="getAssetImg('npc', npc.imageId, 'quest')">
+              <div v-if="isBuild" absolute inset-0 hidden fc bg-black opacity-70 group-hover:flex>
+                <div i-carbon:close-filled absolute icon-btn @click="updateNpcFilter(npc.masterId)" />
+              </div>
               <img v-if="npc.isAugment" absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
               <div
                 v-if="npc.arousalForm" :class="`txt-form-color-${npc.arousalForm}`"

@@ -41,8 +41,8 @@ function isFWorUW(weapon: BuildWeapon) {
 </script>
 
 <template>
-  <div fc flex-col>
-    <div w-300px fc gap-2px>
+  <div w-300px fc flex-col>
+    <div fc gap-2px>
       <div relative w-80px shrink-0>
         <img w-full :src="getAssetImg('weapon', mainWeapon.imageId, 'ls')">
         <div class="prt-ultimate-star-wrapper">
