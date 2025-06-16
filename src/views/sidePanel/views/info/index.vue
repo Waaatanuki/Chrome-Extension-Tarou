@@ -3,7 +3,8 @@ import copy from 'copy-text-to-clipboard'
 import { updateCode } from '~/api'
 import { code, userInfo } from '~/logic/storage'
 
-// TODO 友招检验 profile
+const { checkCode } = useUser()
+
 const info = ref({
   permission: {
     notifications: 'granted',
@@ -56,6 +57,8 @@ function changeCode() {
 }
 
 onMounted(() => {
+  checkCode()
+
   chrome.notifications.getPermissionLevel((level) => {
     info.value.permission.notifications = level
   })

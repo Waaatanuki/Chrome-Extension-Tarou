@@ -2,10 +2,8 @@ import { isSidePanelOpened, obTabId, obWindowId } from '~/logic'
 
 export function setupRuntimeListener() {
   const { registerContextMenu } = useContextMenu()
-  const { checkCode } = useUser()
 
   chrome.runtime.onInstalled.addListener(() => {
-    checkCode()
     registerContextMenu()
     chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false })
     obTabId.value = 0

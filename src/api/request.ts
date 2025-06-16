@@ -2,6 +2,9 @@ import { code, userInfo } from '~/logic'
 
 async function request<T>(api: string, options?: RequestInit, maxCount = 0): Promise<T> {
   const baseURL = import.meta.env.VITE_APP_BASE_API
+  const { checkCode } = useUser()
+
+  checkCode()
 
   const defaultOptions = {
     method: 'get',
