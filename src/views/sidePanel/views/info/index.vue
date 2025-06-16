@@ -110,6 +110,28 @@ onMounted(() => {
     <el-descriptions-item label="UserAgent">
       {{ info.userAgent }}
     </el-descriptions-item>
+    <el-descriptions-item label="相关链接">
+      <div flex flex-col>
+        <div>
+          <el-link href="https://github.com/Waaatanuki/Chrome-Extension-Tarou" target="_blank">
+            Github 插件仓库
+          </el-link>
+        </div>
+        <div>
+          <el-link href="https://gbf.pub" target="_blank">
+            Granblue Master
+          </el-link>
+        </div>
+        <div>
+          <el-link href="https://bbs.nga.cn/read.php?tid=30999435" target="_blank">
+            NGA主题帖
+          </el-link>
+        </div>
+        <div>
+          <el-link>QQ交流群: 194260754</el-link>
+        </div>
+      </div>
+    </el-descriptions-item>
   </el-descriptions>
 
   <el-popover placement="top" width="300">
