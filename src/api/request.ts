@@ -1,4 +1,4 @@
-import { code, uid } from '~/logic'
+import { code, userInfo } from '~/logic'
 
 async function request<T>(api: string, options?: RequestInit, maxCount = 0): Promise<T> {
   const baseURL = import.meta.env.VITE_APP_BASE_API
@@ -8,7 +8,7 @@ async function request<T>(api: string, options?: RequestInit, maxCount = 0): Pro
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
       'code': code.value,
-      'uid': uid.value,
+      'uid': userInfo.value.uid || '',
     },
   }
 

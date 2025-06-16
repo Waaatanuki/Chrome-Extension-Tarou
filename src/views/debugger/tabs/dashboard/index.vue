@@ -4,7 +4,6 @@ import Debug from './components/Debug.vue'
 import RecoveryItemTable from './components/RecoveryItemTable.vue'
 import Setting from './components/Setting.vue'
 import StoneCount from './components/StoneCount.vue'
-import SupportSummon from './components/SupportSummon.vue'
 import ToDoList from './components/ToDoList.vue'
 
 const settingVisible = ref(false)

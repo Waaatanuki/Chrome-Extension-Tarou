@@ -4,6 +4,12 @@ declare module 'myStorage' {
 
   interface UserInfo {
     uid: string
+    name: string
+    imgPc: string
+    stone: number
+    legendticket10: number
+    legendticket: number
+    support: MySupportSummon
     mbp: {
       daily: NumberLimitPair
       weekly: NumberLimitPair
@@ -51,12 +57,6 @@ declare module 'myStorage' {
       isAllComplete: boolean
       isDailyMission: boolean
     }[]
-  }
-
-  interface Profile {
-    uid: string
-    name: string
-    imgPc: string
   }
 
   interface BattleMemo {

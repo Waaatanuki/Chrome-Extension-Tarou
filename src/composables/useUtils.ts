@@ -6,3 +6,7 @@ export function isGamePage(url?: string) {
   const HOST = ['game.granbluefantasy.jp', 'gbf.game.mbga.jp']
   return HOST.includes(urlObj.host)
 }
+
+export function goProfilePage(userId: string) {
+  window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
+}

@@ -3,7 +3,7 @@ import type { NumberLimitPair } from 'myStorage'
 import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import { sendMessage } from 'webext-bridge/background'
-import { battleMemo, eventList, localNpcList, mySupportSummon, notificationItem, notificationSetting, profile, userInfo } from '~/logic/storage'
+import { battleMemo, eventList, localNpcList, notificationItem, notificationSetting, userInfo } from '~/logic/storage'
 
 export function setupWebRequestListener() {
   const { checkUser, sendInfo } = useUser()
@@ -86,11 +86,12 @@ export function setupWebRequestListener() {
         if (!res?.domStr)
           return
 
-        profile.value.uid = myUid
+        userInfo.value.uid = myUid
 
         const $ = load(res.domStr)
-        profile.value.imgPc = String($(`.img-pc`).data().imageName)
-        profile.value.name = String($(`.txt-user-name`).text())
+        userInfo.value.imgPc = String($(`.img-pc`).data().imageName)
+        userInfo.value.name = String($(`.txt-user-name`).text())
+        userInfo.value.support = {}
 
         for (let i = 0; i < 7; i++) {
           for (let j = 0; j < 4; j++) {
@@ -102,10 +103,10 @@ export function setupWebRequestListener() {
               const name = $(`#js-fix-summon${i}${j}-name`).text()
               const infoClass = $(`#js-fix-summon${i}${j}-info`).attr('class')
               const rank = infoClass?.match(/bless-(.*?)-style/)
-              mySupportSummon.value[`${i}${j}`] = { imgId, name, rank: rank ? rank[1] : '', necessary: mySupportSummon.value[`${i}${j}`]?.necessary ?? false }
+              userInfo.value.support[`${i}${j}`] = { imgId, name, rank: rank ? rank[1] : '', necessary: userInfo.value.support[`${i}${j}`]?.necessary ?? false }
             }
             else {
-              mySupportSummon.value[`${i}${j}`] = { imgId: 'empty', name: '', rank: '', necessary: mySupportSummon.value[`${i}${j}`]?.necessary ?? false }
+              userInfo.value.support[`${i}${j}`] = { imgId: 'empty', name: '', rank: '', necessary: userInfo.value.support[`${i}${j}`]?.necessary ?? false }
             }
           }
         }

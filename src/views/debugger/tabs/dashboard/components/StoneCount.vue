@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { legendticket, legendticket10, saveStoneDate, stone } from '~/logic'
+import { saveStoneDate, userInfo } from '~/logic'
 import GachaInfo from './GachaInfo.vue'
 
-const totalStone = computed(() => legendticket10.value * 3000 + legendticket.value * 300 + stone.value)
+const totalStone = computed(() => (userInfo.value.legendticket10 || 0) * 3000 + (userInfo.value.legendticket || 0) * 300 + (userInfo.value.stone || 0))
 const recordVisiable = ref(false)
 function reset() {
   saveStoneDate.value = dayjs().unix()
@@ -27,19 +27,19 @@ function reset() {
       <div w-80px fc flex-col>
         <img :src="getLocalImg('20010', 'ticket')">
         <span text-center text-sm>
-          {{ `${legendticket10}枚` }}
+          {{ `${userInfo.legendticket10 || 0}枚` }}
         </span>
       </div>
       <div w-80px fc flex-col>
         <img :src="getLocalImg('20011', 'ticket')">
         <span text-center text-sm>
-          {{ `${legendticket}枚` }}
+          {{ `${userInfo.legendticket || 0}枚` }}
         </span>
       </div>
       <div w-80px fc flex-col>
         <img :src="getLocalImg('gem')">
         <span text-center text-sm>
-          {{ `${stone}個` }}
+          {{ `${userInfo.stone || 0}個` }}
         </span>
       </div>
       <div w-80px fc flex-col text-center text-base text-orange-600 font-bold>

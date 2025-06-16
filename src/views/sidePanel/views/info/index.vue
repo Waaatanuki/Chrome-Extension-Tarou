@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import copy from 'copy-text-to-clipboard'
 import { updateCode } from '~/api'
-import { code, uid } from '~/logic/storage'
+import { code, userInfo } from '~/logic/storage'
 
 // TODO 友招检验 profile
 const info = ref({
@@ -76,7 +76,7 @@ onMounted(() => {
           </TheButton>
         </div>
       </template>
-      {{ uid ? uid : '未获取' }}
+      {{ userInfo.uid ? userInfo.uid : '未获取' }}
     </el-descriptions-item>
     <el-descriptions-item label="引继码">
       <template #label>
@@ -120,6 +120,6 @@ onMounted(() => {
   </el-popover>
 
   <el-dialog v-model="supportVisible" :fullscreen="true">
-    <SupportSummon />
+    <SupportSummon m-auto mt-20px />
   </el-dialog>
 </template>

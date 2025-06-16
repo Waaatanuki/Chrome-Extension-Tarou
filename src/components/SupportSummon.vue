@@ -1,39 +1,39 @@
 <script setup lang="ts">
-import { mySupportSummon, profile } from '~/logic'
+import { userInfo } from '~/logic'
 
 const order = [1, 2, 3, 4, 5, 6]
 </script>
 
 <template>
-  <div v-if="profile.imgPc" relative h-285px w-530px>
+  <div v-if="userInfo.imgPc" relative h-285px w-530px>
     <img absolute h-full w-full :src="getLocalImg('frame')">
     <div relative z-10 flex gap-10px px-25px py-20px>
       <div>
-        <img w-60px :src="getAssetImg('leader', profile.imgPc, 'raid_chain')">
+        <img w-60px :src="getAssetImg('leader', userInfo.imgPc, 'raid_chain')">
       </div>
-      <div flex flex-col items-stretch justify-between>
+      <div v-if="userInfo.support" flex flex-col items-stretch justify-between>
         <div flex gap-10px>
           <div v-for="i in order" :key="i" space-y-10px>
-            <div v-for="j in 2" :key="`${i}${j}`" relative cursor-pointer @click="mySupportSummon[`${i}${j - 1}`].necessary = !mySupportSummon[`${i}${j - 1}`]?.necessary">
-              <template v-if="mySupportSummon[`${i}${j - 1}`]">
-                <img w-50px :src="getAssetImg('summon', mySupportSummon[`${i}${j - 1}`].imgId, 'raid_normal') ">
-                <div v-if="mySupportSummon[`${i}${j - 1}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${mySupportSummon[`${i}${j - 1}`].rank}-style`">
-                  {{ `Lv${mySupportSummon[`${i}${j - 1}`].name.match(/\d+/)![0]}` }}
+            <div v-for="j in 2" :key="`${i}${j}`" relative cursor-pointer @click="userInfo.support[`${i}${j - 1}`].necessary = !userInfo.support[`${i}${j - 1}`]?.necessary">
+              <template v-if="userInfo.support[`${i}${j - 1}`]">
+                <img w-50px :src="getAssetImg('summon', userInfo.support[`${i}${j - 1}`].imgId, 'raid_normal') ">
+                <div v-if="userInfo.support[`${i}${j - 1}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`${i}${j - 1}`].rank}-style`">
+                  {{ `Lv${userInfo.support[`${i}${j - 1}`].name.match(/\d+/)![0]}` }}
                 </div>
-                <div v-if="mySupportSummon[`${i}${j - 1}`].necessary" i-twemoji:pushpin absolute right--8px top--8px />
+                <div v-if="userInfo.support[`${i}${j - 1}`].necessary" i-twemoji:pushpin absolute right--8px top--8px />
               </template>
             </div>
           </div>
           <div space-y-10px>
             <div v-for="i in 2" :key="i" space-y-2px>
-              <div v-for="j in 2" :key="`0${2 * i + j - 3}`" relative cursor-pointer @click="mySupportSummon[`0${2 * i + j - 3}`].necessary = !mySupportSummon[`0${2 * i + j - 3}`]?.necessary">
-                <template v-if="mySupportSummon[`0${2 * i + j - 3}`]">
-                  <img v-if="mySupportSummon[`0${2 * i + j - 3}`].imgId !== 'empty'" w-50px :src="getAssetImg('summon', mySupportSummon[`0${2 * i + j - 3}`].imgId, 's') ">
+              <div v-for="j in 2" :key="`0${2 * i + j - 3}`" relative cursor-pointer @click="userInfo.support[`0${2 * i + j - 3}`].necessary = !userInfo.support[`0${2 * i + j - 3}`]?.necessary">
+                <template v-if="userInfo.support[`0${2 * i + j - 3}`]">
+                  <img v-if="userInfo.support[`0${2 * i + j - 3}`].imgId !== 'empty'" w-50px :src="getAssetImg('summon', userInfo.support[`0${2 * i + j - 3}`].imgId, 's') ">
                   <div v-else h-50px w-50px />
-                  <div v-if="mySupportSummon[`0${2 * i + j - 3}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${mySupportSummon[`0${2 * i + j - 3}`].rank}-style`">
-                    {{ `Lv${mySupportSummon[`0${2 * i + j - 3}`].name.match(/\d+/)![0]}` }}
+                  <div v-if="userInfo.support[`0${2 * i + j - 3}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`0${2 * i + j - 3}`].rank}-style`">
+                    {{ `Lv${userInfo.support[`0${2 * i + j - 3}`].name.match(/\d+/)![0]}` }}
                   </div>
-                  <div v-if="mySupportSummon[`0${2 * i + j - 3}`].necessary" i-twemoji:pushpin absolute right--8px top--8px />
+                  <div v-if="userInfo.support[`0${2 * i + j - 3}`].necessary" i-twemoji:pushpin absolute right--8px top--8px />
                 </template>
               </div>
             </div>
@@ -41,15 +41,16 @@ const order = [1, 2, 3, 4, 5, 6]
         </div>
         <div flex items-center justify-between text-15px text-white font-700>
           <div>
-            ID: {{ profile.uid }}
+            ID: {{ userInfo.uid }}
           </div>
           <div>
-            昵称: {{ profile.name }}
+            昵称: {{ userInfo.name }}
           </div>
         </div>
       </div>
     </div>
   </div>
+  <el-result v-else icon="info" sub-title="还未获取友招信息" />
 </template>
 
 <style scoped>

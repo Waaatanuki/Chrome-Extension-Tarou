@@ -2,7 +2,7 @@
 import type { Stat } from 'api'
 import copy from 'copy-text-to-clipboard'
 import { listDrop, updateCode } from '~/api'
-import { code, questConfig, uid } from '~/logic/storage'
+import { code, questConfig, userInfo } from '~/logic/storage'
 
 const questData = ref<Stat[]>([])
 
@@ -26,7 +26,7 @@ const loading = ref(false)
 const btnLoading = ref(false)
 
 function showDialog() {
-  if (!code.value || !uid.value)
+  if (!code.value || !userInfo.value.uid)
     return ElMessage.info('进入战斗获取信息')
 
   dialogVisible.value = true
@@ -96,7 +96,7 @@ onMounted(() => {
         </div>
         <div mr-2>
           <el-link :type="code ? 'success' : 'default'" @click="showDialog">
-            玩家ID: {{ uid || '未获取' }}
+            玩家ID: {{ userInfo.uid || '未获取' }}
           </el-link>
         </div>
       </div>

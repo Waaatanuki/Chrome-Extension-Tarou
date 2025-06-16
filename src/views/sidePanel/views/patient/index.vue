@@ -4,10 +4,6 @@ import { markedUserList } from '~/logic'
 
 const uploadBtnLoading = ref(false)
 
-function goProfilePage(userId: string) {
-  window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
-}
-
 const { open, reset, onChange } = useFileDialog({ accept: '.json' })
 
 onChange(async (files) => {

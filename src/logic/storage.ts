@@ -1,6 +1,6 @@
 import type { DropInfo } from 'api'
 import type { BattleInfo } from 'battleLog'
-import type { ArtifactRule, BattleMemo, BattleRecord, DisplayItem, EventInfo, GachaRecord, MarkedUser, MaterialInfo, MySupportSummon, NotificationSetting, Profile, Quest, QuestMemo, RecoveryItem, UserInfo } from 'myStorage'
+import type { ArtifactRule, BattleMemo, BattleRecord, DisplayItem, EventInfo, GachaRecord, MarkedUser, MaterialInfo, NotificationSetting, Quest, QuestMemo, RecoveryItem, UserInfo } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
@@ -10,9 +10,7 @@ import { defaultArtifactRuleList } from '~/constants/artifact'
 import { defaultEvokerInfo, defaultXenoGauge } from '~/constants/evoker'
 
 // Debugger
-export const userInfo = useWebExtensionStorage<Partial<UserInfo>>('userInfo', {})
 export const code = useWebExtensionStorage<string>('code', '')
-export const uid = useWebExtensionStorage<string>('uid', '')
 export const obTabId = useWebExtensionStorage<number>('obTabId', 0)
 export const obWindowId = useWebExtensionStorage<number>('obWindowId', 0)
 export const windowSize = useWebExtensionStorage('windowSize', { left: 300, top: 0, width: 800, height: 600 })
@@ -24,11 +22,7 @@ export const notificationSetting = useWebExtensionStorage<NotificationSetting>('
 export const notificationItem = useWebExtensionStorage<string[]>('notificationItem', defaultNotificationItem)
 
 // Dashboard
-export const profile = useWebExtensionStorage<Profile>('profile', { uid: '', name: '', imgPc: '' })
-export const mySupportSummon = useWebExtensionStorage<MySupportSummon>('mySupportSummon', {})
-export const stone = useWebExtensionStorage<number>('stone', 0)
-export const legendticket10 = useWebExtensionStorage<number>('legendticket10', 0)
-export const legendticket = useWebExtensionStorage<number>('legendticket', 0)
+export const userInfo = useWebExtensionStorage<Partial<UserInfo>>('userInfo', {})
 export const gachaRecord = useWebExtensionStorage<GachaRecord[]>('gachaRecord', [])
 export const saveStoneDate = useWebExtensionStorage('saveStoneDate', dayjs().unix())
 export const lastUpdateTodo = useWebExtensionStorage('lastUpdateTodo', dayjs().unix())

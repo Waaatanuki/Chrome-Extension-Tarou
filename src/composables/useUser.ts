@@ -1,12 +1,12 @@
 import type { DropInfo } from 'api'
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
 import { sendMultiDropInfo } from '~/api'
-import { code, failedDropInfoList, uid } from '~/logic'
+import { code, failedDropInfoList, userInfo } from '~/logic'
 
 export default function useUser() {
   function checkUser(url: string) {
     const searchParams = new URLSearchParams(url)
-    uid.value = searchParams.get('uid') || ''
+    userInfo.value.uid = searchParams.get('uid') || ''
   }
 
   function checkCode() {

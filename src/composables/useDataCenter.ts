@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, legendticket, legendticket10, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, stone, userInfo, xenoGauge } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, userInfo, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -81,16 +81,16 @@ export async function unpack(parcel: string) {
 
   // Dashboard 抽卡数据
   if (url.includes('game.granbluefantasy.jp/gacha/list')) {
-    stone.value = Number(responseData.stone_num)
+    userInfo.value.stone = Number(responseData.stone_num)
 
     // 十连ticket id为 20010
-    legendticket10.value = Number(
+    userInfo.value.legendticket10 = Number(
       responseData.legend.lineup
         .find((item: any) => item.text_btn_image === 'text_legend10')
         .legend_gacha_ticket_list.find((ticket: any) => Number(ticket.ticket_id) === 20010).ticket_num,
     )
     // 单抽ticket id为 20011
-    legendticket.value = Number(
+    userInfo.value.legendticket = Number(
       responseData.legend.lineup
         .find((item: any) => item.text_btn_image === 'text_legend')
         .legend_gacha_ticket_list.find((ticket: any) => Number(ticket.ticket_id) === 20011).ticket_num,

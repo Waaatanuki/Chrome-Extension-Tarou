@@ -2,7 +2,7 @@
 import type { Stat } from 'api'
 import { VueDraggableNext } from 'vue-draggable-next'
 import { listDrop, listQuest } from '~/api'
-import { code, questConfig, uid } from '~/logic/storage'
+import { code, questConfig, userInfo } from '~/logic/storage'
 
 const questData = ref<Stat[]>([])
 const isMange = ref(false)
@@ -22,7 +22,7 @@ function handleQuery() {
   if (loading.value)
     return
 
-  if (!code.value || !uid.value) {
+  if (!code.value || !userInfo.value.uid) {
     ElMessage.error('请先获取引继码和玩家ID')
     return
   }

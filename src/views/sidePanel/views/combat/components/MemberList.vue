@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { MemberInfo } from 'battleLog'
-import { markedUserList, uid } from '~/logic'
+import { markedUserList, userInfo } from '~/logic'
 
 const props = defineProps<{
   memberInfo?: MemberInfo[]
@@ -12,10 +12,6 @@ const props = defineProps<{
 }>()
 
 const MAX_RANK = '400'
-
-function goProfilePage(userId: string) {
-  window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
-}
 
 function handleMark(member: MemberInfo) {
   const hit = markedUserList.value.find(user => user.id === member.userId)
@@ -59,7 +55,7 @@ const data = computed(() =>
         </div>
       </template>
       <div
-        :class="{ myself: member.userId === uid, host: member.is_host }"
+        :class="{ myself: member.userId === userInfo.uid, host: member.is_host }"
         relative mb-10px h-65px w-140px flex cursor-pointer select-none items-center rounded-md bg-neutral-7 transition-all
       >
         <div v-if="member.is_dead" class="absolute h-full w-full fc bg-black/40">

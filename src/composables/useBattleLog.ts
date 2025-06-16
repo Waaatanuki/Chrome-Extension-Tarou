@@ -1,6 +1,6 @@
 import type { Action, BattleRecord, PartyCondition, Player } from 'myStorage'
 import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
-import { battleInfo, battleRecord, notificationSetting, uid } from '~/logic'
+import { battleInfo, battleRecord, notificationSetting, userInfo } from '~/logic'
 
 export function handleStartJson(data: BattleStartJson) {
   const boss = data.boss.param[0]
@@ -285,8 +285,8 @@ function handlePartyConditionInfo(partyCondition: PartyCondition[]) {
 
 function handleMainConditionInfo(bossCondition?: Condition, playerCondition?: Condition) {
   if (bossCondition) {
-    const bossBuffs = bossCondition.buff?.filter(item => !item.personal_buff_user_id || item.personal_buff_user_id === uid.value) || []
-    const bossDebuffs = bossCondition.debuff?.filter(item => !item.personal_debuff_user_id || item.personal_debuff_user_id === uid.value) || []
+    const bossBuffs = bossCondition.buff?.filter(item => !item.personal_buff_user_id || item.personal_buff_user_id === userInfo.value.uid) || []
+    const bossDebuffs = bossCondition.debuff?.filter(item => !item.personal_debuff_user_id || item.personal_debuff_user_id === userInfo.value.uid) || []
     const totalBossBuffs = bossBuffs.concat(bossDebuffs).filter((item, index, self) => index === self.findIndex(t => t.status === item.status))
     battleInfo.value.buffInfo = battleInfo.value.buffInfo ? { ...battleInfo.value.buffInfo, bossBuffs: totalBossBuffs } : { bossBuffs: totalBossBuffs, playerBuffs: [] }
   }
