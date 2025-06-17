@@ -71,24 +71,9 @@ function handleCommand(command: DetailType, data: BuildResponse) {
         </div>
 
         <div fc>
-          <TheButton icon="material-symbols:sticky-note-2-outline" @click="handleCommand('party', data)" />
-          <TheButton icon="material-symbols:follow-the-signs" @click="handleCommand('action', data)" />
+          <TheButton icon="material-symbols:sticky-note-2-outline" title="配置" @click="handleCommand('party', data)" />
+          <TheButton icon="material-symbols:follow-the-signs" title="操作流程" @click="handleCommand('action', data)" />
         </div>
-        <!-- <el-dropdown @command="(command) => handleCommand(command, data)">
-          <TheButton icon="material-symbols:keyboard-external-input-outline">
-            详细
-          </TheButton>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="party">
-                配置
-              </el-dropdown-item>
-              <el-dropdown-item command="action">
-                操作
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown> -->
       </div>
     </el-card>
 
