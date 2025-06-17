@@ -31,9 +31,6 @@ const option = computed<EChartsOption>(() => ({
   },
   yAxis: {
     show: false,
-    axisLine: {
-      onZero: true,
-    },
   },
   series,
 }))

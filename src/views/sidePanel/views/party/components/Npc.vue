@@ -24,6 +24,10 @@ function updateNpcFilter(masterId: number) {
     ElMessage.success('成功添加至未拥有角色')
   }
 }
+
+function goWiki(masterId: number) {
+  window.open(`https://gbf.huijiwiki.com/wiki/Char/${masterId}`, '_blank')
+}
 </script>
 
 <template>
@@ -47,8 +51,9 @@ function updateNpcFilter(masterId: number) {
           <template #reference>
             <div relative w-56px class="group">
               <img w-full :src="getAssetImg('npc', npc.imageId, 'quest')">
-              <div v-if="isBuild" absolute inset-0 hidden fc bg-black opacity-70 group-hover:flex>
-                <div i-carbon:close-filled absolute icon-btn @click="updateNpcFilter(npc.masterId)" />
+              <div absolute inset-0 hidden fc bg-black opacity-70 group-hover:flex>
+                <div v-if="isBuild" i-carbon:close-filled absolute icon-btn @click="updateNpcFilter(npc.masterId)" />
+                <div v-else i-mdi:wikipedia absolute icon-btn @click="goWiki(npc.masterId)" />
               </div>
               <img v-if="npc.isAugment" absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
               <div
