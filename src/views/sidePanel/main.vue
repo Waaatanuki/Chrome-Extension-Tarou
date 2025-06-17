@@ -2,6 +2,7 @@
 import { Icon } from '@iconify/vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import Artifact from './views/artifact/index.vue'
+import Battle from './views/battle/index.vue'
 import Build from './views/build/index.vue'
 import Combat from './views/combat/index.vue'
 import Dashborad from './views/dashboard/index.vue'
@@ -21,11 +22,13 @@ const componentMap: Record<string, Component> = {
   Combat,
   History,
   Patient,
+  Battle,
   Setting,
   Info,
 }
 const currentView = ref('Dashborad')
 
+// TODO:团战期间展示Battle标签
 const upViewList = [
   { key: 'Dashborad', lable: '常用信息', icon: 'material-symbols:dashboard' },
   { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
@@ -35,7 +38,9 @@ const upViewList = [
   { key: 'Combat', lable: '战斗信息', icon: 'game-icons:battle-axe' },
   { key: 'History', lable: '战斗记录', icon: 'game-icons:scroll-unfurled' },
   { key: 'Patient', lable: '标记玩家', icon: 'material-symbols:patient-list' },
+  { key: 'Battle', lable: '接战', icon: 'game-icons:crossed-swords' },
 ]
+
 const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
