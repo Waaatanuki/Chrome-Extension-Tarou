@@ -295,6 +295,10 @@ export async function unpack(parcel: string) {
   // Evoker 贤者四技能数据 & Party 角色数据
   if (url.includes('/npc/npc')) {
     const npcDetail = responseData
+
+    if (!npcDetail.master.id)
+      return
+
     const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(npcDetail.master.id))
     if (hitEvoker)
       hitEvoker.isAbility4Release = !!(npcDetail.ability[4] && npcDetail.ability[4].quest?.is_clear)
