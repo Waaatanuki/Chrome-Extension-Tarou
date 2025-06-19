@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import { eventList } from '~/logic'
 import Artifact from './views/artifact/index.vue'
 import Battle from './views/battle/index.vue'
 import Build from './views/build/index.vue'
@@ -28,8 +29,9 @@ const componentMap: Record<string, Component> = {
 }
 const currentView = ref('Dashborad')
 
-// TODO:团战期间展示Battle标签
-const upViewList = [
+const inBattle = computed(() => eventList.value.find(e => e.type === 'guildwar')?.isActive)
+
+const upViewList = computed(() => [
   { key: 'Dashborad', lable: '常用信息', icon: 'material-symbols:dashboard' },
   { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
   { key: 'Artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
@@ -38,8 +40,8 @@ const upViewList = [
   { key: 'Combat', lable: '战斗信息', icon: 'game-icons:battle-axe' },
   { key: 'History', lable: '战斗记录', icon: 'game-icons:scroll-unfurled' },
   { key: 'Patient', lable: '标记玩家', icon: 'material-symbols:patient-list' },
-  { key: 'Battle', lable: '接战', icon: 'game-icons:crossed-swords' },
-]
+  { key: 'Battle', lable: '接战', icon: 'game-icons:crossed-swords', hidden: !inBattle.value },
+].filter(m => !m.hidden))
 
 const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
