@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import Contact from '~/views/debugger/tabs/dashboard/components/Contact.vue'
-import Battle from '~/views/sidePanel/views/battle/index.vue'
-import ActionList from '~/views/sidePanel/views/combat/components/ActionList.vue'
 
-const visible = ref(false)
 const currentView = ref('Dashborad')
-const foo = ref(123)
+
 const upViewList = [
   { key: 'Dashborad', lable: '基础信息', icon: 'material-symbols:dashboard' },
   { key: 'Drop', lable: '掉落信息', icon: 'material-symbols:bookmark-star-sharp' },
@@ -15,53 +11,20 @@ const downViewList = [
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
 
-function handle() {
+const foo = ref(123)
+
+const visible = ref(false)
+function handleClick() {
   console.log(foo.value)
-  console.log(typeof foo.value)
-
-  ElMessageBox.prompt('请输入新的的引继码', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    beforeClose: (action, instance, done) => {
-      if (action === 'confirm') {
-        console.log(instance.inputValue)
-
-        instance.confirmButtonLoading = true
-        setTimeout(() => {
-          done()
-          setTimeout(() => {
-            instance.confirmButtonLoading = false
-          }, 300)
-        }, 3000)
-      }
-      else {
-        done()
-      }
-    },
-  })
-    .then(({ value }) => {
-      ElMessage({
-        type: 'success',
-        message: `Your email is:${value}`,
-      })
-    })
-    .catch(() => {})
 }
 </script>
 
 <template>
-  <div flex flex-wrap gap-3 p-10>
-    <Contact absolute right-15px top-15px />
-    <div>
-      <TheButton title="ddwq" @click="handle">
-        ceshi
-      </TheButton>
-    </div>
-
+  <div fc flex-col flex-wrap gap-3 p-10>
     <div h-600px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <Battle />
+          content
         </div>
       </el-scrollbar>
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
@@ -80,6 +43,12 @@ function handle() {
           </el-tooltip>
         </div>
       </div>
+    </div>
+
+    <div>
+      <TheButton title="ddwq" @click="handleClick">
+        Button
+      </TheButton>
     </div>
   </div>
 </template>

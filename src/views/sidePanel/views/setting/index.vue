@@ -35,9 +35,11 @@ function updateNpcFilter(item: number) {
   <el-alert :closable="false">
     <template #title>
       <div w-268px flex items-center justify-between gap-2>
-        <div>
-          掉落提醒
-        </div>
+        <el-tooltip content="在道具图片上右键加入掉落监控" placement="top-start">
+          <div>
+            掉落提醒
+          </div>
+        </el-tooltip>
         <el-switch v-model="notificationSetting.targetItemDrop" />
       </div>
     </template>
@@ -56,14 +58,16 @@ function updateNpcFilter(item: number) {
   </div>
   <el-alert :closable="false">
     <template #title>
-      <div w-268px flex items-center justify-between gap-2>
-        <div>
-          未拥有角色
-        </div>
+      <div w-268px>
+        <el-tooltip content="点击配置查询中的角色进行设置" placement="top-start">
+          <span>
+            未拥有角色
+          </span>
+        </el-tooltip>
       </div>
     </template>
   </el-alert>
-  <div px-5>
+  <div v-if="buildNpcFilter.length" px-5>
     <el-card my-10px body-style="padding: 10px">
       <div flex flex-wrap gap-12px>
         <div v-for="item in buildNpcFilter" :key="item" relative fc flex-col select-none class="group">
