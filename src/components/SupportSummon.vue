@@ -50,7 +50,6 @@ const order = [1, 2, 3, 4, 5, 6]
       </div>
     </div>
   </div>
-  <el-result v-else icon="info" sub-title="还未获取友招信息" />
 </template>
 
 <style scoped>

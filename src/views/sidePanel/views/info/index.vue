@@ -16,6 +16,10 @@ const info = ref({
 const supportVisible = ref(false)
 
 function showSupport() {
+  if (!userInfo.value.imgPc) {
+    ElMessage.info('还未获取友招信息')
+    return
+  }
   supportVisible.value = true
 }
 

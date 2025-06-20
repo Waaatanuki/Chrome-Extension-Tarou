@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import { recoveryItemList } from '~/logic'
+import RecoveryItemChart from './RecoveryItemChart.vue'
 
 const inputRef = ref<HTMLTextAreaElement>()
 const dialogVisible = ref(false)
+const chartVisible = ref(false)
 const textarea = ref('')
 
 function reset() {
@@ -39,8 +41,13 @@ function handleOpen() {
   <ElCard m-3 w-full>
     <template #header>
       <div flex justify-between>
-        <div text-xl>
-          回复道具记录
+        <div fc gap-2>
+          <div text-xl>
+            回复道具记录
+          </div>
+          <ElButton type="primary" @click="chartVisible = true">
+            图表
+          </ElButton>
         </div>
         <div>
           <ElButton type="danger" link @click="reset">
@@ -52,7 +59,7 @@ function handleOpen() {
         </div>
       </div>
     </template>
-    <ElTable :data="recoveryItemList" cell-class-name="cell-class-name">
+    <ElTable :data="recoveryItemList" cell-class-name="cell-class-name" max-height="500">
       <ElTableColumn prop="timeStamp" label="日期" align="center">
         <template #default="{ row }">
           {{ dayjs(row.timeStamp).format("YYYY-MM-DD") }}
@@ -111,6 +118,9 @@ function handleOpen() {
   <ElDialog v-model="dialogVisible" @opened="handleOpen">
     <ElInput ref="inputRef" v-model="textarea" :rows="4" type="textarea" />
   </ElDialog>
+  <el-dialog v-if="chartVisible" v-model="chartVisible" width="700">
+    <RecoveryItemChart m-auto />
+  </el-dialog>
 </template>
 
 <style>
