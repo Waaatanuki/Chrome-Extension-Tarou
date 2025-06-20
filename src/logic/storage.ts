@@ -1,11 +1,11 @@
 import type { DropInfo } from 'api'
 import type { BattleInfo } from 'battleLog'
-import type { ArtifactRule, BattleMemo, BattleRecord, DailyCost, DisplayItem, EventInfo, GachaRecord, MarkedUser, MaterialInfo, NotificationSetting, Quest, QuestMemo, RecoveryItem, UserInfo } from 'myStorage'
+import type { ArtifactRule, BattleMemo, BattleRecord, DailyCost, DisplayItem, EventInfo, GachaRecord, MarkedUser, MaterialInfo, NotificationSetting, Quest, QuestMemo, RecoveryItem, UserInfo, Widget } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
-import { defaultNotificationItem, defaultNotificationSetting, defaultTodoList } from '~/constants'
+import { defaultNotificationItem, defaultNotificationSetting, defaultTodoList, defaultWidget } from '~/constants'
 import { defaultArtifactRuleList } from '~/constants/artifact'
 import { defaultEvokerInfo, defaultXenoGauge } from '~/constants/evoker'
 
@@ -31,6 +31,7 @@ export const recoveryItemList = useWebExtensionStorage<RecoveryItem[]>('recovery
 export const eventList = useWebExtensionStorage<EventInfo[]>('eventList', [])
 export const displayList = useWebExtensionStorage<DisplayItem[]>('displayList', [])
 export const dailyCost = useWebExtensionStorage<Partial<DailyCost>>('dailyCost', {})
+export const widgetList = useWebExtensionStorage<Widget[]>('widgetList', defaultWidget)
 
 // Evoker
 export const materialInfo = useWebExtensionStorage<MaterialInfo[]>('materialInfo', [])

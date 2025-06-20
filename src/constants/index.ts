@@ -36,3 +36,11 @@ export const notificationSound = {
   hell: 'raid_appear_highlevel_se_1',
   warning: 'help_se_2',
 }
+
+export const defaultWidget = [
+  { key: 'StoneCount', name: '抽卡资源', visible: true },
+  { key: 'Status', name: '点数资源', visible: true },
+  { key: 'Event', name: '活动信息', visible: true },
+  { key: 'TreasureMonitor', name: '素材监控', visible: true },
+  { key: 'DailyCost', name: '每日统计', visible: true },
+]

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { buildNpcFilter, notificationItem, notificationSetting } from '~/logic'
+import { VueDraggableNext } from 'vue-draggable-next'
+import { defaultWidget } from '~/constants'
+import { buildNpcFilter, notificationItem, notificationSetting, widgetList } from '~/logic'
 
 function handleDelete(item: string) {
   const index = notificationItem.value.findIndex(i => i === item)
@@ -11,9 +13,42 @@ function updateNpcFilter(item: number) {
   if (index !== -1)
     buildNpcFilter.value.splice(index, 1)
 }
+
+onMounted(() => {
+  for (const widget of defaultWidget) {
+    const hit = widgetList.value.find(w => w.key === widget.key)
+    if (!hit)
+      widgetList.value.push({ ...widget })
+  }
+})
 </script>
 
 <template>
+  <el-alert :closable="false">
+    <template #title>
+      <div w-268px>
+        <el-tooltip content="可点击或拖拽进行设置" placement="top-start">
+          <span>
+            常用信息
+          </span>
+        </el-tooltip>
+      </div>
+    </template>
+  </el-alert>
+
+  <VueDraggableNext v-model="widgetList" my-10px flex flex-col gap-10px px-10px>
+    <transition-group name="list">
+      <div
+        v-for="widget in widgetList" :key="widget.key"
+        :class=" { 'bg-neutral-6!': !widget.visible }"
+        cursor-grab select-none rounded-lg bg-teal-6 text-center text-14px leading-loose
+        @click="widget.visible = !widget.visible"
+      >
+        {{ widget.name }}
+      </div>
+    </transition-group>
+  </VueDraggableNext>
+
   <el-alert :closable="false">
     <template #title>
       <div w-268px flex items-center justify-between gap-2>

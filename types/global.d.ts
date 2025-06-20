@@ -299,6 +299,12 @@ declare module 'myStorage' {
     quest: { questId: string, ap?: number, bossImgId: string, bossName: string, count: number }[]
     raidIds: number[]
   }
+
+  interface Widget {
+    key: string
+    name: string
+    visible: boolean
+  }
 }
 
 declare module 'source'{

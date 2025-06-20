@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { widgetList } from '~/logic'
 import DailyCost from './components/DailyCost.vue'
 import Status from './components/Status.vue'
 import StoneCount from './components/StoneCount.vue'
@@ -6,16 +7,37 @@ import TreasureMonitor from './components/TreasureMonitor.vue'
 import Alchemist from './event/Alchemist.vue'
 import Godslayer from './event/Godslayer.vue'
 import Treasureraid from './event/Treasureraid.vue'
+
+const componentMap: Record<string, Component> = {
+  Status,
+  StoneCount,
+  TreasureMonitor,
+  DailyCost,
+  'Event/Alchemist': Alchemist,
+  'Event/Godslayer': Godslayer,
+  'Event/Treasureraid': Treasureraid,
+}
+
+const showWidgets = computed(() =>
+  widgetList.value.reduce<string[]>((pre, cur) => {
+    if (cur.visible) {
+      for (const key of Object.keys(componentMap)) {
+        const k = key.split('/')[0]
+        if (k === cur.key)
+          pre.push(key)
+      }
+    }
+    return pre
+  }, []),
+)
 </script>
 
 <template>
   <div flex flex-wrap gap-3>
-    <StoneCount />
-    <Status />
-    <Treasureraid />
-    <Alchemist />
-    <Godslayer />
-    <TreasureMonitor />
-    <DailyCost />
+    <component
+      :is="componentMap[w]"
+      v-for="w in showWidgets"
+      :key="w"
+    />
   </div>
 </template>
