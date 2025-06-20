@@ -97,7 +97,7 @@ onMounted(() => {
       <template #default>
         <el-card v-if="isMange" body-style="padding: 10px" my-10px h-full>
           <VueDraggableNext v-model="questConfig" flex flex-wrap gap-12px>
-            <transition-group name="list">
+            <transition-group name="draglist">
               <div
                 v-for="quest in questConfig" :key="quest.questId"
                 :class="{ 'brightness-50': !quest.visible }"
@@ -120,21 +120,3 @@ onMounted(() => {
     </el-skeleton>
   </main>
 </template>
-
-<style>
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.list-leave-active {
-  position: absolute;
-}
-</style>

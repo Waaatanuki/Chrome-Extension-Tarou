@@ -177,7 +177,7 @@ onMounted(() => {
         </template>
 
         <VueDraggableNext v-model="questConfig" flex flex-wrap gap-10px>
-          <transition-group name="list">
+          <transition-group name="draglist">
             <div
               v-for="quest in questConfig" :key="quest.questId"
               :class="{ 'brightness-50': !quest.visible }"
@@ -192,21 +192,3 @@ onMounted(() => {
     </el-dialog>
   </main>
 </template>
-
-<style>
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.list-leave-active {
-  position: absolute;
-}
-</style>

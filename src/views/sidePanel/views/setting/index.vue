@@ -37,7 +37,7 @@ onMounted(() => {
   </el-alert>
 
   <VueDraggableNext v-model="widgetList" my-10px flex flex-col gap-10px px-10px>
-    <transition-group name="list">
+    <transition-group name="draglist">
       <div
         v-for="widget in widgetList" :key="widget.key"
         :class=" { 'bg-neutral-6!': !widget.visible }"
