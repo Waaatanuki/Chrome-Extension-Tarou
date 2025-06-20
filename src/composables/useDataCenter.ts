@@ -55,6 +55,7 @@ export async function unpack(parcel: string) {
       else
         dailyCost.value.ap! += questInfo.ap || 0
     }
+    getDisplayList(responseData)
   }
 
   // Dashboard 每日消耗-记录扫荡副本
