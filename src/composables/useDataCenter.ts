@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, userInfo, xenoGauge } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, userInfo, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -14,6 +14,48 @@ export async function unpack(parcel: string) {
     return
 
   const { url, requestData, responseData } = JSON.parse(parcel) as { url: string, requestData?: string, responseData?: any }
+
+  // console.log({ url, requestData, responseData })
+
+  // Dashboard 每日消耗-获取自发副本AP信息
+  if (url.includes('/quest/quest_data')) {
+    initDailyCost()
+    const payload = JSON.parse(requestData!)
+    const questId = String(payload.quest_id)
+    let questInfo = dailyCost.value.quest?.find(q => q.questId === questId)
+    if (!questInfo) {
+      questInfo = { questId, ap: 0, bossImgId: '', bossName: '', count: 0 }
+      dailyCost.value.quest?.push(questInfo)
+    }
+    questInfo.ap = Number(responseData.action_point)
+  }
+
+  // Dashboard 每日消耗-进入自发副本
+  if (url.includes('/quest/create_quest')) {
+    initDailyCost()
+    const payload = JSON.parse(requestData!)
+    dailyCost.value.raidIds?.push(Number(responseData.raid_id))
+    const questInfo = dailyCost.value.quest?.find(q => q.questId === String(payload.quest_id))
+    if (questInfo)
+      dailyCost.value.ap! += questInfo.ap || 0
+  }
+
+  // Dashboard 每日消耗-记录扫荡副本
+  if (url.includes('/rest/quest/questskip/skip')) {
+    initDailyCost()
+    const payload = JSON.parse(requestData!)
+    const questInfo = dailyCost.value.quest?.find(q => q.questId === String(payload.quest_id))
+    if (questInfo)
+      dailyCost.value.ap! += questInfo.ap || 0
+  }
+
+  // Dashboard 每日消耗-进入他人创建的副本
+  if (url.includes('/quest/raid_deck_data_create')) {
+    initDailyCost()
+    const payload = JSON.parse(requestData!)
+    dailyCost.value.bp! += Number(payload.select_bp)
+    dailyCost.value.raidIds!.push(Number(payload.raid_id))
+  }
 
   // Dashboard 首页数据
   if (url.includes('/user/content/index')) {
@@ -552,11 +594,30 @@ export async function unpack(parcel: string) {
       return
 
     battleInfo.value.inLobby = false
-
     const battleStartJson: BattleStartJson = responseData
 
+    // 统计每日副本
+    if (dailyCost.value.dateTime && dayjs().isSame(dailyCost.value.dateTime, 'day')) {
+      const hitIndex = dailyCost.value.raidIds!.findIndex(id => id === Number(battleStartJson.raid_id))
+
+      if (hitIndex !== -1) {
+        dailyCost.value.raidIds!.splice(hitIndex, 1)
+        const questId = String(battleStartJson.quest_id)
+        let hitQuest = dailyCost.value.quest?.find(q => q.questId === questId)
+        if (!hitQuest) {
+          hitQuest = { questId, ap: 0, bossImgId: '', bossName: '', count: 0 }
+          dailyCost.value.quest?.push(hitQuest)
+        }
+        hitQuest.bossImgId = hitQuest.bossImgId || battleStartJson.boss.param[0].cjs.split('_').at(-1)!
+        hitQuest.bossName = hitQuest.bossName || battleStartJson.boss.param[0].monster
+        hitQuest.count++
+      }
+    }
+
+    // 分析副本数据
     handleStartJson(battleStartJson)
 
+    // 上传副本信息
     const matchName = battleStartJson.boss.param.reduce<string[]>((pre, cur) => {
       pre.push(cur.name.ja, cur.name.en)
       return pre
@@ -811,5 +872,17 @@ function getDisplayList(responseData: any) {
       number: Number((value as any).number),
       limit: Number((value as any).registration_number),
     })
+  }
+}
+
+function initDailyCost() {
+  if (!dailyCost.value.dateTime || !dayjs().isSame(dailyCost.value.dateTime, 'day')) {
+    dailyCost.value = {
+      dateTime: Date.now(),
+      ap: 0,
+      bp: 0,
+      quest: [],
+      raidIds: [],
+    }
   }
 }

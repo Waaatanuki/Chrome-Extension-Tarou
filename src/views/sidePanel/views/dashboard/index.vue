@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RecoveryItemTable from './components/RecoveryItemTable.vue'
+import DailyCost from './components/DailyCost.vue'
 import Status from './components/Status.vue'
 import StoneCount from './components/StoneCount.vue'
 import TreasureMonitor from './components/TreasureMonitor.vue'
@@ -16,7 +16,6 @@ import Treasureraid from './event/Treasureraid.vue'
     <Alchemist />
     <Godslayer />
     <TreasureMonitor />
-    <!-- <RecoveryItemTable /> -->
-    <!-- <Contact absolute right-15px top-15px @open="handleOpen" /> -->
+    <DailyCost />
   </div>
 </template>

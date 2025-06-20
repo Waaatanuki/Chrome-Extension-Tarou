@@ -291,6 +291,14 @@ declare module 'myStorage' {
     number: number
     limit: number
   }
+
+  interface DailyCost {
+    dateTime: number
+    ap: number
+    bp: number
+    quest: { questId: string, ap?: number, bossImgId: string, bossName: string, count: number }[]
+    raidIds: number[]
+  }
 }
 
 declare module 'source'{

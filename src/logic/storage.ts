@@ -1,6 +1,6 @@
 import type { DropInfo } from 'api'
 import type { BattleInfo } from 'battleLog'
-import type { ArtifactRule, BattleMemo, BattleRecord, DisplayItem, EventInfo, GachaRecord, MarkedUser, MaterialInfo, NotificationSetting, Quest, QuestMemo, RecoveryItem, UserInfo } from 'myStorage'
+import type { ArtifactRule, BattleMemo, BattleRecord, DailyCost, DisplayItem, EventInfo, GachaRecord, MarkedUser, MaterialInfo, NotificationSetting, Quest, QuestMemo, RecoveryItem, UserInfo } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
@@ -30,6 +30,7 @@ export const todoList = useWebExtensionStorage('todoList', defaultTodoList)
 export const recoveryItemList = useWebExtensionStorage<RecoveryItem[]>('recoveryItemList', [])
 export const eventList = useWebExtensionStorage<EventInfo[]>('eventList', [])
 export const displayList = useWebExtensionStorage<DisplayItem[]>('displayList', [])
+export const dailyCost = useWebExtensionStorage<Partial<DailyCost>>('dailyCost', {})
 
 // Evoker
 export const materialInfo = useWebExtensionStorage<MaterialInfo[]>('materialInfo', [])
