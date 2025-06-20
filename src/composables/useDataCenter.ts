@@ -30,14 +30,31 @@ export async function unpack(parcel: string) {
     questInfo.ap = Number(responseData.action_point)
   }
 
+  // Dashboard 每日消耗-获取沙盒自发副本APP信息
+  if (url.includes('/rest/replicard/user_aap_recovery_info')) {
+    initDailyCost()
+    const payload = JSON.parse(requestData!)
+    const questId = String(payload.quest_id)
+    let questInfo = dailyCost.value.quest?.find(q => q.questId === questId)
+    if (!questInfo) {
+      questInfo = { questId, ap: 0, isReplicard: true, bossImgId: '', bossName: '', count: 0 }
+      dailyCost.value.quest?.push(questInfo)
+    }
+    questInfo.ap = Number(responseData.consume_aap)
+  }
+
   // Dashboard 每日消耗-进入自发副本
   if (url.includes('/quest/create_quest')) {
     initDailyCost()
     const payload = JSON.parse(requestData!)
     dailyCost.value.raidIds?.push(Number(responseData.raid_id))
     const questInfo = dailyCost.value.quest?.find(q => q.questId === String(payload.quest_id))
-    if (questInfo)
-      dailyCost.value.ap! += questInfo.ap || 0
+    if (questInfo) {
+      if (questInfo.isReplicard)
+        dailyCost.value.aap! += questInfo.ap || 0
+      else
+        dailyCost.value.ap! += questInfo.ap || 0
+    }
   }
 
   // Dashboard 每日消耗-记录扫荡副本
@@ -880,6 +897,7 @@ function initDailyCost() {
     dailyCost.value = {
       dateTime: Date.now(),
       ap: 0,
+      aap: 0,
       bp: 0,
       quest: [],
       raidIds: [],

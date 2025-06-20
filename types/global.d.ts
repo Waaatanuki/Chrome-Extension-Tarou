@@ -295,8 +295,9 @@ declare module 'myStorage' {
   interface DailyCost {
     dateTime: number
     ap: number
+    aap: number
     bp: number
-    quest: { questId: string, ap?: number, bossImgId: string, bossName: string, count: number }[]
+    quest: { questId: string, ap?: number, isReplicard?: boolean, bossImgId: string, bossName: string, count: number }[]
     raidIds: number[]
   }
 

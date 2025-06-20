@@ -9,25 +9,34 @@ import { dailyCost } from '~/logic'
         <div text-12px>
           {{ `每日统计(${useDateFormat(dailyCost.dateTime, 'MM-DD').value})` }}
         </div>
-        <el-tooltip content="当日消耗AP、BP数量" placement="top">
-          <div flex gap-2>
+        <div fc gap-1>
+          <el-tooltip content="AP" placement="top">
             <el-tag type="success">
-              {{ `AP ${dailyCost.ap}` }}
+              {{ dailyCost.ap }}
             </el-tag>
+          </el-tooltip>
+          <el-tooltip content="AAP" placement="top">
+            <el-tag type="primary">
+              {{ dailyCost.aap }}
+            </el-tag>
+          </el-tooltip>
+          <el-tooltip content="BP" placement="top">
             <el-tag type="danger">
-              {{ `BP ${dailyCost.bp}` }}
+              {{ dailyCost.bp }}
             </el-tag>
+          </el-tooltip>
+        </div>
+      </div>
+    </template>
+    <el-scrollbar max-height="258">
+      <div flex flex-wrap gap-12px text-12px>
+        <el-tooltip v-for="quest in dailyCost.quest?.filter(q => q.bossImgId)" :key="quest.questId" :content="quest.bossName" placement="top">
+          <div w-60px fc flex-col>
+            <img :src="getBossImg('enemy', quest.bossImgId, 's')">
+            <div>{{ quest.count }}</div>
           </div>
         </el-tooltip>
       </div>
-    </template>
-    <div flex flex-wrap gap-12px text-12px>
-      <el-tooltip v-for="quest in dailyCost.quest?.filter(q => q.bossImgId)" :key="quest.questId" :content="quest.bossName" placement="top">
-        <div w-60px fc flex-col>
-          <img :src="getBossImg('enemy', quest.bossImgId, 's')">
-          <div>{{ quest.count }}</div>
-        </div>
-      </el-tooltip>
-    </div>
+    </el-scrollbar>
   </el-card>
 </template>
