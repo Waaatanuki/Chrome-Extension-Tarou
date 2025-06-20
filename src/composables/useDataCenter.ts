@@ -500,12 +500,14 @@ export async function unpack(parcel: string) {
         if (mission) {
           mission.number = Number(item.numerator)
           mission.limit = Number(item.denominator)
+          mission.isAllComplete = mission.number >= mission.limit
         }
       }
       for (const item of achieve_mission) {
         const mission = eventInfo?.mission.find(m => m.desc === item.description)
         if (mission) {
           mission.number = mission.limit
+          mission.isAllComplete = true
         }
       }
     }
