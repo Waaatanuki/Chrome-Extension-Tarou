@@ -28,10 +28,10 @@ import { dailyCost } from '~/logic'
         </div>
       </div>
     </template>
-    <el-scrollbar max-height="258">
-      <div flex flex-wrap gap-12px text-12px>
+    <el-scrollbar max-height="215">
+      <div flex flex-wrap gap-7px text-12px>
         <el-tooltip v-for="quest in dailyCost.quest?.filter(q => q.bossImgId)" :key="quest.questId" :content="quest.bossName" placement="top">
-          <div w-60px fc flex-col>
+          <div w-50px fc flex-col>
             <img :src="getBossImg('enemy', quest.bossImgId, 's')">
             <div>{{ quest.count }}</div>
           </div>

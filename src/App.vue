@@ -49,12 +49,12 @@ function handleClick() {
                 </div>
               </div>
             </template>
-            <el-scrollbar max-height="258">
-              <div flex flex-wrap gap-12px text-12px>
+            <el-scrollbar max-height="215">
+              <div flex flex-wrap gap-7px text-12px>
                 <el-tooltip v-for="i in 20" :key="i" content="123" placement="top">
-                  <div w-60px fc flex-col>
+                  <div w-50px fc flex-col>
                     <img src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/8104063.png">
-                    <div>{{ 3 }}</div>
+                    <div>{{ 3222 }}</div>
                   </div>
                 </el-tooltip>
               </div>
