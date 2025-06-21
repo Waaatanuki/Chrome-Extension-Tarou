@@ -29,7 +29,7 @@ const componentMap: Record<string, Component> = {
 }
 const currentView = ref('Dashborad')
 
-const inBattle = computed(() => eventList.value.find(e => e.type === 'guildwar')?.isActive)
+const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
   { key: 'Dashborad', lable: '常用信息', icon: 'material-symbols:dashboard' },

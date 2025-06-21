@@ -57,6 +57,7 @@ declare module 'myStorage' {
       isAllComplete: boolean
       isDailyMission: boolean
     }[]
+    additional?: Record<string, any>
   }
 
   interface BattleMemo {

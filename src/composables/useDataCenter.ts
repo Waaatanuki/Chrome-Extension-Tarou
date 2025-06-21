@@ -228,13 +228,14 @@ export async function unpack(parcel: string) {
 
   // Event 获取战货活动信息
   if (/\/treasureraid\d+\/top\/content\/newindex/.test(url)) {
+    const eventType = 'treasureraid'
     const htmlString = decodeURIComponent(responseData.data)
     const $ = load(htmlString)
     const gachaInfo = $('.prt-gacha-infomation')
-    const boxNum = Number((gachaInfo.data('box-num') as string).match(/\d+/)![0])
-    const gachaPoint = Number(gachaInfo.find('.txt-gacha-point').text())
+    const boxNum = gachaInfo.length ? Number((gachaInfo.data('box-num') as string).match(/\d+/)![0]) : 0
+    const gachaPoint = gachaInfo.length ? Number(gachaInfo.find('.txt-gacha-point').text()) : 0
     const eventInfo = {
-      type: 'treasureraid',
+      type: eventType,
       isActive: true,
       mission: responseData.option.event_mission_list.map((m: any) => ({
         reward: m.level_details[m.level].reward_name,
@@ -244,11 +245,11 @@ export async function unpack(parcel: string) {
         isAllComplete: m.is_all_complete,
         isDailyMission: m.is_daily_mission,
       })),
-      count: getEventGachaBoxNum({ eventType: 'treasureraid', currentToken: gachaPoint, drawnBox: boxNum }),
+      count: getEventGachaBoxNum({ eventType, currentToken: gachaPoint, drawnBox: boxNum }),
       updateTime: dayjs().valueOf(),
     }
 
-    const index = eventList.value.findIndex(event => event.type === 'treasureraid')
+    const index = eventList.value.findIndex(event => event.type === eventType)
     if (index === -1) {
       eventList.value.push(eventInfo)
     }
@@ -257,10 +258,66 @@ export async function unpack(parcel: string) {
     }
   }
 
+  // Event 获取古战场活动信息
+  if (/\/teamraid\d+\/top\/content\/index/.test(url)) {
+    const eventType = 'teamraid'
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+    const progressInfo = $('.prt-progress-info')
+    const gachaPoint = Number(progressInfo.find('em').eq(0).text())
+    const [number, limit] = progressInfo.find('em').eq(1).text().split('/').map(Number)
+    const lottery = { number: Number.isNaN(number) ? 0 : number, limit: Number.isNaN(limit) ? 0 : limit }
+
+    const eventInfo = {
+      type: eventType,
+      isActive: true,
+      mission: responseData.option.mission_beginner_list.map((m: any) => ({
+        reward: m.level_details[m.level].reward_name,
+        desc: m.level_details[m.level].description,
+        number: Number(m.progress),
+        limit: Number(m.max_progress),
+        isAllComplete: m.is_all_complete,
+        isDailyMission: m.is_daily_mission,
+      })),
+      count: 0,
+      updateTime: dayjs().valueOf(),
+      additional: {
+        drawnBox: 1,
+        gachaPoint,
+        lottery,
+      },
+    }
+
+    const index = eventList.value.findIndex(event => event.type === eventType)
+    if (index === -1) {
+      eventList.value.push(eventInfo)
+    }
+    else {
+      eventInfo.additional.drawnBox = eventList.value[index].additional?.drawnBox || 1
+      eventList.value[index] = eventInfo
+    }
+  }
+
+  // Event 获取古战场战货信息
+  if (/\/teamraid\d+\/gacha\/content\/index/.test(url)) {
+    const eventType = 'teamraid'
+    const eventInfo = eventList.value.find(event => event.type === eventType)
+    if (!eventInfo || !eventInfo.additional)
+      return
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+    const gachaInfo = $('.prt-gacha-infomation')
+    const boxNum = gachaInfo.length ? Number((gachaInfo.data('box-num') as string).match(/\d+/)![0]) : 0
+    const gachaPoint = gachaInfo.length ? Number(gachaInfo.find('.txt-current-point').text()) : 0
+    eventInfo.additional.drawnBox = boxNum
+    eventInfo.additional.gachaPoint = gachaPoint
+  }
+
   // Event 获取炼金活动信息
   if (url.includes('/frontier/alchemy/content/index')) {
+    const eventType = 'alchemist'
     const eventInfo = {
-      type: 'alchemist',
+      type: eventType,
       isActive: true,
       mission: responseData.option.event_mission_list.map((m: any) => ({
         reward: m.level_details[m.level].reward_name,
@@ -274,7 +331,7 @@ export async function unpack(parcel: string) {
       updateTime: dayjs().valueOf(),
     }
 
-    const index = eventList.value.findIndex(event => event.type === 'alchemist')
+    const index = eventList.value.findIndex(event => event.type === eventType)
     if (index === -1) {
       eventList.value.push(eventInfo)
     }
@@ -285,8 +342,9 @@ export async function unpack(parcel: string) {
 
   // Event 获取神灭战活动信息
   if (url.includes('rest/godslayer/top/quest_list')) {
+    const eventType = 'godslayer'
     const eventInfo = {
-      type: 'godslayer',
+      type: eventType,
       isActive: true,
       mission: responseData.boss_quest_mission.map((m: any) => ({
         reward: m.item_message,
@@ -300,7 +358,7 @@ export async function unpack(parcel: string) {
       updateTime: dayjs().valueOf(),
     }
 
-    const index = eventList.value.findIndex(event => event.type === 'godslayer')
+    const index = eventList.value.findIndex(event => event.type === eventType)
     if (index === -1) {
       eventList.value.push(eventInfo)
     }
@@ -555,6 +613,28 @@ export async function unpack(parcel: string) {
       const eventInfo = eventList.value.find(event => event.type === 'treasureraid')
       const progress = result_data.popup_data.treasureraid_mission.progress ?? []
       const achieve_mission = result_data.popup_data.treasureraid_mission.achieve_mission ?? []
+      for (const item of progress) {
+        const mission = eventInfo?.mission.find(m => m.desc === item.description)
+        if (mission) {
+          mission.number = Number(item.numerator)
+          mission.limit = Number(item.denominator)
+          mission.isAllComplete = mission.number >= mission.limit
+        }
+      }
+      for (const item of achieve_mission) {
+        const mission = eventInfo?.mission.find(m => m.desc === item.description)
+        if (mission) {
+          mission.number = mission.limit
+          mission.isAllComplete = true
+        }
+      }
+    }
+
+    // 更新古战场活动任务信息
+    if (result_data.popup_data?.teamraid_mission_beginner && Object.keys(result_data.popup_data?.teamraid_mission_beginner).length > 0) {
+      const eventInfo = eventList.value.find(event => event.type === 'teamraid')
+      const progress = result_data.popup_data.teamraid_mission_beginner.progress ?? []
+      const achieve_mission = result_data.popup_data.teamraid_mission_beginner.achieve_mission ?? []
       for (const item of progress) {
         const mission = eventInfo?.mission.find(m => m.desc === item.description)
         if (mission) {

@@ -1,7 +1,7 @@
 const eventGachaInfo = [
   {
     name: '古战场',
-    type: 'dasdas12d12',
+    type: 'teamraid',
     boxToken: [
       [1600, 1],
       [2400, 3],
