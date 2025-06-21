@@ -880,9 +880,10 @@ export async function unpack(parcel: string) {
 
 // 获取设定道具数量信息
 function getDisplayList(responseData: any) {
-  displayList.value = []
   if (!responseData.display_list)
     return
+
+  displayList.value = []
   for (const [key, value] of Object.entries(responseData.display_list)) {
     displayList.value.push({
       itemKey: key,
