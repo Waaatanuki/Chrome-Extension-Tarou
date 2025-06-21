@@ -1,4 +1,4 @@
-import type { Player } from 'myStorage'
+import type { DisplayItem, Player } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
 import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
@@ -883,15 +883,15 @@ function getDisplayList(responseData: any) {
   if (!responseData.display_list)
     return
 
-  displayList.value = []
-  for (const [key, value] of Object.entries(responseData.display_list)) {
-    displayList.value.push({
+  displayList.value = Object.entries(responseData.display_list).reduce<DisplayItem[]>((acc, [key, value]) => {
+    acc.push({
       itemKey: key,
       imageId: (value as any).image,
       number: Number((value as any).number),
       limit: Number((value as any).registration_number),
     })
-  }
+    return acc
+  }, [])
 }
 
 function initDailyCost() {
