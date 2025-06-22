@@ -568,7 +568,7 @@ export async function unpack(parcel: string) {
   // Notification 战斗结果特殊事件提醒
   if (/\/result(?:multi)?\/content\/index\/\d+/.test(url)) {
     getDisplayList(responseData)
-    const result_data = responseData.option.result_data
+    const result_data = responseData.option?.result_data
     if (!result_data)
       return
 
