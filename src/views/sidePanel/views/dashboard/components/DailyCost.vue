@@ -10,7 +10,7 @@ import { dailyCost } from '~/logic'
           {{ `每日统计(${useDateFormat(dailyCost.dateTime, 'MM-DD').value})` }}
         </div>
         <div fc gap-1>
-          <el-tooltip content="AP" placement="top">
+          <el-tooltip :content="`AP(${Math.ceil((dailyCost.ap || 0) / 75)}小红)`" placement="top">
             <el-tag type="success">
               {{ dailyCost.ap }}
             </el-tag>
