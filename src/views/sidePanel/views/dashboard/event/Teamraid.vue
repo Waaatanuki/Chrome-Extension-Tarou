@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import type { EventInfo, NumberLimitPair } from 'myStorage'
 import { Icon } from '@iconify/vue'
 import { getEventGachaBoxNum } from '~/constants/event'
 import { eventList } from '~/logic'
 
-const eventInfo = computed(() => eventList.value.find(event => event.type === 'teamraid'))
 // TODO 战斗结算更新古箱数据
+type TeamraidInfo = EventInfo & { additional: { gachaPoint: number, drawnBox: number, lottery: NumberLimitPair } }
+const eventInfo = computed(() => eventList.value.find(event => event.type === 'teamraid') as TeamraidInfo)
 </script>
 
 <template>
