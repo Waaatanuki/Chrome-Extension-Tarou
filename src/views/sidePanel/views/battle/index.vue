@@ -49,7 +49,7 @@ const tableData = computed(() => {
     for (let j = i - 1; j >= 0; j--) {
       const preData = pointLog.value[j]
       const minDiff = (currentData[0] - preData[0]) / 1000 / 60
-      if (minDiff >= 10) {
+      if (minDiff >= 5) {
         s1 = ((currentData[1] - preData[1]) / 100000000 / minDiff * 60)
         s2 = ((currentData[2] - preData[2]) / 100000000 / minDiff * 60)
         break
@@ -96,7 +96,7 @@ const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | 
 </script>
 
 <template>
-  <div v-if="eventLog.key">
+  <div v-if="eventLog?.key">
     <div v-if="msg" my-10px>
       <el-alert :title="msg.title" :type="msg.type" :closable="false" center />
     </div>

@@ -267,7 +267,13 @@ export async function unpack(parcel: string) {
     const gachaPoint = Number(progressInfo.find('em').eq(0).text())
     const [number, limit] = progressInfo.find('em').eq(1).text().split('/').map(Number)
     const lottery = { number: Number.isNaN(number) ? 0 : number, limit: Number.isNaN(limit) ? 0 : limit }
-    const log = { guild1: 'name1', guild2: 'name2', key: '', point: [1750673279000, 333, 21321] }
+    const isBattleShow = !!$('.prt-battle-show').length
+    const log = {
+      guild1: $('.txt-guild-name').text(),
+      guild2: $('.txt-rival-name').text(),
+      key: getJapanMMDD(),
+      point: [Date.now(), Number($('.txt-guild-point').text().replace(/,/g, '')), Number($('.txt-rival-point').text().replace(/,/g, ''))],
+    }
 
     const eventInfo: EventInfo & { additional: TeamraidAdditional } = {
       type: eventType,
@@ -302,13 +308,18 @@ export async function unpack(parcel: string) {
       const existingEventLog = existingEvent.additional?.log
       eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 1
 
-      if (log.key) {
+      if (isBattleShow) {
         eventLog.point = existingEventLog.key === log.key
           ? [...existingEventLog.point, log.point]
           : [log.point]
         eventLog.guild1 = log.guild1
         eventLog.guild2 = log.guild2
         eventLog.key = log.key
+      }
+
+      // 间隔小于一分钟的不记录
+      if (eventLog.point.length > 1 && (eventLog.point.at(-1)![0] - eventLog.point.at(-2)![0]) < 60 * 1000) {
+        eventLog.point.pop()
       }
       eventList.value[index] = eventInfo
     }
@@ -668,6 +679,15 @@ export async function unpack(parcel: string) {
       }
     }
 
+    // 更新古战场果报古箱掉落信息
+    if (result_data.character_message?.lottery_reward_info) {
+      const hitItem = result_data.character_message?.lottery_reward_info.find((reward: any) => Number(reward.item_id) === 30781)
+      const eventInfo = eventList.value.find(event => event.type === 'teamraid')
+      if (hitItem && eventInfo) {
+        eventInfo.additional!.lottery.number += Number(hitItem.number)
+      }
+    }
+
     // 更新炼金活动token数量
     if (result_data.alchemist?.lottery_reward_info && Object.keys(result_data.alchemist?.lottery_reward_info).length > 0) {
       const eventInfo = eventList.value.find(event => event.type === 'alchemist')
@@ -1001,4 +1021,15 @@ function initDailyCost() {
       raidIds: [],
     }
   }
+}
+
+// 获取日本时区的MM-DD
+function getJapanMMDD(): string {
+  const now = new Date()
+  const utcTimestamp = now.getTime() + now.getTimezoneOffset() * 60 * 1000
+  const japanTimestamp = utcTimestamp + 9 * 60 * 60 * 1000
+  const japanDate = new Date(japanTimestamp)
+  const month = String(japanDate.getMonth() + 1).padStart(2, '0')
+  const date = String(japanDate.getDate()).padStart(2, '0')
+  return `${month}-${date}`
 }
