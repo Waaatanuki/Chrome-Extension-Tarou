@@ -702,9 +702,6 @@ export async function unpack(parcel: string) {
       console.log('memoList==>', battleMemo.value)
     }
 
-    if (!obTabId.value)
-      return
-
     battleInfo.value.inLobby = false
     const battleStartJson: BattleStartJson = responseData
 
@@ -725,6 +722,9 @@ export async function unpack(parcel: string) {
         hitQuest.count++
       }
     }
+
+    if (!obTabId.value)
+      return
 
     // 分析副本数据
     handleStartJson(battleStartJson)
