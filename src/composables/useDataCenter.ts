@@ -302,12 +302,14 @@ export async function unpack(parcel: string) {
       const existingEventLog = existingEvent.additional?.log
       eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 1
 
-      eventLog.point = existingEventLog.key === log.key
-        ? [...existingEventLog.point, log.point]
-        : [log.point]
-      eventLog.guild1 = log.guild1
-      eventLog.guild2 = log.guild2
-      eventLog.key = log.key
+      if (log.key) {
+        eventLog.point = existingEventLog.key === log.key
+          ? [...existingEventLog.point, log.point]
+          : [log.point]
+        eventLog.guild1 = log.guild1
+        eventLog.guild2 = log.guild2
+        eventLog.key = log.key
+      }
       eventList.value[index] = eventInfo
     }
   }
