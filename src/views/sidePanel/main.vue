@@ -32,7 +32,7 @@ const currentView = ref('Dashborad')
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
-  { key: 'Dashborad', lable: '常用信息', icon: 'material-symbols:dashboard' },
+  { key: 'Dashborad', lable: '主页', icon: 'material-symbols:dashboard' },
   { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
   { key: 'Artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
   { key: 'Party', lable: '队伍信息', icon: 'ri:team-fill' },

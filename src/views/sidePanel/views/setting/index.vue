@@ -29,7 +29,7 @@ onMounted(() => {
       <div w-268px>
         <el-tooltip content="可点击或拖拽进行设置" placement="top-start">
           <span>
-            常用信息
+            主页设置
           </span>
         </el-tooltip>
       </div>
