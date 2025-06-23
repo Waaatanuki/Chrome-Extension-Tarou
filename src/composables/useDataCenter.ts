@@ -1,4 +1,4 @@
-import type { DisplayItem, Player } from 'myStorage'
+import type { DisplayItem, EventInfo, Player, TeamraidAdditional } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
 import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
@@ -267,8 +267,9 @@ export async function unpack(parcel: string) {
     const gachaPoint = Number(progressInfo.find('em').eq(0).text())
     const [number, limit] = progressInfo.find('em').eq(1).text().split('/').map(Number)
     const lottery = { number: Number.isNaN(number) ? 0 : number, limit: Number.isNaN(limit) ? 0 : limit }
+    const log = { guild1: 'name1', guild2: 'name2', key: '', point: [1750673279000, 333, 21321] }
 
-    const eventInfo = {
+    const eventInfo: EventInfo & { additional: TeamraidAdditional } = {
       type: eventType,
       isActive: true,
       mission: responseData.option.mission_beginner_list.map((m: any) => ({
@@ -285,15 +286,28 @@ export async function unpack(parcel: string) {
         drawnBox: 1,
         gachaPoint,
         lottery,
+        log: { ...log, point: [] },
       },
     }
 
     const index = eventList.value.findIndex(event => event.type === eventType)
+    const eventLog = eventInfo.additional.log
+
     if (index === -1) {
+      eventLog.point = [log.point]
       eventList.value.push(eventInfo)
     }
     else {
-      eventInfo.additional.drawnBox = eventList.value[index].additional?.drawnBox || 1
+      const existingEvent = eventList.value[index]
+      const existingEventLog = existingEvent.additional?.log
+      eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 1
+
+      eventLog.point = existingEventLog.key === log.key
+        ? [...existingEventLog.point, log.point]
+        : [log.point]
+      eventLog.guild1 = log.guild1
+      eventLog.guild2 = log.guild2
+      eventLog.key = log.key
       eventList.value[index] = eventInfo
     }
   }

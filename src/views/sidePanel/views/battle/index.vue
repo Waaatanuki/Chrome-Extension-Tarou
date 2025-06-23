@@ -1,12 +1,16 @@
 <script setup lang="ts">
-const rawData = ref([
-  [1750065627, 312300001, 212000002],
-])
+import type { EventInfo, TeamraidAdditional } from 'myStorage'
+import { eventList } from '~/logic'
 
-const labels = computed(() => rawData.value.map(d => useDateFormat(d[0], 'HH:mm').value))
+// TODO 战斗结算更新古箱数据
+type TeamraidInfo = EventInfo & { additional: TeamraidAdditional }
+const eventInfo = computed(() => eventList.value.find(event => event.type === 'teamraid') as TeamraidInfo)
+const eventLog = computed(() => eventInfo.value.additional.log)
+const pointLog = computed(() => eventLog.value.point)
+const labels = computed(() => pointLog.value.map(d => useDateFormat(d[0], 'HH:mm').value))
 
 const series = computed(() =>
-  rawData.value.reduce<any[]>((pre, cur) => {
+  pointLog.value.reduce<any[]>((pre, cur) => {
     pre[0].data.push(cur[1])
     pre[1].data.push(cur[2])
     return pre
@@ -26,24 +30,24 @@ const series = computed(() =>
 )
 
 const tableData = computed(() => {
-  if (rawData.value.length === 0)
+  if (pointLog.value.length === 0)
     return []
 
   const result = []
   result.unshift({
-    time: useDateFormat(rawData.value[0][0], 'HH:mm').value,
+    time: useDateFormat(pointLog.value[0][0], 'HH:mm').value,
     s1: Number.NaN,
     s2: Number.NaN,
   })
 
-  for (let i = 1; i < rawData.value.length; i++) {
-    const currentData = rawData.value[i]
+  for (let i = 1; i < pointLog.value.length; i++) {
+    const currentData = pointLog.value[i]
 
     let s1 = Number.NaN
     let s2 = Number.NaN
 
     for (let j = i - 1; j >= 0; j--) {
-      const preData = rawData.value[j]
+      const preData = pointLog.value[j]
       const minDiff = (currentData[0] - preData[0]) / 1000 / 60
       if (minDiff >= 10) {
         s1 = ((currentData[1] - preData[1]) / 100000000 / minDiff * 60)
@@ -59,10 +63,10 @@ const tableData = computed(() => {
 })
 
 const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | undefined>(() => {
-  if (rawData.value.length === 0)
+  if (pointLog.value.length === 0)
     return undefined
 
-  const lastPoint = rawData.value.at(-1)!
+  const lastPoint = pointLog.value.at(-1)!
   const lastSpeed = tableData.value[0]
 
   const s1 = Number.isNaN(lastSpeed.s1) ? 0 : Number(lastSpeed.s1)
@@ -89,33 +93,17 @@ const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | 
 
   return undefined
 })
-
-onMounted(() => {
-  // setInterval(() => {
-  //   console.log('loading...')
-
-  //   const last = rawData.value.at(-1)!
-  //   rawData.value.push([
-  //     last[0] + Math.floor(Math.random() * 1000000),
-  //     last[1] + Math.floor(Math.random() * 10) * 4500000,
-  //     last[2] + Math.floor(Math.random() * 10) * 4500000,
-  //   ])
-  // }, 2000)
-})
 </script>
 
 <template>
-  <div>
-    <!-- <TheButton @click="foo">
-      test
-    </TheButton> -->
+  <div v-if="eventLog.key">
     <div v-if="msg" my-10px>
       <el-alert :title="msg.title" :type="msg.type" :closable="false" center />
     </div>
     <div relative h-32px fc>
-      <div>123</div>
+      <div>{{ eventLog.guild1 }}</div>
       <span i-game-icons:sword-clash mx-5 text-xl />
-      <div>456</div>
+      <div>{{ eventLog.guild2 }}</div>
     </div>
     <LineChart id="lineChart" :labels="labels" :series="series" />
     <el-table :data="tableData" :border="true" mt-10px w-300px>
@@ -124,4 +112,5 @@ onMounted(() => {
       <el-table-column prop="s2" label="敌速" align="center" :formatter="(row, col, value) => Number.isNaN(value) ? '-' : value.toFixed(1) " />
     </el-table>
   </div>
+  <el-result v-else icon="info" sub-title="还未获取数据" />
 </template>

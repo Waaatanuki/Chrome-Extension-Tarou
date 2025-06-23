@@ -60,6 +60,13 @@ declare module 'myStorage' {
     additional?: Record<string, any>
   }
 
+  interface TeamraidAdditional {
+    gachaPoint: number
+    drawnBox: number
+    lottery: NumberLimitPair
+    log: { guild1: string, guild2: string, key: string, point: number[][] }
+  }
+
   interface BattleMemo {
     battleId: string
     questName: string
