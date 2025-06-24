@@ -274,6 +274,7 @@ export async function unpack(parcel: string) {
       key: getJapanMMDD(),
       point: [Date.now(), Number($('.txt-guild-point').text().replace(/,/g, '')), Number($('.txt-rival-point').text().replace(/,/g, ''))],
     }
+    const firstPoint = [getJapan7AMTimestamp(), 0, 0]
 
     const eventInfo: EventInfo & { additional: TeamraidAdditional } = {
       type: eventType,
@@ -300,7 +301,7 @@ export async function unpack(parcel: string) {
     const eventLog = eventInfo.additional.log
 
     if (index === -1) {
-      eventLog.point = [log.point]
+      eventLog.point = [firstPoint, log.point]
       eventList.value.push(eventInfo)
     }
     else {
@@ -309,9 +310,9 @@ export async function unpack(parcel: string) {
       eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 1
 
       if (isBattleShow) {
-        eventLog.point = existingEventLog.key === log.key
+        eventLog.point = existingEventLog?.key === log.key
           ? [...existingEventLog.point, log.point]
-          : [log.point]
+          : [firstPoint, log.point]
         eventLog.guild1 = log.guild1
         eventLog.guild2 = log.guild2
         eventLog.key = log.key
@@ -321,6 +322,7 @@ export async function unpack(parcel: string) {
       if (eventLog.point.length > 1 && (eventLog.point.at(-1)![0] - eventLog.point.at(-2)![0]) < 60 * 1000) {
         eventLog.point.pop()
       }
+      eventLog.point = eventLog.point.filter(p => !Number.isNaN(p[1]) && !Number.isNaN(p[2]))
       eventList.value[index] = eventInfo
     }
   }
@@ -1032,4 +1034,13 @@ function getJapanMMDD(): string {
   const month = String(japanDate.getMonth() + 1).padStart(2, '0')
   const date = String(japanDate.getDate()).padStart(2, '0')
   return `${month}-${date}`
+}
+
+function getJapan7AMTimestamp(): number {
+  const localDate = new Date()
+  const year = localDate.getFullYear()
+  const month = localDate.getMonth()
+  const day = localDate.getDate()
+  const japan7AM = new Date(Date.UTC(year, month, day, 7 - 9, 0, 0, 0))
+  return japan7AM.getTime()
 }

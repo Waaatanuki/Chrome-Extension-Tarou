@@ -2,12 +2,12 @@
 import type { EventInfo, TeamraidAdditional } from 'myStorage'
 import { eventList } from '~/logic'
 
-// TODO 战斗结算更新古箱数据
 type TeamraidInfo = EventInfo & { additional: TeamraidAdditional }
 const eventInfo = computed(() => eventList.value.find(event => event.type === 'teamraid') as TeamraidInfo)
 const eventLog = computed(() => eventInfo.value.additional.log)
 const pointLog = computed(() => eventLog.value.point)
 const labels = computed(() => pointLog.value.map(d => useDateFormat(d[0], 'HH:mm').value))
+const { height } = useWindowSize()
 
 const series = computed(() =>
   pointLog.value.reduce<any[]>((pre, cur) => {
@@ -106,7 +106,7 @@ const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | 
       <div>{{ eventLog.guild2 }}</div>
     </div>
     <LineChart id="lineChart" :labels="labels" :series="series" />
-    <el-table :data="tableData" :border="true" mt-10px w-300px>
+    <el-table :data="tableData" :border="true" mt-10px w-300px :max-height="height - 400">
       <el-table-column prop="time" label="" align="center" width="65" />
       <el-table-column prop="s1" label="我速" align="center" :formatter="(row, col, value) => Number.isNaN(value) ? '-' : value.toFixed(1) " />
       <el-table-column prop="s2" label="敌速" align="center" :formatter="(row, col, value) => Number.isNaN(value) ? '-' : value.toFixed(1) " />

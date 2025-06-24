@@ -19,15 +19,15 @@ const option = computed<EChartsOption>(() => ({
   },
   tooltip: { trigger: 'axis' },
   grid: {
-    left: 0,
+    left: 20,
     bottom: 25,
-    right: 0,
+    right: 20,
     top: 10,
   },
   xAxis: {
     type: 'category',
+    boundaryGap: false,
     data: labels,
-
   },
   yAxis: {
     show: false,
