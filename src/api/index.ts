@@ -65,3 +65,18 @@ export function listBuild(data: { questId: string, npcFilter: number[] }) {
     body: JSON.stringify(data),
   })
 }
+
+// 上传用户插件配置
+export function setConfig(data: any) {
+  return request('/ext/config/set', {
+    method: 'post',
+    body: JSON.stringify(data),
+  })
+}
+
+// 查询用户插件配置
+export function getConfig() {
+  return request<{ data: any }>('/ext/config/get', {
+    method: 'post',
+  })
+}
