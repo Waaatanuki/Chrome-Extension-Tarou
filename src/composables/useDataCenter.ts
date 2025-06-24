@@ -269,11 +269,16 @@ export async function unpack(parcel: string) {
     const lottery = { number: Number.isNaN(number) ? 0 : number, limit: Number.isNaN(limit) ? 0 : limit }
     const isBattleShow = !!$('.prt-battle-show').length
     const log = {
-      guild1: $('.txt-guild-name').text(),
-      guild2: $('.txt-rival-name').text(),
+      guild1: $('.prt-battle-show').find('.txt-guild-name').text(),
+      guild2: $('.prt-battle-show').find('.txt-rival-name').text(),
       key: getJapanMMDD(),
-      point: [Date.now(), Number($('.txt-guild-point').text().replace(/,/g, '')), Number($('.txt-rival-point').text().replace(/,/g, ''))],
+      point: [
+        Date.now(),
+        Number($('.prt-battle-show').find('.txt-guild-point').text().replace(/,/g, '')),
+        Number($('.prt-battle-show').find('.txt-rival-point').text().replace(/,/g, '')),
+      ],
     }
+
     const firstPoint = [getJapan7AMTimestamp(), 0, 0]
 
     const eventInfo: EventInfo & { additional: TeamraidAdditional } = {
