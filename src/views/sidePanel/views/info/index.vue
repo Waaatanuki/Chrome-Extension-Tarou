@@ -138,6 +138,19 @@ onMounted(() => {
     </el-descriptions-item>
   </el-descriptions>
 
+  <div my-10px flex items-center justify-between px-4>
+    <el-tooltip content="将插件配置上传到服务器(限GM会员)">
+      <TheButton class="w-1/2">
+        上传配置
+      </TheButton>
+    </el-tooltip>
+    <el-tooltip content="获取服务器上的插件配置(限GM会员)">
+      <TheButton class="w-1/2">
+        同步配置
+      </TheButton>
+    </el-tooltip>
+  </div>
+
   <el-popover placement="top" width="300">
     <template #reference>
       <div hover="text-teal-6" m-auto mt-20px w-150px fc cursor-pointer gap-2>
