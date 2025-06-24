@@ -290,7 +290,7 @@ export async function unpack(parcel: string) {
       count: 0,
       updateTime: dayjs().valueOf(),
       additional: {
-        drawnBox: 1,
+        drawnBox: 0,
         gachaPoint,
         lottery,
         log: { ...log, point: [] },
@@ -307,7 +307,7 @@ export async function unpack(parcel: string) {
     else {
       const existingEvent = eventList.value[index]
       const existingEventLog = existingEvent.additional?.log
-      eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 1
+      eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 0
 
       if (isBattleShow) {
         eventLog.point = existingEventLog?.key === log.key
