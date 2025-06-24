@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { BuildResponse } from 'build'
-import { lsitBuild } from '~/api'
+import { listBuild } from '~/api'
 import { buildNpcFilter, buildQuestId } from '~/logic'
 import ActionList from '../combat/components/ActionList.vue'
 import BattleAnalysis from '../combat/components/BattleAnalysis.vue'
@@ -18,7 +18,7 @@ const detailType = ref<DetailType>('party')
 const msg = ref('进入副本前自动获取副本ID')
 
 function handleQuery() {
-  lsitBuild({ questId: buildQuestId.value, npcFilter: buildNpcFilter.value }).then(({ data }) => {
+  listBuild({ questId: buildQuestId.value, npcFilter: buildNpcFilter.value }).then(({ data }) => {
     buildList.value = data.list
     msg.value = buildList.value.length === 0 ? '未找到匹配的数据' : ''
   })
