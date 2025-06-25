@@ -64,6 +64,7 @@ declare module 'myStorage' {
     gachaPoint: number
     drawnBox: number
     lottery: NumberLimitPair
+    honor: number
     log: { guild1: string, guild2: string, key: string, point: number[][] }
   }
 

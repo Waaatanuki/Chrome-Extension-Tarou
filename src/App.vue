@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
+const visible = ref(false)
+const foo = ref(123)
 const currentView = ref('Dashborad')
 
 const upViewList = [
@@ -11,9 +13,6 @@ const downViewList = [
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
 
-const foo = ref(123)
-
-const visible = ref(false)
 function handleClick() {
   console.log(foo.value)
 }
@@ -46,7 +45,7 @@ function handleClick() {
     </div>
 
     <div>
-      <TheButton title="ddwq" @click="handleClick">
+      <TheButton title="测试" @click="handleClick">
         Button
       </TheButton>
     </div>

@@ -4,9 +4,9 @@ import { Icon } from '@iconify/vue'
 import { getEventGachaBoxNum } from '~/constants/event'
 import { eventList } from '~/logic'
 
-// TODO 战斗结算更新古箱数据
 type TeamraidInfo = EventInfo & { additional: TeamraidAdditional }
 const eventInfo = computed(() => eventList.value.find(event => event.type === 'teamraid') as TeamraidInfo)
+const token = computed(() => eventInfo.value.additional.gachaPoint + eventInfo.value.additional.honor / 1000000 * 60)
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 't
     <template #header>
       <div flex justify-between>
         <div>
-          古战场({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: eventInfo.additional.gachaPoint, drawnBox: eventInfo.additional.drawnBox }) }}箱)
+          古战场({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: token, drawnBox: eventInfo.additional.drawnBox }) }}箱)
         </div>
         <el-tooltip content="最后更新时间" placement="top">
           {{ useDateFormat(eventInfo.updateTime, 'MM-DD HH:mm') }}

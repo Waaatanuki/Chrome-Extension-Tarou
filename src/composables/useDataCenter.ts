@@ -266,6 +266,7 @@ export async function unpack(parcel: string) {
     const progressInfo = $('.prt-progress-info')
     const gachaPoint = Number(progressInfo.find('em').eq(0).text())
     const [number, limit] = progressInfo.find('em').eq(1).text().split('/').map(Number)
+    const honor = Number(progressInfo.find('em').eq(3).text().replace(/,/g, ''))
     const lottery = { number: Number.isNaN(number) ? 0 : number, limit: Number.isNaN(limit) ? 0 : limit }
     const isBattleShow = !!$('.prt-battle-show').length
     const log = {
@@ -298,6 +299,7 @@ export async function unpack(parcel: string) {
         drawnBox: 0,
         gachaPoint,
         lottery,
+        honor,
         log: { ...log, point: [] },
       },
     }
