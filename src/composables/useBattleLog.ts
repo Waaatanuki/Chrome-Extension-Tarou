@@ -699,6 +699,20 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
     })
   }
 
+  if (type === 'event/temporary') {
+    currentRaid.actionQueue.at(-1)?.acitonList.push({
+      type: 'event/temporary',
+      icon: payload.item_id,
+      id: payload.item_id,
+      aim_num: payload.character_num
+        ? currentRaid.player[Number(payload.character_num)].pid
+        : '',
+      aim_is_npc: payload.character_num
+        ? currentRaid.player[Number(payload.character_num)].is_npc
+        : false,
+    })
+  }
+
   if (type === 'recovery')
     currentRaid.actionQueue.at(-1)?.acitonList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
 

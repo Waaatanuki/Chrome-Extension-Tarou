@@ -596,6 +596,11 @@ export async function unpack(parcel: string) {
     handleAttackRusultJson('temporary', responseData, JSON.parse(requestData!))
   }
 
+  // BattleLog 记录使用【活动】药品日志
+  if (/\/rest\/(?:raid|multiraid)\/event_temporary_item_result\.json/.test(url)) {
+    handleAttackRusultJson('event/temporary', responseData, JSON.parse(requestData!))
+  }
+
   // BattleLog 记录使用大红日志
   if (/\/rest\/(?:raid|multiraid)\/user_recovery\.json/.test(url)) {
     handleAttackRusultJson('recovery', responseData, JSON.parse(requestData!))

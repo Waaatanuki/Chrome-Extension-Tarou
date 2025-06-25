@@ -68,6 +68,8 @@ export function getActionIcon(action: Action) {
     return getAssetImg('summon', action.icon!, 's')
   if (action.type === 'temporary')
     return getAssetsItemImg('temporary', action.icon!, 'm')
+  if (action.type === 'event/temporary')
+    return getAssetsItemImg('event/temporary', action.icon!, 's')
   if (action.type === 'recovery')
     return getAssetsItemImg('normal', '1')
   if (action.type === 'attack')

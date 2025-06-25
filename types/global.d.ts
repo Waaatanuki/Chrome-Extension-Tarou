@@ -639,6 +639,7 @@ declare module 'source'{
 
    interface ResultJsonPayload {
      type?: string
+     item_id?: string
      ability_id: string
      summon_id: string
      character_num?: string
