@@ -18,9 +18,12 @@ const detailType = ref<DetailType>('party')
 const msg = ref('进入副本前自动获取副本ID')
 
 function handleQuery() {
+  loading.value = true
   listBuild({ questId: buildQuestId.value, npcFilter: buildNpcFilter.value }).then(({ data }) => {
     buildList.value = data.list
     msg.value = buildList.value.length === 0 ? '未找到匹配的数据' : ''
+  }).finally(() => {
+    loading.value = false
   })
 }
 
