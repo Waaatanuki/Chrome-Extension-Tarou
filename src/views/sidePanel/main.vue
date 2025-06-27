@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import { eventList } from '~/logic'
+import { eventList, obTabId } from '~/logic'
 import Artifact from './views/artifact/index.vue'
 import Battle from './views/battle/index.vue'
 import Build from './views/build/index.vue'
@@ -53,7 +53,18 @@ onMounted(() => {
     if (ctx.length > 1) {
       createNotification({ message: '只能打开一个侧边栏' })
       window.close()
+      return
     }
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tabInfo = tabs[0]
+      if (!tabInfo) {
+        createNotification({ message: '请在游戏页面打开' })
+        window.close()
+        return
+      }
+
+      obTabId.value = tabInfo.id
+    })
   })
 })
 </script>

@@ -6,7 +6,7 @@ export function setupRuntimeListener() {
   chrome.runtime.onInstalled.addListener(() => {
     registerContextMenu()
     chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false })
-    obTabId.value = 0
-    obWindowId.value = 0
+    chrome.tabs.remove(obTabId.value).catch(() => {})
+    chrome.windows.remove(obWindowId.value).catch(() => {})
   })
 }

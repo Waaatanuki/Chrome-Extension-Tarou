@@ -8,21 +8,12 @@ export default function useContextMenu() {
   }
 
   function openSidePanel(tab: chrome.tabs.Tab) {
-    if (obTabId.value && obTabId.value !== tab.id) {
-      createNotification({ message: '侧边栏和详细面板只能在同一个页面打开' })
-      return
-    }
     chrome.sidePanel.open({ tabId: tab.id! }).catch((err) => {
       createNotification({ message: String(err) })
     })
   }
 
   function openDashboard(tab: chrome.tabs.Tab) {
-    if (obTabId.value && obTabId.value !== tab.id) {
-      createNotification({ message: '侧边栏和详细面板只能在同一个页面打开' })
-      return
-    }
-
     chrome.windows.get(obWindowId.value)
       .then(() => {
         createNotification({ message: '已开启详细面板' })
