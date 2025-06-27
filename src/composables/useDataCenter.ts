@@ -324,6 +324,9 @@ export async function unpack(parcel: string) {
         eventLog.guild2 = log.guild2
         eventLog.key = log.key
       }
+      else {
+        eventInfo.additional.log = { ...existingEventLog }
+      }
 
       // 间隔小于一分钟的不记录
       if (eventLog.point.length > 1 && (eventLog.point.at(-1)![0] - eventLog.point.at(-2)![0]) < 60 * 1000) {
