@@ -1,11 +1,10 @@
-import { isSidePanelOpened, obTabId, obWindowId } from '~/logic'
+import { obTabId, obWindowId } from '~/logic'
 
 export function setupTabsListener() {
   chrome.tabs.onCreated.addListener(() => {
     chrome.tabs.get(obTabId.value).catch(() => {
       obTabId.value = 0
       obWindowId.value = 0
-      isSidePanelOpened.value = false
     })
   })
 
@@ -22,7 +21,6 @@ export function setupTabsListener() {
   chrome.tabs.onRemoved.addListener((tabId) => {
     if (tabId === obTabId.value) {
       obTabId.value = 0
-      isSidePanelOpened.value = false
       chrome.windows.remove(obWindowId.value).catch(() => {})
     }
   })

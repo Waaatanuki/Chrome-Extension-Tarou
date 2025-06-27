@@ -1,4 +1,4 @@
-import { isSidePanelOpened, obTabId, obWindowId, windowSize } from '~/logic'
+import { obTabId, obWindowId, windowSize } from '~/logic'
 
 export default function useContextMenu() {
   function registerContextMenu() {
@@ -8,10 +8,6 @@ export default function useContextMenu() {
   }
 
   function openSidePanel(tab: chrome.tabs.Tab) {
-    if (isSidePanelOpened.value) {
-      createNotification({ message: '只能打开一个侧边栏' })
-      return
-    }
     if (obTabId.value && obTabId.value !== tab.id) {
       createNotification({ message: '侧边栏和详细面板只能在同一个页面打开' })
       return
