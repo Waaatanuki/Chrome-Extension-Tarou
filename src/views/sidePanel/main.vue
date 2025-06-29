@@ -27,8 +27,9 @@ const componentMap: Record<string, Component> = {
   Setting,
   Info,
 }
-const currentView = ref('Dashborad')
 
+const { width } = useWindowSize()
+const currentView = ref('Dashborad')
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
@@ -47,6 +48,18 @@ const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
+
+watchEffect(() => {
+  const contentEl: HTMLDivElement | null = document.querySelector('#content')
+
+  if (!contentEl)
+    return
+  const scale = width.value / 360
+  contentEl.style.transform = `scale(${scale})`
+  contentEl.style.transformOrigin = '0 0'
+  contentEl.style.width = `${100 / scale}%`
+  contentEl.style.height = `${100 / scale}%`
+}, { flush: 'post' })
 
 onMounted(() => {
   chrome.runtime.getContexts({ contextTypes: [chrome.runtime.ContextType.SIDE_PANEL] }).then((ctx) => {
@@ -71,7 +84,7 @@ onMounted(() => {
 
 <template>
   <el-config-provider :locale="zhCn">
-    <div h-full w-full flex>
+    <div id="content" h-full w-full flex>
       <el-scrollbar w-full>
         <div p-10px>
           <keep-alive>
@@ -81,13 +94,15 @@ onMounted(() => {
       </el-scrollbar>
 
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
-        <div flex flex-col items-center gap-10px>
-          <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
-            <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
-              <Icon :icon="view.icon" text-20px />
-            </div>
-          </el-tooltip>
-        </div>
+        <el-scrollbar>
+          <div flex flex-col items-center gap-10px>
+            <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
+              <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
+                <Icon :icon="view.icon" text-20px />
+              </div>
+            </el-tooltip>
+          </div>
+        </el-scrollbar>
         <div flex flex-col items-center gap-10px>
           <el-tooltip v-for="view in downViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
             <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">

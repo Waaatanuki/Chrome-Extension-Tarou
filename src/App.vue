@@ -12,14 +12,31 @@ const upViewList = [
 const downViewList = [
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
+const contentRef = useTemplateRef('content')
 
 function handleClick() {
+  if (!contentRef.value)
+    return
   console.log(foo.value)
+
+  const scale = Number(foo.value) / 300
+  contentRef.value.style.transform = `scale(${scale})`
+  contentRef.value.style.transformOrigin = '0 0'
+  contentRef.value.style.width = `${100 / scale}%`
 }
 </script>
 
 <template>
   <div fc flex-col flex-wrap gap-3 p-10>
+    <input v-model="foo" type="text">
+
+    <div ref="content" w-300px flex flex-wrap ring-1 ring-rose>
+      <el-tooltip effect="dark" content="asdsa" placement="left">
+        3123
+      </el-tooltip>
+      <div v-for="i in 10" :key="i" h-50px w-50px ring-1 />
+    </div>
+
     <div h-600px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
