@@ -27,8 +27,10 @@ const componentMap: Record<string, Component> = {
   Setting,
   Info,
 }
-const currentView = ref('Dashborad')
 
+const { width } = useWindowSize()
+const currentView = ref('Dashborad')
+const contentRef = useTemplateRef('content')
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
@@ -47,6 +49,16 @@ const downViewList = [
   { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
+
+watchEffect(() => {
+  if (!contentRef.value)
+    return
+
+  const scale = (width.value - 60) / 300
+  contentRef.value.style.transform = `scale(${scale})`
+  contentRef.value.style.transformOrigin = '0 0'
+  contentRef.value.style.width = `${100 / scale}%`
+}, { flush: 'post' })
 
 onMounted(() => {
   chrome.runtime.getContexts({ contextTypes: [chrome.runtime.ContextType.SIDE_PANEL] }).then((ctx) => {
@@ -73,7 +85,7 @@ onMounted(() => {
   <el-config-provider :locale="zhCn">
     <div h-full w-full flex>
       <el-scrollbar w-full>
-        <div p-10px>
+        <div ref="content" p-10px>
           <keep-alive>
             <component :is="componentMap[currentView]" />
           </keep-alive>
