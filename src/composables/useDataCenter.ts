@@ -228,6 +228,9 @@ export async function unpack(parcel: string) {
 
   // Event 获取战货活动信息
   if (/\/treasureraid\d+\/top\/content\/newindex/.test(url)) {
+    if (!responseData.option)
+      return
+
     const eventType = 'treasureraid'
     const htmlString = decodeURIComponent(responseData.data)
     const $ = load(htmlString)
@@ -260,6 +263,9 @@ export async function unpack(parcel: string) {
 
   // Event 获取古战场活动信息
   if (/\/teamraid\d+\/top\/content\/index/.test(url)) {
+    if (!responseData.option)
+      return
+
     const eventType = 'teamraid'
     const htmlString = decodeURIComponent(responseData.data)
     const $ = load(htmlString)
@@ -354,6 +360,9 @@ export async function unpack(parcel: string) {
 
   // Event 获取炼金活动信息
   if (url.includes('/frontier/alchemy/content/index')) {
+    if (!responseData.option)
+      return
+
     const eventType = 'alchemist'
     const eventInfo = {
       type: eventType,
@@ -381,6 +390,9 @@ export async function unpack(parcel: string) {
 
   // Event 获取神灭战活动信息
   if (url.includes('rest/godslayer/top/quest_list')) {
+    if (!responseData.option)
+      return
+
     const eventType = 'godslayer'
     const eventInfo = {
       type: eventType,
