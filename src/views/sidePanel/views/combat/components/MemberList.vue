@@ -56,7 +56,7 @@ const data = computed(() =>
       </template>
       <div
         :class="{ myself: member.userId === userInfo.uid, host: member.is_host }"
-        relative mb-10px h-65px w-135px flex cursor-pointer select-none items-center rounded-md bg-neutral-7 transition-all
+        relative mb-10px h-65px w-140px flex cursor-pointer select-none items-center rounded-md bg-neutral-7 transition-all
       >
         <div v-if="member.is_dead" class="absolute h-full w-full fc bg-black/40">
           <span text-red font-bold>Dead</span>

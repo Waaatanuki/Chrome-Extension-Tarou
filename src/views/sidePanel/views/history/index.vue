@@ -146,7 +146,7 @@ function processData(): BuildStorage {
       </div>
     </el-card>
 
-    <el-dialog v-model="dialogVisible" :fullscreen="true">
+    <el-drawer v-model="dialogVisible" :fullscreen="true" size="100%">
       <div m-auto mt-20px w-300px flex flex-col gap-10px>
         <template v-if="dialogType === 'detail' && currentRecord">
           <BattleAnalysis :player="currentRecord?.player " />
@@ -187,6 +187,6 @@ function processData(): BuildStorage {
           </div>
         </template>
       </div>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>

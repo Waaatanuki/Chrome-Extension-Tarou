@@ -30,7 +30,6 @@ const componentMap: Record<string, Component> = {
 
 const { width } = useWindowSize()
 const currentView = ref('Dashborad')
-const contentRef = useTemplateRef('content')
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
@@ -51,13 +50,16 @@ const downViewList = [
 ]
 
 watchEffect(() => {
-  if (!contentRef.value)
-    return
+  const contentEl: HTMLDivElement | null = document.querySelector('#content')
 
-  const scale = (width.value - 60) / 300
-  contentRef.value.style.transform = `scale(${scale})`
-  contentRef.value.style.transformOrigin = '0 0'
-  contentRef.value.style.width = `${100 / scale}%`
+  if (!contentEl)
+    return
+  // const scale = (width.value - 60) / 300
+  const scale = width.value / 360
+  contentEl.style.transform = `scale(${scale})`
+  contentEl.style.transformOrigin = '0 0'
+  contentEl.style.width = `${100 / scale}%`
+  // contentEl.style.padding = `${10 / scale}px`
 }, { flush: 'post' })
 
 onMounted(() => {
@@ -83,9 +85,9 @@ onMounted(() => {
 
 <template>
   <el-config-provider :locale="zhCn">
-    <div h-full w-full flex>
+    <div id="content" h-full w-full flex>
       <el-scrollbar w-full>
-        <div ref="content" p-10px>
+        <div p-10px>
           <keep-alive>
             <component :is="componentMap[currentView]" />
           </keep-alive>
