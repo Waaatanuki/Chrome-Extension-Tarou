@@ -7,7 +7,7 @@ const resultFilter = reactive({
 })
 
 const summary = computed(() =>
-  gachaRecord.value.reduce< { count: number, ssrNum: number }>((pre, cur) => {
+  gachaRecord.value.reduce<{ count: number, ssrNum: number }>((pre, cur) => {
     pre.count += cur.count
     pre.ssrNum += cur.ssrList.length
     return pre
@@ -35,7 +35,7 @@ const summary = computed(() =>
         当前没有抽卡信息
       </ElTag>
     </div>
-    <ElScrollbar :max-height="height - 300">
+    <ElScrollbar :max-height="height - 100">
       <div v-for="data in gachaRecord" :key="data.random_key" mb-15px>
         <ElCard>
           <template #header>
