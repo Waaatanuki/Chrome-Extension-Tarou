@@ -41,5 +41,9 @@ const showWidgets = computed(() =>
       v-for="w in showWidgets"
       :key="w"
     />
+
+    <TheButton w-full @click="openPopupWindow('RecoveryItem')">
+      回复道具信息
+    </TheButton>
   </div>
 </template>
