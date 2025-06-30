@@ -872,7 +872,7 @@ export async function unpack(parcel: string) {
   if (url.includes('/socket/uri')) {
     chrome.debugger.detach({ tabId: obTabId.value })
       .catch(error => console.log(error))
-      .then(() => chrome.debugger.attach({ tabId: obTabId.value }, '1.2'))
+      .then(() => chrome.debugger.attach({ tabId: obTabId.value }, '1.3'))
       .then(() => chrome.debugger.sendCommand({ tabId: obTabId.value }, 'Network.enable'))
       .catch(error => console.log(error))
   }

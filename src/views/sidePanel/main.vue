@@ -71,7 +71,6 @@ onMounted(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tabInfo = tabs[0]
       if (!tabInfo) {
-        createNotification({ message: '请在游戏页面打开' })
         window.close()
         return
       }

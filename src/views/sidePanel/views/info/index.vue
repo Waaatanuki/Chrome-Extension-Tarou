@@ -14,14 +14,12 @@ const info = ref({
   userAgent: '',
 })
 
-const supportVisible = ref(false)
-
 function showSupport() {
   if (!userInfo.value.imgPc) {
     ElMessage.info('还未获取友招信息')
     return
   }
-  supportVisible.value = true
+  openPopupWindow('SupportSummon')
 }
 
 function handleCopy() {
@@ -203,8 +201,4 @@ onMounted(() => {
     </template>
     <img :src="getLocalImg('reload')">
   </el-popover>
-
-  <el-dialog v-model="supportVisible" :fullscreen="true">
-    <SupportSummon m-auto mt-20px />
-  </el-dialog>
 </template>
