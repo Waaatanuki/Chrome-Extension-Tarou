@@ -308,6 +308,7 @@ declare module 'myStorage' {
     bp: number
     quest: { questId: string, ap?: number, isReplicard?: boolean, bossImgId: string, bossName: string, count: number }[]
     raidIds: number[]
+    rewardList: { key: string, imgId: string, count: number }[]
   }
 
   interface Widget {

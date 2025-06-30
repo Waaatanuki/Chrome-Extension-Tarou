@@ -624,6 +624,7 @@ export async function unpack(parcel: string) {
   // Notification 战斗结果特殊事件提醒
   if (/\/result(?:multi)?\/content\/index\/\d+/.test(url)) {
     getDisplayList(responseData)
+    initDailyCost()
     const result_data = responseData.option?.result_data
     if (!result_data)
       return
@@ -641,6 +642,31 @@ export async function unpack(parcel: string) {
 
     if (result_data.advent_info?.is_over_limit && notificationSetting.value.isPointOverLimit)
       createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
+
+    // 收集掉落信息
+    for (const element of Object.values(result_data.rewards.reward_list)) {
+      for (const [key, value] of Object.entries(element as Record<string, any>)) {
+        const reward = {
+          key,
+          imgId: `${value.type}/m/${value.thumbnail_img || value.id}`,
+          count: Number(value.count),
+        }
+
+        const hitReward = dailyCost.value.rewardList?.find(r => r.key === reward.key)
+        if (hitReward)
+          hitReward.count += reward.count
+        else
+          dailyCost.value.rewardList?.push(reward)
+      }
+    }
+
+    if (result_data.rewards.artifact_list.length !== 0) {
+      const hitReward = dailyCost.value.rewardList?.find(r => r.key === 'artifact')
+      if (hitReward)
+        hitReward.count += result_data.rewards.artifact_list.length
+      else
+        dailyCost.value.rewardList?.push({ key: 'artifact', imgId: 'artifact/m/301010101', count: result_data.rewards.artifact_list.length })
+    }
 
     // 更新FP点数信息
     if (result_data.follow_point_info && Object.keys(result_data.follow_point_info).length > 0) {
@@ -1049,6 +1075,7 @@ function initDailyCost() {
       bp: 0,
       quest: [],
       raidIds: [],
+      rewardList: [],
     }
   }
 }

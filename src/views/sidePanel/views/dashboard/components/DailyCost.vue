@@ -6,7 +6,7 @@ import { dailyCost } from '~/logic'
   <el-card v-if="dailyCost.dateTime" body-style="padding: 10px" header-class="my-card-header" h-full w-300px>
     <template #header>
       <div flex items-center justify-between>
-        <div text-12px>
+        <div cursor-pointer text-12px hover:text-teal-6 @click="openPopupWindow('RewardList')">
           {{ `每日统计(${useDateFormat(dailyCost.dateTime, 'MM-DD').value})` }}
         </div>
         <div fc gap-1>

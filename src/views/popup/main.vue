@@ -2,6 +2,7 @@
 import ArtifactRule from './components/ArtifactRule.vue'
 import GachaInfo from './components/GachaInfo.vue'
 import RecoveryItem from './components/RecoveryItem.vue'
+import RewardList from './components/RewardList.vue'
 import SupportSummon from './components/SupportSummon.vue'
 
 const currentView = computed(() => document.URL.split('?')[1])
@@ -11,6 +12,7 @@ const componentMap: Record<string, Component> = {
   ArtifactRule,
   RecoveryItem,
   GachaInfo,
+  RewardList,
 }
 </script>
 
