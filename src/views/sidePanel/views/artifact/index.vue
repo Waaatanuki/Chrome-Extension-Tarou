@@ -2,7 +2,6 @@
 import copy from 'copy-text-to-clipboard'
 import { artifactList, artifactRuleIndex, artifactRuleList, language } from '~/logic'
 
-const dialogVisible = ref(false)
 const inputVisible = ref(false)
 const textarea = ref('')
 
@@ -11,7 +10,7 @@ const currentArtifaceRuleInfo = computed(() => artifactRuleList.value[artifactRu
 function handleCommand(command: string | number | object) {
   switch (command) {
     case 'rule':
-      dialogVisible.value = true
+      openPopupWindow('ArtifactRule')
       break
     case 'lang':
       language.value = language.value === 'zh' ? 'ja' : 'zh'
@@ -83,8 +82,6 @@ function onPasteSubmit() {
         :position="`${Math.floor(idx / 5 + 1)}-${idx % 5 + 1}`"
       />
     </div>
-
-    <ArtifactRule v-if="dialogVisible" v-model="dialogVisible" />
 
     <el-dialog v-model="inputVisible">
       <el-input v-model="textarea" :rows="6" type="textarea" />

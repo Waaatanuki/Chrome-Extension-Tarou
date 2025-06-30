@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import ArtifactRule from './components/ArtifactRule.vue'
 import SupportSummon from './components/SupportSummon.vue'
 
 const currentView = computed(() => document.URL.split('?')[1])
 
 const componentMap: Record<string, Component> = {
   SupportSummon,
+  ArtifactRule,
 }
 </script>
 

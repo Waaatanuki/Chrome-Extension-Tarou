@@ -12,7 +12,7 @@ export function goProfilePage(userId: string) {
 }
 
 export function openPopupWindow(key: string) {
-  chrome.windows.create({ url: `src/views/popup/main.html?${key}`, type: 'popup', height: 400, width: 600 }).catch((err) => {
+  chrome.windows.create({ url: `src/views/popup/main.html?${key}`, type: 'popup', height: 800, width: 800 }).catch((err) => {
     createNotification({ message: String(err) })
   })
 }
