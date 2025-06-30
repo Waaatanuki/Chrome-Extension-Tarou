@@ -5,7 +5,6 @@ import { setupDebuggerListener } from './debugger'
 import { setupRuntimeListener } from './runtime'
 import { setupTabsListener } from './tabs'
 import { setupWebRequestListener } from './webRequest'
-import { setupWindowsListener } from './windows';
 
 (() => {
   onMessage('express', (res) => {
@@ -22,6 +21,5 @@ import { setupWindowsListener } from './windows';
   setupTabsListener()
   setupActionListener()
   setupDebuggerListener()
-  setupWindowsListener()
   setupContextMenuListener()
 })()

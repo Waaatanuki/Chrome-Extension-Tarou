@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, localNpcList, materialInfo, notificationSetting, obTabId, obWindowId, recoveryItemList, userInfo, xenoGauge } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, localNpcList, materialInfo, notificationSetting, obTabId, recoveryItemList, userInfo, xenoGauge } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -831,16 +831,17 @@ export async function unpack(parcel: string) {
     console.log('memoList==>', battleMemo.value)
   }
 
-  // ===============侧栏或详细面板打开时进行以下接口分析=====================
-  // ===============侧栏或详细面板打开时进行以下接口分析=====================
-  // ===============侧栏或详细面板打开时进行以下接口分析=====================
-  // ===============侧栏或详细面板打开时进行以下接口分析=====================
-  // ===============侧栏或详细面板打开时进行以下接口分析=====================
-  // ===============侧栏或详细面板打开时进行以下接口分析=====================
-  // ===============侧栏或详细面板打开时进行以下接口分析=====================
-  // ===============侧栏或详细面板打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
+  // ===============侧栏打开时进行以下接口分析=====================
 
-  if (!obWindowId.value && !obTabId.value)
+  if (!obTabId.value)
     return
 
   // Build 获取自发副本的questId
