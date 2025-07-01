@@ -17,7 +17,9 @@ withDefaults(defineProps<{
 
 <template>
   <el-button :type="type" :color="color" :size="size" :loading="loading">
-    <Icon v-if="icon && !loading" :icon="icon" mr-4px />
-    <slot />
+    <div fc gap-4px>
+      <Icon v-if="icon && !loading" :icon="icon" />
+      <slot />
+    </div>
   </el-button>
 </template>

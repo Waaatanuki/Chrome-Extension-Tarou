@@ -130,7 +130,7 @@ function processData(): BuildStorage {
           {{ data.turn }}
         </el-descriptions-item>
       </el-descriptions>
-      <div flex items-center justify-between gap-10 p-2>
+      <div mt-5px flex items-center justify-between>
         <div text-xs>
           {{ data.startTimestamp ? useDateFormat(data.startTimestamp, 'MM/DD HH:mm') : '-' }}
         </div>

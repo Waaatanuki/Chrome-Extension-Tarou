@@ -2,7 +2,7 @@
 import { Icon } from '@iconify/vue'
 
 const visible = ref(false)
-const foo = ref(123)
+const foo = ref('')
 const currentView = ref('Dashborad')
 
 const upViewList = [
