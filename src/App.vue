@@ -19,36 +19,14 @@ function handleClick() {
 </script>
 
 <template>
-  <div fc flex-col flex-wrap gap-3 p-10>
-    <input v-model="foo" type="text">
-
-    <div h-800px w-800px fc ring-1 ring-rose>
-      <el-card w-717px header="掉落统计" :body-style="{ padding: '20px 5px 20px 5px' }">
-        <template #header>
-          <div flex items-center justify-between>
-            <div text-lg>
-              掉落统计
-            </div>
-            <div>
-              <el-switch
-                v-model="visible"
-                inline-prompt
-                style="--el-switch-on-color: #3c3c3c; --el-switch-off-color: #6c6c6c"
-                active-text="获取顺序"
-                inactive-text="数量顺序"
-              />
-            </div>
-          </div>
-        </template>
-        <el-scrollbar :height="600" px-15px>
-          <div flex flex-wrap gap-5px text-14px>
-            <div v-for="i in 80" :key="i" w-80px fc flex-col>
-              <img src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/m/1131.jpg">
-              <div>33</div>
-            </div>
-          </div>
-        </el-scrollbar>
-      </el-card>
+  <div fc flex-wrap gap-3 p-10>
+    <div h-600px w-500px ring-1>
+      <div fc gap-2 p-2>
+        <el-input v-model="foo" type="text" style="width: 200px;" />
+        <TheButton title="测试" @click="handleClick">
+          按钮
+        </TheButton>
+      </div>
     </div>
 
     <div h-600px w-360px flex rounded-xl>
@@ -73,12 +51,6 @@ function handleClick() {
           </el-tooltip>
         </div>
       </div>
-    </div>
-
-    <div>
-      <TheButton title="测试" @click="handleClick">
-        Button
-      </TheButton>
     </div>
   </div>
 </template>

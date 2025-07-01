@@ -36,7 +36,7 @@ export const evokerInfo = useWebExtensionStorage('evokerInfo', defaultEvokerInfo
 export const xenoGauge = useWebExtensionStorage('xenoGauge', defaultXenoGauge)
 
 // BattleLog
-export const battleInfo = useWebExtensionStorage<Partial<BattleInfo>>('BattleInfo', {})
+export const battleInfo = useWebExtensionStorage<Partial<BattleInfo>>('battleInfo', {})
 export const battleRecord = useWebExtensionStorage<BattleRecord[]>('battleRecord', [])
 export const specBossBuff = useWebExtensionStorage<string[]>('specBossBuff', [])
 export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff', [])

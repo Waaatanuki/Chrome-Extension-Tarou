@@ -195,7 +195,7 @@ onMounted(() => {
   <el-popover placement="bottom" width="300">
     <template #reference>
       <div hover="text-teal-6" m-auto mt-20px w-150px fc cursor-pointer gap-2>
-        <div i-carbon:help-filled />
+        <div i-carbon:help-filled @click="openPopupWindow('Debug')" />
         <div>常见问题处理</div>
       </div>
     </template>
