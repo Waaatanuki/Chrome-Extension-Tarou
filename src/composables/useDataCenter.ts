@@ -621,8 +621,8 @@ export async function unpack(parcel: string) {
     handleAttackRusultJson('recovery', responseData, JSON.parse(requestData!))
   }
 
-  // Notification 战斗结果特殊事件提醒
-  if (/\/result(?:multi)?\/content\/index\/\d+/.test(url)) {
+  // BattleLog 战斗结算
+  if (/\/result(?:multi)?\/content\/(?:index|skip_raid)\/\d+/.test(url)) {
     getDisplayList(responseData)
     initDailyCost()
     const result_data = responseData.option?.result_data

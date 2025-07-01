@@ -7,7 +7,7 @@ import { dailyCost } from '~/logic'
     <template #header>
       <div flex items-center justify-between>
         <el-tooltip content="点击显示每日掉落统计" placement="top">
-          <div cursor-pointer text-12px text-teal-4 hover:text-teal-6 @click="openPopupWindow('RewardList')">
+          <div cursor-pointer text-12px text-teal-6 hover:text-teal-4 @click="openPopupWindow('RewardList')">
             {{ `每日统计(${useDateFormat(dailyCost.dateTime, 'MM-DD').value})` }}
           </div>
         </el-tooltip>
