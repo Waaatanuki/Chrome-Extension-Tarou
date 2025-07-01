@@ -12,17 +12,9 @@ const upViewList = [
 const downViewList = [
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
-const contentRef = useTemplateRef('content')
 
 function handleClick() {
-  if (!contentRef.value)
-    return
   console.log(foo.value)
-
-  const scale = Number(foo.value) / 300
-  contentRef.value.style.transform = `scale(${scale})`
-  contentRef.value.style.transformOrigin = '0 0'
-  contentRef.value.style.width = `${100 / scale}%`
 }
 </script>
 
@@ -30,11 +22,33 @@ function handleClick() {
   <div fc flex-col flex-wrap gap-3 p-10>
     <input v-model="foo" type="text">
 
-    <div ref="content" w-300px flex flex-wrap ring-1 ring-rose>
-      <el-tooltip effect="dark" content="asdsa" placement="left">
-        3123
-      </el-tooltip>
-      <div v-for="i in 10" :key="i" h-50px w-50px ring-1 />
+    <div h-800px w-800px fc ring-1 ring-rose>
+      <el-card w-717px header="掉落统计" :body-style="{ padding: '20px 5px 20px 5px' }">
+        <template #header>
+          <div flex items-center justify-between>
+            <div text-lg>
+              掉落统计
+            </div>
+            <div>
+              <el-switch
+                v-model="visible"
+                inline-prompt
+                style="--el-switch-on-color: #3c3c3c; --el-switch-off-color: #6c6c6c"
+                active-text="获取顺序"
+                inactive-text="数量顺序"
+              />
+            </div>
+          </div>
+        </template>
+        <el-scrollbar :height="600" px-15px>
+          <div flex flex-wrap gap-5px text-14px>
+            <div v-for="i in 80" :key="i" w-80px fc flex-col>
+              <img src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/m/1131.jpg">
+              <div>33</div>
+            </div>
+          </div>
+        </el-scrollbar>
+      </el-card>
     </div>
 
     <div h-600px w-360px flex rounded-xl>
