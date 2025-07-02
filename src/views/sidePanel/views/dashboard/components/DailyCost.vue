@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { dailyCost } from '~/logic'
+
+const showList = computed(() => {
+  const list = dailyCost.value.quest?.filter(q => q.bossImgId)
+  return [...list?.filter(q => q.pinned) || [], ...list?.filter(q => !q.pinned) || []]
+})
 </script>
 
 <template>
@@ -33,10 +38,11 @@ import { dailyCost } from '~/logic'
     </template>
     <el-scrollbar max-height="215">
       <div flex flex-wrap gap-7px text-12px>
-        <el-tooltip v-for="quest in dailyCost.quest?.filter(q => q.bossImgId)" :key="quest.questId" :content="quest.bossName" placement="top">
-          <div w-50px fc flex-col>
-            <img :src="getBossImg('enemy', quest.bossImgId, 's')">
+        <el-tooltip v-for="quest in showList" :key="quest.questId" :content="quest.bossName" placement="top">
+          <div relative w-50px fc flex-col>
+            <img cursor-pointer :src="getBossImg('enemy', quest.bossImgId, 's')" @click="quest.pinned = !quest.pinned">
             <div>{{ quest.count }}</div>
+            <div v-if="quest.pinned" i-twemoji:pushpin absolute right-0 top-0 />
           </div>
         </el-tooltip>
       </div>

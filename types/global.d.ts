@@ -306,7 +306,7 @@ declare module 'myStorage' {
     ap: number
     aap: number
     bp: number
-    quest: { questId: string, ap?: number, isReplicard?: boolean, bossImgId: string, bossName: string, count: number }[]
+    quest: { questId: string, ap?: number, isReplicard?: boolean, pinned?: boolean, bossImgId: string, bossName: string, count: number }[]
     raidIds: number[]
     rewardList: { key: string, imgId: string, count: number }[]
   }

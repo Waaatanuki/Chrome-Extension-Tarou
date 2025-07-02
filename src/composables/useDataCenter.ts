@@ -1073,7 +1073,7 @@ function initDailyCost() {
       ap: 0,
       aap: 0,
       bp: 0,
-      quest: [],
+      quest: dailyCost.value.quest?.filter(q => q.pinned).map(q => ({ ...q, count: 0 })) || [],
       raidIds: [],
       rewardList: [],
     }
