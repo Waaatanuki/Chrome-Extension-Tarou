@@ -13,7 +13,7 @@ export function handleDeckJson(data: DeckJson) {
     effects: processEffect(data),
   })
 
-  if (deckList.value.length > 10)
+  if (deckList.value.length > 3)
     deckList.value.pop()
 }
 
