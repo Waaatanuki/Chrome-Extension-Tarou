@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { NormalAttackInfo } from 'battleLog'
 
-defineProps<{ border?: boolean, normalAttackInfo: NormalAttackInfo }>()
+defineProps<{ normalAttackInfo: NormalAttackInfo }>()
 </script>
 
 <template>
