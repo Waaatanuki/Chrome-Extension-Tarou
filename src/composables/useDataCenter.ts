@@ -434,143 +434,7 @@ export async function unpack(parcel: string) {
 
   // BattleLog 战斗结算
   if (/\/result(?:multi)?\/content\/(?:index|skip_raid)\/\d+/.test(url)) {
-    getDisplayList(responseData)
-    initDailyCost()
-    const result_data = responseData.option?.result_data
-    if (!result_data)
-      return
-
-    if (result_data.appearance?.is_quest && notificationSetting.value.appearanceQuest)
-      createNotification({ message: 'Hell提醒', sound: 'hell' })
-
-    if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent) {
-      createNotification({
-        message: '沙盒宝箱提醒',
-        iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png',
-        sound: 'hell',
-      })
-    }
-
-    if (result_data.advent_info?.is_over_limit && notificationSetting.value.isPointOverLimit)
-      createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
-
-    // 收集掉落信息
-    for (const element of Object.values(result_data.rewards.reward_list)) {
-      for (const [key, value] of Object.entries(element as Record<string, any>)) {
-        const reward = {
-          key,
-          imgId: `${value.type}/m/${value.thumbnail_img || value.id}`,
-          count: Number(value.count),
-        }
-
-        const hitReward = dailyCost.value.rewardList?.find(r => r.key === reward.key)
-        if (hitReward)
-          hitReward.count += reward.count
-        else
-          dailyCost.value.rewardList?.push(reward)
-      }
-    }
-
-    if (result_data.rewards.artifact_list.length !== 0) {
-      const hitReward = dailyCost.value.rewardList?.find(r => r.key === 'artifact')
-      if (hitReward)
-        hitReward.count += result_data.rewards.artifact_list.length
-      else
-        dailyCost.value.rewardList?.push({ key: 'artifact', imgId: 'artifact/m/301010101', count: result_data.rewards.artifact_list.length })
-    }
-
-    // 更新FP点数信息
-    if (result_data.follow_point_info && Object.keys(result_data.follow_point_info).length > 0) {
-      userInfo.value.followPoint = {
-        weekly: {
-          number: Number(result_data.follow_point_info.weekly_get_number),
-          limit: Number(result_data.follow_point_info.weekly_limit_number),
-        },
-        total: {
-          number: Number(result_data.follow_point_info.amount),
-          limit: Number(result_data.follow_point_info.limit_number),
-        },
-      }
-    }
-
-    // 更新神器掉落结果
-    if (result_data.rewards?.artifact_drop_count_info) {
-      userInfo.value.artifact = {
-        number: Number(result_data.rewards.artifact_drop_count_info.current_count),
-        limit: Number(result_data.rewards.artifact_drop_count_info.max_count),
-      }
-    }
-
-    // 更新战货活动任务信息
-    if (result_data.popup_data?.treasureraid_mission && Object.keys(result_data.popup_data?.treasureraid_mission).length > 0) {
-      const eventInfo = eventList.value.find(event => event.type === 'treasureraid')
-      const progress = result_data.popup_data.treasureraid_mission.progress ?? []
-      const achieve_mission = result_data.popup_data.treasureraid_mission.achieve_mission ?? []
-      for (const item of progress) {
-        const mission = eventInfo?.mission.find(m => m.desc === item.description)
-        if (mission) {
-          mission.number = Number(item.numerator)
-          mission.limit = Number(item.denominator)
-          mission.isAllComplete = mission.number >= mission.limit
-        }
-      }
-      for (const item of achieve_mission) {
-        const mission = eventInfo?.mission.find(m => m.desc === item.description)
-        if (mission) {
-          mission.number = mission.limit
-          mission.isAllComplete = true
-        }
-      }
-    }
-
-    // 更新古战场活动任务信息
-    if (result_data.popup_data?.teamraid_mission_beginner && Object.keys(result_data.popup_data?.teamraid_mission_beginner).length > 0) {
-      const eventInfo = eventList.value.find(event => event.type === 'teamraid')
-      const progress = result_data.popup_data.teamraid_mission_beginner.progress ?? []
-      const achieve_mission = result_data.popup_data.teamraid_mission_beginner.achieve_mission ?? []
-      for (const item of progress) {
-        const mission = eventInfo?.mission.find(m => m.desc === item.description)
-        if (mission) {
-          mission.number = Number(item.numerator)
-          mission.limit = Number(item.denominator)
-          mission.isAllComplete = mission.number >= mission.limit
-        }
-      }
-      for (const item of achieve_mission) {
-        const mission = eventInfo?.mission.find(m => m.desc === item.description)
-        if (mission) {
-          mission.number = mission.limit
-          mission.isAllComplete = true
-        }
-      }
-    }
-
-    // 更新古战场果报古箱掉落信息
-    if (result_data.character_message?.lottery_reward_info) {
-      const hitItem = result_data.character_message?.lottery_reward_info.find((reward: any) => Number(reward.item_id) === 30781)
-      const eventInfo = eventList.value.find(event => event.type === 'teamraid')
-      if (hitItem && eventInfo) {
-        eventInfo.additional!.lottery.number += Number(hitItem.number)
-      }
-    }
-
-    // 更新炼金活动token数量
-    if (result_data.alchemist?.lottery_reward_info && Object.keys(result_data.alchemist?.lottery_reward_info).length > 0) {
-      const eventInfo = eventList.value.find(event => event.type === 'alchemist')
-      if (eventInfo)
-        eventInfo.count = Number(result_data.alchemist.lottery_reward_info[0].possession_num)
-    }
-
-    const display_list = responseData.display_list
-    if (!display_list || !notificationSetting.value.itemGoal)
-      return
-    const itemList = Object.values(display_list)
-    itemList.forEach((item: any) => {
-      const current = Number(item.number)
-      const goal = Number(item.registration_number)
-      if (goal > 0 && goal <= current)
-        createNotification({ message: `${item.name}达到目标数量`, sound: 'warning' })
-    })
+    handleResultContent(responseData)
   }
 
   // BattleLog 记录副本start信息
@@ -859,6 +723,147 @@ export async function unpack(parcel: string) {
       }
     }
   }
+}
+
+// 处理战斗结算数据
+function handleResultContent(responseData: any) {
+  getDisplayList(responseData)
+  initDailyCost()
+  const result_data = responseData.option?.result_data
+  if (!result_data)
+    return
+
+  if (result_data.appearance?.is_quest && notificationSetting.value.appearanceQuest)
+    createNotification({ message: 'Hell提醒', sound: 'hell' })
+
+  if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent) {
+    createNotification({
+      message: '沙盒宝箱提醒',
+      iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png',
+      sound: 'hell',
+    })
+  }
+
+  if (result_data.advent_info?.is_over_limit && notificationSetting.value.isPointOverLimit)
+    createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
+
+  // 收集掉落信息
+  for (const element of Object.values(result_data.rewards.reward_list)) {
+    for (const [key, value] of Object.entries(element as Record<string, any>)) {
+      const reward = {
+        key,
+        imgId: `${value.type}/m/${value.thumbnail_img || value.id}`,
+        count: Number(value.count),
+      }
+
+      const hitReward = dailyCost.value.rewardList?.find(r => r.key === reward.key)
+      if (hitReward)
+        hitReward.count += reward.count
+      else
+        dailyCost.value.rewardList?.push(reward)
+    }
+  }
+
+  if (result_data.rewards.artifact_list.length !== 0) {
+    const hitReward = dailyCost.value.rewardList?.find(r => r.key === 'artifact')
+    if (hitReward)
+      hitReward.count += result_data.rewards.artifact_list.length
+    else
+      dailyCost.value.rewardList?.push({ key: 'artifact', imgId: 'artifact/m/301010101', count: result_data.rewards.artifact_list.length })
+  }
+
+  // 更新FP点数信息
+  if (result_data.follow_point_info && Object.keys(result_data.follow_point_info).length > 0) {
+    userInfo.value.followPoint = {
+      weekly: {
+        number: Number(result_data.follow_point_info.weekly_get_number),
+        limit: Number(result_data.follow_point_info.weekly_limit_number),
+      },
+      total: {
+        number: Number(result_data.follow_point_info.amount),
+        limit: Number(result_data.follow_point_info.limit_number),
+      },
+    }
+  }
+
+  // 更新神器掉落结果
+  if (result_data.rewards?.artifact_drop_count_info) {
+    userInfo.value.artifact = {
+      number: Number(result_data.rewards.artifact_drop_count_info.current_count),
+      limit: Number(result_data.rewards.artifact_drop_count_info.max_count),
+    }
+  }
+
+  // 更新战货活动任务信息
+  if (result_data.popup_data?.treasureraid_mission && Object.keys(result_data.popup_data?.treasureraid_mission).length > 0) {
+    const eventInfo = eventList.value.find(event => event.type === 'treasureraid')
+    const progress = result_data.popup_data.treasureraid_mission.progress ?? []
+    const achieve_mission = result_data.popup_data.treasureraid_mission.achieve_mission ?? []
+    for (const item of progress) {
+      const mission = eventInfo?.mission.find(m => m.desc === item.description)
+      if (mission) {
+        mission.number = Number(item.numerator)
+        mission.limit = Number(item.denominator)
+        mission.isAllComplete = mission.number >= mission.limit
+      }
+    }
+    for (const item of achieve_mission) {
+      const mission = eventInfo?.mission.find(m => m.desc === item.description)
+      if (mission) {
+        mission.number = mission.limit
+        mission.isAllComplete = true
+      }
+    }
+  }
+
+  // 更新古战场活动任务信息
+  if (result_data.popup_data?.teamraid_mission_beginner && Object.keys(result_data.popup_data?.teamraid_mission_beginner).length > 0) {
+    const eventInfo = eventList.value.find(event => event.type === 'teamraid')
+    const progress = result_data.popup_data.teamraid_mission_beginner.progress ?? []
+    const achieve_mission = result_data.popup_data.teamraid_mission_beginner.achieve_mission ?? []
+    for (const item of progress) {
+      const mission = eventInfo?.mission.find(m => m.desc === item.description)
+      if (mission) {
+        mission.number = Number(item.numerator)
+        mission.limit = Number(item.denominator)
+        mission.isAllComplete = mission.number >= mission.limit
+      }
+    }
+    for (const item of achieve_mission) {
+      const mission = eventInfo?.mission.find(m => m.desc === item.description)
+      if (mission) {
+        mission.number = mission.limit
+        mission.isAllComplete = true
+      }
+    }
+  }
+
+  // 更新古战场果报古箱掉落信息
+  if (result_data.character_message?.lottery_reward_info) {
+    const hitItem = result_data.character_message?.lottery_reward_info.find((reward: any) => Number(reward.item_id) === 30781)
+    const eventInfo = eventList.value.find(event => event.type === 'teamraid')
+    if (hitItem && eventInfo) {
+      eventInfo.additional!.lottery.number += Number(hitItem.number)
+    }
+  }
+
+  // 更新炼金活动token数量
+  if (result_data.alchemist?.lottery_reward_info && Object.keys(result_data.alchemist?.lottery_reward_info).length > 0) {
+    const eventInfo = eventList.value.find(event => event.type === 'alchemist')
+    if (eventInfo)
+      eventInfo.count = Number(result_data.alchemist.lottery_reward_info[0].possession_num)
+  }
+
+  const display_list = responseData.display_list
+  if (!display_list || !notificationSetting.value.itemGoal)
+    return
+  const itemList = Object.values(display_list)
+  itemList.forEach((item: any) => {
+    const current = Number(item.number)
+    const goal = Number(item.registration_number)
+    if (goal > 0 && goal <= current)
+      createNotification({ message: `${item.name}达到目标数量`, sound: 'warning' })
+  })
 }
 
 function processEventData(url: string, responseData: any) {
