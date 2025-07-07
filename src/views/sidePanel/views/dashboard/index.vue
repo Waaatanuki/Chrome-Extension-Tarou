@@ -4,6 +4,7 @@ import DailyCost from './components/DailyCost.vue'
 import Status from './components/Status.vue'
 import StoneCount from './components/StoneCount.vue'
 import TreasureMonitor from './components/TreasureMonitor.vue'
+import Advent from './event/Advent.vue'
 import Alchemist from './event/Alchemist.vue'
 import Godslayer from './event/Godslayer.vue'
 import Teamraid from './event/Teamraid.vue'
@@ -18,6 +19,7 @@ const componentMap: Record<string, Component> = {
   'Event/Godslayer': Godslayer,
   'Event/Treasureraid': Treasureraid,
   'Event/Teamraid': Teamraid,
+  'Event/Advent': Advent,
 }
 
 const showWidgets = computed(() =>

@@ -1,4 +1,4 @@
-import type { DisplayItem, EventInfo, Player, TeamraidAdditional } from 'myStorage'
+import type { AdventAdditional, DisplayItem, EventInfo, Mission, Player, TeamraidAdditional } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
 import type { BattleStartJson, GachaResult } from 'source'
 import { load } from 'cheerio'
@@ -744,8 +744,7 @@ function handleResultContent(responseData: any) {
     })
   }
 
-  if (result_data.advent_info?.is_over_limit && notificationSetting.value.isPointOverLimit)
-    createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
+  const isInAdvent = !!Object.keys(result_data.advent_info).length
 
   // 收集掉落信息
   for (const element of Object.values(result_data.rewards.reward_list)) {
@@ -761,6 +760,16 @@ function handleResultContent(responseData: any) {
         hitReward.count += reward.count
       else
         dailyCost.value.rewardList?.push(reward)
+
+      // 更新四象讨伐章
+      if (isInAdvent) {
+        const additional = eventList.value.find(event => event.type === 'advent')?.additional as AdventAdditional | undefined
+        if (additional) {
+          const hitReward = additional.defeatReward.find(r => `item/event/defeat/${r.key}` === value.type)
+          if (hitReward)
+            hitReward.value += Number(value.count)
+        }
+      }
     }
   }
 
@@ -844,6 +853,29 @@ function handleResultContent(responseData: any) {
     const eventInfo = eventList.value.find(event => event.type === 'teamraid')
     if (hitItem && eventInfo) {
       eventInfo.additional!.lottery.number += Number(hitItem.number)
+    }
+  }
+
+  // 更新四象点数信息
+  if (isInAdvent) {
+    const is_over_limit = result_data.advent_info?.is_over_limit
+    if (is_over_limit && notificationSetting.value.isPointOverLimit)
+      createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
+
+    const eventInfo = eventList.value.find(event => event.type === 'advent')
+    if (eventInfo)
+      eventInfo.count += result_data.advent_info.final_point
+  }
+
+  // 更新四象任务信息
+  if (result_data.popup_data?.daily_mission) {
+    const eventInfo = eventList.value.find(event => event.type === 'advent')
+    const daily_mission = result_data.popup_data.daily_mission
+    const mission = eventInfo?.mission.find(m => m.desc === daily_mission.comment)
+    if (mission) {
+      mission.number = Number(daily_mission.num)
+      mission.limit = Number(daily_mission.max_num)
+      mission.isAllComplete = mission.number >= mission.limit
     }
   }
 
@@ -1060,83 +1092,58 @@ function processEventData(url: string, responseData: any) {
   }
 
   // 四象降临
-  if (/\/teamraid1111\d+\/top\/content\/index/.test(url)) {
+  if (url.includes('/advent/top/content/newindex')) {
     if (!responseData.option)
       return
 
-    const eventType = 'teamraid'
+    const eventType = 'advent'
     const htmlString = decodeURIComponent(responseData.data)
     const $ = load(htmlString)
-    const progressInfo = $('.prt-progress-info')
-    const gachaPoint = Number(progressInfo.find('em').eq(0).text())
-    const [number, limit] = progressInfo.find('em').eq(1).text().split('/').map(Number)
-    const honor = Number(progressInfo.find('em').eq(3).text().replace(/,/g, ''))
-    const lottery = { number: Number.isNaN(number) ? 0 : number, limit: Number.isNaN(limit) ? 0 : limit }
-    const isBattleShow = !!$('.prt-battle-show').length
-    const log = {
-      guild1: $('.prt-battle-show').find('.txt-guild-name').text(),
-      guild2: $('.prt-battle-show').find('.txt-rival-name').text(),
-      key: getJapanMMDD(),
-      point: [
-        Date.now(),
-        Number($('.prt-battle-show').find('.txt-guild-point').text().replace(/,/g, '')),
-        Number($('.prt-battle-show').find('.txt-rival-point').text().replace(/,/g, '')),
-      ],
-    }
+    const [point, pointLimit] = $('.prt-point').text().replace(/,/g, '').split('/').map(Number)
 
-    const firstPoint = [getJapan7AMTimestamp(), 0, 0]
+    const missionList: Mission[] = []
+    const $dailyMission = load($('#tpl-pop-check-daily-mission').text())
+    $dailyMission('.prt-mission-info').each((i, el) => {
+      const desc = $dailyMission(el).find('.prt-mission-description').text()
+      const [number, limit] = $dailyMission(el).find('.prt-mission-complete').length
+        ? [3, 3]
+        : $dailyMission(el).find('.prt-mission-progress').text().split('/').map(s => Number(s.replace(/\D+/g, '')))
+      missionList.push({ desc, number, limit, reward: '', isDailyMission: true, isAllComplete: number >= limit })
+    })
 
-    const eventInfo: EventInfo & { additional: TeamraidAdditional } = {
+    const defeat_reward = responseData.option.defeat_reward
+    const defeatSort = [
+      { id: '4', label: '朱雀討伐章', key: 'platinum' },
+      { id: '1', label: '玄武討伐章', key: 'copper' },
+      { id: '3', label: '白虎討伐章', key: 'gold' },
+      { id: '2', label: '青龙討伐章', key: 'silver' },
+      { id: '5', label: '瑞神討伐章', key: 'diamond' },
+    ]
+    const defeatReward: { id: string, label: string, key: string, value: number, isAllComplete: boolean }[] = []
+    $('.prt-boss-tab .btn-boss-tab').each((i, el) => {
+      const defeatInfo = defeatSort[i]
+      const reward = defeat_reward[defeatInfo.id]
+      defeatReward.push({ ...defeatInfo, value: Number($(el).text().replace(/\D+/g, '')), isAllComplete: reward.list.every((r: any) => r.is_clear) })
+    })
+
+    const eventInfo: EventInfo & { additional: AdventAdditional } = {
       type: eventType,
       isActive: true,
-      mission: responseData.option.mission_beginner_list.map((m: any) => ({
-        reward: m.level_details[m.level].reward_name,
-        desc: m.level_details[m.level].description,
-        number: Number(m.progress),
-        limit: Number(m.max_progress),
-        isAllComplete: m.is_all_complete,
-        isDailyMission: m.is_daily_mission,
-      })),
-      count: 0,
+      mission: missionList,
+      count: point,
       updateTime: dayjs().valueOf(),
       additional: {
-        drawnBox: 0,
-        gachaPoint,
-        lottery,
-        honor,
-        log: { ...log, point: [] },
+        isOverflowed: point >= pointLimit,
+        defeatReward,
       },
     }
 
     const index = eventList.value.findIndex(event => event.type === eventType)
-    const eventLog = eventInfo.additional.log
 
     if (index === -1) {
-      eventLog.point = [firstPoint, log.point]
       eventList.value.push(eventInfo)
     }
     else {
-      const existingEvent = eventList.value[index]
-      const existingEventLog = existingEvent.additional?.log
-      eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 0
-
-      if (isBattleShow) {
-        eventLog.point = existingEventLog?.key === log.key
-          ? [...existingEventLog.point, log.point]
-          : [firstPoint, log.point]
-        eventLog.guild1 = log.guild1
-        eventLog.guild2 = log.guild2
-        eventLog.key = log.key
-      }
-      else {
-        eventInfo.additional.log = { ...existingEventLog }
-      }
-
-      // 间隔小于一分钟的不记录
-      if (eventLog.point.length > 1 && (eventLog.point.at(-1)![0] - eventLog.point.at(-2)![0]) < 60 * 1000) {
-        eventLog.point.pop()
-      }
-      eventLog.point = eventLog.point.filter(p => !Number.isNaN(p[1]) && !Number.isNaN(p[2]))
       eventList.value[index] = eventInfo
     }
   }

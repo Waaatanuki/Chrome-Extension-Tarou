@@ -62,6 +62,11 @@ declare module 'myStorage' {
     isDailyMission: boolean
   }
 
+  interface AdventAdditional {
+    isOverflowed: boolean
+    defeatReward: { id: string, label: string, key: string, value: number, isAllComplete: boolean }[]
+  }
+
   interface TeamraidAdditional {
     gachaPoint: number
     drawnBox: number
