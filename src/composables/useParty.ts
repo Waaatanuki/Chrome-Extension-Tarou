@@ -4,6 +4,9 @@ import { cloneDeep } from 'lodash-es'
 import { calculateSettingList, deckList, jobAbilityList, localNpcList } from '~/logic'
 
 export function handleDeckJson(data: DeckJson) {
+  if (!data)
+    return
+
   deckList.value.unshift({
     priority: String(data.priority),
     weapons: processWeapon(data),
