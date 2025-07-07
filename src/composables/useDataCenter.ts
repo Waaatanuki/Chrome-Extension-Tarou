@@ -1111,7 +1111,6 @@ function processEventData(url: string, responseData: any) {
       missionList.push({ desc, number, limit, reward: '', isDailyMission: true, isAllComplete: number >= limit })
     })
 
-    const defeat_reward = responseData.option.defeat_reward
     const defeatSort = [
       { id: '4', label: '朱雀討伐章', key: 'platinum' },
       { id: '1', label: '玄武討伐章', key: 'copper' },
@@ -1119,11 +1118,10 @@ function processEventData(url: string, responseData: any) {
       { id: '2', label: '青龙討伐章', key: 'silver' },
       { id: '5', label: '瑞神討伐章', key: 'diamond' },
     ]
-    const defeatReward: { id: string, label: string, key: string, value: number, isAllComplete: boolean }[] = []
+    const defeatReward: { id: string, label: string, key: string, value: number }[] = []
     $('.prt-boss-tab .btn-boss-tab').each((i, el) => {
       const defeatInfo = defeatSort[i]
-      const reward = defeat_reward[defeatInfo.id]
-      defeatReward.push({ ...defeatInfo, value: Number($(el).text().replace(/\D+/g, '')), isAllComplete: reward.list.every((r: any) => r.is_clear) })
+      defeatReward.push({ ...defeatInfo, value: Number($(el).text().replace(/\D+/g, '')) })
     })
 
     const eventInfo: EventInfo & { additional: AdventAdditional } = {

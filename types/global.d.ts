@@ -64,7 +64,7 @@ declare module 'myStorage' {
 
   interface AdventAdditional {
     isOverflowed: boolean
-    defeatReward: { id: string, label: string, key: string, value: number, isAllComplete: boolean }[]
+    defeatReward: { id: string, label: string, key: string, value: number }[]
   }
 
   interface TeamraidAdditional {
