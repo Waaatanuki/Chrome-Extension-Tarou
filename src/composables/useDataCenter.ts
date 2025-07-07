@@ -1058,6 +1058,88 @@ function processEventData(url: string, responseData: any) {
       eventList.value[index] = eventInfo
     }
   }
+
+  // 四象降临
+  if (/\/teamraid1111\d+\/top\/content\/index/.test(url)) {
+    if (!responseData.option)
+      return
+
+    const eventType = 'teamraid'
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+    const progressInfo = $('.prt-progress-info')
+    const gachaPoint = Number(progressInfo.find('em').eq(0).text())
+    const [number, limit] = progressInfo.find('em').eq(1).text().split('/').map(Number)
+    const honor = Number(progressInfo.find('em').eq(3).text().replace(/,/g, ''))
+    const lottery = { number: Number.isNaN(number) ? 0 : number, limit: Number.isNaN(limit) ? 0 : limit }
+    const isBattleShow = !!$('.prt-battle-show').length
+    const log = {
+      guild1: $('.prt-battle-show').find('.txt-guild-name').text(),
+      guild2: $('.prt-battle-show').find('.txt-rival-name').text(),
+      key: getJapanMMDD(),
+      point: [
+        Date.now(),
+        Number($('.prt-battle-show').find('.txt-guild-point').text().replace(/,/g, '')),
+        Number($('.prt-battle-show').find('.txt-rival-point').text().replace(/,/g, '')),
+      ],
+    }
+
+    const firstPoint = [getJapan7AMTimestamp(), 0, 0]
+
+    const eventInfo: EventInfo & { additional: TeamraidAdditional } = {
+      type: eventType,
+      isActive: true,
+      mission: responseData.option.mission_beginner_list.map((m: any) => ({
+        reward: m.level_details[m.level].reward_name,
+        desc: m.level_details[m.level].description,
+        number: Number(m.progress),
+        limit: Number(m.max_progress),
+        isAllComplete: m.is_all_complete,
+        isDailyMission: m.is_daily_mission,
+      })),
+      count: 0,
+      updateTime: dayjs().valueOf(),
+      additional: {
+        drawnBox: 0,
+        gachaPoint,
+        lottery,
+        honor,
+        log: { ...log, point: [] },
+      },
+    }
+
+    const index = eventList.value.findIndex(event => event.type === eventType)
+    const eventLog = eventInfo.additional.log
+
+    if (index === -1) {
+      eventLog.point = [firstPoint, log.point]
+      eventList.value.push(eventInfo)
+    }
+    else {
+      const existingEvent = eventList.value[index]
+      const existingEventLog = existingEvent.additional?.log
+      eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 0
+
+      if (isBattleShow) {
+        eventLog.point = existingEventLog?.key === log.key
+          ? [...existingEventLog.point, log.point]
+          : [firstPoint, log.point]
+        eventLog.guild1 = log.guild1
+        eventLog.guild2 = log.guild2
+        eventLog.key = log.key
+      }
+      else {
+        eventInfo.additional.log = { ...existingEventLog }
+      }
+
+      // 间隔小于一分钟的不记录
+      if (eventLog.point.length > 1 && (eventLog.point.at(-1)![0] - eventLog.point.at(-2)![0]) < 60 * 1000) {
+        eventLog.point.pop()
+      }
+      eventLog.point = eventLog.point.filter(p => !Number.isNaN(p[1]) && !Number.isNaN(p[2]))
+      eventList.value[index] = eventInfo
+    }
+  }
 }
 
 // 获取设定道具数量信息

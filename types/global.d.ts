@@ -49,15 +49,17 @@ declare module 'myStorage' {
     count: number
     isActive: boolean
     updateTime: number
-    mission: {
-      reward: string
-      desc: string
-      number: number
-      limit: number
-      isAllComplete: boolean
-      isDailyMission: boolean
-    }[]
+    mission: Mission[]
     additional?: Record<string, any>
+  }
+
+  interface Mission {
+    reward: string
+    desc: string
+    number: number
+    limit: number
+    isAllComplete: boolean
+    isDailyMission: boolean
   }
 
   interface TeamraidAdditional {
@@ -318,7 +320,7 @@ declare module 'myStorage' {
   }
 }
 
-declare module 'source'{
+declare module 'source' {
 
   interface GachaResult {
     stone_num: string
@@ -929,7 +931,7 @@ declare module 'source'{
    }
 }
 
-declare module 'battleLog'{
+declare module 'battleLog' {
   import type { Buff, Summon } from 'source'
 
   interface BattleInfo {
@@ -999,7 +1001,7 @@ declare module 'battleLog'{
   }
 }
 
-declare module 'party'{
+declare module 'party' {
   interface Deck {
     priority: string
     weapons: BuildWeapon[]
@@ -1087,7 +1089,7 @@ declare module 'party'{
   }
 }
 
-declare module 'api'{
+declare module 'api' {
   interface DropInfo {
     battleId: string
     questName: string
@@ -1144,7 +1146,7 @@ declare module 'api'{
   }
 }
 
-declare module 'build'{
+declare module 'build' {
   import type { BuildDetail } from 'myStorage'
   import type { Deck } from 'party'
 

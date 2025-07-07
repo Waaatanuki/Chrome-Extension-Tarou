@@ -15,7 +15,9 @@ const normalAttackInfo = computed(() => currentRecord.value?.actionQueue.findLas
     <BossCard />
     <BossBuff />
     <BattleAnalysis :player="currentRecord.player" :turn="battleInfo.bossInfo?.turn" />
-    <NormalAttackInfo v-if="normalAttackInfo" :normal-attack-info="normalAttackInfo" />
+    <div v-if="normalAttackInfo" w-300px rounded-md ring-1 ring-neutral-7>
+      <NormalAttackInfo :normal-attack-info="normalAttackInfo" />
+    </div>
     <MemberList :member-info="battleInfo.memberInfo" :mvp-info="battleInfo.mvpInfo" />
   </div>
   <el-result v-else icon="info" sub-title="进入战斗时将会读取相关信息" />
