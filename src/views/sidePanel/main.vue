@@ -63,7 +63,7 @@ watchEffect(() => {
 
 onMounted(() => {
   chrome.runtime.getContexts({ contextTypes: [chrome.runtime.ContextType.SIDE_PANEL] }).then((ctx) => {
-    if (ctx.length > 1) {
+    if (ctx.filter(c => c.documentUrl === document.URL).length > 1) {
       createNotification({ message: '只能打开一个侧边栏' })
       window.close()
       return
