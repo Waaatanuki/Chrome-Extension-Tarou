@@ -20,7 +20,7 @@ const { missionList = [] } = defineProps<{ missionList?: Mission[] }>()
           :color="mission.isDailyMission ? '#60a5fa' : '#f0cb4f'"
           size="5"
         />
-        <div max-w-165px v-html="mission.desc" />
+        <div max-w-170px v-html="mission.desc" />
       </div>
     </el-tooltip>
 
