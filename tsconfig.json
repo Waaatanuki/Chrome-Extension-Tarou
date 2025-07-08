@@ -11,7 +11,7 @@
       "~/*": ["src/*"]
     },
     "resolveJsonModule": true,
-    "types": ["vite/client", "chrome", "node", "w3c-image-capture", "jquery"],
+    "types": ["vite/client", "chrome", "node", "jquery"],
     "strict": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,

@@ -3,15 +3,6 @@
   "type": "module",
   "version": "0.0.1",
   "packageManager": "pnpm@10.12.4",
-  "watch": {
-    "build": {
-      "patterns": [
-        "src"
-      ],
-      "extensions": "ts,vue,js,html,scss",
-      "runOnChangeOnly": false
-    }
-  },
   "scripts": {
     "dev": "vite --port 1234 --open",
     "ba": "run-s clear build:alp build:prepare build:js",
@@ -22,7 +13,6 @@
     "build:js": "vite build --config vite.config.content.mts && vite build --config vite.config.inject.mts",
     "zip": "tsx scripts/zip.ts",
     "log": "tsx scripts/log.ts",
-    "watch": "npm-watch",
     "clear": "rimraf --glob dist",
     "up": "taze major -I",
     "lint": "eslint --cache ."
@@ -39,7 +29,6 @@
     "@types/md5": "^2.3.5",
     "@types/node": "^24.0.10",
     "@types/uuid": "^10.0.0",
-    "@types/w3c-image-capture": "^1.0.11",
     "@unocss/eslint-config": "^66.3.2",
     "@unocss/reset": "^66.3.2",
     "@vitejs/plugin-vue": "^6.0.0",
@@ -58,7 +47,6 @@
     "lodash-es": "^4.17.21",
     "md5": "^2.3.0",
     "npm-run-all": "^4.1.5",
-    "npm-watch": "^0.13.0",
     "rimraf": "^6.0.1",
     "tsx": "^4.20.3",
     "typescript": "5.7.3",
