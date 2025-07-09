@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ArtifactRule from './components/ArtifactRule.vue'
+import BuildCompare from './components/BuildCompare.vue'
 import Debug from './components/Debug.vue'
 import GachaInfo from './components/GachaInfo.vue'
 import RecoveryItem from './components/RecoveryItem.vue'
@@ -15,6 +16,7 @@ const componentMap: Record<string, Component> = {
   GachaInfo,
   RewardList,
   Debug,
+  BuildCompare,
 }
 </script>
 

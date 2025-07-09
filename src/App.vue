@@ -20,7 +20,7 @@ function handleClick() {
 
 <template>
   <div fc flex-wrap gap-3 p-10>
-    <div h-600px w-500px ring-1>
+    <div h-600px w-600px ring-1>
       <div fc gap-2 p-2>
         <el-input v-model="foo" type="text" style="width: 200px;" />
         <TheButton title="测试" @click="handleClick">

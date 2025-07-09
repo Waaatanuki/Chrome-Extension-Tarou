@@ -9,7 +9,13 @@ const deck = computed(() => deckList.value[0])
 </script>
 
 <template>
-  <div v-if="deck" flex flex-col gap-10px>
+  <div h-10 flex items-center rounded bg-neutral-8 px-4 text-base>
+    <TheButton @click="openPopupWindow('BuildCompare')">
+      配置对比
+    </TheButton>
+  </div>
+
+  <div v-if="deck" my-10px flex flex-col gap-10px>
     <Npc :leader="deck.leader" :npcs="deck.npcs" />
     <Weapon :weapons="deck.weapons" />
     <Summon :summons="deck.summons" />
