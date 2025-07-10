@@ -115,6 +115,15 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
   const partyCondition: PartyCondition[] = []
   const formation = status?.formation || currentRaid?.formation || []
 
+  const currentAbilityList = getAbilityList(status?.ability)
+  currentAbilityList.forEach((abi) => {
+    const hit = currentRaid.abilityList.find(a => a.id === abi.id)
+    if (hit)
+      hit.icon = abi.icon
+    else
+      currentRaid.abilityList.push({ ...abi })
+  })
+
   for (let i = 0; i < 6; i++) {
     const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
     if (playerBuffs?.condition) {
@@ -736,7 +745,10 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   })
 }
 
-function getAbilityList(rawAbility: Ability) {
+function getAbilityList(rawAbility?: Ability) {
+  if (!rawAbility)
+    return []
+
   const prefix = 'ico-ability'
   return Object.values(rawAbility).reduce<Action[]>(
     (pre, cur) => pre.concat(Object.values(cur.list).reduce<Action[]>(
