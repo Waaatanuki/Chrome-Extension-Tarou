@@ -5,6 +5,7 @@ import { battleInfo, battleRecord } from '~/logic'
 const currentRaid = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId))
 const timerValue = computed(() => Date.now() + battleInfo.value.bossInfo!.timer * 1000)
 const bossImgSrc = computed(() => getBossImg('enemy', battleInfo.value.bossInfo!.imgId, 's'))
+const endTimerValue = computed(() => Date.now() + Number(battleInfo.value.bossInfo!.addition?.unique_gauge_time_limit?.rest_time) * 1000 || 0)
 const operationSecond = computed(() => currentRaid.value ? currentRaid.value.startTimer - currentRaid.value.endTimer : 0)
 
 function handleCopy(text: string) {
@@ -38,6 +39,11 @@ function handleCopy(text: string) {
         </div>
       </template>
     </ElProgress>
+    <ElCountdown
+      v-if="battleInfo.bossInfo.addition?.unique_gauge_time_limit"
+      value-style="color: #b91c1c" format="mm:ss" :value="endTimerValue"
+      absolute class="left-1/2 top-1/2 translate-y--100px -translate-x-1/2"
+    />
     <el-tag v-if="battleInfo.bossInfo.interrupt_display_text" absolute class="left-1/2 top-1/2 translate-y-72px -translate-x-1/2">
       {{ battleInfo.bossInfo.interrupt_display_text }}
     </el-tag>
