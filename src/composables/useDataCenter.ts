@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, evokerInfo, gachaRecord, jobAbilityList, localNpcList, materialInfo, notificationSetting, obTabId, recoveryItemList, userInfo, xenoGauge } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, userInfo } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -229,61 +229,13 @@ export async function unpack(parcel: string) {
     recoveryItemList.value.unshift(res)
   }
 
-  // Evoker 素材数据
-  if (url.includes('/item/article_list_by_filter_mode')) {
-    materialInfo.value = responseData
-  }
-
-  // Evoker 贤武数据
-  if (url.includes('/weapon/list')) {
-    const weaponList = responseData.list
-    weaponList.forEach((weapon: any) => {
-      const hitEvoker = evokerInfo.value.find(evoker => evoker.weaponId === Number(weapon.master.id))
-      if (hitEvoker)
-        hitEvoker.weaponLevel = Number(weapon.param.evolution) + 1
-    })
-  }
-
-  // Evoker 塔罗数据
-  if (url.includes('/summon/list')) {
-    const summonList = responseData.list
-    summonList.forEach((summon: any) => {
-      const hitEvoker = evokerInfo.value.find(evoker => evoker.summonId === Number(summon.master.id))
-      if (hitEvoker)
-        hitEvoker.tarotLevel = Number(summon.param.evolution) + 2
-    })
-  }
-
-  // Evoker 贤者数据
-  if (url.includes('/npc/list')) {
-    const npcList = responseData.list
-    npcList.forEach((npc: any) => {
-      const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(npc.master.id))
-      if (hitEvoker)
-        hitEvoker.evokerLevel = Number(npc.param.evolution) + 1
-    })
-  }
-
-  // Evoker 领域数据
-  if (url.includes('/rest/npcevoker/evoker_list')) {
-    const data = responseData.evoker
-    const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(data.param.npc_id))
-    if (hitEvoker)
-      hitEvoker.domainLevel = Number(data.param.evoker_lv)
-  }
-
-  // Evoker 贤者四技能数据 & Party 角色数据
+  // Party 角色数据
   if (url.includes('/npc/npc')) {
     const npcDetail = responseData
 
-    if (!npcDetail.master.id)
+    if (!npcDetail.master?.id)
       return
 
-    const hitEvoker = evokerInfo.value.find(evoker => evoker.npcId === Number(npcDetail.master.id))
-    if (hitEvoker)
-      hitEvoker.isAbility4Release = !!(npcDetail.ability[4] && npcDetail.ability[4].quest?.is_clear)
-
-    // 记录角色信息
     const npcInfo: BuildNpc = {
       paramId: npcDetail.id,
       masterId: Number(npcDetail.master.id),
@@ -321,19 +273,6 @@ export async function unpack(parcel: string) {
       localNpcList.value[hitIndex] = { ...npcInfo, exlb: localNpcList.value[hitIndex].exlb }
 
     localNpcList.value = localNpcList.value.filter(n => !Object.hasOwn(n, 'id'))
-  }
-
-  // Evoker 获取沙盒4个六道boss进度条
-  if (url.includes('/rest/replicard/stage')) {
-    if ([6, 7, 8, 9].includes(Number(responseData.stage.stage_id))) {
-      for (const division of Object.values(responseData.map.division_list)) {
-        const hitQuest = (division as any).quest_list.find((quest: any) => xenoGauge.value.some(xeno => xeno.questId === quest.quest_id))
-        if (hitQuest) {
-          xenoGauge.value.find(xeno => xeno.questId === hitQuest.quest_id)!.gauge = hitQuest.xeno_sephira_gauge || 0
-          break
-        }
-      }
-    }
   }
 
   // Party 记录伤害计算设置
