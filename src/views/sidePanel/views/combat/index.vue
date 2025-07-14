@@ -12,6 +12,7 @@ const normalAttackInfo = computed(() => currentRecord.value?.actionQueue.findLas
 
 <template>
   <div v-if="currentRecord" fc flex-col gap-10px>
+    <MemberList v-if="battleInfo.inLobby" :member-info="battleInfo.lobbyMemberList" />
     <BossCard />
     <BossBuff />
     <BattleAnalysis :player="currentRecord.player" :turn="battleInfo.bossInfo?.turn" />
