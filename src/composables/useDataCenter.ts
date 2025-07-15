@@ -838,7 +838,7 @@ function handleResultContent(responseData: any) {
 }
 
 function processEventData(url: string, responseData: any) {
-  // Event 获取战货活动信息
+  // 战货活动
   if (/\/treasureraid\d+\/top\/content\/newindex/.test(url)) {
     if (!responseData.option)
       return
@@ -873,7 +873,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // Event 获取古战场活动信息
+  // 古战场
   if (/\/teamraid\d+\/top\/content\/index/.test(url)) {
     if (!responseData.option)
       return
@@ -955,7 +955,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // Event 获取古战场战货信息
+  // 古战场战货
   if (/\/teamraid\d+\/gacha\/content\/index/.test(url)) {
     const eventType = 'teamraid'
     const eventInfo = eventList.value.find(event => event.type === eventType)
@@ -970,7 +970,7 @@ function processEventData(url: string, responseData: any) {
     eventInfo.additional.gachaPoint = gachaPoint
   }
 
-  // Event 获取炼金活动信息
+  // 炼金活动
   if (url.includes('/frontier/alchemy/content/index')) {
     if (!responseData.option)
       return
@@ -1000,7 +1000,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // Event 获取神灭战活动信息
+  // 神灭战
   if (url.includes('rest/godslayer/top/quest_list')) {
     if (!responseData.option)
       return
