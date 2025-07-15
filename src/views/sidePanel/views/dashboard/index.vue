@@ -7,6 +7,7 @@ import TreasureMonitor from './components/TreasureMonitor.vue'
 import Advent from './event/Advent.vue'
 import Alchemist from './event/Alchemist.vue'
 import Godslayer from './event/Godslayer.vue'
+import Interlude from './event/Interlude.vue'
 import Teamraid from './event/Teamraid.vue'
 import Treasureraid from './event/Treasureraid.vue'
 
@@ -20,6 +21,7 @@ const componentMap: Record<string, Component> = {
   'Event/Treasureraid': Treasureraid,
   'Event/Teamraid': Teamraid,
   'Event/Advent': Advent,
+  'Event/Interlude': Interlude,
 }
 
 const showWidgets = computed(() =>

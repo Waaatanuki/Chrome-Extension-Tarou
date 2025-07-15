@@ -75,6 +75,10 @@ declare module 'myStorage' {
     log: { guild1: string, guild2: string, key: string, point: number[][] }
   }
 
+  interface InterludeAdditional {
+    dailyList: Mission[]
+  }
+
   interface BattleMemo {
     battleId: string
     questName: string

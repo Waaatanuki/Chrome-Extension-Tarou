@@ -825,6 +825,28 @@ function handleResultContent(responseData: any) {
       eventInfo.count = Number(result_data.alchemist.lottery_reward_info[0].possession_num)
   }
 
+  // 更新转世外传token数量
+  if (result_data.interlude_info && Object.keys(result_data.interlude_info).length > 0) {
+    const eventInfo = eventList.value.find(event => event.type === 'interlude')
+    if (eventInfo)
+      eventInfo.count += Number(result_data.interlude_info.token)
+  }
+
+  // 更新转世外传任务信息
+  if (result_data.replicard.event_mission_result?.mission_list) {
+    const eventInfo = eventList.value.find(event => event.type === 'interlude')
+    if (eventInfo) {
+      for (const mission of eventInfo.additional!.dailyList) {
+        const hitMission = result_data.replicard.event_mission_result.mission_list.find((m: any) => m.description === mission.desc)
+        if (hitMission) {
+          mission.number = hitMission.progress.current
+          mission.limit = hitMission.progress.max
+          mission.isAllComplete = hitMission.progress.current >= hitMission.progress.max
+        }
+      }
+    }
+  }
+
   const display_list = responseData.display_list
   if (!display_list || !notificationSetting.value.itemGoal)
     return
@@ -1082,6 +1104,94 @@ function processEventData(url: string, responseData: any) {
     }
     else {
       eventList.value[index] = eventInfo
+    }
+  }
+
+  // 转世外传
+  if (url.includes('/interlude/top/content/index')) {
+    if (!responseData.option)
+      return
+
+    const eventType = 'interlude'
+
+    const dailyList: Mission[] = []
+    const daily_popup = responseData.option.daily_popup
+    for (const mission of daily_popup) {
+      dailyList.push({
+        reward: mission.reward_name,
+        desc: mission.description,
+        number: mission.progress.current,
+        limit: mission.progress.max,
+        isAllComplete: mission.progress.current >= mission.progress.max,
+        isDailyMission: true,
+      })
+    }
+
+    const missionList: Mission[] = []
+    const missionInfo = responseData.option.current_progress.missions_cleared
+    const sort = { 1: 'C级任务', 2: 'B级任务', 3: 'A级任务', 4: 'S级任务' }
+    for (const [key, label] of Object.entries(sort)) {
+      const mission = missionInfo[key]
+      missionList.push({
+        reward: '',
+        desc: label,
+        number: mission.current,
+        limit: mission.max,
+        isAllComplete: mission.current >= mission.max,
+        isDailyMission: false,
+      })
+    }
+
+    const eventInfo = {
+      type: eventType,
+      isActive: true,
+      mission: missionList,
+      count: Number(responseData.option.current_progress.sephira_token_balance),
+      updateTime: dayjs().valueOf(),
+      additional: {
+        dailyList,
+      },
+    }
+
+    const index = eventList.value.findIndex(event => event.type === eventType)
+    if (index === -1) {
+      eventList.value.push(eventInfo)
+    }
+    else {
+      if (eventInfo.additional.dailyList.length === 0) {
+        eventInfo.additional.dailyList = eventList.value[index].additional?.dailyList || []
+      }
+
+      eventList.value[index] = eventInfo
+    }
+  }
+
+  // 转世外传任务
+  if (url.includes('/rest/interlude/mission/mission_list')) {
+    const eventType = 'interlude'
+    const eventInfo = eventList.value.find(event => event.type === eventType)
+    if (!eventInfo)
+      return
+
+    const list = responseData.list.filter((m: any) => !m.mission_rank)
+
+    for (const mission of list) {
+      const hitMission = eventInfo.additional!.dailyList.find((m: Mission) => m.desc === mission.description)
+      if (hitMission) {
+        hitMission.number = mission.progress.current
+        hitMission.limit = mission.progress.max
+        hitMission.isAllComplete = mission.progress.current >= mission.progress.max
+      }
+      else {
+        eventInfo.additional!.dailyList.unshift({
+          reward: mission.reward_name,
+          desc: mission.description,
+          number: mission.progress.current,
+          limit: mission.progress.max,
+          isAllComplete: mission.progress.current >= mission.progress.max,
+          isDailyMission: true,
+        })
+      }
     }
   }
 }
