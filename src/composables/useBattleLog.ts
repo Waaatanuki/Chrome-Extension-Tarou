@@ -13,7 +13,11 @@ export function handleStartJson(data: BattleStartJson) {
       ? data.special_skill_indicate[0]?.interrupt_display_text
       : ''
 
-  const addition = { unique_gauge_time_limit: data.unique_gauge_time_limit }
+  const addition = {
+    restTime: data.unique_gauge_time_limit
+      ? Date.now() + Number(data.unique_gauge_time_limit.rest_time) * 1000
+      : undefined,
+  }
 
   battleInfo.value.bossInfo = {
     questId: data.quest_id,
@@ -25,6 +29,7 @@ export function handleStartJson(data: BattleStartJson) {
     hpmax: Number(boss.hpmax),
     hpPercent: Number.parseFloat((Number(boss.hp) / Number(boss.hpmax) * 100).toFixed(2)),
     timer: data.timer,
+    countDownTime: Date.now() + data.timer * 1000,
     turn: data.turn,
     addition,
     interrupt_display_text,
@@ -81,7 +86,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.bossInfo.fellow = Number(status?.fellow)
 
   if (status?.unique_gauge_time_limit && battleInfo.value.bossInfo)
-    battleInfo.value.bossInfo.addition = { unique_gauge_time_limit: status.unique_gauge_time_limit }
+    battleInfo.value.bossInfo.addition = { restTime: Date.now() + Number(status.unique_gauge_time_limit.rest_time) * 1000 }
 
   if (battleInfo.value.bossInfo && status?.special_skill_indicate)
     battleInfo.value.bossInfo.interrupt_display_text = status.special_skill_indicate[0]?.interrupt_display_text
@@ -91,6 +96,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.bossInfo.hp = bossGauge.hp!
     battleInfo.value.bossInfo.hpPercent = Number.parseFloat((Number(bossGauge.hp) / Number(battleInfo.value.bossInfo.hpmax) * 100).toFixed(2))
     battleInfo.value.bossInfo.timer = status?.timer ?? battleInfo.value.bossInfo.timer
+    battleInfo.value.bossInfo.countDownTime = status?.timer ? Date.now() + status.timer * 1000 : battleInfo.value.bossInfo.countDownTime
     battleInfo.value.bossInfo.turn = status?.turn ?? battleInfo.value.bossInfo.turn
   }
   const isBossDie = data.scenario.some(item => item.cmd === 'die' && item.to === 'boss')
@@ -99,6 +105,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.bossInfo.hp = 0
     battleInfo.value.bossInfo.hpPercent = 0
     battleInfo.value.bossInfo.timer = status?.timer ?? battleInfo.value.bossInfo.timer
+    battleInfo.value.bossInfo.countDownTime = status?.timer ? Date.now() + status.timer * 1000 : battleInfo.value.bossInfo.countDownTime
     currentRaid.endTimestamp = Date.now()
   }
 

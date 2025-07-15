@@ -962,15 +962,12 @@ declare module 'battleLog' {
     hpPercent: number
     turn: number
     timer: number
+    countDownTime: number
     interrupt_display_text?: string
     lv: string
     attribute: string
     addition?: {
-      unique_gauge_time_limit?: {
-        default_time_limit: string
-        limit_reduce_second: number
-        rest_time: number
-      }
+      restTime?: number
     }
     limitNum: number
     fellow: number
