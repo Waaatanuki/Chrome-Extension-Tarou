@@ -93,6 +93,32 @@ declare module 'myStorage' {
     questName: string
     memo: string
   }
+
+  interface GachaInfo {
+    id?: string
+    serviceStart?: string
+    serviceEnd?: string
+    randomKey?: string
+    ratio1?: {
+      id: string
+      updateTime: number
+      appear: GachaNpc[]
+    }
+    ratio2?: {
+      id: string
+      updateTime: number
+      appear: GachaNpc[]
+    }
+  }
+
+  interface GachaNpc {
+    id: number
+    rate: number
+    cat: string
+    type: string
+    incidence: boolean
+  }
+
   interface GachaRecord {
     random_key: string
     service_start: string
@@ -330,6 +356,26 @@ declare module 'myStorage' {
 }
 
 declare module 'source' {
+
+  interface GachaRatioAppear {
+    rarity: number
+    rarity_name: string
+    category: number
+    category_name: string
+    item: GachaRatioAppearItem[]
+  }
+
+  interface GachaRatioAppearItem {
+    name: string
+    drop_rate: string
+    attribute: string
+    kind?: string
+    incidence?: string
+    reward_id: number
+    character_name?: string
+    is_season: boolean
+    season_message: string
+  }
 
   interface GachaResult {
     stone_num: string

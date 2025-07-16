@@ -8,6 +8,7 @@ import Build from './views/build/index.vue'
 import Combat from './views/combat/index.vue'
 import Dashborad from './views/dashboard/index.vue'
 import Drop from './views/drop/index.vue'
+import Gacha from './views/gacha/index.vue'
 import History from './views/history/index.vue'
 import Info from './views/info/index.vue'
 import Party from './views/party/index.vue'
@@ -24,6 +25,7 @@ const componentMap: Record<string, Component> = {
   History,
   Patient,
   Battle,
+  Gacha,
   Setting,
   Info,
 }
@@ -41,6 +43,7 @@ const upViewList = computed(() => [
   { key: 'Combat', lable: '战斗信息', icon: 'game-icons:battle-axe' },
   { key: 'History', lable: '战斗记录', icon: 'game-icons:scroll-unfurled' },
   { key: 'Patient', lable: '标记玩家', icon: 'material-symbols:patient-list' },
+  { key: 'Gacha', lable: '抽卡模拟', icon: 'game-icons:mimic-chest' },
   { key: 'Battle', lable: '接战', icon: 'game-icons:crossed-swords', hidden: !inBattle.value },
 ].filter(m => !m.hidden))
 

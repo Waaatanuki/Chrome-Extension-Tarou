@@ -1,11 +1,11 @@
-import type { AdventAdditional, DisplayItem, EventInfo, Mission, Player, TeamraidAdditional } from 'myStorage'
+import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, Player, TeamraidAdditional } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
-import type { BattleStartJson, GachaResult } from 'source'
+import type { BattleStartJson, GachaRatioAppear, GachaRatioAppearItem, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, userInfo } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, userInfo } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -158,6 +158,39 @@ export async function unpack(parcel: string) {
         .find((item: any) => item.text_btn_image === 'text_legend')
         .legend_gacha_ticket_list.find((ticket: any) => Number(ticket.ticket_id) === 20011).ticket_num,
     )
+
+    gachaInfo.value.id = responseData.legend.lineup[0].id
+    gachaInfo.value.randomKey = responseData.legend.random_key
+    gachaInfo.value.serviceStart = responseData.legend.lineup[0].service_start
+    gachaInfo.value.serviceEnd = responseData.legend.lineup[0].service_end
+  }
+
+  // Gacha 卡池数据
+  if (url.includes('/gacha/provision_ratio/legend/')) {
+    const regex = /\/gacha\/provision_ratio\/legend\/(\d+)\/(\d+)/
+    const match = url.match(regex)
+
+    if (!match || match[1] !== gachaInfo.value.id)
+      return
+
+    const cardType = ['weapon', 'weapon', 'summon']
+    const rarityType = ['', '', 'r', 'sr', 'ssr']
+    const data = responseData.appear as GachaRatioAppear[]
+
+    const createGachaNpc = (item: GachaRatioAppear, obj: GachaRatioAppearItem): GachaNpc => ({
+      id: obj.reward_id,
+      rate: Number.parseFloat(obj.drop_rate) / 100,
+      cat: cardType[item.category],
+      type: rarityType[item.rarity],
+      incidence: !!obj.incidence,
+    })
+
+    const ratioType = match[2] as '1' | '2'
+    gachaInfo.value[`ratio${ratioType}`] = {
+      id: match[1],
+      updateTime: Date.now(),
+      appear: data.flatMap(item => item.item.map(obj => createGachaNpc(item, obj)) || []),
+    }
   }
 
   // Dashboard 抽卡记录

@@ -1,6 +1,6 @@
 import type { DropInfo } from 'api'
 import type { BattleInfo } from 'battleLog'
-import type { ArtifactRule, BattleMemo, BattleRecord, DailyCost, DisplayItem, EventInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestMemo, RecoveryItem, UserInfo, Widget } from 'myStorage'
+import type { ArtifactRule, BattleMemo, BattleRecord, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestMemo, RecoveryItem, UserInfo, Widget } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
@@ -60,3 +60,6 @@ export const artifactRuleList = useWebExtensionStorage<ArtifactRule[]>('artifact
 // Build
 export const buildQuestId = useWebExtensionStorage('buildQuestId', '')
 export const buildNpcFilter = useWebExtensionStorage<number[]>('buildNpcFilter', [])
+
+// Gacha
+export const gachaInfo = useWebExtensionStorage<GachaInfo>('gachaInfo', {})
