@@ -15,7 +15,7 @@ function reset() {
       <div flex justify-between>
         <div fc gap-2>
           <div>{{ `攒井第${dayjs().diff(dayjs.unix(saveStoneDate), "day")}天` }}</div>
-          <div i-carbon:document icon-btn title="查看抽卡记录" @click="openPopupWindow('GachaInfo')" />
+          <div i-carbon:document icon-btn title="查看抽卡记录" @click="openPopupWindow('GachaRecord')" />
           <div i-carbon:reset icon-btn title="重置天数" @click="reset" />
         </div>
         <div fc text-orange-600 font-bold>
