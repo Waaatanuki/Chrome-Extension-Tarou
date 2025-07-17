@@ -37,53 +37,7 @@ const data = ref({})
     <div h-600px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          <el-card header-class="my-card-header" body-style="padding: 10px">
-            <template #header>
-              <div v-if="gachaInfo.id" flex items-center justify-between text-12px>
-                <div>
-                  <el-tooltip content="编号: 123231">
-                    <img w-100px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/banner/gacha/banner_455j7uhn_1.png">
-                  </el-tooltip>
-                </div>
-                <div flex flex-col items-end justify-center gap-5px>
-                  <div>{{ `2025/7/15 19:00` }}</div>
-                  <div>{{ `2025/7/19 18:59` }}</div>
-                </div>
-              </div>
-              <div v-else text-center>
-                未获取卡池信息
-              </div>
-            </template>
-            <div text-12px>
-              <div flex items-center justify-between>
-                <div>{{ `卡池概率1(${gachaInfo.ratio1?.id || '未获取'})` }}</div>
-                <div>{{ gachaInfo.ratio1 ? useDateFormat(gachaInfo.ratio1.updateTime, 'MM-DD HH:mm') : '' }}</div>
-              </div>
-              <div flex items-center justify-between>
-                <div>{{ `卡池概率2(${gachaInfo.ratio2?.id || '未获取'})` }}</div>
-                <div>{{ gachaInfo.ratio2 ? useDateFormat(gachaInfo.ratio2.updateTime, 'MM-DD HH:mm') : '' }}</div>
-              </div>
-            </div>
-          </el-card>
-
-          <el-descriptions direction="vertical" :column="1" border size="small">
-            <el-descriptions-item :label="`当前卡池(${gachaInfo.id || '未获取'})`">
-              <div>
-                <div v-if="gachaInfo.id " flex items-center justify-between>
-                  <div>持续时间</div>
-                  <div>{{ `${gachaInfo.serviceStart}—${gachaInfo.serviceEnd}` }}</div>
-                </div>
-                <div flex items-center justify-between>
-                  <div>{{ `卡池概率1(${gachaInfo.ratio1?.id || '未获取'})` }}</div>
-                  <div>{{ gachaInfo.ratio1 ? useDateFormat(gachaInfo.ratio1.updateTime, 'MM-DD HH:mm') : '' }}</div>
-                </div>
-                <div flex items-center justify-between>
-                  <div>{{ `卡池概率2(${gachaInfo.ratio2?.id || '未获取'})` }}</div>
-                  <div>{{ gachaInfo.ratio2 ? useDateFormat(gachaInfo.ratio2.updateTime, 'MM-DD HH:mm') : '' }}</div>
-                </div>
-              </div>
-            </el-descriptions-item>
-          </el-descriptions>
+          content
         </div>
       </el-scrollbar>
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>

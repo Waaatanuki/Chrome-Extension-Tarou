@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { MemberInfo } from 'battleLog'
-import { markedUserList, userInfo } from '~/logic'
+import { battleInfo, markedUserList, userInfo } from '~/logic'
 
 const props = defineProps<{
   memberInfo?: MemberInfo[]
@@ -12,6 +12,28 @@ const props = defineProps<{
 }>()
 
 const MAX_RANK = '400'
+const targetStamp = ['stamp44.png', 'stamp191.png']
+
+const stampList = computed(() => {
+  return battleInfo.value.chatList?.filter(c => c.isStamp && targetStamp.includes(c.content))
+    .reduce<{ userId: string, timestamp: number, nickname: string, isStamp: boolean, content: string }[]>((pre, cur) => {
+      if (pre.some(s => s.userId === cur.userId)) {
+        pre = []
+      }
+      pre.push(cur)
+      return pre
+    }, []) || []
+})
+
+const data = computed(() =>
+  props.memberInfo?.reduce<MemberInfo[]>((pre, cur) => {
+    const hit = props.mvpInfo?.find(m => m.userId === cur.userId)
+    const info = hit ? { rank: hit.rank, point: hit.point } : { rank: 999 }
+    const stamp = stampList.value.find(s => s.userId === cur.userId)
+    pre.push({ ...cur, ...info, stamp: stamp?.content })
+    return pre
+  }, []).sort((a, b) => Number(a.rank) - Number(b.rank)),
+)
 
 function handleMark(member: MemberInfo) {
   const hit = markedUserList.value.find(user => user.id === member.userId)
@@ -31,15 +53,6 @@ function handleMark(member: MemberInfo) {
     ElMessage.success('成功标记该玩家')
   }
 }
-
-const data = computed(() =>
-  props.memberInfo?.reduce<MemberInfo[]>((pre, cur) => {
-    const hit = props.mvpInfo?.find(m => m.userId === cur.userId)
-    const info = hit ? { rank: hit.rank, point: hit.point } : { rank: 999 }
-    pre.push({ ...cur, ...info })
-    return pre
-  }, []).sort((a, b) => Number(a.rank) - Number(b.rank)),
-)
 </script>
 
 <template>
@@ -61,7 +74,7 @@ const data = computed(() =>
         <div v-if="member.is_dead" class="absolute h-full w-full fc bg-black/40">
           <span text-red font-bold>Dead</span>
         </div>
-        <div ml-35px flex flex-col justify-center gap-5px text-start font-medium>
+        <div ml-35px flex flex-col justify-center text-start font-medium>
           <span w-100px overflow-hidden text-ellipsis whitespace-nowrap>
             {{ member.nickname }}
           </span>
@@ -70,13 +83,14 @@ const data = computed(() =>
           </span>
         </div>
 
-        <ElTag effect="dark" size="small" :type="member.userRank === MAX_RANK ? 'warning' : 'info'" absolute right--1px top--10px>
+        <ElTag effect="dark" size="small" :type="member.userRank === MAX_RANK ? 'warning' : 'info'" absolute left-5px top--10px>
           {{ `Lv${member.userRank}` }}
         </ElTag>
         <ElTag v-if="member.rank && member.rank !== 999" effect="dark" size="small" type="danger" absolute left--8px my-auto>
           {{ `#${member.rank}` }}
         </ElTag>
-        <img :src="member.jobIcon" absolute left-5px top--12px h-24px>
+        <img :src="member.jobIcon" absolute bottom--10px left-5px h-24px>
+        <img v-if="member.stamp" :src="getStamp(member.stamp)" absolute right-5px top--15px h-30px>
         <div :class="member.attributeClass" scale-150 />
         <div v-if="markedUserList.some(user => user.id === member.userId)" i-carbon:bookmark-filled absolute bottom--10px right-25px text-orange />
       </div>

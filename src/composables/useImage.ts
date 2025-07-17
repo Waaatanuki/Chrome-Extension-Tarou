@@ -84,3 +84,7 @@ export function getBuffIcon(buff: Buff, turn: number) {
 
   return `${iconUrl}${buff.status.replace(/-/g, '')}.png`
 }
+
+export function getStamp(content: string) {
+  return `${imgUri}/sp/assets/stamp/full//${content}`
+}

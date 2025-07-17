@@ -277,6 +277,27 @@ export function handleWsPayloadJson(data: WsPayloadData) {
 
   if (data.mvpUpdate)
     battleInfo.value.mvpInfo = data.mvpUpdate.mvpList.map(mvp => ({ userId: mvp.user_id, rank: mvp.rank, point: Number(mvp.point) }))
+
+  if (data.chatAdd) {
+    battleInfo.value.chatList ??= []
+    battleInfo.value.chatList.push({
+      userId: data.chatAdd.userId,
+      timestamp: data.chatAdd.timestamp,
+      nickname: data.chatAdd.nickname,
+      isStamp: data.chatAdd.commentData.isStamp,
+      content: data.chatAdd.commentData.content,
+    })
+  }
+
+  if (data.raidGet) {
+    battleInfo.value.chatList = data.raidGet.map(item => ({
+      userId: item.userId,
+      timestamp: item.timestamp,
+      nickname: item.nickname,
+      isStamp: item.commentData.isStamp,
+      content: item.commentData.content,
+    }))
+  }
 }
 
 function mergerCondition(condition: Condition) {
@@ -352,6 +373,7 @@ function recordRaidInfo(data: BattleStartJson) {
   }, [])
 
   battleInfo.value.mvpInfo = []
+  battleInfo.value.chatList = []
   battleInfo.value.normalAttackInfo = { hit: 0, ability: 0, special: 0, total: 0 }
   const formation = Object.values(data.ability).map(a => a.pos)
   const guard_status = Object.values(data.ability).map(a => ({ num: a.pos, is_guard_status: 0 }))

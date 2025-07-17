@@ -952,6 +952,22 @@ declare module 'source' {
        timestamp: string
        user_id: string
      }
+     chatAdd?: ChatInfo
+     raidGet?: ChatInfo[]
+   }
+
+   interface ChatInfo {
+     viewerId: string
+     chatId: string
+     categoryId: string
+     userId: string
+     timestamp: number
+     nickname: string
+     userImage: string
+     commentData: {
+       isStamp: boolean
+       content: string
+     }
    }
 
    interface Artifact {
@@ -1004,6 +1020,13 @@ declare module 'battleLog' {
     buffInfo: BuffInfo
     leaderAttr: string
     normalAttackInfo: NormalAttackInfo
+    chatList: {
+      userId: string
+      timestamp: number
+      nickname: string
+      isStamp: boolean
+      content: string
+    }[]
   }
 
   interface BossInfo {
@@ -1048,6 +1071,7 @@ declare module 'battleLog' {
     is_host?: boolean
     point?: number
     rank?: number
+    stamp?: string
   }
 
   interface NormalAttackInfo {
