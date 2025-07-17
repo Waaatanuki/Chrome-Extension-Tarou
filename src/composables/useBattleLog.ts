@@ -289,7 +289,7 @@ export function handleWsPayloadJson(data: WsPayloadData) {
     })
   }
 
-  if (data.raidGet) {
+  if (data.raidGet && typeof data.raidGet !== 'boolean') {
     battleInfo.value.chatList = data.raidGet.map(item => ({
       userId: item.userId,
       timestamp: item.timestamp,
