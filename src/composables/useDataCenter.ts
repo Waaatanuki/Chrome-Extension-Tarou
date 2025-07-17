@@ -179,7 +179,7 @@ export async function unpack(parcel: string) {
 
     const createGachaNpc = (item: GachaRatioAppear, obj: GachaRatioAppearItem): GachaNpc => ({
       id: obj.reward_id,
-      rate: Number.parseFloat(obj.drop_rate) / 100,
+      rate: Number.parseFloat(obj.drop_rate) * 1000 / 100000,
       cat: cardType[item.category],
       type: rarityType[item.rarity],
       incidence: !!obj.incidence,
