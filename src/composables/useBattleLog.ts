@@ -1,5 +1,5 @@
 import type { Action, BattleRecord, PartyCondition, Player } from 'myStorage'
-import type { Ability, AttackResultJson, BattleStartJson, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
+import type { Ability, AttackResultJson, BattleStartJson, ChatInfoEN, ChatInfoJP, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
 import { battleInfo, battleRecord, notificationSetting, userInfo } from '~/logic'
 
 export function handleStartJson(data: BattleStartJson) {
@@ -289,14 +289,28 @@ export function handleWsPayloadJson(data: WsPayloadData) {
     })
   }
 
+  if (data.raidPost) {
+    battleInfo.value.chatList ??= []
+    battleInfo.value.chatList.push({
+      userId: data.raidPost.user_id,
+      timestamp: Math.floor(Number(data.raidPost.timestamp)) * 1000,
+      nickname: data.raidPost.user_name,
+      isStamp: data.raidPost.user_comment.is_stamp,
+      content: `stamp${data.raidPost.user_comment.stamp_id}.png`,
+    })
+  }
+
   if (data.raidGet && typeof data.raidGet !== 'boolean') {
     battleInfo.value.chatList = data.raidGet.map(item => ({
-      userId: item.userId,
-      timestamp: item.timestamp,
-      nickname: item.nickname,
-      isStamp: item.commentData.isStamp,
-      content: item.commentData.content,
-    }))
+      userId: (item as ChatInfoJP).userId ?? (item as ChatInfoEN).user_id,
+      timestamp: typeof item.timestamp === 'number'
+        ? item.timestamp
+        : Math.floor(Number(item.timestamp)) * 1000,
+      nickname: (item as ChatInfoJP).nickname ?? (item as ChatInfoEN).user_name,
+      isStamp: (item as ChatInfoJP).commentData?.isStamp ?? (item as ChatInfoEN).user_comment?.is_stamp,
+      content: (item as ChatInfoJP).commentData?.content ?? `stamp${(item as ChatInfoEN).user_comment?.stamp_id || 0}.png`,
+    }),
+    )
   }
 }
 

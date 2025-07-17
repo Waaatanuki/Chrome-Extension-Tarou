@@ -952,11 +952,12 @@ declare module 'source' {
        timestamp: string
        user_id: string
      }
-     chatAdd?: ChatInfo
-     raidGet?: ChatInfo[]
+     chatAdd?: ChatInfoJP
+     raidPost?: ChatInfoEN
+     raidGet?: (ChatInfoJP | ChatInfoEN)[]
    }
 
-   interface ChatInfo {
+   interface ChatInfoJP {
      viewerId: string
      chatId: string
      categoryId: string
@@ -968,6 +969,17 @@ declare module 'source' {
        isStamp: boolean
        content: string
      }
+   }
+
+   interface ChatInfoEN {
+     user_id: string
+     user_name: string
+     user_comment: {
+       is_stamp: boolean
+       text: string
+       stamp_id: number
+     }
+     timestamp: string
    }
 
    interface Artifact {
