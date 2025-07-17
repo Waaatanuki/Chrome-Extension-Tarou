@@ -193,6 +193,28 @@ export async function unpack(parcel: string) {
     }
   }
 
+  // Gacha 卡池角色数据
+  if (url.includes('/gacha/content/release/legend/')) {
+    const regex = /\/gacha\/content\/release\/legend\/(\d+)/
+    const match = url.match(regex)
+    if (!match)
+      return
+
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+
+    const ids: string[] = []
+    $(`.img-open-character`).each((i, el) => {
+      ids.push(el.attribs.alt)
+    })
+
+    gachaInfo.value.npc = {
+      id: match[1],
+      updateTime: Date.now(),
+      list: ids,
+    }
+  }
+
   // Dashboard 抽卡记录
   if (url.includes('gacha/result//legend')) {
     const RawData: GachaResult = responseData

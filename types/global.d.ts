@@ -109,6 +109,11 @@ declare module 'myStorage' {
       updateTime: number
       appear: GachaNpc[]
     }
+    npc?: {
+      id: string
+      updateTime: number
+      list: string[]
+    }
   }
 
   interface GachaNpc {
