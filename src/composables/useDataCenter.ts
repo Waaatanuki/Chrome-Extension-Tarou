@@ -436,7 +436,7 @@ export async function unpack(parcel: string) {
     const battleId = String(responseData.raid_id)
     const timestamp = new Date().valueOf()
     const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
-    if (!hitMemo) {
+    if (!hitMemo && responseData.boss) {
       const questName = responseData.boss.param[0].monster
 
       const memo = { battleId, questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') }
