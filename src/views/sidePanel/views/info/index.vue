@@ -201,4 +201,18 @@ onMounted(() => {
     </template>
     <img :src="getLocalImg('reload')">
   </el-popover>
+
+  <div m-auto mt-10px w-150px text-12px>
+    <a href="https://afdian.com/a/tarou" target="_blank" class="group">
+      <div fc gap-1 rounded-lg px-4 py-2 group-hover=" text-yellow">
+        <div
+          i-ph-lightning-duotone group-hover="i-ph-lightning-fill"
+          transition-all
+        />
+        <div>
+          在爱发电上支持我
+        </div>
+      </div>
+    </a>
+  </div>
 </template>
