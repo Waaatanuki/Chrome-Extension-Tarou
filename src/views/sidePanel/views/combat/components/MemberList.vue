@@ -17,9 +17,9 @@ const targetStamp = ['stamp44.png', 'stamp191.png']
 const stampList = computed(() => {
   return battleInfo.value.chatList?.filter(c => c.isStamp && targetStamp.includes(c.content))
     .reduce<{ userId: string, timestamp: number, nickname: string, isStamp: boolean, content: string }[]>((pre, cur) => {
-      if (pre.some(s => s.userId === cur.userId)) {
+      if (pre.some(s => s.userId === cur.userId) || !cur.userId)
         pre = []
-      }
+
       pre.push(cur)
       return pre
     }, []) || []
@@ -34,6 +34,16 @@ const data = computed(() =>
     return pre
   }, []).sort((a, b) => Number(a.rank) - Number(b.rank)),
 )
+
+function clearStamp() {
+  battleInfo.value.chatList!.push({
+    isStamp: true,
+    content: 'stamp44.png',
+    userId: '',
+    timestamp: 0,
+    nickname: '',
+  })
+}
 
 function handleMark(member: MemberInfo) {
   const hit = markedUserList.value.find(user => user.id === member.userId)
@@ -90,7 +100,7 @@ function handleMark(member: MemberInfo) {
           {{ `#${member.rank}` }}
         </ElTag>
         <img :src="member.jobIcon" absolute bottom--10px left-5px h-24px>
-        <img v-if="member.stamp" :src="getStamp(member.stamp)" absolute right-5px top--15px h-30px>
+        <img v-if="member.stamp" :src="getStamp(member.stamp)" absolute right-5px top--15px h-30px @click="clearStamp">
         <div :class="member.attributeClass" scale-150 />
         <div v-if="markedUserList.some(user => user.id === member.userId)" i-carbon:bookmark-filled absolute bottom--10px right-25px text-orange />
       </div>
