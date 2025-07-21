@@ -697,14 +697,12 @@ export async function unpack(parcel: string) {
           damage,
           duration: time,
           treasureList,
-          reserve: false,
           abilityList: [],
         })
         battleRecord.value.sort((a, b) => Number(b.raid_id) - Number(a.raid_id))
 
-        if (battleRecord.value.length > 30) {
-          const lastIndex = battleRecord.value.findLastIndex(record => !record.reserve)
-          battleRecord.value.splice(lastIndex, 1)
+        while (battleRecord.value.length > 10) {
+          battleRecord.value.pop()
         }
       }
       else {

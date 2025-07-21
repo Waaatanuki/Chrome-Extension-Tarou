@@ -416,14 +416,12 @@ function recordRaidInfo(data: BattleStartJson) {
     formation,
     special_skill_flag: Number(data.special_skill_flag),
     actionQueue,
-    reserve: false,
     abilityList,
     point: 0,
   })
 
-  if (battleRecord.value.length > 30) {
-    const lastIndex = battleRecord.value.findLastIndex(record => !record.reserve)
-    battleRecord.value.splice(lastIndex, 1)
+  while (battleRecord.value.length > 10) {
+    battleRecord.value.pop()
   }
 }
 
