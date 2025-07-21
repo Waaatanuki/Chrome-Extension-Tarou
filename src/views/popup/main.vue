@@ -21,7 +21,7 @@ const componentMap: Record<string, Component> = {
 </script>
 
 <template>
-  <main h-full w-full fc>
-    <component :is="componentMap[currentView]" />
+  <main p-20px>
+    <component :is="componentMap[currentView]" m-auto />
   </main>
 </template>
