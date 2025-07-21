@@ -70,7 +70,7 @@ function handleCommand(command: DetailType, data: BuildResponse) {
       </el-descriptions>
       <div mt-5px flex items-center justify-between>
         <div text-xs>
-          {{ useDateFormat(data.createTime! * 1000, 'MM/DD HH:mm') }}{{ ` @ ${data.account}` }}
+          {{ useDateFormat(data.createTime, 'MM/DD HH:mm') }}{{ ` @ ${data.account}` }}
         </div>
 
         <div fc>
