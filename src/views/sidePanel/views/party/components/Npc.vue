@@ -17,11 +17,11 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
 
 function updateNpcFilter(masterId: number) {
   if (buildNpcFilter.value.includes(masterId)) {
-    ElMessage.success('已添加至未拥有角色')
+    ElMessage.success('已标记')
   }
   else {
     buildNpcFilter.value.push(masterId)
-    ElMessage.success('成功添加至未拥有角色')
+    ElMessage.success('标记成功')
   }
 }
 
