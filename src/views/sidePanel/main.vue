@@ -98,7 +98,7 @@ onMounted(() => {
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
         <el-scrollbar>
           <div flex flex-col items-center gap-10px>
-            <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
+            <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :show-after="1000" :content="view.lable" placement="left">
               <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
                 <Icon :icon="view.icon" text-20px />
               </div>
@@ -106,7 +106,7 @@ onMounted(() => {
           </div>
         </el-scrollbar>
         <div flex flex-col items-center gap-10px>
-          <el-tooltip v-for="view in downViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
+          <el-tooltip v-for="view in downViewList" :key="view.key" effect="dark" :show-after="1000" :content="view.lable" placement="left">
             <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
               <Icon :icon="view.icon" text-20px />
             </div>
