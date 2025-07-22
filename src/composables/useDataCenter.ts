@@ -159,10 +159,13 @@ export async function unpack(parcel: string) {
         .legend_gacha_ticket_list.find((ticket: any) => Number(ticket.ticket_id) === 20011).ticket_num,
     )
 
-    gachaInfo.value.id = responseData.legend.lineup[0].id
-    gachaInfo.value.randomKey = responseData.legend.random_key
-    gachaInfo.value.serviceStart = responseData.legend.lineup[0].service_start
-    gachaInfo.value.serviceEnd = responseData.legend.lineup[0].service_end
+    const hitLineup = responseData.legend.lineup.find((l: any) => l.class_name === 'prt-title-legend10')
+    if (hitLineup) {
+      gachaInfo.value.id = hitLineup.id
+      gachaInfo.value.randomKey = responseData.legend.random_key
+      gachaInfo.value.serviceStart = hitLineup.service_start
+      gachaInfo.value.serviceEnd = hitLineup.service_end
+    }
   }
 
   // Gacha 卡池数据
