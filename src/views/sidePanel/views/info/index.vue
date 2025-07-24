@@ -158,6 +158,11 @@ onMounted(() => {
     <el-descriptions-item label="相关链接">
       <div flex flex-col>
         <div>
+          <el-link href="https://waaatanuki.github.io/tarou-docs" target="_blank">
+            太郎使用手册
+          </el-link>
+        </div>
+        <div>
           <el-link href="https://github.com/Waaatanuki/Chrome-Extension-Tarou" target="_blank">
             Github 插件仓库
           </el-link>
