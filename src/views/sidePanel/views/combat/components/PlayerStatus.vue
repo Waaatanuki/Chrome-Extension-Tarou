@@ -12,25 +12,29 @@ interface DisplayPlayer extends Player {
   }
 }
 
-const { playerInfo } = defineProps<{ playerInfo: Player[], turn: number }>()
+const { playerInfo, formation } = defineProps<{ playerInfo: Player[], formation: number[], turn: number }>()
 
 const disPlayPlayer = computed<DisplayPlayer[]>(() => {
-  const copyPlayer = JSON.parse(JSON.stringify(playerInfo))
+  const sub = playerInfo
+    .map((_, index) => index)
+    .filter(index => !formation.includes(index))
+  const sortInfo = [...formation.map(i => ({ index: i, isMain: true })), ...sub.map(i => ({ index: i, isMain: false }))]
 
-  for (const player of copyPlayer) {
-    const importantBuffs = []
-    const commonBuffs = []
+  return sortInfo.map(({ index, isMain }) => {
+    const player = JSON.parse(JSON.stringify(playerInfo[index])) as DisplayPlayer
+    const importantBuffs: Buff[] = []
+    const commonBuffs: Buff[] = []
+
     for (const buff of player.condition.buff) {
       if (specPlayerBuff.value.some(specBuff => buff.status.startsWith(specBuff)))
         importantBuffs.push(buff)
       else
         commonBuffs.push(buff)
     }
-    player.condition.importantBuffs = importantBuffs
-    player.condition.commonBuffs = commonBuffs
-  }
-
-  return copyPlayer
+    player.condition.importantBuffs = isMain ? importantBuffs : []
+    player.condition.commonBuffs = isMain ? commonBuffs : []
+    return player
+  })
 })
 
 function toggleImage(specBuff: string[], buffId: string) {

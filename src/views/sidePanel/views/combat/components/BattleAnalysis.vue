@@ -4,7 +4,7 @@ import DamageRecord from './DamageRecord.vue'
 import DamageTaken from './DamageTaken.vue'
 import PlayerStatus from './PlayerStatus.vue'
 
-defineProps<{ player: Player[], turn?: number }>()
+defineProps<{ player: Player[], formation: number[], turn?: number }>()
 
 const tabName = ref('damage')
 </script>
@@ -13,7 +13,7 @@ const tabName = ref('damage')
   <ElCard v-if="player" w-300px shrink-0 body-style="padding: 5px">
     <ElTabs v-model="tabName" stretch>
       <ElTabPane v-if="turn" label="角色状态" name="status">
-        <PlayerStatus :player-info="player" :turn="turn" />
+        <PlayerStatus :player-info="player" :formation="formation" :turn="turn" />
       </ElTabPane>
       <ElTabPane label="伤害统计" name="damage">
         <DamageRecord :player-info="player" />
