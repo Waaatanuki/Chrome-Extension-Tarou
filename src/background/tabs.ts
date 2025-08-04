@@ -20,6 +20,10 @@ export function setupTabsListener() {
   chrome.tabs.onRemoved.addListener((tabId) => {
     if (tabId === obTabId.value) {
       obTabId.value = 0
+      chrome.runtime.getContexts({ }).then((contexts) => {
+        const ids = contexts.filter(c => c.documentOrigin?.includes(chrome.runtime.id)).map(c => c.tabId)
+        chrome.tabs.remove(ids).catch(() => {})
+      })
     }
   })
 }

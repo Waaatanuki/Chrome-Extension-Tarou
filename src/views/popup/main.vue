@@ -18,6 +18,14 @@ const componentMap: Record<string, Component> = {
   Debug,
   BuildCompare,
 }
+
+onMounted(() => {
+  if (currentView.value.startsWith('WindowPanel')) {
+    const url = chrome.runtime.getURL('/src/views/sidePanel/main.html')
+    const tabId = currentView.value.split('WindowPanel')[1]
+    window.location.href = `${url}?${tabId}`
+  }
+})
 </script>
 
 <template>

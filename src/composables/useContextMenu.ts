@@ -1,6 +1,7 @@
 export default function useContextMenu() {
   function registerContextMenu() {
     chrome.contextMenus.create({ id: 'openSidePanel', title: '开启侧边栏', contexts: ['all'] })
+    chrome.contextMenus.create({ id: 'openWindowPanel', title: '开启窗口栏', contexts: ['all'] })
     chrome.contextMenus.create({ id: 'pushInTargetItem', title: '加入掉落监控', contexts: ['image'] })
   }
 
@@ -10,5 +11,9 @@ export default function useContextMenu() {
     })
   }
 
-  return { registerContextMenu, openSidePanel }
+  function openWindowPanel(tab: chrome.tabs.Tab) {
+    openPopupWindow(`WindowPanel${tab.id}`)
+  }
+
+  return { registerContextMenu, openSidePanel, openWindowPanel }
 }

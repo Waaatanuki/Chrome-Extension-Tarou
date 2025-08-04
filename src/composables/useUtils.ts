@@ -19,6 +19,13 @@ export function openPopupWindow(key: string) {
     BuildCompare: { height: 800, width: 1100 },
   }
 
-  chrome.windows.create({ url: `src/views/popup/main.html?${key}`, type: 'popup', ...(windowSize[key] ?? { height: 800, width: 800 }) })
+  const getWindowSize = (key: string) => {
+    if (key.startsWith('WindowPanel')) {
+      return { height: 800, width: 360 }
+    }
+    return windowSize[key] ?? { height: 800, width: 800 }
+  }
+
+  chrome.windows.create({ url: `src/views/popup/main.html?${key}`, type: 'popup', ...getWindowSize(key) })
     .catch((err) => { createNotification({ message: String(err) }) })
 }

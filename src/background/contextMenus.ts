@@ -1,7 +1,7 @@
 import { notificationItem } from '~/logic'
 
 export function setupContextMenuListener() {
-  const { openSidePanel } = useContextMenu()
+  const { openSidePanel, openWindowPanel } = useContextMenu()
 
   chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (!isGamePage(tab?.url)) {
@@ -17,6 +17,10 @@ export function setupContextMenuListener() {
     switch (info.menuItemId) {
       case 'openSidePanel':{
         openSidePanel(tab)
+        break
+      }
+      case 'openWindowPanel':{
+        openWindowPanel(tab)
         break
       }
       case 'pushInTargetItem':

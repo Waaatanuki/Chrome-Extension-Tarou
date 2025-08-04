@@ -32,6 +32,7 @@ const componentMap: Record<string, Component> = {
 
 const { width } = useWindowSize()
 const currentView = ref('Dashborad')
+const tabId = computed(() => Number(document.URL.split('?')[1]))
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
@@ -65,8 +66,8 @@ watchEffect(() => {
 }, { flush: 'post' })
 
 onMounted(() => {
-  chrome.runtime.getContexts({ contextTypes: [chrome.runtime.ContextType.SIDE_PANEL] }).then((ctx) => {
-    if (ctx.filter(c => c.documentUrl === document.URL).length > 1) {
+  chrome.runtime.getContexts({}).then((ctx) => {
+    if (ctx.filter(c => c.documentUrl?.includes('src/views/sidePanel/main.html')).length > 1) {
       createNotification({ message: '只能打开一个侧边栏' })
       window.close()
       return
@@ -78,7 +79,7 @@ onMounted(() => {
         return
       }
 
-      obTabId.value = tabInfo.id
+      obTabId.value = tabId.value || tabInfo.id
     })
   })
 })
