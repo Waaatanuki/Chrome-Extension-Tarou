@@ -122,14 +122,16 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
   const partyCondition: PartyCondition[] = []
   const formation = status?.formation || currentRaid?.formation || []
 
-  const currentAbilityList = getAbilityList(status?.ability)
-  currentAbilityList.forEach((abi) => {
-    const hit = currentRaid.abilityList.find(a => a.id === abi.id)
-    if (hit)
-      hit.icon = abi.icon
-    else
-      currentRaid.abilityList.push({ ...abi })
-  })
+  if (type === 'start') {
+    const currentAbilityList = getAbilityList(status?.ability)
+    currentAbilityList.forEach((abi) => {
+      const hit = currentRaid.abilityList.find(a => a.id === abi.id)
+      if (hit)
+        hit.icon = abi.icon
+      else
+        currentRaid.abilityList.push({ ...abi })
+    })
+  }
 
   for (let i = 0; i < 6; i++) {
     const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
@@ -402,6 +404,7 @@ function recordRaidInfo(data: BattleStartJson) {
   }]
 
   const abilityList = getAbilityList(data.ability)
+  console.log({ abilityList })
 
   battleRecord.value.unshift({
     quest_id: data.quest_id,
@@ -688,6 +691,8 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   }
 
   if (type === 'ability') {
+    console.log(currentRaid.abilityList)
+
     const hit = currentRaid.abilityList?.find(ability => ability.id === payload.ability_id)
     if (!hit)
       return
