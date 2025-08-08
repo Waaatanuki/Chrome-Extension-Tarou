@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 // 将秒数转化为HH:mm:ss
 export function formatTime(seconds: number): string {
   if (seconds === 0)
@@ -47,4 +49,21 @@ export function imgSrcToQuestImage(src = '') {
   const separator = '/sp/'
   const index = src.indexOf(separator)
   return index === -1 ? '' : src.substring(index)
+}
+
+export function formatEventDate(timestamp: number): string {
+  const time = dayjs(timestamp).format('HH:mm')
+
+  let prefix = ''
+  if (dayjs().subtract(1, 'day').isSame(dayjs(timestamp), 'day')) {
+    prefix = '昨天 '
+  }
+  else if (dayjs().subtract(2, 'day').isSame(dayjs(timestamp), 'day')) {
+    prefix = '前天 '
+  }
+  else if (dayjs().isAfter(dayjs(timestamp), 'day')) {
+    prefix = `${dayjs(timestamp).format('MM-DD')} `
+  }
+
+  return `${prefix}${time}`
 }

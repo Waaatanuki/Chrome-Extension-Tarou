@@ -17,7 +17,7 @@ const token = computed(() => eventInfo.value.additional.gachaPoint + eventInfo.v
           古战场({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: token, drawnBox: eventInfo.additional.drawnBox }) }}箱)
         </div>
         <el-tooltip content="最后更新时间" placement="top">
-          {{ useDateFormat(eventInfo.updateTime, 'MM-DD HH:mm') }}
+          {{ formatEventDate(eventInfo.updateTime) }}
         </el-tooltip>
       </div>
     </template>

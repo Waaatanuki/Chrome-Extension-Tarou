@@ -13,7 +13,7 @@ const articleIitemNum = computed(() => Object.values (eventInfo.value?.additiona
           剧情复刻{{ `( ${articleIitemNum} )` }}
         </div>
         <el-tooltip content="最后更新时间" placement="top">
-          {{ useDateFormat(eventInfo.updateTime, 'MM-DD HH:mm') }}
+          {{ formatEventDate(eventInfo.updateTime) }}
         </el-tooltip>
       </div>
     </template>
