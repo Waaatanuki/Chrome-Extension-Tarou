@@ -741,6 +741,7 @@ function handleResultContent(responseData: any) {
 
   const isInAdvent = !!Object.keys(result_data.advent_info).length
   const isInSolotreasure = !!eventList.value.find(e => e.type === 'solotreasure')?.isActive
+  const isInBiography = !!eventList.value.find(e => e.type === 'biography')?.isActive
 
   // 收集掉落信息
   for (const element of Object.values(result_data.rewards.reward_list)) {
@@ -770,6 +771,14 @@ function handleResultContent(responseData: any) {
       // 更新剧情复刻道具数量
       if (isInSolotreasure) {
         const additional = eventList.value.find(event => event.type === 'solotreasure')?.additional as Record<string, number> | undefined
+        if (additional && additional[key]) {
+          additional[key] += Number(value.count)
+        }
+      }
+
+      // 更新剧情活动道具数量
+      if (isInBiography) {
+        const additional = eventList.value.find(event => event.type === 'biography')?.additional as Record<string, number> | undefined
         if (additional && additional[key]) {
           additional[key] += Number(value.count)
         }
@@ -871,9 +880,9 @@ function handleResultContent(responseData: any) {
       eventInfo.count += result_data.advent_info.final_point
   }
 
-  // 更新四象和剧情复刻任务信息
+  // 更新四象，剧情活动和剧情复刻任务信息
   if (result_data.popup_data?.daily_mission) {
-    const targetEvent = ['advent', 'solotreasure']
+    const targetEvent = ['advent', 'solotreasure', 'biography']
     for (const eventType of targetEvent) {
       const eventInfo = eventList.value.find(event => event.type === eventType && event.isActive)
       if (!eventInfo)
@@ -1262,6 +1271,56 @@ function processEventData(url: string, responseData: any) {
           isDailyMission: true,
         })
       }
+    }
+  }
+
+  // 剧情活动
+  if (/\/biography\d+\/top\/content\/newindex/.test(url)) {
+    if (!responseData.option)
+      return
+
+    const eventType = 'biography'
+    // const htmlString = decodeURIComponent(responseData.data)
+    // const $ = load(htmlString)
+    // const $dailyPopup = load($('#tpl-pop-check-daily-mission').text())
+
+    // const missionList: Mission[] = []
+
+    // $dailyPopup('.prt-mission-info').each((i, el) => {
+    //   const [number, limit] = $dailyPopup(el).find('.prt-mission-complete').length
+    //     ? [5, 5]
+    //     : $dailyPopup(el).find('.prt-mission-progress').text().split('/').map(s => Number(s.replace(/\D+/g, '')))
+
+    //   missionList.push({
+    //     desc: $dailyPopup(el).find('.prt-mission-description').html()!,
+    //     number,
+    //     limit,
+    //     isAllComplete: number >= limit,
+    //     isDailyMission: true,
+    //     reward: '',
+    //   })
+    // })
+
+    const articleInfo = responseData.option.status.article_item.reduce((obj: any, item: any) => {
+      obj[`${item.item_kind}_${item.id}`] = Number (item.possessed)
+      return obj
+    }, {} as Record<number, number>)
+
+    const eventInfo = {
+      type: eventType,
+      isActive: true,
+      mission: [],
+      count: 0,
+      updateTime: dayjs().valueOf(),
+      additional: articleInfo,
+    }
+
+    const index = eventList.value.findIndex(event => event.type === eventType)
+    if (index === -1) {
+      eventList.value.push(eventInfo)
+    }
+    else {
+      eventList.value[index] = eventInfo
     }
   }
 

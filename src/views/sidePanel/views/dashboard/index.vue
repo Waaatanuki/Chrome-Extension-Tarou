@@ -6,6 +6,7 @@ import StoneCount from './components/StoneCount.vue'
 import TreasureMonitor from './components/TreasureMonitor.vue'
 import Advent from './event/Advent.vue'
 import Alchemist from './event/Alchemist.vue'
+import Biography from './event/Biography.vue'
 import Godslayer from './event/Godslayer.vue'
 import Interlude from './event/Interlude.vue'
 import Solotreasure from './event/Solotreasure.vue'
@@ -24,6 +25,7 @@ const componentMap: Record<string, Component> = {
   'Event/Advent': Advent,
   'Event/Interlude': Interlude,
   'Event/Solotreasure': Solotreasure,
+  'Event/Biography': Biography,
 }
 
 const showWidgets = computed(() =>
