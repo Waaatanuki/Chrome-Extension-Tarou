@@ -13,6 +13,8 @@ import Solotreasure from './event/Solotreasure.vue'
 import Teamraid from './event/Teamraid.vue'
 import Treasureraid from './event/Treasureraid.vue'
 
+const { updateInfo, checkForUpdates } = useVersionCheck()
+
 const componentMap: Record<string, Component> = {
   Status,
   StoneCount,
@@ -40,6 +42,10 @@ const showWidgets = computed(() =>
     return pre
   }, []),
 )
+
+onMounted(() => {
+  checkForUpdates()
+})
 </script>
 
 <template>
@@ -54,4 +60,6 @@ const showWidgets = computed(() =>
       回复道具信息
     </TheButton>
   </div>
+
+  <UpdateDrawer v-model="updateInfo.visible" :info="updateInfo" />
 </template>

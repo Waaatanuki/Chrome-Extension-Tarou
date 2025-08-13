@@ -21,6 +21,7 @@ export const defaultNotificationSetting = {
   appearanceQuest: true,
   itemGoal: true,
   isPointOverLimit: true,
+  checkUpdate: true,
 }
 
 export const defaultNotificationItem = [

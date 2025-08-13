@@ -310,6 +310,7 @@ declare module 'myStorage' {
     appearanceQuest: boolean
     itemGoal: boolean
     isPointOverLimit: boolean
+    checkUpdate: boolean
   }
 
   interface ArtifactRule {
