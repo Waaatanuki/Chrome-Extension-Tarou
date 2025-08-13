@@ -1280,26 +1280,26 @@ function processEventData(url: string, responseData: any) {
       return
 
     const eventType = 'biography'
-    // const htmlString = decodeURIComponent(responseData.data)
-    // const $ = load(htmlString)
-    // const $dailyPopup = load($('#tpl-pop-check-daily-mission').text())
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+    const $dailyPopup = load($('#tpl-pop-check-daily-mission').text())
 
-    // const missionList: Mission[] = []
+    const missionList: Mission[] = []
 
-    // $dailyPopup('.prt-mission-info').each((i, el) => {
-    //   const [number, limit] = $dailyPopup(el).find('.prt-mission-complete').length
-    //     ? [5, 5]
-    //     : $dailyPopup(el).find('.prt-mission-progress').text().split('/').map(s => Number(s.replace(/\D+/g, '')))
+    $dailyPopup('.prt-mission-info').each((i, el) => {
+      const [number, limit] = $dailyPopup(el).find('.prt-mission-complete').length
+        ? [5, 5]
+        : $dailyPopup(el).find('.prt-mission-progress').text().split('/').map(s => Number(s.replace(/\D+/g, '')))
 
-    //   missionList.push({
-    //     desc: $dailyPopup(el).find('.prt-mission-description').html()!,
-    //     number,
-    //     limit,
-    //     isAllComplete: number >= limit,
-    //     isDailyMission: true,
-    //     reward: '',
-    //   })
-    // })
+      missionList.push({
+        desc: $dailyPopup(el).find('.prt-mission-description').html()!,
+        number,
+        limit,
+        isAllComplete: number >= limit,
+        isDailyMission: true,
+        reward: '',
+      })
+    })
 
     const articleInfo = responseData.option.status.article_item.reduce((obj: any, item: any) => {
       obj[`${item.item_kind}_${item.id}`] = Number (item.possessed)
@@ -1309,7 +1309,7 @@ function processEventData(url: string, responseData: any) {
     const eventInfo = {
       type: eventType,
       isActive: true,
-      mission: [],
+      mission: missionList,
       count: 0,
       updateTime: dayjs().valueOf(),
       additional: articleInfo,
