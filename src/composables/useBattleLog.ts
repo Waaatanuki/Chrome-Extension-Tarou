@@ -691,25 +691,37 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   }
 
   if (type === 'ability') {
-    console.log(currentRaid.abilityList)
-
     const hit = currentRaid.abilityList?.find(ability => ability.id === payload.ability_id)
     if (!hit)
       return
 
     currentRaid.player[Number(payload.ability_character_num)].use_ability_count++
 
+    const aimInfo: { pid: string, isNpc: boolean }[] = []
+
+    if (payload.ability_aim_num) {
+      aimInfo.push({
+        pid: currentRaid.player[Number(payload.ability_aim_num)].pid,
+        isNpc: currentRaid.player[Number(payload.ability_aim_num)].is_npc,
+      })
+    }
+
+    if (payload.ability_sub_param?.length === 2) {
+      for (let i = 0; i < 2; i++) {
+        const playerIndex = Number(payload.ability_sub_param[i])
+        aimInfo.push({
+          pid: currentRaid.player[playerIndex].pid,
+          isNpc: currentRaid.player[playerIndex].is_npc,
+        })
+      }
+    }
+
     currentRaid.actionQueue.at(-1)?.acitonList.push({
       ...hit,
       icon: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.icon : hit.icon,
       id: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id : hit.id,
       isSub: !!hit.subAbility,
-      aim_num: payload.ability_aim_num
-        ? currentRaid.player[Number(payload.ability_aim_num)].pid
-        : '',
-      aim_is_npc: payload.ability_aim_num
-        ? currentRaid.player[Number(payload.ability_aim_num)].is_npc
-        : false,
+      aimInfo,
     })
   }
 
@@ -745,12 +757,14 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       type: 'temporary',
       icon: payload.character_num ? '1' : '2',
       id: payload.character_num ? '1' : '2',
-      aim_num: payload.character_num
-        ? currentRaid.player[Number(payload.character_num)].pid
-        : '',
-      aim_is_npc: payload.character_num
-        ? currentRaid.player[Number(payload.character_num)].is_npc
-        : false,
+      ...(payload.character_num
+        ? {
+            aimInfo: [{
+              pid: currentRaid.player[Number(payload.character_num)].pid,
+              isNpc: currentRaid.player[Number(payload.character_num)].is_npc,
+            }],
+          }
+        : {}),
     })
   }
 
@@ -759,12 +773,14 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       type: 'event/temporary',
       icon: payload.item_id,
       id: payload.item_id,
-      aim_num: payload.character_num
-        ? currentRaid.player[Number(payload.character_num)].pid
-        : '',
-      aim_is_npc: payload.character_num
-        ? currentRaid.player[Number(payload.character_num)].is_npc
-        : false,
+      ...(payload.character_num
+        ? {
+            aimInfo: [{
+              pid: currentRaid.player[Number(payload.character_num)].pid,
+              isNpc: currentRaid.player[Number(payload.character_num)].is_npc,
+            }],
+          }
+        : {}),
     })
   }
 

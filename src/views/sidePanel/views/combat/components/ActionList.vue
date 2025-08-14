@@ -34,9 +34,15 @@ defineProps<{ actionQueue: ActionQueue[] }>()
       <div flex flex-wrap items-center justify-start gap-10px p-10px border-b="1  solid #414243">
         <div v-for="action, i in list.acitonList" :key="i" fc>
           <img h-47px :src="getActionIcon(action)">
-          <template v-if="action.aim_num">
-            <div i-game-icons:fast-forward-button mx-5px text-xl />
-            <img h-47px :src="getAssetImg(action.aim_is_npc ? 'npc' : 'leader', `${action.aim_num}_01`, 's')">
+          <div v-if="action.aimInfo?.length" i-game-icons:fast-forward-button mx-5px text-xl />
+          <template v-if="action.aimInfo?.length === 1">
+            <img h-47px :src="getAssetImg(action.aimInfo[0].isNpc ? 'npc' : 'leader', `${action.aimInfo[0].pid}_01`, 's')">
+          </template>
+
+          <template v-if="action.aimInfo?.length === 2">
+            <img h-47px :src="getAssetImg(action.aimInfo[0].isNpc ? 'npc' : 'leader', `${action.aimInfo[0].pid}_01`, 's')">
+            <div i-game-icons:card-exchange mx-5px text-xl />
+            <img h-47px :src="getAssetImg(action.aimInfo[1].isNpc ? 'npc' : 'leader', `${action.aimInfo[1].pid}_01`, 's')">
           </template>
         </div>
       </div>
