@@ -265,16 +265,12 @@ declare module 'myStorage' {
     type: string
     icon?: string
     id?: string
-    isSub?: boolean
     subAbility?: {
       icon: string
       id: string
       index: string
     }[]
-    aimInfo?: {
-      pid: string
-      isNpc: boolean
-    }[]
+    aim?: string[]
   }
 
   interface MarkedUser {

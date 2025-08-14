@@ -12,9 +12,12 @@ interface DisplayPlayer extends Player {
   }
 }
 
-const { playerInfo, formation } = defineProps<{ playerInfo: Player[], formation: number[], turn: number }>()
+const { playerInfo, formation } = defineProps<{ playerInfo: Player[], formation?: number[], turn: number }>()
 
 const disPlayPlayer = computed<DisplayPlayer[]>(() => {
+  if (!formation)
+    return []
+
   const sub = playerInfo
     .map((_, index) => index)
     .filter(index => !formation.includes(index))

@@ -606,9 +606,28 @@ export async function unpack(parcel: string) {
     if (!hitAbility)
       return
     hitAbility.subAbility = Object.values(data.select_ability_info).map((item: any) => ({
-      icon: item.image,
+      icon: `/sp/assets/item/ability/s/${item.image}.jpg`,
       id: item.action_id,
       index: item.index,
+    }))
+  }
+
+  // BattleLog 记录暗器设置
+  if (/\/rest\/(?:raid|multiraid)\/get_hiddenweapon/.test(url)) {
+    // 两个使用暗器职业的一技能ID
+    const HIDDEN_WEAPON_ABILITY_ID = ['7241', '201581']
+    const data = responseData
+    const paylaod = JSON.parse(requestData!) as { raid_id: number, pid: string }
+    const hit = battleRecord.value.find(record => record.raid_id === paylaod.raid_id)
+    if (!hit)
+      return
+    const hitAbility = hit.abilityList.find(ability => HIDDEN_WEAPON_ABILITY_ID.includes(ability.id || ''))
+    if (!hitAbility)
+      return
+    hitAbility.subAbility = Object.values(data.hiddenweapon_info.set_hidden_weapon).map((item: any) => ({
+      icon: `/sp/assets/item/hiddenweapon/s/${item.hiddenweapon_id}.jpg`,
+      id: item.hiddenweapon_id,
+      index: item.set_pos,
     }))
   }
 

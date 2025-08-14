@@ -4,6 +4,10 @@ import type { Buff } from 'source'
 
 const imgUri = 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img'
 
+export function getLocalIcon(id: string) {
+  return new URL(`/src/assets/icon/${id}.png`, import.meta.url).href
+}
+
 export function getLocalImg(prop: string, type = 'common') {
   return new URL(`/src/assets/image/${type}/${prop}.png`, import.meta.url).href
 }
@@ -57,11 +61,10 @@ export function getArtifactIcon(id: string) {
 }
 
 export function getActionIcon(action: Action) {
-  if (action.type === 'ability') {
-    return action.isSub
-      ? getAssetsItemImg('ability', action.icon!)
-      : getAbilityIcon(action.icon!)
-  }
+  if (action.icon?.startsWith('/sp'))
+    return `${imgUri}${action.icon}`
+  if (action.type === 'ability')
+    return getAbilityIcon(action.icon!)
   if (action.type === 'fc')
     return getAbilityIcon(`fatal_chain_${action.icon}`)
   if (action.type === 'summon')
@@ -87,4 +90,10 @@ export function getBuffIcon(buff: Buff, turn: number) {
 
 export function getStamp(content: string) {
   return `${imgUri}/sp/assets/stamp/full//${content}`
+}
+
+export function getOfficialUrl(url: string) {
+  if (url.startsWith('/sp'))
+    return `${imgUri}${url}`
+  return url
 }

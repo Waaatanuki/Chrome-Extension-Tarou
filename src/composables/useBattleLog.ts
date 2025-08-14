@@ -697,22 +697,24 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
 
     currentRaid.player[Number(payload.ability_character_num)].use_ability_count++
 
-    const aimInfo: { pid: string, isNpc: boolean }[] = []
+    const aim: string[] = []
 
     if (payload.ability_aim_num) {
-      aimInfo.push({
-        pid: currentRaid.player[Number(payload.ability_aim_num)].pid,
-        isNpc: currentRaid.player[Number(payload.ability_aim_num)].is_npc,
-      })
+      const hitPlayer = currentRaid.player[Number(payload.ability_aim_num)]
+      aim.push(getAssetImg(hitPlayer.is_npc ? 'npc' : 'leader', `${hitPlayer.pid}_01`, 's'))
     }
 
     if (payload.ability_sub_param?.length === 2) {
+      // 忍者、魔战一技能ID
+      const NINJA_MAGIC = ['7030', '201531']
       for (let i = 0; i < 2; i++) {
-        const playerIndex = Number(payload.ability_sub_param[i])
-        aimInfo.push({
-          pid: currentRaid.player[playerIndex].pid,
-          isNpc: currentRaid.player[playerIndex].is_npc,
-        })
+        if (NINJA_MAGIC.includes(payload.ability_id)) {
+          aim.push(getLocalIcon(`${payload.ability_id}_${payload.ability_sub_param[i]}`))
+        }
+        else {
+          const hitPlayer = currentRaid.player[Number(payload.ability_sub_param[i])]
+          aim.push(getAssetImg(hitPlayer.is_npc ? 'npc' : 'leader', `${hitPlayer.pid}_01`, 's'))
+        }
       }
     }
 
@@ -720,8 +722,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       ...hit,
       icon: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.icon : hit.icon,
       id: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id : hit.id,
-      isSub: !!hit.subAbility,
-      aimInfo,
+      aim,
     })
   }
 
@@ -753,33 +754,25 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   }
 
   if (type === 'temporary') {
+    const hitPlayer = payload.character_num ? currentRaid.player[Number(payload.character_num)] : undefined
     currentRaid.actionQueue.at(-1)?.acitonList.push({
       type: 'temporary',
       icon: payload.character_num ? '1' : '2',
       id: payload.character_num ? '1' : '2',
-      ...(payload.character_num
-        ? {
-            aimInfo: [{
-              pid: currentRaid.player[Number(payload.character_num)].pid,
-              isNpc: currentRaid.player[Number(payload.character_num)].is_npc,
-            }],
-          }
+      ...(hitPlayer
+        ? { aim: [getAssetImg(hitPlayer.is_npc ? 'npc' : 'leader', `${hitPlayer.pid}_01`, 's')] }
         : {}),
     })
   }
 
   if (type === 'event/temporary') {
+    const hitPlayer = payload.character_num ? currentRaid.player[Number(payload.character_num)] : undefined
     currentRaid.actionQueue.at(-1)?.acitonList.push({
       type: 'event/temporary',
       icon: payload.item_id,
       id: payload.item_id,
-      ...(payload.character_num
-        ? {
-            aimInfo: [{
-              pid: currentRaid.player[Number(payload.character_num)].pid,
-              isNpc: currentRaid.player[Number(payload.character_num)].is_npc,
-            }],
-          }
+      ...(hitPlayer
+        ? { aim: [getAssetImg(hitPlayer.is_npc ? 'npc' : 'leader', `${hitPlayer.pid}_01`, 's')] }
         : {}),
     })
   }

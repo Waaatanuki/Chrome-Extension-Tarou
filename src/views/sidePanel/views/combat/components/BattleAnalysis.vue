@@ -4,7 +4,7 @@ import DamageRecord from './DamageRecord.vue'
 import DamageTaken from './DamageTaken.vue'
 import PlayerStatus from './PlayerStatus.vue'
 
-defineProps<{ player: Player[], formation: number[], turn?: number }>()
+defineProps<{ player: Player[], formation?: number[], turn?: number }>()
 
 const tabName = ref('damage')
 </script>
