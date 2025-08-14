@@ -754,11 +754,12 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   }
 
   if (type === 'temporary') {
+    const itemId = payload.item_id ? payload.item_id : payload.character_num ? '1' : '2'
     const hitPlayer = payload.character_num ? currentRaid.player[Number(payload.character_num)] : undefined
     currentRaid.actionQueue.at(-1)?.acitonList.push({
-      type: 'temporary',
-      icon: payload.character_num ? '1' : '2',
-      id: payload.character_num ? '1' : '2',
+      type: payload.item_id ? 'coopraid' : 'temporary',
+      icon: itemId,
+      id: itemId,
       ...(hitPlayer
         ? { aim: [getAssetImg(hitPlayer.is_npc ? 'npc' : 'leader', `${hitPlayer.pid}_01`, 's')] }
         : {}),

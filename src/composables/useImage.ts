@@ -71,6 +71,8 @@ export function getActionIcon(action: Action) {
     return getAssetImg('summon', action.icon!, 's')
   if (action.type === 'temporary')
     return getAssetsItemImg('temporary', action.icon!, 'm')
+  if (action.type === 'coopraid')
+    return getAssetsItemImg('coopraid', action.icon!, 's')
   if (action.type === 'event/temporary')
     return getAssetsItemImg('event/temporary', action.icon!, 's')
   if (action.type === 'recovery')
