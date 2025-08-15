@@ -1122,9 +1122,6 @@ function processEventData(url: string, responseData: any) {
 
   // 神灭战
   if (url.includes('rest/godslayer/top/quest_list')) {
-    if (!responseData.option)
-      return
-
     const eventType = 'godslayer'
     const eventInfo = {
       type: eventType,
@@ -1152,9 +1149,6 @@ function processEventData(url: string, responseData: any) {
 
   // 四象降临
   if (url.includes('/advent/top/content/newindex')) {
-    if (!responseData.option)
-      return
-
     const eventType = 'advent'
     const htmlString = decodeURIComponent(responseData.data)
     const $ = load(htmlString)
