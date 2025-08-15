@@ -47,6 +47,14 @@ function toggleImage(specBuff: string[], buffId: string) {
   else
     specBuff.push(buffId)
 }
+
+function isOneRow(player: DisplayPlayer) {
+  const impCol = player.condition.importantBuffs.length * 2
+  const comCol = onlyShowSpecBuff ? 0 : Math.ceil(player.condition.commonBuffs.length / 2)
+  if (impCol + comCol > 10)
+    return false
+  return true
+}
 </script>
 
 <template>
@@ -58,36 +66,47 @@ function toggleImage(specBuff: string[], buffId: string) {
     </div>
 
     <div flex flex-col items-start justify-center gap-5px>
-      <div v-for="player in disPlayPlayer" :key="player.pid" flex items-center justify-start gap-5px>
-        <div relative h-45px w-45px fc shrink-0>
-          <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
-            <span text-12px text-red font-bold>Dead</span>
+      <div v-for="player in disPlayPlayer" :key="player.pid" relative w-288px rounded-5px bg-neutral-8>
+        <div absolute h-48px w-48px border-5px class="border-#121212">
+          <div relative fc>
+            <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
+              <span text-12px text-red font-bold>Dead</span>
+            </div>
+            <el-tag v-if="player.condition.coating_value" absolute right-0 top-0 type="primary" effect="light" size="small">
+              {{ player.condition.coating_value }}
+            </el-tag>
+            <img w-full rounded-5px :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id, 's')">
           </div>
-          <el-tag v-if="player.condition.coating_value" absolute right-0 top-0 type="primary" effect="light" size="small">
-            {{ player.condition.coating_value }}
-          </el-tag>
-          <img w-full :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id, 's')">
         </div>
-        <div min-h-44px w-230px flex flex-wrap rounded p-2px ring-1 ring-neutral-7>
-          <img
-            v-for="buff, idx in player.condition.importantBuffs" :key="idx"
-            :src="getBuffIcon(buff, turn)"
-            h-40px w-40px cursor-pointer @click="toggleImage(specPlayerBuff, buff.status.split('_')[0])"
-          >
+
+        <div v-if="!isOneRow(player)" class="shadow-[-3px_-3px_0px_#121212]" absolute left-48px h-8px w-8px rounded-tl-5px />
+        <div v-if="!isOneRow(player)" class="shadow-[3px_3px_0px_#121212]" absolute left-40px top-40px h-8px w-8px rounded-br-5px />
+        <div v-if="!isOneRow(player)" class="shadow-[-3px_-3px_0px_#121212]" absolute left-0 top-48px h-8px w-8px rounded-tl-5px />
+
+        <div flex flex-wrap>
+          <div h-48px w-48px />
+          <div v-for="buff, idx in player.condition.importantBuffs" :key="idx" h-48px w-48px fc>
+            <img
+              :src="getBuffIcon(buff, turn)"
+              h-40px w-40px cursor-pointer @click="toggleImage(specPlayerBuff, buff.status.split('_')[0])"
+            >
+          </div>
           <template v-if="!onlyShowSpecBuff">
-            <div v-for="i in Math.ceil(player.condition.commonBuffs.length / 2)" :key="i" flex flex-col>
-              <img
-                v-if="player.condition.commonBuffs[(i - 1) * 2]"
-                h-20px w-20px cursor-pointer
-                :src="getBuffIcon(player.condition.commonBuffs[(i - 1) * 2], turn)"
-                @click="toggleImage(specPlayerBuff, player.condition.commonBuffs[(i - 1) * 2].status.split('_')[0])"
-              >
-              <img
-                v-if="player.condition.commonBuffs[(i - 1) * 2 + 1]"
-                h-20px w-20px cursor-pointer
-                :src="getBuffIcon(player.condition.commonBuffs[(i - 1) * 2 + 1], turn)"
-                @click="toggleImage(specPlayerBuff, player.condition.commonBuffs[(i - 1) * 2 + 1].status.split('_')[0])"
-              >
+            <div v-for="i in Math.ceil(player.condition.commonBuffs.length / 2)" :key="i" h-48px w-24px flex flex-col>
+              <div v-if="player.condition.commonBuffs[(i - 1) * 2]" h-24px w-24px fc>
+                <img
+                  h-20px w-20px cursor-pointer
+                  :src="getBuffIcon(player.condition.commonBuffs[(i - 1) * 2], turn)"
+                  @click="toggleImage(specPlayerBuff, player.condition.commonBuffs[(i - 1) * 2].status.split('_')[0])"
+                >
+              </div>
+              <div v-if="player.condition.commonBuffs[(i - 1) * 2 + 1]" h-24px w-24px fc>
+                <img
+                  h-20px w-20px cursor-pointer
+                  :src="getBuffIcon(player.condition.commonBuffs[(i - 1) * 2 + 1], turn)"
+                  @click="toggleImage(specPlayerBuff, player.condition.commonBuffs[(i - 1) * 2 + 1].status.split('_')[0])"
+                >
+              </div>
             </div>
           </template>
         </div>
