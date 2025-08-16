@@ -50,7 +50,8 @@ function toggleImage(specBuff: string[], buffId: string) {
 
 function isOneRow(player: DisplayPlayer) {
   const impCol = player.condition.importantBuffs.length * 2
-  const comCol = onlyShowSpecBuff ? 0 : Math.ceil(player.condition.commonBuffs.length / 2)
+  const comCol = onlyShowSpecBuff.value ? 0 : Math.ceil(player.condition.commonBuffs.length / 2)
+
   if (impCol + comCol > 10)
     return false
   return true
@@ -67,21 +68,22 @@ function isOneRow(player: DisplayPlayer) {
 
     <div flex flex-col items-start justify-center gap-5px>
       <div v-for="player in disPlayPlayer" :key="player.pid" relative w-288px rounded-5px bg-neutral-8>
-        <div absolute h-48px w-48px border-5px class="border-#121212">
+        <div absolute h-48px w-48px border-5px class="border-#1D1E1F">
           <div relative fc>
             <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
               <span text-12px text-red font-bold>Dead</span>
             </div>
-            <el-tag v-if="player.condition.coating_value" absolute right-0 top-0 type="primary" effect="light" size="small">
+            <div v-if="player.condition.coating_value" class="txt-coating-value" absolute bottom-0>
               {{ player.condition.coating_value }}
-            </el-tag>
+            </div>
             <img w-full rounded-5px :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id, 's')">
           </div>
         </div>
 
-        <div v-if="!isOneRow(player)" class="shadow-[-3px_-3px_0px_#121212]" absolute left-48px h-8px w-8px rounded-tl-5px />
-        <div v-if="!isOneRow(player)" class="shadow-[3px_3px_0px_#121212]" absolute left-40px top-40px h-8px w-8px rounded-br-5px />
-        <div v-if="!isOneRow(player)" class="shadow-[-3px_-3px_0px_#121212]" absolute left-0 top-48px h-8px w-8px rounded-tl-5px />
+        <div class="shadow-[-3px_-3px_0px_#1D1E1F]" absolute left-48px h-8px w-8px rounded-tl-5px />
+        <div v-if="isOneRow(player)" class="shadow-[-3px_3px_0px_#1D1E1F]" absolute left-48px top-40px h-8px w-8px rounded-bl-5px />
+        <div v-if="!isOneRow(player)" class="shadow-[3px_3px_0px_#262626]" absolute left-40px top-40px h-8px w-8px rounded-br-5px />
+        <div v-if="!isOneRow(player)" class="shadow-[-3px_-3px_0px_#1D1E1F]" absolute left-0 top-48px h-8px w-8px rounded-tl-5px />
 
         <div flex flex-wrap>
           <div h-48px w-48px />
@@ -114,3 +116,19 @@ function isOneRow(player: DisplayPlayer) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.txt-coating-value {
+  font-size: 12px;
+  color: #31fdff;
+  text-shadow:
+    0 0 1px #012061,
+    0 0 1px #012061,
+    0 0 1px #012061,
+    0 0 1px #012061,
+    0 0 2px #012061,
+    0 0 2px #012061,
+    0 0 2px #012061,
+    0 0 2px #012061;
+}
+</style>
