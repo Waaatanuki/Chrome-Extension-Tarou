@@ -44,4 +44,5 @@ export const defaultWidget = [
   { key: 'Event', name: '活动信息', visible: true },
   { key: 'TreasureMonitor', name: '素材监控', visible: true },
   { key: 'DailyCost', name: '每日统计', visible: true },
+  { key: 'SkipQuest', name: '扫荡副本', visible: true },
 ]

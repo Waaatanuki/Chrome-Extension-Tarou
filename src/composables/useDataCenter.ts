@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, userInfo } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, skipQuest, userInfo } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -68,6 +68,10 @@ export async function unpack(parcel: string) {
     const questInfo = dailyCost.value.quest?.find(q => q.questId === String(payload.quest_id))
     if (questInfo)
       dailyCost.value.ap! += questInfo.ap || 0
+
+    const skipQuestInfo = skipQuest.value.list.find(q => q.questId === String(payload.quest_id))
+    if (skipQuestInfo)
+      skipQuestInfo.limitedCount--
   }
 
   // Dashboard 每日消耗-进入他人创建的副本
@@ -285,6 +289,20 @@ export async function unpack(parcel: string) {
       })
     }
     recoveryItemList.value.unshift(res)
+  }
+
+  // Dashboard skip副本信息
+  if (url.includes('/rest/quest/skip_quest_list')) {
+    skipQuest.value.updateTime = Date.now()
+    skipQuest.value.list = Object.values(responseData.list)
+      .flat()
+      .map((item: any) => ({
+        chapterId: item.chapter_id,
+        questId: item.quest_id,
+        thumbnailImage: item.thumbnail_image,
+        useItemId: item.use_item_id[0],
+        limitedCount: item.limited_count,
+      }))
   }
 
   // Party 角色数据

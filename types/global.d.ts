@@ -356,6 +356,17 @@ declare module 'myStorage' {
     name: string
     visible: boolean
   }
+
+  interface SkipQuest {
+    updateTime: number
+    list: {
+      chapterId: string
+      questId: string
+      thumbnailImage: string
+      useItemId?: string
+      limitedCount: number
+    }[]
+  }
 }
 
 declare module 'source' {
