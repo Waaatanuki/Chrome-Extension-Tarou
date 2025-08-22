@@ -12,6 +12,7 @@ import Godslayer from './event/Godslayer.vue'
 import Interlude from './event/Interlude.vue'
 import Solotreasure from './event/Solotreasure.vue'
 import Teamraid from './event/Teamraid.vue'
+import Terra from './event/Terra.vue'
 import Treasureraid from './event/Treasureraid.vue'
 
 const { updateInfo, checkForUpdates } = useVersionCheck()
@@ -30,6 +31,7 @@ const componentMap: Record<string, Component> = {
   'Event/Interlude': Interlude,
   'Event/Solotreasure': Solotreasure,
   'Event/Biography': Biography,
+  'Event/Terra': Terra,
 }
 
 const showWidgets = computed(() =>

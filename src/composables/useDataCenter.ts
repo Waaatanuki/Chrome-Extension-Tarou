@@ -963,6 +963,33 @@ function handleResultContent(responseData: any) {
     }
   }
 
+  // 更新十天众战记任务信息
+  if (result_data.popup_data?.terra && Object.keys(result_data.popup_data?.terra).length > 0) {
+    const eventInfo = eventList.value.find(event => event.type === 'terra')
+    if (!eventInfo)
+      return
+    const progress = result_data.popup_data.terra.mission.progress ?? []
+
+    // 达成时触发的任务
+    const achieve_mission = result_data.popup_data.terra.mission.achieve_mission ?? []
+    for (const item of progress) {
+      const mission = eventInfo?.mission.find(m => m.desc === item.description)
+      if (mission) {
+        mission.number = Number(item.numerator)
+        mission.limit = Number(item.denominator)
+        mission.isAllComplete = mission.number >= mission.limit
+      }
+    }
+    for (const item of achieve_mission) {
+      const mission = eventInfo?.mission.find(m => m.desc === item.description)
+      if (mission) {
+        mission.number = mission.limit
+        mission.isAllComplete = true
+      }
+    }
+    eventInfo.count = result_data.popup_data.terra.walk_point.walk_point_after
+  }
+
   const display_list = responseData.display_list
   if (!display_list || !notificationSetting.value.itemGoal)
     return
@@ -1394,6 +1421,52 @@ function processEventData(url: string, responseData: any) {
       count: 0,
       updateTime: dayjs().valueOf(),
       additional: articleInfo,
+    }
+
+    const index = eventList.value.findIndex(event => event.type === eventType)
+    if (index === -1) {
+      eventList.value.push(eventInfo)
+    }
+    else {
+      eventList.value[index] = eventInfo
+    }
+  }
+
+  // 十天众战记
+  if (url.includes('/terra/content/index')) {
+    if (!responseData.option)
+      return
+
+    const eventType = 'terra'
+    const map_info = responseData.option.map_info
+
+    const eventInfo = {
+      type: eventType,
+      isActive: true,
+      mission: [
+        ...responseData.option.daily_mission_list.map((m: any) => ({
+          reward: m.level_details.find((d: any) => d.level === m.level).reward_name,
+          desc: m.level_details.find((d: any) => d.level === m.level).description,
+          number: Number(m.progress),
+          limit: Number(m.max_progress),
+          isAllComplete: m.is_all_complete,
+          isDailyMission: true,
+        })),
+        ...responseData.option.mission_list.map((m: any) => ({
+          reward: m.level_details.find((d: any) => d.level === m.level).reward_name,
+          desc: m.level_details.find((d: any) => d.level === m.level).description,
+          number: Number(m.progress),
+          limit: Number(m.max_progress),
+          isAllComplete: m.is_all_complete,
+          isDailyMission: false,
+        })),
+      ],
+      count: map_info.current_walk_point,
+      updateTime: dayjs().valueOf(),
+      additional: {
+        current_loop_num: map_info.current_loop_num,
+        remain_square_num_to_goal: map_info.remain_square_num_to_goal,
+      },
     }
 
     const index = eventList.value.findIndex(event => event.type === eventType)
