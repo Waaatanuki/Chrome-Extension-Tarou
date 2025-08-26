@@ -785,6 +785,11 @@ function handleResultContent(responseData: any) {
     })
   }
 
+  // 非古战场副本结算时探险时间减60秒
+  if (result_data.event?.event_type !== 3 && sampoInfo.value.remainTime) {
+    sampoInfo.value.remainTime -= 60000
+  }
+
   const isInAdvent = !!Object.keys(result_data.advent_info).length
   const isInSolotreasure = !!eventList.value.find(e => e.type === 'solotreasure')?.isActive
   const isInBiography = !!eventList.value.find(e => e.type === 'biography')?.isActive

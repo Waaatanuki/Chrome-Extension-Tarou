@@ -1,5 +1,17 @@
 <script setup lang="ts">
-import { sampoInfo } from '~/logic'
+import { notificationSetting, sampoInfo } from '~/logic'
+
+function handleFinish() {
+  sampoInfo.value.isFinished = true
+
+  if (notificationSetting.value.sampoFinish) {
+    createNotification({
+      message: '探险完成',
+      iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/vyrnsampo/assets/character/team_captain/1.png',
+      sound: 'warning',
+    })
+  }
+}
 </script>
 
 <template>
@@ -9,7 +21,7 @@ import { sampoInfo } from '~/logic'
         <div>
           探险队情报
         </div>
-        <el-tag :type=" sampoInfo.isFinished ? 'success' : 'danger' ">
+        <el-tag v-if="sampoInfo.areaName" :type=" sampoInfo.isFinished ? 'success' : 'danger' ">
           {{ sampoInfo.isFinished ? '探险完成' : '探险中' }}
         </el-tag>
       </div>
@@ -25,7 +37,7 @@ import { sampoInfo } from '~/logic'
         <div>
           探险倒计时
         </div>
-        <el-countdown value-style="font-size: 12px" :value="sampoInfo.remainTime" @finish="sampoInfo.isFinished = true" />
+        <el-countdown value-style="font-size: 12px" :value="sampoInfo.remainTime" @finish=" handleFinish" />
       </div>
     </div>
     <el-alert v-else title="请先获取探险队信息" type="info" :center="true" :closable="false" />

@@ -15,7 +15,7 @@ const downViewList = [
 ]
 
 function handleClick() {
-  console.log(foo.value)
+  console.log('handleClick')
 }
 const gachaInfo = ref({
   id: '12',
@@ -53,7 +53,7 @@ const data = ref({})
                 <div>
                   元气回复
                 </div>
-                <el-countdown value-style="font-size: 12px" :value="1298372189371" />
+                <el-countdown value-style="font-size: 12px" :value="175680273000" @finish="handleClick" />
               </div>
               <div flex items-center justify-between>
                 <div>

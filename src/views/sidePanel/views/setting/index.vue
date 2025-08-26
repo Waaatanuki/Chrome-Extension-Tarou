@@ -69,6 +69,7 @@ onMounted(() => {
     <el-checkbox v-model="notificationSetting.appearanceQuest" label="Hell提醒" />
     <el-checkbox v-model="notificationSetting.itemGoal" label="底部道具数量达到目标" />
     <el-checkbox v-model="notificationSetting.isPointOverLimit" label="四象点数超过上限" />
+    <el-checkbox v-model="notificationSetting.sampoFinish" label="探险完成提醒" />
     <el-checkbox v-model="notificationSetting.checkUpdate" label="检测版本更新" />
   </div>
   <el-alert :closable="false">

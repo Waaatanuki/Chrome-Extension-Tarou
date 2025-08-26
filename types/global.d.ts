@@ -309,6 +309,7 @@ declare module 'myStorage' {
     itemGoal: boolean
     isPointOverLimit: boolean
     checkUpdate: boolean
+    sampoFinish: boolean
   }
 
   interface ArtifactRule {

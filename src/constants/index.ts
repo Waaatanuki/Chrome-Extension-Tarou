@@ -22,6 +22,7 @@ export const defaultNotificationSetting = {
   itemGoal: true,
   isPointOverLimit: true,
   checkUpdate: true,
+  sampoFinish: true,
 }
 
 export const defaultNotificationItem = [
