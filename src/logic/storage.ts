@@ -1,6 +1,6 @@
 import type { DropInfo } from 'api'
 import type { BattleInfo } from 'battleLog'
-import type { ArtifactRule, BattleMemo, BattleRecord, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestMemo, RecoveryItem, SkipQuest, UserInfo, Widget } from 'myStorage'
+import type { ArtifactRule, BattleMemo, BattleRecord, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestMemo, RecoveryItem, SampoInfo, SkipQuest, UserInfo, Widget } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
@@ -29,6 +29,7 @@ export const displayList = useWebExtensionStorage<DisplayItem[]>('displayList', 
 export const dailyCost = useWebExtensionStorage<Partial<DailyCost>>('dailyCost', {})
 export const widgetList = useWebExtensionStorage<Widget[]>('widgetList', defaultWidget)
 export const skipQuest = useWebExtensionStorage<SkipQuest>('skipQuest', { updateTime: 0, list: [] })
+export const sampoInfo = useWebExtensionStorage<Partial<SampoInfo>>('sampoInfo', {})
 
 // BattleLog
 export const battleInfo = useWebExtensionStorage<Partial<BattleInfo>>('battleInfo', {})

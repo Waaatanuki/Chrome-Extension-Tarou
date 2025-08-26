@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { widgetList } from '~/logic'
 import DailyCost from './components/DailyCost.vue'
+import Sampo from './components/Sampo.vue'
 import SkipQuest from './components/SkipQuest.vue'
 import Status from './components/Status.vue'
 import StoneCount from './components/StoneCount.vue'
@@ -23,6 +24,7 @@ const componentMap: Record<string, Component> = {
   TreasureMonitor,
   DailyCost,
   SkipQuest,
+  Sampo,
   'Event/Alchemist': Alchemist,
   'Event/Godslayer': Godslayer,
   'Event/Treasureraid': Treasureraid,

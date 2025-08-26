@@ -367,6 +367,13 @@ declare module 'myStorage' {
       limitedCount: number
     }[]
   }
+
+  interface SampoInfo {
+    areaName: string
+    remainTime: number
+    recoveryRemainTime: number
+    isFinished: boolean
+  }
 }
 
 declare module 'source' {

@@ -20,6 +20,9 @@ onMounted(() => {
     if (!hit)
       widgetList.value.push({ ...widget })
   }
+  widgetList.value = widgetList.value.filter(widget =>
+    defaultWidget.some(defaultWidget => defaultWidget.key === widget.key),
+  )
 })
 </script>
 

@@ -39,16 +39,3 @@ function handleClick(quest: typeof skipQuest.value.list[number]) {
     <el-alert v-else title="请先获取扫荡副本信息" type="info" :center="true" :closable="false" />
   </el-card>
 </template>
-
-<style>
-.overflowed-point {
-  color: #e3b7ff;
-  text-shadow:
-    0px 0px 1px #7f12b7,
-    0px 0px 1px #7f12b7,
-    0px 0px 1px #7f12b7,
-    0px 0px 2px #7f12b7,
-    0px 0px 2px #7f12b7,
-    0px 0px 2px #7f12b7;
-}
-</style>

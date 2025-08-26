@@ -37,7 +37,33 @@ const data = ref({})
     <div h-600px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px>
-          content
+          <el-card body-style="padding: 10px" header-class="my-card-header" h-full w-300px>
+            <template #header>
+              <div flex justify-between>
+                <div>
+                  探险队情报
+                </div>
+                <el-tag type="danger">
+                  探险中
+                </el-tag>
+              </div>
+            </template>
+            <div flex flex-col text-12px>
+              <div flex items-center justify-between>
+                <div>
+                  元气回复
+                </div>
+                <el-countdown value-style="font-size: 12px" :value="1298372189371" />
+              </div>
+              <div flex items-center justify-between>
+                <div>
+                  探险倒计时
+                </div>
+                <el-countdown value-style="font-size: 12px" :value="1298372189371" />
+              </div>
+            </div>
+            <!-- <el-alert v-else title="请先获取扫荡副本信息" type="info" :center="true" :closable="false" /> -->
+          </el-card>
         </div>
       </el-scrollbar>
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>

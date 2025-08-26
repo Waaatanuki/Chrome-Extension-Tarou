@@ -5,7 +5,7 @@ import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, skipQuest, userInfo } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, skipQuest, userInfo } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -170,6 +170,15 @@ export async function unpack(parcel: string) {
       gachaInfo.value.serviceStart = hitLineup.service_start
       gachaInfo.value.serviceEnd = hitLineup.service_end
     }
+  }
+
+  // Dashboard 探险队
+  if (url.includes('/vyrnsampo/content/area_index')) {
+    const progressSampoInfo = responseData.option.progress_sampo_info
+    sampoInfo.value.areaName = progressSampoInfo.area_name
+    sampoInfo.value.remainTime = Date.now() + progressSampoInfo.remain_time * 1000
+    sampoInfo.value.recoveryRemainTime = Date.now() + progressSampoInfo.captain_info.recovery_remain_time * 1000
+    sampoInfo.value.isFinished = progressSampoInfo.is_finished
   }
 
   // Gacha 卡池数据
