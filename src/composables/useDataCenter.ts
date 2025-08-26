@@ -175,10 +175,15 @@ export async function unpack(parcel: string) {
   // Dashboard 探险队
   if (url.includes('/vyrnsampo/content/area_index')) {
     const progressSampoInfo = responseData.option.progress_sampo_info
+
+    if (Object.keys(progressSampoInfo).length === 0)
+      return
+
     sampoInfo.value.areaName = progressSampoInfo.area_name
     sampoInfo.value.remainTime = Date.now() + progressSampoInfo.remain_time * 1000
     sampoInfo.value.recoveryRemainTime = Date.now() + progressSampoInfo.captain_info.recovery_remain_time * 1000
     sampoInfo.value.isFinished = progressSampoInfo.is_finished
+    sampoInfo.value.level = progressSampoInfo.captain_info.adventure_level
   }
 
   // Gacha 卡池数据
@@ -785,8 +790,8 @@ function handleResultContent(responseData: any) {
     })
   }
 
-  // 非古战场副本结算时探险时间减60秒
-  if (result_data.event?.event_type !== 3 && sampoInfo.value.remainTime) {
+  // 非古战场副本,非扫荡副本结算时探险时间减60秒
+  if (result_data.event?.event_type !== 3 && result_data.quest_type !== 28 && sampoInfo.value.remainTime) {
     sampoInfo.value.remainTime -= 60000
   }
 

@@ -19,10 +19,10 @@ function handleFinish() {
     <template #header>
       <div flex items-center justify-between>
         <div>
-          探险队情报
+          {{ `探险队信息 Lv${sampoInfo.level}` }}
         </div>
-        <el-tag v-if="sampoInfo.areaName" :type=" sampoInfo.isFinished ? 'success' : 'danger' ">
-          {{ sampoInfo.isFinished ? '探险完成' : '探险中' }}
+        <el-tag v-if="sampoInfo.areaName" :type="sampoInfo.isFinished ? 'success' : 'danger' ">
+          {{ sampoInfo.isFinished ? '待机中' : '探险中' }}
         </el-tag>
       </div>
     </template>
@@ -33,13 +33,13 @@ function handleFinish() {
         </div>
         <el-countdown value-style="font-size: 12px" :value="sampoInfo.recoveryRemainTime" />
       </div>
-      <div flex items-center justify-between>
+      <div v-if="!sampoInfo.isFinished" flex items-center justify-between>
         <div>
-          探险倒计时
+          探险计时
         </div>
-        <el-countdown value-style="font-size: 12px" :value="sampoInfo.remainTime" @finish=" handleFinish" />
+        <el-countdown value-style="font-size: 12px" :value="sampoInfo.remainTime" @finish="handleFinish" />
       </div>
     </div>
-    <el-alert v-else title="请先获取探险队信息" type="info" :center="true" :closable="false" />
+    <el-alert v-else title="未获取探险信息" type="info" :center="true" :closable="false" />
   </el-card>
 </template>

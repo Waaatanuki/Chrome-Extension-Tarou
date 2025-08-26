@@ -374,6 +374,7 @@ declare module 'myStorage' {
     remainTime: number
     recoveryRemainTime: number
     isFinished: boolean
+    level: number
   }
 }
 
