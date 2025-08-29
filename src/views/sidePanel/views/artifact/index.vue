@@ -9,6 +9,9 @@ const currentArtifaceRuleInfo = computed(() => artifactRuleList.value[artifactRu
 
 function handleCommand(command: string | number | object) {
   switch (command) {
+    case 'box':
+      openPopupWindow('ArtifactBox')
+      break
     case 'rule':
       openPopupWindow('ArtifactRule')
       break
@@ -55,6 +58,9 @@ function onPasteSubmit() {
         </TheButton>
         <template #dropdown>
           <el-dropdown-menu>
+            <el-dropdown-item command="box">
+              弹窗展示
+            </el-dropdown-item>
             <el-dropdown-item command="rule">
               配置权重
             </el-dropdown-item>

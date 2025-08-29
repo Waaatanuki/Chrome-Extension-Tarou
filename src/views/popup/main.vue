@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ArtifactBox from './components/ArtifactBox.vue'
 import ArtifactRule from './components/ArtifactRule.vue'
 import BuildCompare from './components/BuildCompare.vue'
 import Debug from './components/Debug.vue'
@@ -12,6 +13,7 @@ const currentView = computed(() => document.URL.split('?')[1])
 const componentMap: Record<string, Component> = {
   SupportSummon,
   ArtifactRule,
+  ArtifactBox,
   RecoveryItem,
   GachaRecord,
   RewardList,
