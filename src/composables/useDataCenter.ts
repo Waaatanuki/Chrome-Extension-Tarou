@@ -1006,7 +1006,8 @@ function handleResultContent(responseData: any) {
         mission.isAllComplete = true
       }
     }
-    eventInfo.count = result_data.popup_data.terra.walk_point.walk_point_after
+    if (result_data.popup_data.terra.walk_point.walk_point_after)
+      eventInfo.count = result_data.popup_data.terra.walk_point.walk_point_after
   }
 
   const display_list = responseData.display_list
