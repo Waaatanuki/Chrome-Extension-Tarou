@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import type { GachaNpc } from 'myStorage'
 import { gachaInfo } from '~/logic'
+import GachaAnimation from './GachaAnimation.vue'
 
 const count = ref(0)
 const result = ref<GachaNpc[]>([])
 const ssrList = ref<GachaNpc[]>([])
 const ssrCount = computed(() => ssrList.value.length)
+
+const animationVisible = ref(false)
+const animationResult = ref<GachaNpc[]>([])
 
 const groupedResult = computed(() => {
   const resultValue = result.value || []
@@ -57,10 +61,13 @@ function draw(times: number) {
     ElMessage.error('卡池数据不一致')
     return
   }
+  animationVisible.value = true
+  animationResult.value.length = 0
 
   for (let i = 0; i < times; i++) {
     result.value = gacha10()
     count.value += 10
+    animationResult.value = animationResult.value.concat([...result.value])
     for (const item of result.value) {
       if (item.type === 'ssr') {
         ssrList.value.push(item)
@@ -73,6 +80,11 @@ function reset() {
   result.value = []
   ssrList.value = []
   count.value = 0
+}
+
+function closeAnimation() {
+  animationVisible.value = false
+  animationResult.value.length = 0
 }
 </script>
 
@@ -141,6 +153,8 @@ function reset() {
         </div>
       </div>
     </el-card>
+
+    <GachaAnimation v-if="animationVisible" :result-list="animationResult" @click="closeAnimation" @close="closeAnimation" />
   </div>
 </template>
 
