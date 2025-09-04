@@ -179,11 +179,22 @@ export async function unpack(parcel: string) {
     if (Object.keys(progressSampoInfo).length === 0)
       return
 
-    sampoInfo.value.areaName = progressSampoInfo.area_name
-    sampoInfo.value.remainTime = Date.now() + progressSampoInfo.remain_time * 1000
-    sampoInfo.value.recoveryRemainTime = Date.now() + progressSampoInfo.captain_info.recovery_remain_time * 1000
-    sampoInfo.value.isFinished = progressSampoInfo.is_finished
-    sampoInfo.value.level = progressSampoInfo.captain_info.adventure_level
+    const endStamina = Math.min(
+      progressSampoInfo.captain_info.max_stamina,
+      progressSampoInfo.captain_info.current_stamina + Math.floor(progressSampoInfo.remain_time / (60 * 10)),
+    )
+
+    sampoInfo.value = {
+      timestamp: Date.now(),
+      areaName: `${progressSampoInfo.area_name} 线路${progressSampoInfo.route_id}`,
+      remainTime: Date.now() + progressSampoInfo.remain_time * 1000,
+      recoveryRemainTime: Date.now() + progressSampoInfo.captain_info.recovery_remain_time * 1000,
+      currentStamina: progressSampoInfo.captain_info.current_stamina,
+      endStamina,
+      maxStamina: progressSampoInfo.captain_info.max_stamina,
+      isFinished: progressSampoInfo.is_finished,
+      level: progressSampoInfo.captain_info.adventure_level,
+    }
   }
 
   // Gacha 卡池数据
