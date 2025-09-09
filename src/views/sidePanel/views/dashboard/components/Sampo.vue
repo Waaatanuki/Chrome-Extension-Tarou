@@ -5,12 +5,9 @@ const throttledSampoChange = useThrottleFn((ms: number) => {
   if (!sampoInfo.value.maxStamina)
     return
 
-  const passedTime = Date.now() - sampoInfo.value.timestamp!
-  const totalTime = ms + passedTime
-
   sampoInfo.value.endStamina = Math.min(
     sampoInfo.value.maxStamina,
-    sampoInfo.value.currentStamina! + Math.floor(totalTime / (1000 * 60 * 10)),
+    sampoInfo.value.currentStamina! + Math.floor(ms / (1000 * 60 * 10)),
   )
 }, 10000)
 

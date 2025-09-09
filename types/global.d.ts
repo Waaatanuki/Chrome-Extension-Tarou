@@ -371,7 +371,6 @@ declare module 'myStorage' {
 
   interface SampoInfo {
     areaName: string
-    timestamp: number
     remainTime: number
     recoveryRemainTime: number
     currentStamina: number
