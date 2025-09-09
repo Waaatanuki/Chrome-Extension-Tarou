@@ -185,7 +185,6 @@ export async function unpack(parcel: string) {
     )
 
     sampoInfo.value = {
-      timestamp: Date.now(),
       areaName: `${progressSampoInfo.area_name} 线路${progressSampoInfo.route_id}`,
       remainTime: Date.now() + progressSampoInfo.remain_time * 1000,
       recoveryRemainTime: Date.now() + progressSampoInfo.captain_info.recovery_remain_time * 1000,
