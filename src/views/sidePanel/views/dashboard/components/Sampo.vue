@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { notificationSetting, sampoInfo } from '~/logic'
 
-const throttledChange = useThrottleFn((ms: number) => {
+const throttledSampoChange = useThrottleFn((ms: number) => {
   if (!sampoInfo.value.maxStamina)
     return
 
@@ -14,8 +14,19 @@ const throttledChange = useThrottleFn((ms: number) => {
   )
 }, 10000)
 
-function handleChange(ms: number) {
-  throttledChange(ms)
+function handleSampoChange(ms: number) {
+  throttledSampoChange(ms)
+}
+
+const throttledStaminaChange = useThrottleFn((ms: number) => {
+  if (!sampoInfo.value.maxStamina)
+    return
+
+  sampoInfo.value.currentStamina = sampoInfo.value.maxStamina - Math.ceil(ms / (1000 * 60 * 10))
+}, 10000)
+
+function handleStaminaChange(ms: number) {
+  throttledStaminaChange(ms)
 }
 
 function handleFinish() {
@@ -46,17 +57,19 @@ function handleFinish() {
       </template>
       {{ sampoInfo.areaName }}
     </el-descriptions-item>
-    <el-descriptions-item label="元气全回复" align="center" label-width="100">
-      <el-countdown value-style="font-size: 12px" :value="sampoInfo.recoveryRemainTime" />
+    <el-descriptions-item label="当前/结束" align="center" label-width="100">
+      <el-tooltip content="当前元气/探险结束时元气">
+        {{ sampoInfo.maxStamina ? `${sampoInfo.currentStamina}/${sampoInfo.endStamina}` : '-' }}
+      </el-tooltip>
     </el-descriptions-item>
     <el-descriptions-item label="探险倒计时" align="center" label-width="100">
       <div v-if="sampoInfo.isFinished">
         -
       </div>
-      <el-countdown v-else value-style="font-size: 12px" :value="sampoInfo.remainTime" @change="handleChange" @finish="handleFinish" />
+      <el-countdown v-else value-style="font-size: 12px" :value="sampoInfo.remainTime" @change="handleSampoChange" @finish="handleFinish" />
     </el-descriptions-item>
-    <el-descriptions-item label="结束时元气" align="center" label-width="100">
-      {{ sampoInfo.maxStamina ? `${sampoInfo.endStamina}/${sampoInfo.maxStamina}` : '-' }}
+    <el-descriptions-item label="元气全回复" align="center" label-width="100">
+      <el-countdown value-style="font-size: 12px" :value="sampoInfo.recoveryRemainTime" @change="handleStaminaChange" />
     </el-descriptions-item>
   </el-descriptions>
 
