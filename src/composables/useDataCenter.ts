@@ -1159,8 +1159,13 @@ function processEventData(url: string, responseData: any) {
     const htmlString = decodeURIComponent(responseData.data)
     const $ = load(htmlString)
     const gachaInfo = $('.prt-gacha-infomation')
-    const boxNum = gachaInfo.length ? Number((gachaInfo.data('box-num') as string).match(/\d+/)![0]) : 0
-    const gachaPoint = gachaInfo.length ? Number(gachaInfo.find('.txt-current-point').text()) : 0
+    if (!gachaInfo.length) {
+      eventInfo.additional.drawnBox = 0
+      return
+    }
+    const boxNum = Number((gachaInfo.data('box-num') as string).match(/\d+/)![0])
+    const gachaPoint = Number(gachaInfo.find('.txt-current-point').text())
+
     eventInfo.additional.drawnBox = boxNum
     eventInfo.additional.gachaPoint = gachaPoint
   }
