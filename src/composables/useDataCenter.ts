@@ -928,7 +928,7 @@ function handleResultContent(responseData: any) {
 
   // 更新古战场果报古箱掉落信息
   if (result_data.character_message?.lottery_reward_info) {
-    const hitItem = result_data.character_message?.lottery_reward_info.find((reward: any) => Number(reward.item_id) === 30781)
+    const hitItem = result_data.character_message?.lottery_reward_info.find((reward: any) => reward.item_image.includes('30711'))
     const eventInfo = eventList.value.find(event => event.type === 'teamraid')
     if (hitItem && eventInfo) {
       eventInfo.additional!.lottery.number += Number(hitItem.number)
