@@ -194,8 +194,8 @@ declare module 'myStorage' {
     duration?: string
     treasureList?: { src: string, number: string, boxClass: string }[]
     abilityList: Action[]
-    isUploaded?: boolean
     isFa?: boolean
+    key?: string
   }
 
   interface BuildDetail {

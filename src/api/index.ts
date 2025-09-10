@@ -52,7 +52,7 @@ export function listDrop(questIds: string[]) {
 
 // 上传配置
 export function uploadBuild(data: any) {
-  return request('/ext/build', {
+  return request<{ key: string }>('/ext/build', {
     method: 'post',
     body: JSON.stringify(data),
   })

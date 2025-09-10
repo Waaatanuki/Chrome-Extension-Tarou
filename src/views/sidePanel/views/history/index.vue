@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { BuildStorage } from 'build'
 import type { BattleRecord } from 'myStorage'
+import copy from 'copy-text-to-clipboard'
 import { uploadBuild } from '~/api'
 import { battleRecord, deckList } from '~/logic'
 import ActionList from '../combat/components/ActionList.vue'
@@ -70,11 +71,11 @@ function handleCopyBuild() {
   )
     .then(() => {
       loading.value = true
-      uploadBuild({ ...processData(), anonymous: anonymous.value }).then(() => {
+      uploadBuild({ ...processData(), anonymous: anonymous.value }).then((data) => {
         ElMessage.success('上传成功')
         const record = battleRecord.value.find(record => record.raid_id === currentRecord.value?.raid_id)
         if (record)
-          record.isUploaded = true
+          record.key = data.key
 
         dialogVisible.value = false
       }).finally(() => {
@@ -108,6 +109,11 @@ function processData(): BuildStorage {
     },
   }
 }
+
+function copyLink(key: string) {
+  if (copy(`https://gbf.pub/build?key=${key}`))
+    ElMessage.success('已复制分享链接')
+}
 </script>
 
 <template>
@@ -136,8 +142,11 @@ function processData(): BuildStorage {
         </div>
 
         <div fc>
-          <TheButton :disabled="data.isUploaded" @click="handleCommand('upload', data)">
-            {{ data.isUploaded ? '已上传' : '上传' }}
+          <TheButton v-if="data.key" @click="copyLink(data.key)">
+            分享
+          </TheButton>
+          <TheButton v-else @click="handleCommand('upload', data)">
+            上传
           </TheButton>
           <TheButton @click="handleCommand('detail', data)">
             详情
