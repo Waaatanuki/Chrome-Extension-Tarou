@@ -45,7 +45,7 @@ function handleFinish() {
       <template #label>
         <div flex justify-between>
           <div>
-            {{ `探险队信息 Lv${sampoInfo.level}` }}
+            {{ `探险队 Lv${sampoInfo.level}` }}
           </div>
           <el-tag v-if="sampoInfo.areaName" :type="sampoInfo.isFinished ? 'success' : 'danger' ">
             {{ sampoInfo.isFinished ? '待机中' : '探险中' }}
