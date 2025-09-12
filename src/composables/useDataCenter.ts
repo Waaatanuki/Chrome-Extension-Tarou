@@ -935,6 +935,15 @@ function handleResultContent(responseData: any) {
     }
   }
 
+  // 更新古战场贡献信息
+  if (result_data.event?.data) {
+    const hitItem = result_data.event?.data.find((reward: any) => reward.item_image === 'service')
+    const eventInfo = eventList.value.find(event => event.type === 'teamraid')
+    if (hitItem && eventInfo) {
+      eventInfo.additional!.honor += Number(hitItem.get_num) + Number(hitItem.get_bonus_num)
+    }
+  }
+
   // 更新四象点数信息
   if (isInAdvent) {
     const is_over_limit = result_data.advent_info?.is_over_limit
@@ -1113,6 +1122,7 @@ function processEventData(url: string, responseData: any) {
         gachaPoint,
         lottery,
         honor,
+        targetHonor: 0,
         log: { ...log, point: [] },
       },
     }
@@ -1128,6 +1138,7 @@ function processEventData(url: string, responseData: any) {
       const existingEvent = eventList.value[index]
       const existingEventLog = existingEvent.additional?.log
       eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 0
+      eventInfo.additional.targetHonor = existingEvent.additional?.targetHonor || 0
 
       if (isBattleShow) {
         eventLog.point = existingEventLog?.key === log.key
