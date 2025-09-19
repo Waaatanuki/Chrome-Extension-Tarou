@@ -173,7 +173,7 @@ function handleNormalAttackJson(data: AttackResultJson) {
         continue
 
       const _action = action as unknown as SpecialScenario
-      battleInfo.value.normalAttackInfo.hit++
+      battleInfo.value.normalAttackInfo.hit += _action.total?.length ?? 0
       for (let i = 0; i < _action.list.length || 0; i++) {
         const detail = _action.list[i]
         for (let j = 0; j < detail.damage.length; j++) {
