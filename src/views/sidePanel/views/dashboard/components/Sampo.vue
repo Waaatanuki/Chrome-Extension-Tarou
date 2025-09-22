@@ -19,7 +19,10 @@ const throttledStaminaChange = useThrottleFn((ms: number) => {
   if (!sampoInfo.value.maxStamina)
     return
 
-  sampoInfo.value.currentStamina = sampoInfo.value.maxStamina - Math.ceil(ms / (1000 * 60 * 10))
+  sampoInfo.value.currentStamina = Math.min(
+    sampoInfo.value.maxStamina,
+    sampoInfo.value.maxStamina - Math.ceil(ms / (1000 * 60 * 10)),
+  )
 }, 10000)
 
 function handleStaminaChange(ms: number) {

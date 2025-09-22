@@ -196,6 +196,19 @@ export async function unpack(parcel: string) {
     }
   }
 
+  // Dashboard 探险队地图信息
+  if (url.includes('/vyrnsampo/content/area/')) {
+    const teamInfo = responseData.option.team_info
+
+    if (!teamInfo || Object.keys(teamInfo).length === 0)
+      return
+
+    sampoInfo.value.recoveryRemainTime = Date.now() + teamInfo.captain_info.recovery_remain_time * 1000
+    sampoInfo.value.currentStamina = teamInfo.captain_info.current_stamina
+    sampoInfo.value.maxStamina = teamInfo.captain_info.max_stamina
+    sampoInfo.value.level = teamInfo.captain_info.adventure_level
+  }
+
   // Gacha 卡池数据
   if (url.includes('/gacha/provision_ratio/legend/')) {
     const regex = /\/gacha\/provision_ratio\/legend\/(\d+)\/(\d+)/
