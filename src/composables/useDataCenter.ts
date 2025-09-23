@@ -964,8 +964,10 @@ function handleResultContent(responseData: any) {
       createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
 
     const eventInfo = eventList.value.find(event => event.type === 'advent')
-    if (eventInfo)
+    if (eventInfo) {
       eventInfo.count += result_data.advent_info.final_point
+      eventInfo.additional!.isOverflowed = is_over_limit
+    }
   }
 
   // 更新四象，剧情活动和剧情复刻任务信息
