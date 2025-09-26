@@ -131,6 +131,8 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
       else
         currentRaid.abilityList.push({ ...abi })
     })
+
+    currentRaid.actionQueue.at(-1)!.guard_status = formation.map(item => ({ num: Number(item), is_guard_status: 0 }))
   }
 
   for (let i = 0; i < 6; i++) {
@@ -404,7 +406,6 @@ function recordRaidInfo(data: BattleStartJson) {
   }]
 
   const abilityList = getAbilityList(data.ability)
-  console.log({ abilityList })
 
   battleRecord.value.unshift({
     quest_id: data.quest_id,
