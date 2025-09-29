@@ -802,7 +802,7 @@ function handleResultContent(responseData: any) {
   if (!result_data)
     return
 
-  if (result_data.appearance?.is_quest && notificationSetting.value.appearanceQuest)
+  if (result_data.appearance?.is_quest && !result_data.appearance?.is_retry && notificationSetting.value.appearanceQuest)
     createNotification({ message: 'Hell提醒', sound: 'hell' })
 
   if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent) {
