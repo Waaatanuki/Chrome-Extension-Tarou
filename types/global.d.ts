@@ -380,6 +380,42 @@ declare module 'myStorage' {
     isFinished: boolean
     level: number
   }
+
+  interface SampoSetup {
+    captain: SampoCaptain
+    crew: SampoCrew[]
+    currentAreaId: number
+    area: SapmoArea[]
+  }
+
+  interface SampoParam {
+    power: number
+    endurance: number
+    observation: number
+    charm: number
+    luck: number
+  }
+
+  interface SampoCaptain extends SampoParam {
+    id: number
+    lv: number
+  }
+
+  interface SampoCrew extends Partial<SampoParam> {
+    id: number
+    lv: number
+  }
+
+  interface SapmoArea extends SampoParam {
+    id: number
+    isEmpty: boolean
+    equip: SampoEquip[]
+  }
+
+  interface SampoEquip extends Partial<SampoParam> {
+    id: number
+    slot: number
+  }
 }
 
 declare module 'source' {
@@ -674,371 +710,371 @@ declare module 'source' {
     }
   }
 
-   type ScenarioType = SummonScenario | DamageScenario | LoopDamageScenario
+  type ScenarioType = SummonScenario | DamageScenario | LoopDamageScenario
 
-   interface Scenario {
-     cmd: string
-     name?: {
-       ja: string
-       en: string
-     }
-     kind?: string
-     hp?: number
-     hpmax?: number
-     pos: number
-     num: number
-     from: string
-     to: string
-     condition: Condition
-     damage: { value: number, hp: number, pos: number }[][]
-     total?: { split: string[] }[]
-     is_damage_sync_effect: boolean | string
-     effect?: string
-     index?: number | string
-     target?: string
-     comment?: string
-     mode?: string
-     amount?: number
-     is_last_raid?: boolean
-   }
+  interface Scenario {
+    cmd: string
+    name?: {
+      ja: string
+      en: string
+    }
+    kind?: string
+    hp?: number
+    hpmax?: number
+    pos: number
+    num: number
+    from: string
+    to: string
+    condition: Condition
+    damage: { value: number, hp: number, pos: number }[][]
+    total?: { split: string[] }[]
+    is_damage_sync_effect: boolean | string
+    effect?: string
+    index?: number | string
+    target?: string
+    comment?: string
+    mode?: string
+    amount?: number
+    is_last_raid?: boolean
+  }
 
-   interface SpecialScenario extends Scenario {
-     list: { damage: { value: number }[] }[]
-   }
+  interface SpecialScenario extends Scenario {
+    list: { damage: { value: number }[] }[]
+  }
 
-   interface SummonScenario extends Scenario {
-     list: { damage: { value: number }[] }[]
-   }
+  interface SummonScenario extends Scenario {
+    list: { damage: { value: number }[] }[]
+  }
 
-   interface DamageScenario extends Scenario {
-     list: { num: number, value?: number, damage?: { value: number }[] }[]
-   }
+  interface DamageScenario extends Scenario {
+    list: { num: number, value?: number, damage?: { value: number }[] }[]
+  }
 
-   interface LoopDamageScenario extends Scenario {
-     list: { value?: number, damage?: { value: number }[] }[][]
-   }
+  interface LoopDamageScenario extends Scenario {
+    list: { value?: number, damage?: { value: number }[] }[][]
+  }
 
-   interface SuperScenario extends Scenario {
-     list: { damage: { pos: number, value: number }[] }[]
-   }
+  interface SuperScenario extends Scenario {
+    list: { damage: { pos: number, value: number }[] }[]
+  }
 
-   interface ResultJsonPayload {
-     type?: string
-     item_id?: string
-     ability_id: string
-     summon_id: string
-     character_num?: string
-     ability_aim_num?: string
-     ability_character_num: string
-     ability_sub_param: number[]
-   }
+  interface ResultJsonPayload {
+    type?: string
+    item_id?: string
+    ability_id: string
+    summon_id: string
+    character_num?: string
+    ability_aim_num?: string
+    ability_character_num: string
+    ability_sub_param: number[]
+  }
 
-   interface GuardSettingJson {
-     raid_id: number
-     guard_status: {
-       [key: string]: {
-         target_num: number
-         is_guard_status: number
-       }
-     }
-   }
+  interface GuardSettingJson {
+    raid_id: number
+    guard_status: {
+      [key: string]: {
+        target_num: number
+        is_guard_status: number
+      }
+    }
+  }
 
-   interface BossCondition {
-     status: string
-     class: string
-     remain: string | number
-     name: string
-     detail: string
-   }
+  interface BossCondition {
+    status: string
+    class: string
+    remain: string | number
+    name: string
+    detail: string
+  }
 
-   interface DeckJson {
-     group_name: string
-     combination_group_id: number
-     combination_id: number
-     name: string
-     order_no: number
-     priority: number
-     pc: Pc
-     npc: DeckNpc
-   }
+  interface DeckJson {
+    group_name: string
+    combination_group_id: number
+    combination_id: number
+    name: string
+    order_no: number
+    priority: number
+    pc: Pc
+    npc: DeckNpc
+  }
 
-   interface DeckNpc {
-     [key: string]: {
-       param: NpcParam
-       master: NpcMaster
-     }
-   }
+  interface DeckNpc {
+    [key: string]: {
+      param: NpcParam
+      master: NpcMaster
+    }
+  }
 
-   interface NpcParam {
-     image_id_3: string
-     id: number
-     has_npcaugment_constant: boolean
-   }
+  interface NpcParam {
+    image_id_3: string
+    id: number
+    has_npcaugment_constant: boolean
+  }
 
-   interface NpcMaster {
-     id: string
-     name: string
-   }
+  interface NpcMaster {
+    id: string
+    name: string
+  }
 
-   interface Pc {
-     param: { image: string, id: number }
-     summons: DeckSummon
-     sub_summons: DeckSummon
-     weapons: DeckWeapon
-     damage_info: DamageInfo
-     after_damage_info: DamageInfo
-     set_action: { name: string, set_action_id: string }[]
-     quick_user_summon_id: number
-     familiar_id?: number
-     job: {
-       param: {
-         id: number
-       }
-       master: {
-         id: string
-       }
-     }
-   }
+  interface Pc {
+    param: { image: string, id: number }
+    summons: DeckSummon
+    sub_summons: DeckSummon
+    weapons: DeckWeapon
+    damage_info: DamageInfo
+    after_damage_info: DamageInfo
+    set_action: { name: string, set_action_id: string }[]
+    quick_user_summon_id: number
+    familiar_id?: number
+    job: {
+      param: {
+        id: number
+      }
+      master: {
+        id: string
+      }
+    }
+  }
 
-   interface DeckSummon {
-     [key: string]: {
-       param?: SummonParam
-       master?: {
-         attribute: string
-         id: string
-         name: string
-         rarity: string
-       }
-     }
-   }
+  interface DeckSummon {
+    [key: string]: {
+      param?: SummonParam
+      master?: {
+        attribute: string
+        id: string
+        name: string
+        rarity: string
+      }
+    }
+  }
 
-   interface SummonParam {
-     id: string
-     image_id: string
-     level: string
-     attack: string
-     hp: string
-     quality: string
-     evolution_flag: string
-     evolution: string
-     is_mypage: boolean
-   }
+  interface SummonParam {
+    id: string
+    image_id: string
+    level: string
+    attack: string
+    hp: string
+    quality: string
+    evolution_flag: string
+    evolution: string
+    is_mypage: boolean
+  }
 
-   interface DeckWeapon {
-     [key: string]: WeaponDetail
-   }
+  interface DeckWeapon {
+    [key: string]: WeaponDetail
+  }
 
-   interface WeaponDetail {
-     master?: WeaponMaster
-     param?: WeaponParam
-     skill1?: WeaponSkill
-     skill2?: WeaponSkill
-     skill3?: WeaponSkill
-   }
+  interface WeaponDetail {
+    master?: WeaponMaster
+    param?: WeaponParam
+    skill1?: WeaponSkill
+    skill2?: WeaponSkill
+    skill3?: WeaponSkill
+  }
 
-   interface WeaponMaster {
-     id: string
-     name: string
-     attribute: string
-     series_id: string
-   }
+  interface WeaponMaster {
+    id: string
+    name: string
+    attribute: string
+    series_id: string
+  }
 
-   interface WeaponParam {
-     image_id: string
-     level: string
-     arousal: {
-       is_arousal_weapon: boolean
-       form: number
-     }
-   }
-   interface WeaponSkill {
-     id: string
-     description: string
-     image: string
-     attribute: string
-     name: string
-   }
+  interface WeaponParam {
+    image_id: string
+    level: string
+    arousal: {
+      is_arousal_weapon: boolean
+      form: number
+    }
+  }
+  interface WeaponSkill {
+    id: string
+    description: string
+    image: string
+    attribute: string
+    name: string
+  }
 
-   interface DamageInfo {
-     assumed_advantage_damage_attribute: number
-     assumed_normal_damage_attribute: number
-     assumed_advantage_damage: number
-     assumed_normal_damage: number
-     hp: number
-     effect_value_info: EffectValueInfo[]
-   }
+  interface DamageInfo {
+    assumed_advantage_damage_attribute: number
+    assumed_normal_damage_attribute: number
+    assumed_advantage_damage: number
+    assumed_normal_damage: number
+    hp: number
+    effect_value_info: EffectValueInfo[]
+  }
 
-   interface EffectValueInfo {
-     icon_img: string
-     value: string
-     is_max: boolean
-   }
+  interface EffectValueInfo {
+    icon_img: string
+    value: string
+    is_max: boolean
+  }
 
-   interface CalculateSetting {
-     priority: string
-     setting: {
-       image_id: string | null
-       summon_id: number | null
-       group_priority?: string
-       priority?: string
-     }
-   }
+  interface CalculateSetting {
+    priority: string
+    setting: {
+      image_id: string | null
+      summon_id: number | null
+      group_priority?: string
+      priority?: string
+    }
+  }
 
-   interface SpecialSkillSetting {
-     value: number
-     raid_id: number
-   }
+  interface SpecialSkillSetting {
+    value: number
+    raid_id: number
+  }
 
-   interface AssistRaidsData {
-     'chapter_name': string
-     'cjs_id': string
-     'raid': Raid
-     'boss_hp_width': number
-     'remaining_time': string
-     'member_count': number
-     'assist_user_limit': number
-     'called_user_name': string
-     'data-raid-type': number
-     'used_battle_point': number
-     'is_same_guild': boolean
-     'is_friend': boolean
-     'is_semi': any
-     'is_special_battle': boolean
-     'owner_job_id': string
-     'is_complete_perfection_proof': boolean
-     'is_lottery_rare_enemy': boolean
-     'is_trial_multi': boolean
-     'boss_image': string
-     'is_adddrop': boolean
-     'exskill_cp_type': number
-     'is_half': boolean
-     'boss_count_alive': number
-     'boss_count': number
-     'used_battle_point_max': string
-     'is_unpopular': boolean
-     'bp_select_type': number
-     'buff_name': string
-     'is_defendorder': boolean
-     'is_restrict_assist': boolean
-     'is_beginner': boolean
-   }
+  interface AssistRaidsData {
+    'chapter_name': string
+    'cjs_id': string
+    'raid': Raid
+    'boss_hp_width': number
+    'remaining_time': string
+    'member_count': number
+    'assist_user_limit': number
+    'called_user_name': string
+    'data-raid-type': number
+    'used_battle_point': number
+    'is_same_guild': boolean
+    'is_friend': boolean
+    'is_semi': any
+    'is_special_battle': boolean
+    'owner_job_id': string
+    'is_complete_perfection_proof': boolean
+    'is_lottery_rare_enemy': boolean
+    'is_trial_multi': boolean
+    'boss_image': string
+    'is_adddrop': boolean
+    'exskill_cp_type': number
+    'is_half': boolean
+    'boss_count_alive': number
+    'boss_count': number
+    'used_battle_point_max': string
+    'is_unpopular': boolean
+    'bp_select_type': number
+    'buff_name': string
+    'is_defendorder': boolean
+    'is_restrict_assist': boolean
+    'is_beginner': boolean
+  }
 
-   interface Raid {
-     multi_raid_id: string
-     multi_raid_timeline_id: string
-     quest_id: string
-     quest_detail_id: string
-     quest_type: string
-     action_type: string
-     is_trial: string
-     user_id: string
-     guild_id: string
-     member_num: string
-     battle_key: string
-     cleared_at: any
-     created_at: string
-     updated_at: string
-     deleted_at: string
-     location_id: string
-   }
+  interface Raid {
+    multi_raid_id: string
+    multi_raid_timeline_id: string
+    quest_id: string
+    quest_detail_id: string
+    quest_type: string
+    action_type: string
+    is_trial: string
+    user_id: string
+    guild_id: string
+    member_num: string
+    battle_key: string
+    cleared_at: any
+    created_at: string
+    updated_at: string
+    deleted_at: string
+    location_id: string
+  }
 
-   interface WsPayloadData {
-     bossUpdate?: {
-       param: {
-         boss1_hp: numebr
-         boss1_condition: Condition
-       }
-     }
-     mvpUpdate?: {
-       mvpList: {
-         point: string
-         user_id: string
-         rank: number
-       }[]
-     }
-     memberJoin?: {
-       member: {
-         nickname: string
-         user_id: string
-         level: number
-         job_id: number
-         pc_attribute: number
-       }
-       mvpList: {
-         point: string
-         user_id: string
-         rank: number
-       }[]
-     }
-     battleFinish?: {
-       timestamp: string
-       user_id: string
-     }
-     chatAdd?: ChatInfoJP
-     raidPost?: ChatInfoEN
-     raidGet?: (ChatInfoJP | ChatInfoEN)[]
-   }
+  interface WsPayloadData {
+    bossUpdate?: {
+      param: {
+        boss1_hp: numebr
+        boss1_condition: Condition
+      }
+    }
+    mvpUpdate?: {
+      mvpList: {
+        point: string
+        user_id: string
+        rank: number
+      }[]
+    }
+    memberJoin?: {
+      member: {
+        nickname: string
+        user_id: string
+        level: number
+        job_id: number
+        pc_attribute: number
+      }
+      mvpList: {
+        point: string
+        user_id: string
+        rank: number
+      }[]
+    }
+    battleFinish?: {
+      timestamp: string
+      user_id: string
+    }
+    chatAdd?: ChatInfoJP
+    raidPost?: ChatInfoEN
+    raidGet?: (ChatInfoJP | ChatInfoEN)[]
+  }
 
-   interface ChatInfoJP {
-     viewerId: string
-     chatId: string
-     categoryId: string
-     userId: string
-     timestamp: number
-     nickname: string
-     userImage: string
-     commentData: {
-       isStamp: boolean
-       content: string
-     }
-   }
+  interface ChatInfoJP {
+    viewerId: string
+    chatId: string
+    categoryId: string
+    userId: string
+    timestamp: number
+    nickname: string
+    userImage: string
+    commentData: {
+      isStamp: boolean
+      content: string
+    }
+  }
 
-   interface ChatInfoEN {
-     user_id: string
-     user_name: string
-     user_comment: {
-       is_stamp: boolean
-       text: string
-       stamp_id: number
-     }
-     timestamp: string
-   }
+  interface ChatInfoEN {
+    user_id: string
+    user_name: string
+    user_comment: {
+      is_stamp: boolean
+      text: string
+      stamp_id: number
+    }
+    timestamp: string
+  }
 
-   interface Artifact {
-     artifact_id: number
-     max_level: number
-     name: string
-     comment: string
-     rarity: string
-     skill1_info: ArtifactSkillInfo
-     skill2_info: ArtifactSkillInfo
-     skill3_info: ArtifactSkillInfo
-     skill4_info: ArtifactSkillInfo
-     id: number
-     level: string
-     kind: string
-     attribute: string
-     next_exp: number
-     remain_next_exp: number
-     exp_width: number
-     is_used: boolean
-     is_locked: boolean
-     is_unnecessary: boolean
-     equip_npc_info: {
-       user_npc_id?: number
-       image?: string
-       name?: name
-     }
-   }
+  interface Artifact {
+    artifact_id: number
+    max_level: number
+    name: string
+    comment: string
+    rarity: string
+    skill1_info: ArtifactSkillInfo
+    skill2_info: ArtifactSkillInfo
+    skill3_info: ArtifactSkillInfo
+    skill4_info: ArtifactSkillInfo
+    id: number
+    level: string
+    kind: string
+    attribute: string
+    next_exp: number
+    remain_next_exp: number
+    exp_width: number
+    is_used: boolean
+    is_locked: boolean
+    is_unnecessary: boolean
+    equip_npc_info: {
+      user_npc_id?: number
+      image?: string
+      name?: name
+    }
+  }
 
-   interface ArtifactSkillInfo {
-     skill_id: number
-     level: number
-     name: string
-     is_max_quality: boolean
-     effect_value: string
-     icon_image: string
-   }
+  interface ArtifactSkillInfo {
+    skill_id: number
+    level: number
+    name: string
+    is_max_quality: boolean
+    effect_value: string
+    icon_image: string
+  }
 }
 
 declare module 'battleLog' {

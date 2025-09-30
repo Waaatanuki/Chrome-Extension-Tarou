@@ -47,9 +47,12 @@ function handleFinish() {
     <el-descriptions-item label="探险队情报" align="center" :span="3">
       <template #label>
         <div flex justify-between>
-          <div>
-            {{ `探险队 Lv${sampoInfo.level}` }}
-          </div>
+          <el-tooltip content="打开探险队配装" placement="top">
+            <div cursor-pointer text-12px text-teal-6 hover:text-teal-4 @click="openPopupWindow('SampoSetup')">
+              {{ `探险队 Lv${sampoInfo.level}` }}
+            </div>
+          </el-tooltip>
+
           <el-tag v-if="sampoInfo.areaName" :type="sampoInfo.isFinished ? 'success' : 'danger' ">
             {{ sampoInfo.isFinished ? '待机中' : '探险中' }}
           </el-tag>

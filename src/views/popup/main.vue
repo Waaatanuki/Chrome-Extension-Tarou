@@ -6,6 +6,7 @@ import Debug from './components/Debug.vue'
 import GachaRecord from './components/GachaRecord.vue'
 import RecoveryItem from './components/RecoveryItem.vue'
 import RewardList from './components/RewardList.vue'
+import SampoSetup from './components/SampoSetup.vue'
 import SupportSummon from './components/SupportSummon.vue'
 
 const currentView = computed(() => document.URL.split('?')[1])
@@ -19,6 +20,7 @@ const componentMap: Record<string, Component> = {
   RewardList,
   Debug,
   BuildCompare,
+  SampoSetup,
 }
 
 onMounted(() => {

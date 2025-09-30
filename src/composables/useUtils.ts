@@ -18,6 +18,7 @@ export function openPopupWindow(key: string) {
     ArtifactBox: { height: 950, width: 1600 },
     RecoveryItem: { height: 1000, width: 900 },
     BuildCompare: { height: 800, width: 1100 },
+    SampoSetup: { height: 900, width: 600 },
   }
 
   const getWindowSize = (key: string) => {

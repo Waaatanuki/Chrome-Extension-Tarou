@@ -1,11 +1,11 @@
-import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, Player, TeamraidAdditional } from 'myStorage'
+import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, Player, SampoParam, TeamraidAdditional } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
 import type { BattleStartJson, GachaRatioAppear, GachaRatioAppearItem, GachaResult } from 'source'
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, skipQuest, userInfo } from '~/logic'
+import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -196,17 +196,120 @@ export async function unpack(parcel: string) {
     }
   }
 
+  // Dashboard 探险队队员信息
+  if (url.includes('/rest/vyrnsampo/crew_list')) {
+    if (!responseData || responseData.length === 0)
+      return
+
+    const crewMap = {
+      1: 'observation',
+      2: 'endurance',
+      3: 'charm',
+      4: 'power',
+    } as Record<number, keyof SampoParam>
+
+    sampoSetup.value.crew = responseData.map((item: any) => ({
+      id: item.crew_id,
+      lv: item.friendship_level,
+      [crewMap[item.crew_id]]: Number(item.skill[0].comment.match(/\d+/)?.[0] || '0'),
+    }))
+  }
+
   // Dashboard 探险队地图信息
   if (url.includes('/vyrnsampo/content/area/')) {
     const teamInfo = responseData.option.team_info
+    const areaInfo = responseData.option.area_info
 
-    if (!teamInfo || Object.keys(teamInfo).length === 0)
+    if (!teamInfo || Object.keys(teamInfo).length === 0 || !areaInfo || Object.keys(areaInfo).length === 0)
       return
 
     sampoInfo.value.recoveryRemainTime = Date.now() + teamInfo.captain_info.recovery_remain_time * 1000
     sampoInfo.value.currentStamina = teamInfo.captain_info.current_stamina
     sampoInfo.value.maxStamina = teamInfo.captain_info.max_stamina
     sampoInfo.value.level = teamInfo.captain_info.adventure_level
+
+    sampoSetup.value.captain = {
+      id: teamInfo.captain_info.captain_id,
+      lv: teamInfo.captain_info.adventure_level,
+      power: Number(teamInfo.captain_info.power),
+      endurance: Number(teamInfo.captain_info.endurance),
+      observation: Number(teamInfo.captain_info.observation),
+      charm: Number(teamInfo.captain_info.charm),
+      luck: Number(teamInfo.captain_info.luck),
+    }
+
+    const isEmpty = Object.values(teamInfo.cosmetic_info_list).every((item: any) => Object.keys(item).length === 0)
+      && Object.values(teamInfo.crew_info_list).every((item: any) => Object.keys(item).length === 0)
+
+    sampoSetup.value.area = sampoSetup.value.area || []
+    sampoSetup.value.currentAreaId = Number(areaInfo.area_id)
+    let hitArea = sampoSetup.value.area.find(a => a.id === Number(areaInfo.area_id))
+
+    if (!hitArea) {
+      hitArea = {
+        id: Number(areaInfo.area_id),
+        isEmpty,
+        power: Number(areaInfo.recommend_power),
+        endurance: Number(areaInfo.recommend_endurance),
+        observation: Number(areaInfo.recommend_observation),
+        charm: Number(areaInfo.recommend_charm),
+        luck: Number(areaInfo.recommend_luck),
+        equip: [],
+      }
+      sampoSetup.value.area.push(hitArea)
+    }
+    hitArea.isEmpty = isEmpty
+    hitArea.power = Number(areaInfo.recommend_power)
+    hitArea.endurance = Number(areaInfo.recommend_endurance)
+    hitArea.observation = Number(areaInfo.recommend_observation)
+    hitArea.charm = Number(areaInfo.recommend_charm)
+    hitArea.luck = Number(areaInfo.recommend_luck)
+  }
+
+  // Dashboard 探险队装备信息
+  if (url.includes('/rest/vyrnsampo/equip_cosmetic_list')) {
+    const setting = JSON.parse(requestData!)
+    const areaId = Number(setting.area_id)
+
+    if (sampoSetup.value.currentAreaId !== areaId)
+      return
+
+    const hitArea = sampoSetup.value.area?.find(p => p.id === areaId)
+
+    if (!hitArea || !hitArea.isEmpty)
+      return
+
+    const list = responseData.list
+
+    if (!list || list.length === 0 || !sampoSetup.value.captain)
+      return
+
+    for (const item of list) {
+      let hit = hitArea.equip.find(p => p.id === item.cosmetic_id)
+      if (!hit) {
+        hit = {
+          id: item.cosmetic_id,
+          slot: Number(item.slot),
+          power: 0,
+          endurance: 0,
+          observation: 0,
+          charm: 0,
+          luck: 0,
+        }
+        hitArea.equip.push(hit)
+      }
+      hit.power = item.after_parameter.power - sampoSetup.value.captain.power
+      hit.endurance = item.after_parameter.endurance - sampoSetup.value.captain.endurance
+      hit.observation = item.after_parameter.observation - sampoSetup.value.captain.observation
+      hit.charm = item.after_parameter.charm - sampoSetup.value.captain.charm
+      hit.luck = item.after_parameter.luck - sampoSetup.value.captain.luck
+
+      Object.keys(hit).forEach((key) => {
+        if (hit[key as keyof SampoParam] === 0) {
+          delete hit[key as keyof SampoParam]
+        }
+      })
+    }
   }
 
   // Gacha 卡池数据
