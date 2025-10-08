@@ -23,7 +23,7 @@ const eventGachaInfo = [
   },
   {
     name: '公会战',
-    type: 'asdasdasd',
+    type: 'teamforce',
     boxToken: [
       [1600, 1],
       [2400, 3],

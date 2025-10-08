@@ -1,4 +1,4 @@
-import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, Player, SampoParam, TeamraidAdditional } from 'myStorage'
+import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, Player, SampoParam, TeamforceAdditional, TeamraidAdditional } from 'myStorage'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
 import type { BattleStartJson, GachaRatioAppear, GachaRatioAppearItem, GachaResult } from 'source'
 import { load } from 'cheerio'
@@ -1060,6 +1060,28 @@ function handleResultContent(responseData: any) {
     }
   }
 
+  // 更新工会战活动任务信息
+  if (result_data.popup_data?.teamforce_mission && Object.keys(result_data.popup_data?.teamforce_mission).length > 0) {
+    const eventInfo = eventList.value.find(event => event.type === 'teamforce')
+    const progress = result_data.popup_data.teamforce_mission.progress ?? {}
+    const achieve_mission = result_data.popup_data.teamforce_mission.achieve_mission ?? []
+
+    const mission = eventInfo?.mission.find(m => m.desc === progress.description)
+    if (mission) {
+      mission.number = Number(progress.numerator)
+      mission.limit = Number(progress.denominator)
+      mission.isAllComplete = mission.number >= mission.limit
+    }
+
+    for (const item of achieve_mission) {
+      const mission = eventInfo?.mission.find(m => m.desc === item.description)
+      if (mission) {
+        mission.number = mission.limit
+        mission.isAllComplete = true
+      }
+    }
+  }
+
   // 更新四象点数信息
   if (isInAdvent) {
     const is_over_limit = result_data.advent_info?.is_over_limit
@@ -1282,6 +1304,65 @@ function processEventData(url: string, responseData: any) {
   // 古战场战货
   if (/\/teamraid\d+\/gacha\/content\/index/.test(url)) {
     const eventType = 'teamraid'
+    const eventInfo = eventList.value.find(event => event.type === eventType)
+    if (!eventInfo || !eventInfo.additional)
+      return
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+    const gachaInfo = $('.prt-gacha-infomation')
+    if (!gachaInfo.length) {
+      eventInfo.additional.drawnBox = 0
+      return
+    }
+    const boxNum = Number((gachaInfo.data('box-num') as string).match(/\d+/)![0])
+    const gachaPoint = Number(gachaInfo.find('.txt-current-point').text())
+
+    eventInfo.additional.drawnBox = boxNum
+    eventInfo.additional.gachaPoint = gachaPoint
+  }
+
+  // 工会战
+  if (/\/teamforce\/top\/content\/index\/\d+/.test(url)) {
+    if (!responseData.option)
+      return
+
+    const eventType = 'teamforce'
+
+    const eventInfo: EventInfo & { additional: TeamforceAdditional } = {
+      type: eventType,
+      isActive: true,
+      mission: Object.values(responseData.option.mission_list).map((m: any) => ({
+        reward: m.level_details[m.level].reward_name,
+        desc: m.level_details[m.level].description,
+        number: Number(m.progress),
+        limit: Number(m.max_progress),
+        isAllComplete: m.is_all_complete,
+        isDailyMission: false,
+      })),
+      count: Number(responseData.option.poped_extra_enemy_list[0]?.remain_daily_play_limit || 0),
+      updateTime: dayjs().valueOf(),
+      additional: {
+        drawnBox: 0,
+        gachaPoint: 0,
+      },
+    }
+
+    const index = eventList.value.findIndex(event => event.type === eventType)
+
+    if (index === -1) {
+      eventList.value.push(eventInfo)
+    }
+    else {
+      const existingEvent = eventList.value[index]
+      eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 0
+      eventInfo.additional.gachaPoint = existingEvent.additional?.gachaPoint || 0
+      eventList.value[index] = eventInfo
+    }
+  }
+
+  // 工会战战货
+  if (/\/teamforce\/gacha\/content\/index/.test(url)) {
+    const eventType = 'teamforce'
     const eventInfo = eventList.value.find(event => event.type === eventType)
     if (!eventInfo || !eventInfo.additional)
       return

@@ -12,6 +12,7 @@ import Biography from './event/Biography.vue'
 import Godslayer from './event/Godslayer.vue'
 import Interlude from './event/Interlude.vue'
 import Solotreasure from './event/Solotreasure.vue'
+import Teamforce from './event/Teamforce.vue'
 import Teamraid from './event/Teamraid.vue'
 import Terra from './event/Terra.vue'
 import Treasureraid from './event/Treasureraid.vue'
@@ -29,6 +30,7 @@ const componentMap: Record<string, Component> = {
   'Event/Godslayer': Godslayer,
   'Event/Treasureraid': Treasureraid,
   'Event/Teamraid': Teamraid,
+  'Event/Teamforce': Teamforce,
   'Event/Advent': Advent,
   'Event/Interlude': Interlude,
   'Event/Solotreasure': Solotreasure,

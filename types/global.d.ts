@@ -76,6 +76,11 @@ declare module 'myStorage' {
     log: { guild1: string, guild2: string, key: string, point: number[][] }
   }
 
+  interface TeamforceAdditional {
+    gachaPoint: number
+    drawnBox: number
+  }
+
   interface InterludeAdditional {
     dailyList: Mission[]
   }
