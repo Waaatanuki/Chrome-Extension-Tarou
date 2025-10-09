@@ -56,6 +56,9 @@ importers:
       '@vueuse/shared':
         specifier: ^13.9.0
         version: 13.9.0(vue@3.5.21(typescript@5.7.3))
+      '@zumer/snapdom':
+        specifier: ^1.9.14
+        version: 1.9.14
       ali-oss:
         specifier: ^6.23.0
         version: 6.23.0
@@ -1137,6 +1140,9 @@ packages:
 
   '@vueuse/shared@9.13.0':
     resolution: {integrity: sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==}
+
+  '@zumer/snapdom@1.9.14':
+    resolution: {integrity: sha512-kQARFS/jf+fsIFv9qxfNp8YMeun5tTyhFDk3iv47Lywk5YRldhINWicEZI15fP3FDUCeo8ok+BP0CtnDRFMFRg==}
 
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
@@ -4576,6 +4582,8 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@zumer/snapdom@1.9.14': {}
 
   abort-controller@3.0.0:
     dependencies:

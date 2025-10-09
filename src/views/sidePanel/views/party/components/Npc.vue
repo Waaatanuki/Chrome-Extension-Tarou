@@ -51,9 +51,9 @@ function goWiki(masterId: number) {
           <template #reference>
             <div relative w-56px class="group">
               <img w-full :src="getAssetImg('npc', npc.imageId, 'quest')">
-              <div absolute inset-0 hidden fc bg-black opacity-70 group-hover:flex>
-                <div v-if="isBuild" i-carbon:close-filled absolute icon-btn @click="updateNpcFilter(npc.masterId)" />
-                <div v-else i-mdi:wikipedia absolute icon-btn @click="goWiki(npc.masterId)" />
+              <div absolute inset-0 hidden fc bg-black opacity-70 class="group-hover:flex">
+                <div v-if="isBuild" class="i-carbon:close-filled" absolute icon-btn @click="updateNpcFilter(npc.masterId)" />
+                <div v-else class="i-mdi:wikipedia" absolute icon-btn @click="goWiki(npc.masterId)" />
               </div>
               <img v-if="npc.isAugment" absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
               <div
@@ -68,7 +68,7 @@ function goWiki(masterId: number) {
                     :class="`ability_icon_type_${ability.iconType}`"
                     h-11px w-11px rounded-sm ring-1
                   />
-                  <div v-if="!ability.fa" i-carbon:close absolute text-13px text-black />
+                  <div v-if="!ability.fa" class="i-carbon:close" absolute text-13px text-black />
                 </div>
               </div>
             </div>
