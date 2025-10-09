@@ -1328,6 +1328,10 @@ function processEventData(url: string, responseData: any) {
 
     const eventType = 'teamforce'
 
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+    const remainDailyPlayLimit = Number($('.prt-strong-quest-remain').text())
+
     const eventInfo: EventInfo & { additional: TeamforceAdditional } = {
       type: eventType,
       isActive: true,
@@ -1339,7 +1343,7 @@ function processEventData(url: string, responseData: any) {
         isAllComplete: m.is_all_complete,
         isDailyMission: false,
       })),
-      count: Number(responseData.option.poped_extra_enemy_list[0]?.remain_daily_play_limit || 0),
+      count: remainDailyPlayLimit,
       updateTime: dayjs().valueOf(),
       additional: {
         drawnBox: 0,
