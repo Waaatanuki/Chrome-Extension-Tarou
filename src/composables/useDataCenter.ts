@@ -726,7 +726,7 @@ export async function unpack(parcel: string) {
   }
 
   // 判断是否开启debugger
-  if (url.includes('/socket/uri')) {
+  if (url.includes('/socket/uri/raid')) {
     chrome.debugger.detach({ tabId: obTabId.value })
       .catch(error => console.log(error))
       .then(() => chrome.debugger.attach({ tabId: obTabId.value }, '1.3'))
