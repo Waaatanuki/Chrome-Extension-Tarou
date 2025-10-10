@@ -10,7 +10,7 @@ const { size = 'small', type = 'primary', color = 'rgb(13 148 136)', icon, loadi
 </script>
 
 <template>
-  <el-button v-bind="{ ...$attrs, ...$props }">
+  <el-button v-bind="{ ...$attrs, ...$props }" icon="">
     <div fc gap-4px>
       <Icon v-if="icon && !loading" :icon="icon" />
       <slot />
