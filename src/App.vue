@@ -21,26 +21,10 @@ const gachaInfo = ref({
   id: '12',
 })
 const data = ref({})
-
-const bar = [
-  { key: 'Drop', lable: '复制配置', icon: 'material-symbols:content-copy' },
-  { key: 'Dashborad', lable: '下载配置', icon: 'streamline-flex:screenshot' },
-  { key: 'Setting', lable: '配置对比', icon: 'material-symbols:compare' },
-]
 </script>
 
 <template>
   <div fc flex-wrap gap-3 p-10>
-    <div
-      fixed left-0 top-100px h-30px w-30px flex items-center
-      overflow-hidden rounded-r-3xl bg-teal-7 transition-all duration-300 hover:w-90px
-    >
-      <el-tooltip v-for="view in bar" :key="view.key" effect="dark" :content="view.lable" placement="top" :show-after="500">
-        <div mx-5px h-20px w-20px fc shrink-0 cursor-pointer rounded-full hover:bg-teal-9 @click="currentView = view.key">
-          <Icon :icon="view.icon" text-12px />
-        </div>
-      </el-tooltip>
-    </div>
     <div h-600px w-600px ring-1>
       <div fc gap-2 p-2>
         <el-input v-model="foo" type="text" style="width: 200px;" />
