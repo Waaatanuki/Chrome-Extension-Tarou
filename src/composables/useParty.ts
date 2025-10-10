@@ -16,8 +16,9 @@ export function handleDeckJson(data: DeckJson) {
     effects: processEffect(data),
   })
 
-  if (deckList.value.length > 3)
+  while (deckList.value.length > 3) {
     deckList.value.pop()
+  }
 }
 
 export function handleCalculateSetting(data: CalculateSetting) {
