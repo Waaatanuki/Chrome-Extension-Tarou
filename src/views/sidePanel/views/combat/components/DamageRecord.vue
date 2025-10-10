@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import type { Player } from 'myStorage'
 
-const props = defineProps<{ playerInfo: Player[] }>()
+const { playerInfo, isExport = false } = defineProps<{ playerInfo: Player[], isExport?: boolean }>()
 
 type DamageType = 'total' | 'attack' | 'ability' | 'special' | 'other'
 const damageType = ref<DamageType>('total')
 
 const damageTypeOptions = ref<{ value: DamageType, label: string }[]>([
-  { value: 'total', label: '总计' },
   { value: 'attack', label: '通常攻击&反击' },
   { value: 'ability', label: '技能伤害' },
   { value: 'special', label: '奥义伤害' },
   { value: 'other', label: '其他' },
+  { value: 'total', label: '总计' },
 ])
 
 const maxDamage = computed(() =>
-  props.playerInfo.reduce((pre, cur) => pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value, 1),
+  playerInfo.reduce((pre, cur) => pre > cur.damage[damageType.value].value ? pre : cur.damage[damageType.value].value, 1),
 )
 
 const totalDamage = computed(() =>
@@ -23,7 +23,7 @@ const totalDamage = computed(() =>
     p.push({
       value: c.value,
       label: c.label,
-      total: props.playerInfo.reduce((pre, cur) => {
+      total: playerInfo.reduce((pre, cur) => {
         pre += cur.damage[c.value].value
         return pre
       }, 0),
@@ -40,7 +40,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
 
 <template>
   <div>
-    <div mb-15px w-full fc>
+    <div v-if="!isExport" mb-15px w-full fc>
       <ElSelect v-model="damageType" style="width:150px" size="small">
         <ElOption
           v-for="item in damageTypeOptions"
@@ -76,41 +76,51 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
           <ElProgress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
             <div />
           </ElProgress>
-          <div mx-5px mt-10px flex items-center justify-between>
+          <div mx-5px mt-10px w-full flex items-center justify-between>
             <div>
               <ElTooltip
                 v-if="player.attackInfo"
                 :content="`总次数: ${player.attackInfo.total} TA: ${getRengeki('ta', player.attackInfo)} DA: ${getRengeki('da', player.attackInfo)}  SA: ${getRengeki('sa', player.attackInfo)}`"
                 placement="top" effect="dark"
               >
-                <div text-12px>
+                <div w-60px text-12px>
                   {{ `TA: ${getRengeki('ta', player.attackInfo)}` }}
                 </div>
               </ElTooltip>
             </div>
-            <div text-12px>
+            <div text-end text-12px>
               {{ player.damage[damageType].value.toLocaleString() }}
             </div>
           </div>
         </div>
       </div>
-      <div mt-10px w-full flex justify-end text-base>
+      <div v-if="isExport" mt-5px w-full flex flex-col text-12px>
+        <div v-for="damage, index in totalDamage" :key="index" flex items-center justify-between>
+          <div flex-1>
+            {{ damage.label }}{{ `(${(damage.total / totalDamage[4].total * 100).toFixed(2)}%)` }}
+          </div>
+          <div text-end>
+            {{ `${damage.total.toLocaleString()}` }}
+          </div>
+        </div>
+      </div>
+      <div v-else mt-10px w-full flex justify-end text-base>
         <div fc gap-10px>
-          合计： {{ totalDamage[0].total.toLocaleString() }}
+          合计： {{ totalDamage[4].total.toLocaleString() }}
           <el-popover placement="top-end" width="200">
             <template #reference>
               <div i-carbon:information />
             </template>
             <el-descriptions direction="vertical" :column="1" size="small" border>
-              <el-descriptions-item v-for="i in 4" :key="i" label="Username">
+              <el-descriptions-item v-for="damage, index in totalDamage.slice(0, 4)" :key="index" label="Username">
                 <template #label>
                   <div flex items-center justify-between>
-                    <div>{{ totalDamage[i].label }}</div>
-                    <div>{{ `${(totalDamage[i].total / totalDamage[0].total * 100).toFixed(2)}%` }}</div>
+                    <div>{{ damage.label }}</div>
+                    <div>{{ `${(damage.total / totalDamage[4].total * 100).toFixed(2)}%` }}</div>
                   </div>
                 </template>
                 <div>
-                  {{ `${totalDamage[i].total.toLocaleString()}` }}
+                  {{ `${damage.total.toLocaleString()}` }}
                 </div>
               </el-descriptions-item>
             </el-descriptions>

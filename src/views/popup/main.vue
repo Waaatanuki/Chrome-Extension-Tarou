@@ -3,6 +3,7 @@ import ArtifactBox from './components/ArtifactBox.vue'
 import ArtifactRule from './components/ArtifactRule.vue'
 import BuildCompare from './components/BuildCompare.vue'
 import Debug from './components/Debug.vue'
+import ExportRecord from './components/ExportRecord.vue'
 import GachaRecord from './components/GachaRecord.vue'
 import RecoveryItem from './components/RecoveryItem.vue'
 import RewardList from './components/RewardList.vue'
@@ -21,6 +22,7 @@ const componentMap: Record<string, Component> = {
   Debug,
   BuildCompare,
   SampoSetup,
+  ExportRecord,
 }
 
 onMounted(() => {

@@ -3,7 +3,7 @@ import type { BuildStorage } from 'build'
 import type { BattleRecord } from 'myStorage'
 import copy from 'copy-text-to-clipboard'
 import { uploadBuild } from '~/api'
-import { battleRecord, deckList } from '~/logic'
+import { battleExportData, battleRecord, deckList } from '~/logic'
 import ActionList from '../combat/components/ActionList.vue'
 import BattleAnalysis from '../combat/components/BattleAnalysis.vue'
 import Npc from '../party/components/Npc.vue'
@@ -43,13 +43,20 @@ function getFullTimeSpeed(row: BattleRecord) {
   return `${row.duration} / ${(damage / (seconds / 60) / 1000000).toFixed(0)}`
 }
 
-function handleCommand(command: 'detail' | 'upload', data: BattleRecord) {
+function handleCommand(command: 'detail' | 'upload' | 'export', data: BattleRecord) {
+  currentRecord.value = data
+
+  if (command === 'export') {
+    battleExportData.value = processData()
+    openPopupWindow('ExportRecord')
+    return
+  }
+
   if (command === 'upload')
     data.isFa = data.isFa ?? true
 
   dialogType.value = command
   dialogVisible.value = true
-  currentRecord.value = data
 }
 
 function handleCopyBuild() {
@@ -150,6 +157,9 @@ function copyLink(key: string) {
           </TheButton>
           <TheButton @click="handleCommand('detail', data)">
             详情
+          </TheButton>
+          <TheButton @click="handleCommand('export', data)">
+            导出
           </TheButton>
         </div>
       </div>
