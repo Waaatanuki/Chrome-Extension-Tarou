@@ -50,25 +50,44 @@ function goWiki(masterId: number) {
         <el-popover placement="top-start" width="274">
           <template #reference>
             <div relative w-56px class="group">
-              <img w-full :src="getAssetImg('npc', npc.imageId, 'quest')">
-              <div absolute inset-0 hidden fc bg-black opacity-70 class="group-hover:flex">
+              <img w-full :src="getAssetImg('npc', npc.imageId, 'raid_normal')">
+              <div absolute inset-0 z-999 hidden fc bg-black opacity-70 class="group-hover:flex">
                 <div v-if="isBuild" class="i-carbon:close-filled" absolute icon-btn @click="updateNpcFilter(npc.masterId)" />
                 <div v-else class="i-mdi:wikipedia" absolute icon-btn @click="goWiki(npc.masterId)" />
               </div>
               <img v-if="npc.isAugment" absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
-              <div
-                v-if="npc.arousalForm" :class="`txt-form-color-${npc.arousalForm}`"
-                absolute bottom-13px right-0 rounded bg-neutral px-1 text-12px
-              >
-                {{ NPC_AROUSAL_FORM[npc.arousalForm] }}
-              </div>
-              <div mt-1px h-12px flex items-center justify-start gap-4px>
-                <div v-for="ability, i in npc.ability" :key="i" relative fc>
-                  <div
-                    :class="`ability_icon_type_${ability.iconType}`"
-                    h-11px w-11px rounded-sm ring-1
-                  />
-                  <div v-if="!ability.fa" class="i-carbon:close" absolute text-13px text-black />
+              <img absolute right-0 top-0 :src="getArtifactIcon(`icn_type_${npc.attribute}`)" w-20px>
+
+              <div absolute bottom-0 w-full flex flex-col py-2px>
+                <div
+                  v-if="npc.arousalForm" :class="`txt-form-color-${npc.arousalForm}`"
+                  class="bg-[rgba(0,0,0,0.6)]" mr-2px self-end rounded p-1px text-10px
+                >
+                  {{ NPC_AROUSAL_FORM[npc.arousalForm] }}
+                </div>
+
+                <div relative h-15px pt-10px>
+                  <img m-auto h-5px w-52px :src="getLocalImg('status_hp')">
+                  <div absolute bottom--1px right-2px w-52px text-end text-12px class="txt-hp-value">
+                    123456
+                  </div>
+                </div>
+
+                <div class="txt-hp-value" flex items-center justify-end px-3px>
+                  <img w-12px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/skill/ex_skill_ta.png">
+                  <div text-10px>
+                    100%
+                  </div>
+                </div>
+
+                <div h-12px flex items-center justify-start gap-4px px-4px>
+                  <div v-for="ability, i in npc.ability" :key="i" relative fc>
+                    <div
+                      :class="`ability_icon_type_${ability.iconType}`"
+                      h-9px w-9px rounded-sm ring-1
+                    />
+                    <div v-if="!ability.fa" class="i-carbon:close" absolute text-13px text-black />
+                  </div>
                 </div>
               </div>
             </div>
@@ -171,5 +190,17 @@ function goWiki(masterId: number) {
     0 0 2px #150f0f,
     0 0 2px #150f0f,
     0 0 2px #150f0f;
+}
+.txt-hp-value {
+  color: #f2eee2;
+  text-shadow:
+    0 0 1px #0c320d,
+    0 0 1px #0c320d,
+    0 0 1px #0c320d,
+    0 0 1px #0c320d,
+    0 0 2px #0c320d,
+    0 0 2px #0c320d,
+    0 0 2px #0c320d,
+    0 0 2px #0c320d;
 }
 </style>

@@ -138,7 +138,8 @@ function processNpc(data: DeckJson) {
       newNpcs.push({
         paramId: npc.param.id,
         masterId: Number(npc.master.id),
-        imageId: npc.param.image_id_3,
+        imageId: formatNpcImageId(npc.param.image_id_3),
+        attribute: npc.master.attribute,
         isAugment: npc.param.has_npcaugment_constant,
         arousalForm: hit ? hit.arousalForm : 0,
         ability: hit ? [...hit.ability] : [],
@@ -153,4 +154,10 @@ function processNpc(data: DeckJson) {
 function processEffect(data: DeckJson) {
   const damageInfo = Object.keys(data.pc.after_damage_info).length === 0 ? data.pc.damage_info : data.pc.after_damage_info
   return damageInfo.effect_value_info.map(e => ({ iconImg: e.icon_img, isMax: e.is_max, value: e.value }))
+}
+
+function formatNpcImageId(str: string) {
+  const regex = /^skin\/(.+?)_[^_]+$/
+  const match = str.match(regex)
+  return match ? match[1] : str
 }

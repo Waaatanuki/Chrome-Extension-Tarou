@@ -47,7 +47,7 @@ export function useVersionCheck() {
       }
     }
     catch (error) {
-      console.error('检查更新失败:', error)
+      console.log('检查更新失败:', error)
     }
   }
 

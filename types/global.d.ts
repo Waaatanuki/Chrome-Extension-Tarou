@@ -819,6 +819,7 @@ declare module 'source' {
   interface NpcMaster {
     id: string
     name: string
+    attribute: number
   }
 
   interface Pc {
@@ -1191,6 +1192,7 @@ declare module 'party' {
     paramId: number
     masterId: number
     imageId: string
+    attribute: number
     isAugment: boolean
     arousalForm?: number
     ability: {
