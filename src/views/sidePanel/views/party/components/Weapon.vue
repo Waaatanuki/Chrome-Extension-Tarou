@@ -49,9 +49,9 @@ function isFWorUW(weapon: BuildWeapon) {
           <div class="prt-ultimate-star-on" :data-level="mainWeapon.level" />
         </div>
         <img v-if="mainWeapon.arousalForm" class="ico-arousal-main-type" :src="getArousalIcon(mainWeapon.arousalForm)">
-        <ElTag v-if="getSkillAlias (mainWeapon)" type="danger" size="small" class="skill-tag">
-          {{ getSkillAlias (mainWeapon) }}
-        </ElTag>
+        <div v-if="getSkillAlias(mainWeapon)" class="skill-tag rounded bg-black/90 px-4px py-1px text-12px text-rose">
+          {{ getSkillAlias(mainWeapon) }}
+        </div>
         <img v-if="mainWeapon.skill.find(s => s.type === 'skill1')?.image && isUW(mainWeapon)" class="skill1-icon" :src="getSkillIcon(mainWeapon, 'skill1')">
         <img v-if="mainWeapon.skill.find(s => s.type === 'skill2')?.image && isFWorUW(mainWeapon)" class="skill2-icon" :src="getSkillIcon(mainWeapon, 'skill2')">
       </div>
@@ -62,9 +62,9 @@ function isFWorUW(weapon: BuildWeapon) {
             <div class="prt-ultimate-star-on" :data-level="w.level" />
           </div>
           <img v-if="w.arousalForm" class="ico-arousal-type" :src="getArousalIcon(w.arousalForm)">
-          <ElTag v-if="getSkillAlias(w)" type="danger" size="small" class="skill-tag">
+          <div v-if="getSkillAlias(w)" class="skill-tag rounded bg-black/90 px-4px py-1px text-12px text-rose">
             {{ getSkillAlias(w) }}
-          </ElTag>
+          </div>
           <img v-if="w.skill.find(s => s.type === 'skill1')?.image && isUW(w)" class="skill1-icon" :src="getSkillIcon(w, 'skill1')">
           <img v-if="w.skill.find(s => s.type === 'skill2')?.image && isFWorUW(w)" class="skill2-icon" :src="getSkillIcon(w, 'skill2')">
         </div>

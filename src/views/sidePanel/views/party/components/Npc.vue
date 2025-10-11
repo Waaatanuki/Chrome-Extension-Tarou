@@ -61,7 +61,7 @@ function goWiki(masterId: number) {
               <div absolute bottom-0 w-full flex flex-col py-2px>
                 <div
                   v-if="npc.arousalForm" :class="`txt-form-color-${npc.arousalForm}`"
-                  class="bg-[rgba(0,0,0,0.6)]" mr-2px self-end rounded p-1px text-10px
+                  class="bg-black/60" mr-2px self-end rounded p-1px text-10px
                 >
                   {{ NPC_AROUSAL_FORM[npc.arousalForm] }}
                 </div>

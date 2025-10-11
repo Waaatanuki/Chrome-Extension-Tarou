@@ -76,7 +76,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
           <ElProgress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
             <div />
           </ElProgress>
-          <div mx-5px mt-10px w-full flex items-center justify-between>
+          <div mt-10px w-full flex items-center justify-between>
             <div>
               <ElTooltip
                 v-if="player.attackInfo"

@@ -15,6 +15,7 @@ async function exportToImg() {
     const element = document.querySelector(`#record-container`)!
     const result = await snapdom(element)
     await result.download({ scale: 1.5, format: 'png', filename: `战斗记录${Date.now()}`, backgroundColor: '#131313' })
+    ElMessage.success('保存成功')
   }
   catch (error) {
     createNotification({ message: String(error) })
@@ -51,7 +52,7 @@ async function exportToImg() {
             {{ `${userInfo.name} @ ${useDateFormat(battleExportData.startTime! * 1000, 'MM-DD HH:mm:ss').value}` }}
           </div>
         </el-card>
-        <DamageRecord v-if="battleExportData.detail" :player-info="battleExportData.detail.player" :is-export="true" />
+        <DamageRecord v-if="battleExportData.detail" m-auto :player-info="battleExportData.detail.player" :is-export="true" />
       </div>
       <div v-if="deck" flex flex-col gap-10px>
         <Npc :leader="deck.leader" :npcs="deck.npcs" />
