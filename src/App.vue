@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-// import Gacha from '~/views/sidePanel/views/gacha/index.vue'
-// import Npc from '~/views/sidePanel/views/party/components/Npc.vue'
+import { snapdom } from '@zumer/snapdom'
+import Npc from '~/views/sidePanel/views/party/components/Npc.vue'
 
 const visible = ref(false)
 const foo = ref('')
@@ -15,8 +15,16 @@ const downViewList = [
   { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
 ]
 
-function handleClick() {
+async function handleClick() {
   console.log('handleClick')
+  try {
+    const element = document.querySelector(`.foo`)!
+    const result = await snapdom(element)
+    await result.download({ quality: 3, scale: 3, format: 'png', filename: `配置截图${Date.now()}` })
+  }
+  catch (error) {
+    console.error(error)
+  }
 }
 const gachaInfo = ref({
   id: '12',
@@ -222,8 +230,9 @@ const deck = ref({ leader: {
 
     <div h-600px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
-        <div p-10px>
+        <div p-10px class="foo">
           <!-- <Npc :leader="deck.leader" :npcs="deck.npcs" /> -->
+          <img src="https://picsum.photos/500/500" alt="" srcset="">
         </div>
       </el-scrollbar>
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>

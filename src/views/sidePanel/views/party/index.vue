@@ -18,7 +18,7 @@ async function copyParty() {
   try {
     const element = document.querySelector(`.party-container`)!
     const result = await snapdom(element)
-    const clipboardItem = new ClipboardItem({ 'image/png': await result.toBlob({ type: 'png' }) })
+    const clipboardItem = new ClipboardItem({ 'image/png': await result.toBlob({ scale: 1.5, type: 'png', backgroundColor: '#131313' }) })
     await navigator.clipboard.write([clipboardItem])
     ElMessage.success({ offset: 100, message: '已复制到剪贴板' })
   }
@@ -31,7 +31,7 @@ async function downloadParty() {
   try {
     const element = document.querySelector(`.party-container`)!
     const result = await snapdom(element)
-    await result.download({ format: 'png', filename: `配置截图${Date.now()}` })
+    await result.download({ scale: 1.5, format: 'png', filename: `配置截图${Date.now()}`, backgroundColor: '#131313' })
   }
   catch (error) {
     createNotification({ message: String(error) })

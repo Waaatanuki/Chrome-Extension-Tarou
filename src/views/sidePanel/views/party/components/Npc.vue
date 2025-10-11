@@ -73,7 +73,7 @@ function goWiki(masterId: number) {
                   </div>
                 </div>
 
-                <div class="txt-hp-value" flex items-center justify-end px-3px>
+                <div class="txt-hp-value" flex items-center justify-end gap-1px px-3px>
                   <img w-12px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/skill/ex_skill_ta.png">
                   <div text-10px>
                     100%
