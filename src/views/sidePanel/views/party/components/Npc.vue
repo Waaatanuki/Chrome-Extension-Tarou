@@ -45,8 +45,8 @@ function goWiki(masterId: number) {
         </ElTag>
       </div>
     </div>
-    <div flex gap-5px>
-      <template v-for="npc in npcs" :key="npc.paramId">
+    <div flex flex-wrap gap-5px>
+      <template v-for="npc, index in npcs" :key="npc.paramId">
         <el-popover placement="top-start" width="274">
           <template #reference>
             <div relative w-56px class="group">
@@ -130,6 +130,9 @@ function goWiki(masterId: number) {
             </template>
           </div>
         </el-popover>
+        <div v-if="index === 2 && npcs.length > 5" w-117px fc bg-amber>
+          留白
+        </div>
       </template>
     </div>
   </div>
