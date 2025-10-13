@@ -130,8 +130,8 @@ function goWiki(masterId: number) {
             </template>
           </div>
         </el-popover>
-        <div v-if="index === 2 && npcs.length > 5" w-117px fc bg-amber>
-          留白
+        <div v-if="index === 2 && npcs.length > 5" w-117px fc>
+          <img :src="getLocalImg('versusia')">
         </div>
       </template>
     </div>
