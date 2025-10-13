@@ -13,13 +13,13 @@ export function goProfilePage(userId: string) {
 
 export function openPopupWindow(key: string) {
   const windowSize: Record<string, { height: number, width: number }> = {
-    SupportSummon: { height: 400, width: 600 },
+    ArtifactBox: { height: 950, width: 1580 },
     ArtifactRule: { height: 700, width: 700 },
-    ArtifactBox: { height: 950, width: 1600 },
-    RecoveryItem: { height: 1000, width: 900 },
     BuildCompare: { height: 800, width: 1100 },
-    SampoSetup: { height: 900, width: 600 },
     ExportRecord: { height: 800, width: 800 },
+    RecoveryItem: { height: 1000, width: 900 },
+    SampoSetup: { height: 900, width: 600 },
+    SupportSummon: { height: 400, width: 600 },
   }
 
   const getWindowSize = (key: string) => {

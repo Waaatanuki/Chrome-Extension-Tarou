@@ -3,7 +3,7 @@ import { artifactList } from '~/logic'
 </script>
 
 <template>
-  <div my-10px w-full flex flex-wrap justify-center gap-10px>
+  <div my-10px w-full flex flex-wrap gap-10px>
     <ArtifactCard
       v-for="artifact, idx in artifactList" :key="artifact.id"
       :artifact="artifact"

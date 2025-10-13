@@ -13,16 +13,16 @@ import SupportSummon from './components/SupportSummon.vue'
 const currentView = computed(() => document.URL.split('?')[1])
 
 const componentMap: Record<string, Component> = {
-  SupportSummon,
-  ArtifactRule,
   ArtifactBox,
-  RecoveryItem,
-  GachaRecord,
-  RewardList,
-  Debug,
+  ArtifactRule,
   BuildCompare,
-  SampoSetup,
+  Debug,
   ExportRecord,
+  GachaRecord,
+  RecoveryItem,
+  RewardList,
+  SampoSetup,
+  SupportSummon,
 }
 
 onMounted(() => {

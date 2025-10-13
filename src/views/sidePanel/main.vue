@@ -16,18 +16,18 @@ import Patient from './views/patient/index.vue'
 import Setting from './views/setting/index.vue'
 
 const componentMap: Record<string, Component> = {
-  Dashborad,
-  Drop,
   Artifact,
-  Party,
+  Battle,
   Build,
   Combat,
-  History,
-  Patient,
-  Battle,
+  Dashborad,
+  Drop,
   Gacha,
-  Setting,
+  History,
   Info,
+  Party,
+  Patient,
+  Setting,
 }
 
 const { width } = useWindowSize()
