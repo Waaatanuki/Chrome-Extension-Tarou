@@ -3,7 +3,7 @@ import type { Artifact } from 'source'
 import { artifactSkillList } from '~/constants/artifact'
 import { artifactRuleIndex, artifactRuleList, language } from '~/logic'
 
-defineProps<{ artifact: Artifact, position: string }>()
+defineProps<{ artifact: Artifact, position: string, filter: string }>()
 
 type SkillName = 'skill1_info' | 'skill2_info' | 'skill3_info' | 'skill4_info'
 const skillNameList: SkillName[] = ['skill1_info', 'skill2_info', 'skill3_info', 'skill4_info']
@@ -36,6 +36,9 @@ function getPoint(artifact: Artifact) {
 }
 
 function getPointType(artifact: Artifact) {
+  if (artifact.rarity !== '3')
+    return 'success'
+
   if (!currentArtifaceRuleInfo.value.highlight)
     return 'warning'
 
@@ -49,7 +52,7 @@ function getPointType(artifact: Artifact) {
 </script>
 
 <template>
-  <el-card body-style="padding: 10px" relative h-full w-300px>
+  <el-card v-if="!filter || filter === getPointType(artifact)" body-style="padding: 10px" relative h-full w-300px>
     <div flex flex-col>
       <el-tag absolute left-0 top-0 type="info" size="large">
         {{ position }}
@@ -90,7 +93,3 @@ function getPointType(artifact: Artifact) {
     </div>
   </el-card>
 </template>
-
-<style scoped>
-
-</style>

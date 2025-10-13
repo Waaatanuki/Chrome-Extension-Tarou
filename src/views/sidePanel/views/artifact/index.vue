@@ -4,7 +4,7 @@ import { artifactList, artifactRuleIndex, artifactRuleList, language } from '~/l
 
 const inputVisible = ref(false)
 const textarea = ref('')
-
+const filter = ref('')
 const currentArtifaceRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 
 function handleCommand(command: string | number | object) {
@@ -47,10 +47,18 @@ function onPasteSubmit() {
 
 <template>
   <main>
-    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-4 text-base>
-      <el-select v-model="artifactRuleIndex" size="small" style="width: 100px;">
-        <el-option v-for="rule, idx in artifactRuleList" :key="idx" :value="idx" :label="rule.name" />
-      </el-select>
+    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-2 text-base>
+      <div fc gap-2>
+        <el-select v-model="artifactRuleIndex" size="small" style="width: 100px;">
+          <el-option v-for="rule, idx in artifactRuleList" :key="idx" :value="idx" :label="rule.name" />
+        </el-select>
+
+        <el-select v-model="filter" size="small" style="width: 70px;" placeholder="全部" clearable>
+          <el-option value="danger" label="低分" />
+          <el-option value="warning" label="普通" />
+          <el-option value="success" label="高分" />
+        </el-select>
+      </div>
 
       <el-dropdown @command="handleCommand">
         <TheButton>
@@ -86,6 +94,7 @@ function onPasteSubmit() {
         v-for="artifact, idx in artifactList" :key="artifact.id"
         :artifact="artifact"
         :position="`${Math.floor(idx / 5 + 1)}-${idx % 5 + 1}`"
+        :filter="filter"
       />
     </div>
 
