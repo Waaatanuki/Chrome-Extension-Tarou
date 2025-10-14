@@ -13,7 +13,7 @@ export function goProfilePage(userId: string) {
 
 export function openPopupWindow(key: string) {
   const windowSize: Record<string, { height: number, width: number }> = {
-    ArtifactBox: { height: 950, width: 1580 },
+    ArtifactBox: { height: 1000, width: 1580 },
     ArtifactRule: { height: 700, width: 700 },
     BuildCompare: { height: 800, width: 1100 },
     ExportRecord: { height: 800, width: 800 },

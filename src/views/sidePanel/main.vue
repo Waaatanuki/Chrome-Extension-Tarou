@@ -3,28 +3,26 @@ import { Icon } from '@iconify/vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { eventList, obTabId } from '~/logic'
 
-const componentMap: Record<string, Component> = {
-  Artifact: defineAsyncComponent(() => import('./views/artifact/index.vue')),
-  Battle: defineAsyncComponent(() => import('./views/battle/index.vue')),
-  Build: defineAsyncComponent(() => import('./views/build/index.vue')),
-  Combat: defineAsyncComponent(() => import('./views/combat/index.vue')),
-  Dashborad: defineAsyncComponent(() => import('./views/dashboard/index.vue')),
-  Drop: defineAsyncComponent(() => import('./views/drop/index.vue')),
-  Gacha: defineAsyncComponent(() => import('./views/gacha/index.vue')),
-  History: defineAsyncComponent(() => import('./views/history/index.vue')),
-  Info: defineAsyncComponent(() => import('./views/info/index.vue')),
-  Party: defineAsyncComponent(() => import('./views/party/index.vue')),
-  Patient: defineAsyncComponent(() => import('./views/patient/index.vue')),
-  Setting: defineAsyncComponent(() => import('./views/setting/index.vue')),
-}
+const componentMap: Record<string, Component> = (() => {
+  const modules = import.meta.glob('./views/*/index.vue')
+  const map: Record<string, Component> = {}
+
+  for (const path in modules) {
+    const componentName = path.split('/')[2]
+    const capitalizedName = componentName.charAt(0).toUpperCase() + componentName.slice(1)
+    map[capitalizedName] = defineAsyncComponent(modules[path] as any)
+  }
+
+  return map
+})()
 
 const { width } = useWindowSize()
-const currentView = ref('Dashborad')
+const currentView = ref('Dashboard')
 const tabId = computed(() => Number(document.URL.split('?')[1]))
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
-  { key: 'Dashborad', lable: '主页', icon: 'material-symbols:dashboard' },
+  { key: 'Dashboard', lable: '主页', icon: 'material-symbols:dashboard' },
   { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
   { key: 'Artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
   { key: 'Party', lable: '队伍信息', icon: 'ri:team-fill' },

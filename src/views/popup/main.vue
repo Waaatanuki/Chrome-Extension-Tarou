@@ -1,18 +1,17 @@
 <script setup lang="ts">
 const currentView = computed(() => document.URL.split('?')[1])
 
-const componentMap: Record<string, Component> = {
-  ArtifactBox: defineAsyncComponent(() => import('./components/ArtifactBox.vue')),
-  ArtifactRule: defineAsyncComponent(() => import('./components/ArtifactRule.vue')),
-  BuildCompare: defineAsyncComponent(() => import('./components/BuildCompare.vue')),
-  Debug: defineAsyncComponent(() => import('./components/Debug.vue')),
-  ExportRecord: defineAsyncComponent(() => import('./components/ExportRecord.vue')),
-  GachaRecord: defineAsyncComponent(() => import('./components/GachaRecord.vue')),
-  RecoveryItem: defineAsyncComponent(() => import('./components/RecoveryItem.vue')),
-  RewardList: defineAsyncComponent(() => import('./components/RewardList.vue')),
-  SampoSetup: defineAsyncComponent(() => import('./components/SampoSetup.vue')),
-  SupportSummon: defineAsyncComponent(() => import('./components/SupportSummon.vue')),
-}
+const componentMap: Record<string, Component> = (() => {
+  const modules = import.meta.glob('./components/*.vue')
+  const map: Record<string, Component> = {}
+
+  for (const path in modules) {
+    const componentName = path.split('/').pop()?.replace('.vue', '') || ''
+    map[componentName] = defineAsyncComponent(modules[path] as any)
+  }
+
+  return map
+})()
 
 onMounted(() => {
   if (currentView.value.startsWith('WindowPanel')) {
