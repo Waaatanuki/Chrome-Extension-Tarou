@@ -1,4 +1,4 @@
-import type { ArtifactRule } from 'myStorage'
+import type { ArtifactRule } from 'extension'
 
 const defaultArtifactRule = {
   skill: {

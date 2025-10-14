@@ -1,4 +1,4 @@
-import type { Action } from 'myStorage'
+import type { Action } from 'extension'
 import type { BuildWeapon, SkillType } from 'party'
 import type { Buff } from 'source'
 

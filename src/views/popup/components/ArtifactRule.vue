@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ArtifactRuleInfo, ExtraRule } from 'myStorage'
+import type { ArtifactRuleInfo, ExtraRule } from 'extension'
 import { artifactSkillList } from '~/constants/artifact'
 import { artifactRuleIndex, artifactRuleList, language } from '~/logic'
 

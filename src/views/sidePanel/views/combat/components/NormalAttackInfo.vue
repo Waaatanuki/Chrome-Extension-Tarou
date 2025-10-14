@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { NormalAttackInfo } from 'battleLog'
+import type { NormalAttackInfo } from 'battle'
 
 defineProps<{ normalAttackInfo: NormalAttackInfo }>()
 </script>

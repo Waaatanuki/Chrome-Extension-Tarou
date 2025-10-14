@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EventInfo, TeamforceAdditional } from 'myStorage'
+import type { EventInfo, TeamforceAdditional } from 'extension'
 import { Icon } from '@iconify/vue'
 import { getEventGachaBoxNum } from '~/constants/event'
 import { eventList } from '~/logic'

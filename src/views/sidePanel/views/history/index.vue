@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { BuildStorage } from 'build'
-import type { BattleRecord } from 'myStorage'
+import type { BattleExport } from 'battle'
+import type { BattleRecord } from 'extension'
 import copy from 'copy-text-to-clipboard'
 import { uploadBuild } from '~/api'
 import { battleExportData, battleRecord, deckList } from '~/logic'
@@ -92,7 +92,7 @@ function handleCopyBuild() {
     .catch(() => { })
 }
 
-function processData(): BuildStorage {
+function processData(): BattleExport {
   const uploadRecord: BattleRecord = JSON.parse(JSON.stringify(currentRecord.value))
   return {
     questId: uploadRecord.quest_id,

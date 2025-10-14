@@ -70,7 +70,7 @@ function getPointType(artifact: Artifact) {
         </div>
 
         <div h-50px>
-          <img v-if="artifact.equip_npc_info.image" h-full :src="getAssetImg('npc', artifact.equip_npc_info.image, 's')">
+          <img v-if="artifact.equip_npc_info?.image" h-full :src="getAssetImg('npc', artifact.equip_npc_info.image, 's')">
           <div v-else h-50px w-50px fc text-10px ring-1 ring-neutral-7>
             EMPTY
           </div>

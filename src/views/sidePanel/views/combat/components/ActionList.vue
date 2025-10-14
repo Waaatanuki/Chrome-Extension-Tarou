@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ActionQueue } from 'myStorage'
+import type { ActionQueue } from 'extension'
 import NormalAttackInfo from './NormalAttackInfo.vue'
 
 const { mode = 'vertical' } = defineProps<{ actionQueue: ActionQueue[], mode?: 'horizontal' | 'vertical' }>()

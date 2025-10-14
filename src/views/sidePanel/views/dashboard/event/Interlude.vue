@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EventInfo, InterludeAdditional } from 'myStorage'
+import type { EventInfo, InterludeAdditional } from 'extension'
 import { eventList } from '~/logic'
 
 type InterludeInfo = EventInfo & { additional: InterludeAdditional }

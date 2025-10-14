@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GachaNpc } from 'myStorage'
+import type { GachaNpc } from 'extension'
 import { gachaInfo } from '~/logic'
 import GachaAnimation from './GachaAnimation.vue'
 

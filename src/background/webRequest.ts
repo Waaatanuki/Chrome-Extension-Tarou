@@ -1,5 +1,5 @@
 import type { Treasure } from 'api'
-import type { NumberLimitPair } from 'myStorage'
+import type { NumberLimitPair } from 'extension'
 import type { Exlb } from 'party'
 import { load } from 'cheerio'
 import { sendMessage } from 'webext-bridge/background'

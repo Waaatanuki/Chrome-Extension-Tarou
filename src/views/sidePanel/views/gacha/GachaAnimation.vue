@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GachaNpc } from 'myStorage'
+import type { GachaNpc } from 'extension'
 
 const { resultList } = defineProps<{ resultList: GachaNpc[] }>()
 const emits = defineEmits(['close'])

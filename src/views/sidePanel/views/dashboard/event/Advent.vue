@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AdventAdditional, EventInfo } from 'myStorage'
+import type { AdventAdditional, EventInfo } from 'extension'
 import { eventList } from '~/logic'
 
 type AdventInfo = EventInfo & { additional: AdventAdditional }

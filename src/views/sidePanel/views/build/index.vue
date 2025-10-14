@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BuildResponse } from 'build'
+import type { BuildResponse } from 'api'
 import { listBuild } from '~/api'
 import { buildNpcFilter, buildQuestId } from '~/logic'
 import ActionList from '../combat/components/ActionList.vue'

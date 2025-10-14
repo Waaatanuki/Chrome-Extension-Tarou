@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Player } from 'myStorage'
+import type { Player } from 'extension'
 import type { Buff } from 'source'
 import { onlyShowSpecBuff, specPlayerBuff } from '~/logic'
 

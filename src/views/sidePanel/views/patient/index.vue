@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MarkedUser } from 'myStorage'
+import type { MarkedUser } from 'extension'
 import { markedUserList } from '~/logic'
 
 const uploadBtnLoading = ref(false)

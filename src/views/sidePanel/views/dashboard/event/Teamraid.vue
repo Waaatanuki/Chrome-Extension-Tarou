@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EventInfo, TeamraidAdditional } from 'myStorage'
+import type { EventInfo, TeamraidAdditional } from 'extension'
 import { Icon } from '@iconify/vue'
 import { getEventGachaBoxNum } from '~/constants/event'
 import { eventList } from '~/logic'

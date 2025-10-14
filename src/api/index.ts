@@ -1,6 +1,5 @@
-import type { DropInfo, StartJsonBoss, Stat } from 'api'
-import type { BuildResponse } from 'build'
-import type { Quest } from 'myStorage'
+import type { BuildResponse, DropInfo, StartJsonBoss, Stat } from 'api'
+import type { Quest } from 'extension'
 import request from './request'
 
 // 更新引继码

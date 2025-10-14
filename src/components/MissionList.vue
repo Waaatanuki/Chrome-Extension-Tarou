@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Mission } from 'myStorage'
+import type { Mission } from 'extension'
 import { Icon } from '@iconify/vue'
 
 const { missionList = [] } = defineProps<{ missionList?: Mission[] }>()

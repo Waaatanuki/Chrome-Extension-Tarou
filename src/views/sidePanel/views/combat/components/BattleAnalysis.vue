@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Player } from 'myStorage'
+import type { Player } from 'extension'
 import DamageRecord from './DamageRecord.vue'
 import DamageTaken from './DamageTaken.vue'
 import PlayerStatus from './PlayerStatus.vue'

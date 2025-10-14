@@ -1,4 +1,4 @@
-import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, Player, SampoParam, TeamforceAdditional, TeamraidAdditional } from 'myStorage'
+import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, Player, SampoParam, TeamforceAdditional, TeamraidAdditional } from 'extension'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
 import type { BattleStartJson, GachaRatioAppear, GachaRatioAppearItem, GachaResult } from 'source'
 import { load } from 'cheerio'
@@ -455,6 +455,7 @@ export async function unpack(parcel: string) {
     const npcInfo: BuildNpc = {
       paramId: npcDetail.id,
       masterId: Number(npcDetail.master.id),
+      attribute: npcDetail.master.attribute,
       imageId: '',
       isAugment: npcDetail.has_npcaugment_constant,
       arousalForm: npcDetail.npc_arousal_form,

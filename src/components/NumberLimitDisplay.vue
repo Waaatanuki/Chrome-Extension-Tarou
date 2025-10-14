@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { NumberLimitPair } from 'myStorage'
+import type { NumberLimitPair } from 'extension'
 
 defineProps<{ value?: NumberLimitPair }>()
 </script>

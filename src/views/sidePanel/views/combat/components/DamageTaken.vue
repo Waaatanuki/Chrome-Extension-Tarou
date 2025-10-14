@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Player } from 'myStorage'
+import type { Player } from 'extension'
 
 const props = defineProps<{ playerInfo: Player[] }>()
 

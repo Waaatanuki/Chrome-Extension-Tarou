@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MemberInfo } from 'battleLog'
+import type { MemberInfo } from 'battle'
 import { battleInfo, markedUserList, userInfo } from '~/logic'
 
 const props = defineProps<{

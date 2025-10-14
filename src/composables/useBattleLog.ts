@@ -1,4 +1,4 @@
-import type { Action, BattleRecord, PartyCondition, Player } from 'myStorage'
+import type { Action, BattleRecord, PartyCondition, Player } from 'extension'
 import type { Ability, AttackResultJson, BattleStartJson, ChatInfoEN, ChatInfoJP, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
 import { battleInfo, battleRecord, notificationSetting, userInfo } from '~/logic'
 

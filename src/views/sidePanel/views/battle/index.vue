@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EventInfo, TeamraidAdditional } from 'myStorage'
+import type { EventInfo, TeamraidAdditional } from 'extension'
 import { eventList } from '~/logic'
 
 type TeamraidInfo = EventInfo & { additional: TeamraidAdditional }

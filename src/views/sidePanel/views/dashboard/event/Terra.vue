@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EventInfo } from 'myStorage'
+import type { EventInfo } from 'extension'
 import { eventList } from '~/logic'
 
 interface TerraAdditional {
