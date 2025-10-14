@@ -2,32 +2,20 @@
 import { Icon } from '@iconify/vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { eventList, obTabId } from '~/logic'
-import Artifact from './views/artifact/index.vue'
-import Battle from './views/battle/index.vue'
-import Build from './views/build/index.vue'
-import Combat from './views/combat/index.vue'
-import Dashborad from './views/dashboard/index.vue'
-import Drop from './views/drop/index.vue'
-import Gacha from './views/gacha/index.vue'
-import History from './views/history/index.vue'
-import Info from './views/info/index.vue'
-import Party from './views/party/index.vue'
-import Patient from './views/patient/index.vue'
-import Setting from './views/setting/index.vue'
 
 const componentMap: Record<string, Component> = {
-  Artifact,
-  Battle,
-  Build,
-  Combat,
-  Dashborad,
-  Drop,
-  Gacha,
-  History,
-  Info,
-  Party,
-  Patient,
-  Setting,
+  Artifact: defineAsyncComponent(() => import('./views/artifact/index.vue')),
+  Battle: defineAsyncComponent(() => import('./views/battle/index.vue')),
+  Build: defineAsyncComponent(() => import('./views/build/index.vue')),
+  Combat: defineAsyncComponent(() => import('./views/combat/index.vue')),
+  Dashborad: defineAsyncComponent(() => import('./views/dashboard/index.vue')),
+  Drop: defineAsyncComponent(() => import('./views/drop/index.vue')),
+  Gacha: defineAsyncComponent(() => import('./views/gacha/index.vue')),
+  History: defineAsyncComponent(() => import('./views/history/index.vue')),
+  Info: defineAsyncComponent(() => import('./views/info/index.vue')),
+  Party: defineAsyncComponent(() => import('./views/party/index.vue')),
+  Patient: defineAsyncComponent(() => import('./views/patient/index.vue')),
+  Setting: defineAsyncComponent(() => import('./views/setting/index.vue')),
 }
 
 const { width } = useWindowSize()

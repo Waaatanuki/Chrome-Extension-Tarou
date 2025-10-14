@@ -1,28 +1,17 @@
 <script setup lang="ts">
-import ArtifactBox from './components/ArtifactBox.vue'
-import ArtifactRule from './components/ArtifactRule.vue'
-import BuildCompare from './components/BuildCompare.vue'
-import Debug from './components/Debug.vue'
-import ExportRecord from './components/ExportRecord.vue'
-import GachaRecord from './components/GachaRecord.vue'
-import RecoveryItem from './components/RecoveryItem.vue'
-import RewardList from './components/RewardList.vue'
-import SampoSetup from './components/SampoSetup.vue'
-import SupportSummon from './components/SupportSummon.vue'
-
 const currentView = computed(() => document.URL.split('?')[1])
 
 const componentMap: Record<string, Component> = {
-  ArtifactBox,
-  ArtifactRule,
-  BuildCompare,
-  Debug,
-  ExportRecord,
-  GachaRecord,
-  RecoveryItem,
-  RewardList,
-  SampoSetup,
-  SupportSummon,
+  ArtifactBox: defineAsyncComponent(() => import('./components/ArtifactBox.vue')),
+  ArtifactRule: defineAsyncComponent(() => import('./components/ArtifactRule.vue')),
+  BuildCompare: defineAsyncComponent(() => import('./components/BuildCompare.vue')),
+  Debug: defineAsyncComponent(() => import('./components/Debug.vue')),
+  ExportRecord: defineAsyncComponent(() => import('./components/ExportRecord.vue')),
+  GachaRecord: defineAsyncComponent(() => import('./components/GachaRecord.vue')),
+  RecoveryItem: defineAsyncComponent(() => import('./components/RecoveryItem.vue')),
+  RewardList: defineAsyncComponent(() => import('./components/RewardList.vue')),
+  SampoSetup: defineAsyncComponent(() => import('./components/SampoSetup.vue')),
+  SupportSummon: defineAsyncComponent(() => import('./components/SupportSummon.vue')),
 }
 
 onMounted(() => {
