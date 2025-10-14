@@ -711,12 +711,24 @@ export async function unpack(parcel: string) {
   }
 
   // 判断是否开启debugger
-  if (url.includes('/socket/uri/raid') && obTabId.value) {
-    chrome.debugger.detach({ tabId: obTabId.value })
-      .catch(error => console.log(error))
-      .then(() => chrome.debugger.attach({ tabId: obTabId.value }, '1.3'))
-      .then(() => chrome.debugger.sendCommand({ tabId: obTabId.value }, 'Network.enable'))
-      .catch(error => console.log(error))
+  if (url.includes('/socket/uri/raid')) {
+    chrome.runtime.getContexts({}).then((ctx) => {
+      if (ctx.filter(c => c.documentUrl?.includes('src/views/sidePanel/main.html')).length === 0)
+        obTabId.value = 0
+
+      if (!obTabId.value)
+        return
+
+      chrome.debugger.getTargets().then((targets) => {
+        const isAttached = targets.some(target => target.tabId === obTabId.value && target.attached)
+
+        if (!isAttached) {
+          chrome.debugger
+            .attach({ tabId: obTabId.value }, '1.3')
+            .then(() => chrome.debugger.sendCommand({ tabId: obTabId.value }, 'Network.enable'))
+        }
+      })
+    })
   }
 
   // BattleLog 查询房间成员
