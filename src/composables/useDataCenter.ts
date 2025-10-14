@@ -631,9 +631,6 @@ export async function unpack(parcel: string) {
       }
     }
 
-    if (!obTabId.value)
-      return
-
     // 分析副本数据
     handleStartJson(battleStartJson)
 
@@ -688,19 +685,6 @@ export async function unpack(parcel: string) {
     console.log('memoList==>', battleMemo.value)
   }
 
-  // ===============侧栏打开时进行以下接口分析=====================
-  // ===============侧栏打开时进行以下接口分析=====================
-  // ===============侧栏打开时进行以下接口分析=====================
-  // ===============侧栏打开时进行以下接口分析=====================
-  // ===============侧栏打开时进行以下接口分析=====================
-  // ===============侧栏打开时进行以下接口分析=====================
-  // ===============侧栏打开时进行以下接口分析=====================
-  // ===============侧栏打开时进行以下接口分析=====================
-  // ===============侧栏打开时进行以下接口分析=====================
-
-  if (!obTabId.value)
-    return
-
   // Build 获取自发副本的questId
   if (url.includes('/quest/content/supporter/')) {
     const regex = /\/quest\/content\/supporter\/(\d+)\//
@@ -727,7 +711,7 @@ export async function unpack(parcel: string) {
   }
 
   // 判断是否开启debugger
-  if (url.includes('/socket/uri/raid')) {
+  if (url.includes('/socket/uri/raid') && obTabId.value) {
     chrome.debugger.detach({ tabId: obTabId.value })
       .catch(error => console.log(error))
       .then(() => chrome.debugger.attach({ tabId: obTabId.value }, '1.3'))
