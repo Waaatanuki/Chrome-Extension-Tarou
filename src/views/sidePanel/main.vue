@@ -9,34 +9,33 @@ const componentMap: Record<string, Component> = (() => {
 
   for (const path in modules) {
     const componentName = path.split('/')[2]
-    const capitalizedName = componentName.charAt(0).toUpperCase() + componentName.slice(1)
-    map[capitalizedName] = defineAsyncComponent(modules[path] as any)
+    map[componentName] = defineAsyncComponent(modules[path] as any)
   }
 
   return map
 })()
 
 const { width } = useWindowSize()
-const currentView = ref('Dashboard')
+const currentView = ref('dashboard')
 const tabId = computed(() => Number(document.URL.split('?')[1]))
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
-  { key: 'Dashboard', lable: '主页', icon: 'material-symbols:dashboard' },
-  { key: 'Drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
-  { key: 'Artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
-  { key: 'Party', lable: '队伍信息', icon: 'ri:team-fill' },
-  { key: 'Build', lable: '配置查询', icon: 'material-symbols:document-search' },
-  { key: 'Combat', lable: '战斗信息', icon: 'game-icons:battle-axe' },
-  { key: 'History', lable: '战斗记录', icon: 'game-icons:scroll-unfurled' },
-  { key: 'Patient', lable: '标记玩家', icon: 'material-symbols:patient-list' },
-  { key: 'Gacha', lable: '抽卡模拟', icon: 'game-icons:mimic-chest' },
-  { key: 'Battle', lable: '接战', icon: 'game-icons:crossed-swords', hidden: !inBattle.value },
+  { key: 'dashboard', lable: '主页', icon: 'material-symbols:dashboard' },
+  { key: 'drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
+  { key: 'artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
+  { key: 'party', lable: '队伍信息', icon: 'ri:team-fill' },
+  { key: 'build', lable: '配置查询', icon: 'material-symbols:document-search' },
+  { key: 'combat', lable: '战斗信息', icon: 'game-icons:battle-axe' },
+  { key: 'history', lable: '战斗记录', icon: 'game-icons:scroll-unfurled' },
+  { key: 'patient', lable: '标记玩家', icon: 'material-symbols:patient-list' },
+  { key: 'gacha', lable: '抽卡模拟', icon: 'game-icons:mimic-chest' },
+  { key: 'battle', lable: '接战', icon: 'game-icons:crossed-swords', hidden: !inBattle.value },
 ].filter(m => !m.hidden))
 
 const downViewList = [
-  { key: 'Info', lable: '用户信息', icon: 'carbon:information-filled' },
-  { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
+  { key: 'info', lable: '用户信息', icon: 'carbon:information-filled' },
+  { key: 'setting', lable: '设置', icon: 'carbon:settings' },
 ]
 
 watchEffect(() => {
