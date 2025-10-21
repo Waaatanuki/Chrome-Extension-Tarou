@@ -389,6 +389,7 @@ declare module 'source' {
     image_id_3: string
     id: number
     has_npcaugment_constant: boolean
+    npc_arousal_form: number
   }
 
   interface NpcMaster {

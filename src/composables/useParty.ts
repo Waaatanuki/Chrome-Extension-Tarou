@@ -130,7 +130,7 @@ function processLeader(data: DeckJson) {
 
 function processNpc(data: DeckJson) {
   const newNpcs: BuildNpc[] = []
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 8; i++) {
     const npc = data.npc[i]
     if (npc?.param) {
       const hit = localNpcList.value.find(n => n.paramId === npc.param.id)
@@ -141,7 +141,7 @@ function processNpc(data: DeckJson) {
         imageId: formatNpcImageId(npc.param.image_id_3),
         attribute: npc.master.attribute,
         isAugment: npc.param.has_npcaugment_constant,
-        arousalForm: hit ? hit.arousalForm : 0,
+        arousalForm: npc.param.npc_arousal_form,
         ability: hit ? [...hit.ability] : [],
         exlb: hit?.exlb,
         artifact: hit?.artifact,
