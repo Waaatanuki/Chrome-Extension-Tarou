@@ -56,7 +56,7 @@ function goWiki(masterId: number) {
                 <div v-else class="i-mdi:wikipedia" absolute icon-btn @click="goWiki(npc.masterId)" />
               </div>
               <img v-if="npc.isAugment" absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
-              <img absolute right-0 top-0 :src="getArtifactIcon(`icn_type_${npc.attribute}`)" w-20px>
+              <img v-if="npc.attribute" absolute right-0 top-0 :src="getArtifactIcon(`icn_type_${npc.attribute}`)" w-20px>
 
               <div absolute bottom-0 w-full flex flex-col py-2px>
                 <div
@@ -66,7 +66,7 @@ function goWiki(masterId: number) {
                   {{ NPC_AROUSAL_FORM[npc.arousalForm] }}
                 </div>
 
-                <div relative h-15px pt-10px>
+                <!-- <div relative h-15px pt-10px>
                   <img m-auto h-5px w-52px :src="getLocalImg('status_hp')">
                   <div absolute bottom--1px right-2px w-52px text-end text-12px class="txt-hp-value">
                     123456
@@ -78,7 +78,7 @@ function goWiki(masterId: number) {
                   <div text-10px>
                     100%
                   </div>
-                </div>
+                </div> -->
 
                 <div h-12px flex items-center justify-start gap-4px px-4px>
                   <div v-for="ability, i in npc.ability" :key="i" relative fc>
