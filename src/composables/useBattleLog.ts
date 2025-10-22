@@ -8,9 +8,9 @@ export function handleStartJson(data: BattleStartJson) {
   battleInfo.value.leaderAttr = leader.attr
 
   const interrupt_display_text = data.status?.special_skill_indicate
-    ? data.status.special_skill_indicate[0]?.interrupt_display_text
+    ? data.status.special_skill_indicate[0]?.interrupt_display_text ?? []
     : data.special_skill_indicate
-      ? data.special_skill_indicate[0]?.interrupt_display_text
+      ? data.special_skill_indicate[0]?.interrupt_display_text ?? []
       : []
 
   const addition = {
