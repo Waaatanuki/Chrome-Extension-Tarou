@@ -111,22 +111,22 @@ const showDamage = computed(() => {
 
 <template>
   <div flex flex-col>
-    <div fc gap-10px>
-      <div v-for="deck, index in deckInfo" :key="index" h-650px w-320px flex flex-col items-center justify-between gap-10px>
+    <div flex justify-center gap-10px>
+      <div v-for="deck, index in deckInfo" :key="index" min-h-650px w-320px flex flex-col items-center justify-between gap-10px>
         <div h-30px w-200px fc cursor-pointer rounded opacity-50 :class="{ 'text-amber opacity-100! ring-1 ring-amber': currentIndex === index }" @click="currentIndex = index">
           当前配置
         </div>
-        <div w-320px fc flex-1 flex-col gap-10px rounded-xl ring-1 ring-neutral-5>
+        <div w-320px fc flex-1 flex-col gap-10px rounded-xl p-10px ring-1 ring-neutral-5>
           <template v-if="deck">
-            <Npc :leader="deck.leader" :npcs="deck.npcs" />
+            <Npc :leader="deck.leader" :npcs="deck.npcs" :priority="deck.priority" />
             <Weapon :weapons="deck.weapons" />
             <Summon :summons="deck.summons" />
           </template>
         </div>
       </div>
-      <div h-650px w-320px flex flex-col items-center justify-between gap-10px>
+      <div min-h-650px w-320px flex flex-col items-center justify-between gap-10px>
         <div h-30px />
-        <ElScrollbar max-height="610px" w-320px rounded-xl ring-1 ring-neutral-5>
+        <ElScrollbar max-height="700px" w-320px rounded-xl ring-1 ring-neutral-5>
           <div fc flex-col gap-10px p-10px>
             <div
               v-for="effect in dataSort(compareResult)" :key="effect.iconImg"

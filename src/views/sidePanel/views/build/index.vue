@@ -83,7 +83,7 @@ function handleCommand(command: DetailType, data: BuildResponse) {
     <el-dialog v-model="dialogVisible" :fullscreen="true">
       <div v-if="currentBuild" m-auto mt-20px w-300px flex flex-col gap-10px>
         <template v-if="detailType === 'party'">
-          <Npc :leader="currentBuild.deck.leader" :npcs="currentBuild.deck.npcs" :is-build="true" />
+          <Npc :leader="currentBuild.deck.leader" :npcs="currentBuild.deck.npcs" :is-build="true" :priority="currentBuild.deck.priority" />
           <Weapon :weapons="currentBuild.deck.weapons" />
           <Summon :summons="currentBuild.deck.summons" />
           <BattleAnalysis :player="currentBuild.detail.player" />

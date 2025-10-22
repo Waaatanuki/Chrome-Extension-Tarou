@@ -43,7 +43,7 @@ async function downloadParty() {
 <template>
   <CommandBar :commands="commands" />
   <div v-if="deck" flex flex-col gap-10px class="party-container">
-    <Npc :leader="deck.leader" :npcs="deck.npcs" />
+    <Npc :leader="deck.leader" :npcs="deck.npcs" :priority="deck.priority" />
     <Weapon :weapons="deck.weapons" />
     <Summon :summons="deck.summons" />
   </div>

@@ -2,9 +2,10 @@
 import type { BuildLeader, BuildNpc } from 'party'
 import { buildNpcFilter } from '~/logic'
 
-const { isBuild = false } = defineProps<{
+const { isBuild = false, priority } = defineProps<{
   leader: BuildLeader
   npcs: BuildNpc[]
+  priority: string
   isBuild?: boolean
 }>()
 
@@ -14,6 +15,8 @@ const NPC_AROUSAL_FORM: Record<string, string> = {
   3: '防御',
   4: '连击',
 }
+
+const questId = computed(() => priority.slice(0, 6))
 
 function updateNpcFilter(masterId: number) {
   if (buildNpcFilter.value.includes(masterId)) {
@@ -130,8 +133,8 @@ function goWiki(masterId: number) {
             </template>
           </div>
         </el-popover>
-        <div v-if="index === 2 && npcs.length > 5" w-117px fc>
-          <img :src="getLocalImg('versusia')">
+        <div v-if="index === 2 && questId.length === 6" w-117px fc>
+          <img w-100px :src="getQuestImg(questId, 'lobby')">
         </div>
       </template>
     </div>

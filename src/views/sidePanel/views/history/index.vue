@@ -200,7 +200,7 @@ function copyLink(key: string) {
           <el-result v-else icon="info" sub-title="切换至战斗记录所使用的的队伍" />
 
           <div v-if="currentDeck" m-auto w-300px flex flex-col gap-10px>
-            <Npc :leader="currentDeck.leader" :npcs="currentDeck.npcs" />
+            <Npc :leader="currentDeck.leader" :npcs="currentDeck.npcs" :priority="currentDeck.priority" />
             <Weapon :weapons="currentDeck.weapons" />
             <Summon :summons="currentDeck.summons" />
           </div>
