@@ -446,7 +446,7 @@ export async function unpack(parcel: string) {
   }
 
   // Party 角色数据
-  if (url.includes('/npc/npc')) {
+  if (/\/(?:party|npc)\/npc\//.test(url)) {
     const npcDetail = responseData
 
     if (!npcDetail.master?.id)
