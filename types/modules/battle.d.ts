@@ -37,8 +37,9 @@ declare module 'battle' {
     interrupt_display_text?: string
     lv: string
     attribute: string
-    addition?: {
+    addition: {
       restTime?: number
+      genesis?: number
     }
     limitNum: number
     fellow: number

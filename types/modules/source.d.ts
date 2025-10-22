@@ -74,6 +74,11 @@ declare module 'source' {
       limit_reduce_second: number
       rest_time: number
     }
+    unique_gauge?: {
+      id: string
+      value: number
+      description: string
+    }
   }
 
   interface Boss {
@@ -316,6 +321,7 @@ declare module 'source' {
     mode?: string
     amount?: number
     is_last_raid?: boolean
+    value?: number
   }
 
   interface SpecialScenario extends Scenario {

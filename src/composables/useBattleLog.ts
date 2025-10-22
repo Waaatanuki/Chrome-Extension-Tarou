@@ -17,6 +17,7 @@ export function handleStartJson(data: BattleStartJson) {
     restTime: data.unique_gauge_time_limit
       ? Date.now() + Number(data.unique_gauge_time_limit.rest_time) * 1000
       : undefined,
+    genesis: data.unique_gauge?.id === 'genesis' ? data.unique_gauge.value : undefined,
   }
 
   battleInfo.value.bossInfo = {
@@ -65,12 +66,13 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
   if (!type || !data?.scenario)
     return
 
-  const isWin = data.scenario.some(item => item.cmd === 'win' && item.is_last_raid)
+  const scenario = data.scenario
+  const isWin = scenario.some(item => item.cmd === 'win' && item.is_last_raid)
   if (isWin && notificationSetting.value.battleWin) {
     createNotification({ message: `战斗结束`, sound: 'win' })
   }
 
-  const isLose = data.scenario.some(item => item.cmd === 'lose')
+  const isLose = scenario.some(item => item.cmd === 'lose')
   if (isLose && notificationSetting.value.battleLose)
     createNotification({ message: `队伍全灭`, sound: 'lose' })
 
@@ -79,14 +81,19 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
   if (!currentRaid)
     return
 
-  const bossGauge = data.scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)
+  const bossGauge = scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)
   const status = data.status
 
   if (status?.fellow && battleInfo.value.bossInfo)
     battleInfo.value.bossInfo.fellow = Number(status?.fellow)
 
   if (status?.unique_gauge_time_limit && battleInfo.value.bossInfo)
-    battleInfo.value.bossInfo.addition = { restTime: Date.now() + Number(status.unique_gauge_time_limit.rest_time) * 1000 }
+    battleInfo.value.bossInfo.addition.restTime = Date.now() + Number(status.unique_gauge_time_limit.rest_time) * 1000
+
+  const hitUniqueGauge = scenario.findLast(item => item.cmd === 'unique_gauge')
+
+  if (hitUniqueGauge && battleInfo.value.bossInfo)
+    battleInfo.value.bossInfo.addition.genesis = hitUniqueGauge.value
 
   if (battleInfo.value.bossInfo && status?.special_skill_indicate)
     battleInfo.value.bossInfo.interrupt_display_text = status.special_skill_indicate[0]?.interrupt_display_text.join('|')
@@ -99,7 +106,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.bossInfo.countDownTime = status?.timer ? Date.now() + status.timer * 1000 : battleInfo.value.bossInfo.countDownTime
     battleInfo.value.bossInfo.turn = status?.turn ?? battleInfo.value.bossInfo.turn
   }
-  const isBossDie = data.scenario.some(item => item.cmd === 'die' && item.to === 'boss')
+  const isBossDie = scenario.some(item => item.cmd === 'die' && item.to === 'boss')
 
   if (isBossDie && battleInfo.value.bossInfo) {
     battleInfo.value.bossInfo.hp = 0
@@ -116,8 +123,8 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.summonInfo.supporter.recast = status?.supporter?.recast ?? battleInfo.value.summonInfo.supporter.recast
   }
 
-  const bossBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
-  const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
+  const bossBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
+  const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
 
   const partyCondition: PartyCondition[] = []
   const formation = status?.formation || currentRaid?.formation || []

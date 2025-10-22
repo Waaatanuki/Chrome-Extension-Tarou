@@ -42,8 +42,11 @@ function handleCopy(text: string) {
       value-style="color: #b91c1c" format="mm:ss" :value="battleInfo.bossInfo.addition.restTime"
       absolute class="left-1/2 top-1/2 translate-y--100px -translate-x-1/2"
     />
+    <div v-if="battleInfo.bossInfo.addition.genesis" class="absolute left-1/2 top-1/2 translate-y--100px text-#b91c1c -translate-x-1/2">
+      {{ battleInfo.bossInfo.addition.genesis }}
+    </div>
     <div v-if="battleInfo.bossInfo.interrupt_display_text" class="absolute left-1/2 top-1/2 flex flex-col translate-y-70px gap-1px -translate-x-1/2">
-      <el-tag v-for="text in battleInfo.bossInfo.interrupt_display_text.split('|')" :key="text">
+      <el-tag v-for="text in battleInfo.bossInfo.interrupt_display_text.split('|')" :key="text" disable-transitions>
         {{ text }}
       </el-tag>
     </div>
