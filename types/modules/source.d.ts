@@ -66,7 +66,7 @@ declare module 'source' {
     user_id: string
     ability: Ability
     special_skill_flag: string
-    special_skill_indicate?: { interrupt_display_text: string }[]
+    special_skill_indicate?: { interrupt_display_text: string[] }[]
     scenario?: ScenarioType[]
     status?: StatusInfo
     unique_gauge_time_limit?: {
@@ -267,7 +267,7 @@ declare module 'source' {
     turn: number
     fellow: number
     is_guard_status: { is_guard_status: number }[]
-    special_skill_indicate?: { interrupt_display_text: string }[]
+    special_skill_indicate?: { interrupt_display_text: string[] }[]
     unique_gauge_time_limit?: {
       default_time_limit: string
       limit_reduce_second: number

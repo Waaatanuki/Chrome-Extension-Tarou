@@ -11,7 +11,7 @@ export function handleStartJson(data: BattleStartJson) {
     ? data.status.special_skill_indicate[0]?.interrupt_display_text
     : data.special_skill_indicate
       ? data.special_skill_indicate[0]?.interrupt_display_text
-      : ''
+      : []
 
   const addition = {
     restTime: data.unique_gauge_time_limit
@@ -32,7 +32,7 @@ export function handleStartJson(data: BattleStartJson) {
     countDownTime: Date.now() + data.timer * 1000,
     turn: data.turn,
     addition,
-    interrupt_display_text,
+    interrupt_display_text: interrupt_display_text.join('|'),
     lv: boss.Lv,
     attribute: boss.attribute,
     limitNum: Number(data.limit_number || 1),
@@ -89,7 +89,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.bossInfo.addition = { restTime: Date.now() + Number(status.unique_gauge_time_limit.rest_time) * 1000 }
 
   if (battleInfo.value.bossInfo && status?.special_skill_indicate)
-    battleInfo.value.bossInfo.interrupt_display_text = status.special_skill_indicate[0]?.interrupt_display_text
+    battleInfo.value.bossInfo.interrupt_display_text = status.special_skill_indicate[0]?.interrupt_display_text.join('|')
 
   if (bossGauge && battleInfo.value.bossInfo) {
     battleInfo.value.bossInfo.name = bossGauge.name!.ja

@@ -13,9 +13,11 @@ const { mode = 'vertical' } = defineProps<{ actionQueue: ActionQueue[], mode?: '
           <div text-base font-bold>
             {{ `第${list.turn}回合` }}
           </div>
-          <ElTag v-if="list.interrupt_display_text" type="warning" size="small">
-            {{ list.interrupt_display_text }}
-          </ElTag>
+          <div v-if="list.interrupt_display_text" flex flex-col gap-1px>
+            <el-tag v-for="text in list.interrupt_display_text.split('|')" :key="text" type="warning" size="small">
+              {{ text }}
+            </el-tag>
+          </div>
           <div fc gap-2px>
             <ElCheckTag v-for="index in 4" :key="index" label="G" :checked="!!list.guard_status[index - 1]?.is_guard_status">
               G

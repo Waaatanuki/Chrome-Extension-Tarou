@@ -42,9 +42,11 @@ function handleCopy(text: string) {
       value-style="color: #b91c1c" format="mm:ss" :value="battleInfo.bossInfo.addition.restTime"
       absolute class="left-1/2 top-1/2 translate-y--100px -translate-x-1/2"
     />
-    <el-tag v-if="battleInfo.bossInfo.interrupt_display_text" absolute class="left-1/2 top-1/2 translate-y-72px -translate-x-1/2">
-      {{ battleInfo.bossInfo.interrupt_display_text }}
-    </el-tag>
+    <div v-if="battleInfo.bossInfo.interrupt_display_text" class="absolute left-1/2 top-1/2 flex flex-col translate-y-70px gap-1px -translate-x-1/2">
+      <el-tag v-for="text in battleInfo.bossInfo.interrupt_display_text.split('|')" :key="text">
+        {{ text }}
+      </el-tag>
+    </div>
     <el-tooltip content="操作时长">
       <div absolute left-0 top-0 select-none>
         {{ formatTime(operationSecond) }}
