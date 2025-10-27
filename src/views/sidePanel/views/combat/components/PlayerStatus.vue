@@ -73,7 +73,7 @@ function isOneRow(player: DisplayPlayer) {
             <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
               <span text-12px text-red font-bold>Dead</span>
             </div>
-            <div v-if="player.condition.coating_value" class="txt-coating-value" absolute bottom-0>
+            <div v-if="player.condition.coating_value && !player.is_dead" class="txt-coating-value" absolute bottom-0>
               {{ player.condition.coating_value }}
             </div>
             <img w-full rounded-5px :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id, 's')">
