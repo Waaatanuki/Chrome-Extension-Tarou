@@ -67,7 +67,7 @@ function handleMark(member: MemberInfo) {
 
 <template>
   <div v-if="data" mt-10px flex flex-wrap gap-20px text-12px>
-    <el-tooltip v-for="member, idx in data" :key="idx" placement="top" :show-after="1000">
+    <el-tooltip v-for="member, idx in data" :key="idx" placement="top" :show-after="500">
       <template #content>
         <div mb-10px w-100px>
           {{ markedUserList.find(user => user.id === member.userId)?.comment }}

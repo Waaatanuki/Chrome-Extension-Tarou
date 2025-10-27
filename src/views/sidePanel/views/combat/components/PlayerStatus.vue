@@ -13,14 +13,17 @@ interface DisplayPlayer extends Player {
 }
 
 const { playerInfo, formation } = defineProps<{ playerInfo: Player[], formation?: number[], turn: number }>()
+const onlyShowMainPlayer = ref(true)
 
 const disPlayPlayer = computed<DisplayPlayer[]>(() => {
   if (!formation)
     return []
 
-  const sub = playerInfo
-    .map((_, index) => index)
-    .filter(index => !formation.includes(index))
+  const sub = onlyShowMainPlayer.value
+    ? []
+    : playerInfo
+        .map((_, index) => index)
+        .filter(index => !formation.includes(index))
   const sortInfo = [...formation.map(i => ({ index: i, isMain: true })), ...sub.map(i => ({ index: i, isMain: false }))]
 
   return sortInfo.map(({ index, isMain }) => {
@@ -60,7 +63,17 @@ function isOneRow(player: DisplayPlayer) {
 
 <template>
   <div>
-    <div mb-15px w-full fc>
+    <div mb-15px w-full flex justify-between px-10px>
+      <el-switch
+        v-model="onlyShowMainPlayer"
+        size="small"
+        active-text="前排"
+        inactive-text="全部"
+        inline-prompt
+        style="--el-switch-off-color: #0d9488"
+      >
+        只显示标记状态
+      </el-switch>
       <el-checkbox v-model="onlyShowSpecBuff" :border="true" size="small">
         只显示标记状态
       </el-checkbox>
