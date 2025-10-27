@@ -1,6 +1,6 @@
 export const weaponSkill = [
   {
-    series_id: '3',
+    series_id: ['3'],
     name: '法武插件',
     type: 'skill3',
     list: [{
@@ -90,7 +90,7 @@ export const weaponSkill = [
     }],
   },
   {
-    series_id: '13',
+    series_id: ['13'],
     name: 'U武插件',
     type: 'skill3',
     list: [{
@@ -178,5 +178,33 @@ export const weaponSkill = [
       comment: '無属性の敵に対して与ダメージUP',
       comment_en: 'allies\' DMG against non-elemental foes',
     }],
+  },
+  {
+    series_id: ['44'],
+    name: '破坏插件',
+    type: 'skill3',
+    list: [
+      {
+        id: '100885',
+        name: '崩焉のアンクレット',
+        alias: '神击',
+        comment: '通常攻撃の与ダメージ上昇',
+        comment_en: 'Supplement normal attack DMG',
+      },
+      {
+        id: '100886',
+        name: '越達のアンクレット',
+        alias: '神技',
+        comment: 'アビリティの与ダメージ上昇',
+        comment_en: 'Supplement skill DMG',
+      },
+      {
+        id: '100887',
+        name: '竟極のアンクレット',
+        alias: '神奥',
+        comment: '奥義の与ダメージ上昇',
+        comment_en: 'Supplement C.A. DMG',
+      },
+    ],
   },
 ]
