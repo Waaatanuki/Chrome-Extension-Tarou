@@ -247,6 +247,7 @@ declare module 'source' {
     is_dead: boolean
     is_host: boolean
     hp_ratio: number
+    group_num: number | null
   }
 
   interface AttackResultJson {
@@ -570,7 +571,7 @@ declare module 'source' {
   interface WsPayloadData {
     bossUpdate?: {
       param: {
-        boss1_hp: number // 修复了拼写错误 numebr -> number
+        boss1_hp: number
         boss1_condition: Condition
       }
     }
@@ -588,6 +589,7 @@ declare module 'source' {
         level: number
         job_id: number
         pc_attribute: number
+        group_num: number | null
       }
       mvpList: {
         point: string

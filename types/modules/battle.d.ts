@@ -61,8 +61,9 @@ declare module 'battle' {
     userRank: string
     jobIcon: string
     attributeClass: string
-    is_dead: boolean
-    is_host?: boolean
+    isDead: boolean
+    groupNum: number | null
+    isHost?: boolean
     point?: number
     rank?: number
     stamp?: string

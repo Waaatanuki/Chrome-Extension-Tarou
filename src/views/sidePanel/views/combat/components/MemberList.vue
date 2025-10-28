@@ -78,10 +78,10 @@ function handleMark(member: MemberInfo) {
         </div>
       </template>
       <div
-        :class="{ myself: member.userId === userInfo.uid, host: member.is_host }"
+        :class="{ myself: member.userId === userInfo.uid, host: member.isHost }"
         relative mb-10px h-65px w-140px flex cursor-pointer select-none items-center rounded-md bg-neutral-7 transition-all
       >
-        <div v-if="member.is_dead" class="absolute h-full w-full fc bg-black/40">
+        <div v-if="member.isDead" class="absolute h-full w-full fc bg-black/40">
           <span text-red font-bold>Dead</span>
         </div>
         <div ml-35px flex flex-col justify-center text-start font-medium>
@@ -96,6 +96,7 @@ function handleMark(member: MemberInfo) {
         <ElTag effect="dark" size="small" :type="member.userRank === MAX_RANK ? 'warning' : 'info'" absolute left-5px top--10px>
           {{ `Lv${member.userRank}` }}
         </ElTag>
+        <img v-if="member.groupNum !== null" :src="getGroupIcon(member.groupNum)" absolute left-60px top--10px h-20px>
         <ElTag v-if="member.rank && member.rank !== 999" effect="dark" size="small" type="danger" absolute left--8px my-auto>
           {{ `#${member.rank}` }}
         </ElTag>

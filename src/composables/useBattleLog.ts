@@ -51,8 +51,9 @@ export function handleStartJson(data: BattleStartJson) {
     userRank: cur.level,
     jobIcon: getJobIcon(cur.job_id),
     attributeClass: `ico-attribute ico-attribute-${cur.pc_attribute}`,
-    is_dead: cur.is_dead,
-    is_host: cur.is_host,
+    isDead: cur.is_dead,
+    isHost: cur.is_host,
+    groupNum: cur.group_num,
   }))
 
   handleMainConditionInfo(boss.condition, leader.condition)
@@ -281,7 +282,8 @@ export function handleWsPayloadJson(data: WsPayloadData) {
       userRank: String(member.level),
       jobIcon: getJobIcon(member.job_id),
       attributeClass: `ico-attribute ico-attribute-${member.pc_attribute}`,
-      is_dead: false,
+      isDead: false,
+      groupNum: member.group_num,
     })
     battleInfo.value.mvpInfo = data.memberJoin.mvpList.map(mvp => ({ userId: mvp.user_id, rank: mvp.rank, point: Number(mvp.point) }))
   }

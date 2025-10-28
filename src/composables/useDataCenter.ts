@@ -745,7 +745,8 @@ export async function unpack(parcel: string) {
         userRank: elem.attribs['data-user-rank'],
         jobIcon: $(elem).find('.img-job-icon').attr('src') ?? '',
         attributeClass: $(elem).find('.ico-attribute').attr('class') ?? '',
-        is_dead: false,
+        isDead: false,
+        groupNum: null,
       })
     })
   }

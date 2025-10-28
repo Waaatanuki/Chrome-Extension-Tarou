@@ -99,3 +99,7 @@ export function getOfficialUrl(url: string) {
     return `${imgUri}${url}`
   return url
 }
+
+export function getGroupIcon(group_num: number) {
+  return `${imgUri}/sp/raid/assets/ui_exception/group_gauge/singularity_chain/icon_${group_num}.png`
+}
