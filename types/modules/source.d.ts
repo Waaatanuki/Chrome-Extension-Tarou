@@ -79,6 +79,16 @@ declare module 'source' {
       value: number
       description: string
     }
+    group_gauge?: {
+      id: string
+      value: number
+      ability_list: {
+        ability_id: number
+        image: string
+        name: string
+        comment: string
+      }[]
+    }
   }
 
   interface Boss {

@@ -573,6 +573,11 @@ export async function unpack(parcel: string) {
     handleAttackRusultJson('ability', responseData, JSON.parse(requestData!))
   }
 
+  // BattleLog 记录使用DC连锁技能日志
+  if (/\/rest\/(?:raid|multiraid)\/group_gauge_action_result\.json/.test(url)) {
+    handleAttackRusultJson('ability', responseData, JSON.parse(requestData!))
+  }
+
   // BattleLog 记录使用蓝绿药日志
   if (/\/rest\/(?:raid|multiraid)\/temporary_item_result\.json/.test(url)) {
     handleAttackRusultJson('temporary', responseData, JSON.parse(requestData!))

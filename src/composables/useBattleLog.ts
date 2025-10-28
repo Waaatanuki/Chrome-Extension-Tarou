@@ -416,6 +416,14 @@ function recordRaidInfo(data: BattleStartJson) {
 
   const abilityList = getAbilityList(data.ability)
 
+  if (data.group_gauge) {
+    abilityList.push(...data.group_gauge.ability_list.map(a => ({
+      type: 'ability',
+      id: String(a.ability_id),
+      icon: a.image,
+    })))
+  }
+
   battleRecord.value.unshift({
     quest_id: data.quest_id,
     raid_id: data.raid_id,
@@ -701,11 +709,12 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   }
 
   if (type === 'ability') {
-    const hit = currentRaid.abilityList?.find(ability => ability.id === payload.ability_id)
+    const hit = currentRaid.abilityList?.find(ability => ability.id === String(payload.ability_id))
     if (!hit)
       return
 
-    currentRaid.player[Number(payload.ability_character_num)].use_ability_count++
+    if (payload.ability_character_num)
+      currentRaid.player[Number(payload.ability_character_num)].use_ability_count++
 
     const aim: string[] = []
 
@@ -821,7 +830,7 @@ function getAbilityList(rawAbility?: Ability) {
       (p, c) => p.concat([{
         type: 'ability',
         icon: c[0].class.split(' ')[0].substring(prefix.length),
-        id: c[0]['ability-id'],
+        id: String(c[0]['ability-id']),
       }]),
       [],
     )),
