@@ -1,12 +1,13 @@
 import type { DropInfo } from 'api'
 import type { BattleExport, BattleInfo } from 'battle'
-import type { ArtifactRule, BattleMemo, BattleRecord, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestMemo, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
+import type { ArtifactRule, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestMemo, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
-import { defaultNotificationItem, defaultNotificationSetting, defaultTodoList, defaultWidget } from '~/constants'
+import { defaultCombatPanelSetting, defaultNotificationItem, defaultNotificationSetting, defaultTodoList, defaultWidget } from '~/constants'
 import { defaultArtifactRuleList } from '~/constants/artifact'
+
 // Debugger
 export const code = useWebExtensionStorage<string>('code', '')
 export const obTabId = useWebExtensionStorage<number>('obTabId', 0)
@@ -15,6 +16,7 @@ export const obTabId = useWebExtensionStorage<number>('obTabId', 0)
 export const volume = useWebExtensionStorage<number>('volume', 0.5)
 export const notificationSetting = useWebExtensionStorage<NotificationSetting>('notificationSetting', defaultNotificationSetting)
 export const notificationItem = useWebExtensionStorage<string[]>('notificationItem', defaultNotificationItem)
+export const combatPanelSetting = useWebExtensionStorage<CombatPanelSetting>('combatPanelSetting', JSON.parse(JSON.stringify(defaultCombatPanelSetting)))
 
 // Dashboard
 export const userInfo = useWebExtensionStorage<Partial<UserInfo>>('userInfo', {})

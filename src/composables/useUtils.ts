@@ -1,3 +1,5 @@
+import { combatPanelSetting } from '~/logic'
+
 export function isGamePage(url?: string) {
   if (!url)
     return false
@@ -9,6 +11,67 @@ export function isGamePage(url?: string) {
 
 export function goProfilePage(userId: string) {
   window.open(`https://game.granbluefantasy.jp/#profile/${userId}`)
+}
+
+export function deepClone<T>(obj: T): T {
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  if (obj instanceof Date) {
+    return new Date(obj.getTime()) as unknown as T
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => deepClone(item)) as unknown as T
+  }
+
+  const cloned = {} as T
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      cloned[key] = deepClone(obj[key])
+    }
+  }
+
+  return cloned
+}
+
+/**
+ * 深度合并默认配置和用户配置
+ * @param defaultConfig 默认配置
+ * @param userConfig 用户当前配置
+ * @returns 合并后的新配置
+ */
+export function mergeConfig<T extends Record<string, any>>(defaultConfig: T, userConfig: Partial<T>): T {
+  const result = {} as T
+
+  // 只遍历默认配置，构建结果对象
+  for (const key in defaultConfig) {
+    const defaultValue = defaultConfig[key]
+    const userValue = userConfig[key]
+
+    if (isPlainObject(defaultValue) && isPlainObject(userValue)) {
+      // 如果都是对象，递归合并
+      result[key] = mergeConfig(defaultValue, userValue as any)
+    }
+    else if (userValue !== undefined) {
+      // 如果用户有这个值，使用用户的值
+      result[key] = userValue
+    }
+    else {
+      // 否则使用默认值
+      result[key] = defaultValue
+    }
+  }
+
+  return result
+}
+
+/**
+ * 检查是否为纯对象
+ */
+function isPlainObject(obj: any): obj is Record<string, any> {
+  return obj !== null && typeof obj === 'object' && !Array.isArray(obj) && obj.constructor === Object
 }
 
 export function openPopupWindow(key: string) {
@@ -34,6 +97,11 @@ export function openPopupWindow(key: string) {
 }
 
 export function openCombatPanel() {
-  chrome.windows.create({ url: 'src/views/combatPanel/main.html', type: 'popup', height: 800, width: 800 })
+  chrome.windows.create({
+    url: 'src/views/combatPanel/main.html',
+    type: 'popup',
+    width: combatPanelSetting.value.Container.width,
+    height: combatPanelSetting.value.Container.height,
+  })
     .catch((err) => { createNotification({ message: String(err) }) })
 }

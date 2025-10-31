@@ -48,3 +48,16 @@ export const defaultWidget = [
   { key: 'SkipQuest', name: '扫荡副本', visible: true },
   { key: 'Sampo', name: '探险队', visible: true },
 ]
+
+export const defaultCombatPanelSetting = {
+  Container: {
+    x: 0,
+    y: 0,
+    width: 800,
+    height: 800,
+  },
+  CommandBar: {
+    x: 40,
+    y: 80,
+  },
+}

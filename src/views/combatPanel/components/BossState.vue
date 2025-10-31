@@ -20,8 +20,8 @@ function handleCopy(text: string) {
 
 <template>
   <div
-    v-if="battleInfo.bossInfo" ref="el" relative w-300px text-15px
-    :style="style" style="position: fixed" :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
+    v-if="battleInfo.bossInfo" ref="el" w-300px text-15px
+    :style="style" style="position: absolute" :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
   >
     <ElProgress type="circle" :percentage="battleInfo.bossInfo.hpPercent" :stroke-width="15" status="exception" :width="300">
       <template #default="{ percentage }">

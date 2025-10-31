@@ -422,4 +422,17 @@ declare module 'extension' {
     id: number
     slot: number
   }
+
+  interface CombatPanelSetting {
+    Container: {
+      width: number
+      height: number
+    } & Position
+    CommandBar: Position
+  }
+
+  interface Position {
+    x: number
+    y: number
+  }
 }
