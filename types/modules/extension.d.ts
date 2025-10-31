@@ -430,6 +430,7 @@ declare module 'extension' {
     } & Position
     CommandBar: Position
     BossState: Position
+    RoomInfo: Position
   }
 
   interface Position {

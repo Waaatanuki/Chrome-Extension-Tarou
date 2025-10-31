@@ -63,7 +63,11 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
     y: 80,
   },
   BossState: {
-    x: 40,
-    y: 40,
+    x: 170,
+    y: 90,
+  },
+  RoomInfo: {
+    x: 200,
+    y: 300,
   },
 }
