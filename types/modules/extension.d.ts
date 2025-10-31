@@ -429,6 +429,7 @@ declare module 'extension' {
       height: number
     } & Position
     CommandBar: Position
+    BossState: Position
   }
 
   interface Position {

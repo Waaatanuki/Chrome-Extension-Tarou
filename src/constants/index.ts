@@ -1,3 +1,5 @@
+import type { CombatPanelSetting } from 'extension'
+
 export const defaultTodoList = [
   { done: false, content: '巡岛' },
   { done: false, content: '大巴' },
@@ -49,7 +51,7 @@ export const defaultWidget = [
   { key: 'Sampo', name: '探险队', visible: true },
 ]
 
-export const defaultCombatPanelSetting = {
+export const defaultCombatPanelSetting: CombatPanelSetting = {
   Container: {
     x: 0,
     y: 0,
@@ -59,5 +61,9 @@ export const defaultCombatPanelSetting = {
   CommandBar: {
     x: 40,
     y: 80,
+  },
+  BossState: {
+    x: 40,
+    y: 40,
   },
 }

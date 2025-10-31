@@ -15,7 +15,9 @@ const componentMap: Record<string, Component> = (() => {
 })()
 
 onMounted(() => {
-  combatPanelSetting.value = mergeConfig(defaultCombatPanelSetting, combatPanelSetting.value)
+  setTimeout(() => {
+    combatPanelSetting.value = mergeConfig(defaultCombatPanelSetting, combatPanelSetting.value)
+  })
 })
 </script>
 
