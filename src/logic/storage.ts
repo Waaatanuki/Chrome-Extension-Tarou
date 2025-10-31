@@ -16,7 +16,7 @@ export const obTabId = useWebExtensionStorage<number>('obTabId', 0)
 export const volume = useWebExtensionStorage<number>('volume', 0.5)
 export const notificationSetting = useWebExtensionStorage<NotificationSetting>('notificationSetting', defaultNotificationSetting)
 export const notificationItem = useWebExtensionStorage<string[]>('notificationItem', defaultNotificationItem)
-export const combatPanelSetting = useWebExtensionStorage<CombatPanelSetting>('combatPanelSetting', JSON.parse(JSON.stringify(defaultCombatPanelSetting)))
+export const combatPanelSetting = useWebExtensionStorage<CombatPanelSetting>('combatPanelSetting', deepClone(defaultCombatPanelSetting))
 
 // Dashboard
 export const userInfo = useWebExtensionStorage<Partial<UserInfo>>('userInfo', {})

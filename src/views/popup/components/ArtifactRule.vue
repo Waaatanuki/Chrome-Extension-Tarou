@@ -31,7 +31,7 @@ function onSubmit() {
 
   artifactRuleList.value[artifactRuleIndex.value] = {
     name: ruleName.value,
-    info: JSON.parse(JSON.stringify(ruleInfo.value)),
+    info: deepClone(ruleInfo.value)!,
   }
 
   window.close()
@@ -44,7 +44,7 @@ function handleCancel() {
 onMounted(() => {
   setTimeout(() => {
     ruleName.value = artifactRuleList.value[artifactRuleIndex.value].name
-    ruleInfo.value = JSON.parse(JSON.stringify(artifactRuleList.value[artifactRuleIndex.value].info))
+    ruleInfo.value = deepClone(artifactRuleList.value[artifactRuleIndex.value].info)
     ruleInfo.value!.highlight = ruleInfo.value!.highlight || {}
 
     for (const [key, value] of Object.entries(ruleInfo.value!.extra)) {

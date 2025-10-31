@@ -1,6 +1,5 @@
 import type { BuildLeaderAbility, BuildNpc, BuildSummon, BuildWeapon, SkillType } from 'party'
 import type { CalculateSetting, DeckJson } from 'source'
-import { cloneDeep } from 'lodash-es'
 import { calculateSettingList, deckList, jobAbilityList, localNpcList } from '~/logic'
 
 export function handleDeckJson(data: DeckJson) {
@@ -26,7 +25,7 @@ export function handleCalculateSetting(data: CalculateSetting) {
   if (hit)
     hit.setting = { ...data.setting }
   else
-    calculateSettingList.value.push(cloneDeep(data))
+    calculateSettingList.value.push(deepClone(data))
 }
 
 function processWeapon(data: DeckJson) {

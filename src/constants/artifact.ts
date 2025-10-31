@@ -74,7 +74,7 @@ const defaultArtifactRule = {
 
 export const defaultArtifactRuleList: ArtifactRule[] = Array.from({ length: 6 }, (_, i) => ({
   name: `规则${i + 1}`,
-  info: JSON.parse(JSON.stringify(defaultArtifactRule)),
+  info: deepClone(defaultArtifactRule),
 }))
 
 export const artifactSkillList = {

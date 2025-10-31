@@ -93,7 +93,7 @@ function handleCopyBuild() {
 }
 
 function processData(): BattleExport {
-  const uploadRecord: BattleRecord = JSON.parse(JSON.stringify(currentRecord.value))
+  const uploadRecord: BattleRecord = deepClone(currentRecord.value)!
   return {
     questId: uploadRecord.quest_id,
     raidId: uploadRecord.raid_id,

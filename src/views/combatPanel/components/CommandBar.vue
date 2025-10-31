@@ -34,7 +34,7 @@ function handleResetPosition() {
     if (!w.id)
       return
 
-    combatPanelSetting.value = JSON.parse(JSON.stringify(defaultCombatPanelSetting))
+    combatPanelSetting.value = deepClone(defaultCombatPanelSetting)
     chrome.windows.update(w.id, {
       width: defaultCombatPanelSetting.Container.width,
       height: defaultCombatPanelSetting.Container.height,

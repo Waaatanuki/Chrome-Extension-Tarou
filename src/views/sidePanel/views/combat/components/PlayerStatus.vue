@@ -27,7 +27,7 @@ const disPlayPlayer = computed<DisplayPlayer[]>(() => {
   const sortInfo = [...formation.map(i => ({ index: i, isMain: true })), ...sub.map(i => ({ index: i, isMain: false }))]
 
   return sortInfo.map(({ index, isMain }) => {
-    const player = JSON.parse(JSON.stringify(playerInfo[index])) as DisplayPlayer
+    const player = deepClone(playerInfo[index]) as DisplayPlayer
     const importantBuffs: Buff[] = []
     const commonBuffs: Buff[] = []
 

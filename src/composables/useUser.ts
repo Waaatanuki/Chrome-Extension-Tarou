@@ -17,7 +17,7 @@ export default function useUser() {
   function sendInfo(dropInfo: DropInfo[], upload = false) {
     if (!upload)
       beforeSend(dropInfo)
-    const array = JSON.parse(JSON.stringify(upload ? dropInfo : failedDropInfoList.value))
+    const array = deepClone(upload ? dropInfo : failedDropInfoList.value)
 
     return new Promise<void>((resolve, reject) => {
       function handel() {
