@@ -90,3 +90,5 @@ src/
 - UnoCSS样式
 - webext-bridge用于扩展消息传递
 - Cheerio用于HTML解析
+- /src/components里的组件会自动引用，不需要引用语句
+- vue以及src/composables里的方法也会自动引用，不需要引用语句

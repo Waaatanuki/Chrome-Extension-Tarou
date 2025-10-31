@@ -32,3 +32,8 @@ export function openPopupWindow(key: string) {
   chrome.windows.create({ url: `src/views/popup/main.html?${key}`, type: 'popup', ...getWindowSize(key) })
     .catch((err) => { createNotification({ message: String(err) }) })
 }
+
+export function openCombatPanel() {
+  chrome.windows.create({ url: 'src/views/combatPanel/main.html', type: 'popup', height: 800, width: 800 })
+    .catch((err) => { createNotification({ message: String(err) }) })
+}

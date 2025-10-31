@@ -2,6 +2,12 @@
 import copy from 'copy-text-to-clipboard'
 import { battleInfo, battleRecord } from '~/logic'
 
+const el = useTemplateRef<HTMLElement>('el')
+const { style, isDragging } = useDraggable(el, {
+  initialValue: { x: 40, y: 40 },
+  preventDefault: true,
+})
+
 const currentRaid = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId))
 const bossImgSrc = computed(() => getBossImg('enemy', battleInfo.value.bossInfo!.imgId, 's'))
 const operationSecond = computed(() => currentRaid.value ? currentRaid.value.startTimer - currentRaid.value.endTimer : 0)
@@ -13,7 +19,10 @@ function handleCopy(text: string) {
 </script>
 
 <template>
-  <div v-if="battleInfo.bossInfo" relative w-300px text-15px>
+  <div
+    v-if="battleInfo.bossInfo" ref="el" relative w-300px text-15px
+    :style="style" style="position: fixed" :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
+  >
     <ElProgress type="circle" :percentage="battleInfo.bossInfo.hpPercent" :stroke-width="15" status="exception" :width="300">
       <template #default="{ percentage }">
         <div flex flex-col gap-2>
@@ -28,7 +37,7 @@ function handleCopy(text: string) {
             <img w-55px :src="bossImgSrc">
             <span text-30px>{{ percentage }}%</span>
           </div>
-          <div text-15px @click="openCombatPanel">
+          <div text-15px>
             {{ battleInfo.bossInfo.name }}
           </div>
           <div text-15px>
