@@ -713,7 +713,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
     if (!hit)
       return
 
-    if (payload.ability_character_num)
+    if (payload.ability_character_num !== null && payload.ability_character_num !== undefined)
       currentRaid.player[Number(payload.ability_character_num)].use_ability_count++
 
     const aim: string[] = []
