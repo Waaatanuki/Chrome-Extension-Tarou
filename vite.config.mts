@@ -4,7 +4,7 @@ import Vue from '@vitejs/plugin-vue'
 import fg from 'fast-glob'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { ElementPlusResolver, VueUseComponentsResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import { r } from './scripts/utils'
@@ -25,7 +25,7 @@ export const sharedConfig: UserConfig = {
       dts: r('types/auto-imports.d.ts'),
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver(), VueUseComponentsResolver()],
       dts: r('types/components.d.ts'),
     }),
     UnoCSS(),

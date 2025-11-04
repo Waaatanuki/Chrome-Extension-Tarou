@@ -431,6 +431,7 @@ declare module 'extension' {
     CommandBar: Position
     BossState: Position
     RoomInfo: Position
+    DamageRecord: Position
   }
 
   interface Position {

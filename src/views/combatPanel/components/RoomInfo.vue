@@ -42,7 +42,7 @@ function handleCopy(text: string) {
           -
         </div>
       </el-descriptions-item>
-      <el-descriptions-item label="操作时间" align="center">
+      <el-descriptions-item label="操作时长" align="center">
         {{ formatTime(operationSecond) }}
       </el-descriptions-item>
       <el-descriptions-item label="当前贡献" align="center">
