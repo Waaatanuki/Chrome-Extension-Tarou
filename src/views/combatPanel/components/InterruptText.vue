@@ -2,11 +2,6 @@
 import { battleInfo, combatPanelSetting } from '~/logic'
 
 const { position } = defineProps<{ position: { x: number, y: number } }>()
-
-function handleDragEnd(position: { x: number, y: number }) {
-  combatPanelSetting.value.InterruptText.x = position.x
-  combatPanelSetting.value.InterruptText.y = position.y
-}
 </script>
 
 <template>
@@ -16,7 +11,10 @@ function handleDragEnd(position: { x: number, y: number }) {
     ring="3 rose"
     :initial-value="position"
     :prevent-default="true"
-    @end="handleDragEnd"
+    @end="(position) => {
+      combatPanelSetting.InterruptText.x = position.x
+      combatPanelSetting.InterruptText.y = position.y
+    }"
   >
     <div
       v-if="battleInfo.bossInfo?.interrupt_display_text"

@@ -41,11 +41,6 @@ const totalDamageTaken = computed(() =>
 function handleCommand(command: DamageTakenType) {
   damageTakenType.value = command
 }
-
-function handleDragEnd(position: { x: number, y: number }) {
-  combatPanelSetting.value.DamageTaken.x = position.x
-  combatPanelSetting.value.DamageTaken.y = position.y
-}
 </script>
 
 <template>
@@ -56,7 +51,10 @@ function handleDragEnd(position: { x: number, y: number }) {
     :initial-value="position"
     :prevent-default="true"
     :handle="handle"
-    @end="handleDragEnd"
+    @end="(position) => {
+      combatPanelSetting.DamageTaken.x = position.x
+      combatPanelSetting.DamageTaken.y = position.y
+    }"
   >
     <div
       class="flex items-center justify-between bg-neutral-7 px-2 py-1 text-12px"

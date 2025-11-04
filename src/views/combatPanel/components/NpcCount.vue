@@ -10,11 +10,6 @@ const handle = useTemplateRef<HTMLElement>('handle')
 function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number, da: number, ta: number }) {
   return `${Math.floor(info[type] / info.total * 100)}%`
 }
-
-function handleDragEnd(position: { x: number, y: number }) {
-  combatPanelSetting.value.NpcCount.x = position.x
-  combatPanelSetting.value.NpcCount.y = position.y
-}
 </script>
 
 <template>
@@ -25,7 +20,10 @@ function handleDragEnd(position: { x: number, y: number }) {
     :initial-value="position"
     :prevent-default="true"
     :handle="handle"
-    @end="handleDragEnd"
+    @end="(position) => {
+      combatPanelSetting.NpcCount.x = position.x
+      combatPanelSetting.NpcCount.y = position.y
+    }"
   >
     <div
       class="flex items-center justify-between bg-neutral-7 px-2 py-1 text-12px"
