@@ -6,6 +6,7 @@ import BossCard from './components/BossCard.vue'
 import MemberList from './components/MemberList.vue'
 import NormalAttackInfo from './components/NormalAttackInfo.vue'
 
+const tabName = ref('damage')
 const currentRecord = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId))
 const normalAttackInfo = computed(() => currentRecord.value?.actionQueue.findLast(queue => queue.normalAttackInfo)?.normalAttackInfo)
 </script>
@@ -15,7 +16,7 @@ const normalAttackInfo = computed(() => currentRecord.value?.actionQueue.findLas
     <MemberList v-if="battleInfo.inLobby" :member-info="battleInfo.lobbyMemberList" />
     <BossCard />
     <BossBuff />
-    <BattleAnalysis :player="currentRecord.player" :formation="currentRecord.formation" :turn="battleInfo.bossInfo?.turn" />
+    <BattleAnalysis v-model="tabName" :player="currentRecord.player" :formation="currentRecord.formation" :turn="battleInfo.bossInfo?.turn" />
     <div v-if="normalAttackInfo" w-300px rounded-md ring-1 ring-neutral-7>
       <NormalAttackInfo :normal-attack-info="normalAttackInfo" />
     </div>
