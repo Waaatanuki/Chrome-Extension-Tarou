@@ -53,9 +53,9 @@ function handleCommand(command: DamageType) {
     </div>
 
     <div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
+      <ElProgress :percentage="80" color="#e6a23c" text-inside>
+        <div />
+      </ElProgress>
     </div>
   </UseDraggable>
 </template>

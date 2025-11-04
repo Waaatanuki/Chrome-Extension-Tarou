@@ -3,7 +3,7 @@ import { battleInfo, battleRecord, combatPanelSetting } from '~/logic'
 
 const { position } = defineProps<{ position: { x: number, y: number } }>()
 
-const playerInfo = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId)?.player)
+const playerInfo = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId)?.player ?? [])
 
 const handle = useTemplateRef<HTMLElement>('handle')
 type DamageType = 'total' | 'attack' | 'ability' | 'special' | 'other'
@@ -18,17 +18,28 @@ const damageTypeOptions = [
 const damageType = ref<DamageType>('total')
 const damageTypeDesc = computed(() => damageTypeOptions.find(item => item.value === damageType.value)?.label || '总计')
 const maxDamage = computed(() =>
-  playerInfo.value?.reduce((pre, cur) => pre > cur.damage[damageType.value].value
+  playerInfo.value.reduce((pre, cur) => pre > cur.damage[damageType.value].value
     ? pre
     : cur.damage[damageType.value].value, 1) ?? 0,
 )
 
+const totalDamage = computed(() =>
+  damageTypeOptions.reduce<{ value: string, label: string, total: number }[]>((p, c) => {
+    p.push({
+      value: c.value,
+      label: c.label,
+      total: playerInfo.value.reduce((pre, cur) => {
+        pre += cur.damage[c.value].value
+        return pre
+      }, 0),
+    })
+
+    return p
+  }, []),
+)
+
 function handleCommand(command: DamageType) {
   damageType.value = command
-}
-
-function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number, da: number, ta: number }) {
-  return `${Math.floor(info[type] / info.total * 100)}%`
 }
 
 function handleDragEnd(position: { x: number, y: number }) {
@@ -40,7 +51,7 @@ function handleDragEnd(position: { x: number, y: number }) {
 <template>
   <UseDraggable
     v-slot="{ isDragging }"
-    class="absolute w-300px"
+    class="absolute w-250px"
     border="~ neutral-7 rounded"
     :initial-value="position"
     :prevent-default="true"
@@ -72,45 +83,23 @@ function handleDragEnd(position: { x: number, y: number }) {
     </div>
 
     <div flex flex-col items-start justify-center gap-5px p-5px>
-      <div v-for="player in playerInfo" :key="player.pid" fc gap-5px>
+      <div v-for="player in playerInfo" :key="player.pid" fc gap-8px>
         <div relative w-45px>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
             <span text-12px text-red font-bold>Dead</span>
           </div>
           <img w-full :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id, 's')">
         </div>
-        <div fc flex-col gap-5px>
-          <div relative w-50px>
-            <img w-full :src="getLocalImg('ability-count-bg')">
-            <div absolute inset-y-0 right-7px fc text-12px>
-              {{ player.use_ability_count }}
-            </div>
-          </div>
-          <div relative w-50px>
-            <img w-full :src="getLocalImg('special-count-bg')">
-            <div absolute inset-y-0 right-7px fc text-12px>
-              {{ player.use_special_skill_count }}
-            </div>
-          </div>
-        </div>
-        <div w-180px>
-          <ElProgress :percentage=" player.damage[damageType].value / maxDamage * 100" color="#e6a23c" text-inside>
+        <div w-180px py-5px>
+          <ElProgress :percentage="player.damage[damageType].value / maxDamage * 100" color="#e6a23c" :stroke-width="8" text-inside>
             <div />
           </ElProgress>
-          <div mt-10px w-full flex items-center justify-between>
+          <div mx-2px mt-5px flex items-center justify-between text-12px>
             <div>
-              <ElTooltip
-                v-if="player.attackInfo"
-                :content="`总次数: ${player.attackInfo.total} TA: ${getRengeki('ta', player.attackInfo)} DA: ${getRengeki('da', player.attackInfo)}  SA: ${getRengeki('sa', player.attackInfo)}`"
-                placement="top" effect="dark" :show-after="500"
-              >
-                <div w-60px text-12px>
-                  {{ `TA: ${getRengeki('ta', player.attackInfo)}` }}
-                </div>
-              </ElTooltip>
-            </div>
-            <div text-end text-12px>
               {{ player.damage[damageType].value.toLocaleString() }}
+            </div>
+            <div>
+              {{ (player.damage[damageType].value / totalDamage.find(item => item.value === damageType)!.total * 100).toFixed(2) }}%
             </div>
           </div>
         </div>

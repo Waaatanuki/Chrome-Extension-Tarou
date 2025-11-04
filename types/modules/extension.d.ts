@@ -433,6 +433,7 @@ declare module 'extension' {
     RoomInfo: Position
     DamageRecord: Position
     DamageTaken: Position
+    NpcCount: Position
   }
 
   interface Position {

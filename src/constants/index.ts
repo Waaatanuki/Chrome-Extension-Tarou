@@ -78,4 +78,8 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
     x: 40,
     y: 380,
   },
+  NpcCount: {
+    x: 40,
+    y: 520,
+  },
 }

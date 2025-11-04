@@ -12,16 +12,30 @@ const damageTakenTypeOptions = [
   { value: 'total', label: '总计' },
 ] as const
 
-const playerInfo = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId)?.player)
+const playerInfo = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId)?.player ?? [])
 
 const handle = useTemplateRef<HTMLElement>('handle')
 const damageTakenType = ref<DamageTakenType>('total')
 const damageTakenTypeDesc = computed(() => damageTakenTypeOptions.find(item => item.value === damageTakenType.value)?.label || '总计')
 
 const maxDamageTaken = computed(() =>
-  playerInfo.value?.reduce((pre, cur) => pre > cur.damageTaken[damageTakenType.value].value
+  playerInfo.value.reduce((pre, cur) => pre > cur.damageTaken[damageTakenType.value].value
     ? pre
     : cur.damageTaken[damageTakenType.value].value, 1) ?? 0,
+)
+
+const totalDamageTaken = computed(() =>
+  damageTakenTypeOptions.reduce<{ value: string, label: string, total: number }[]>((p, c) => {
+    p.push({
+      value: c.value,
+      label: c.label,
+      total: playerInfo.value.reduce((pre, cur) => {
+        pre += cur.damageTaken[c.value].value
+        return pre
+      }, 0),
+    })
+    return p
+  }, []),
 )
 
 function handleCommand(command: DamageTakenType) {
@@ -37,7 +51,7 @@ function handleDragEnd(position: { x: number, y: number }) {
 <template>
   <UseDraggable
     v-slot="{ isDragging }"
-    class="absolute w-300px"
+    class="absolute w-250px"
     border="~ neutral-7 rounded"
     :initial-value="position"
     :prevent-default="true"
@@ -69,35 +83,23 @@ function handleDragEnd(position: { x: number, y: number }) {
     </div>
 
     <div flex flex-col items-start justify-center gap-5px p-5px>
-      <div v-for="player in playerInfo" :key="player.pid" fc gap-5px>
+      <div v-for="player in playerInfo" :key="player.pid" fc gap-8px>
         <div relative w-45px>
           <div v-if="player.is_dead" class="absolute h-full w-full fc bg-black/40">
             <span text-12px text-red font-bold>Dead</span>
           </div>
           <img w-full :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id, 's')">
         </div>
-        <div fc flex-col gap-5px>
-          <div relative w-50px>
-            <img w-full :src="getLocalImg('ability-count-bg')">
-            <div absolute inset-y-0 right-7px fc text-12px>
-              {{ player.use_ability_count }}
-            </div>
-          </div>
-          <div relative w-50px>
-            <img w-full :src="getLocalImg('special-count-bg')">
-            <div absolute inset-y-0 right-7px fc text-12px>
-              {{ player.use_special_skill_count }}
-            </div>
-          </div>
-        </div>
-        <div w-180px>
-          <ElProgress :percentage=" player.damageTaken[damageTakenType].value / maxDamageTaken * 100" color="#be123c" text-inside>
+        <div w-180px py-5px>
+          <ElProgress :percentage=" player.damageTaken[damageTakenType].value / maxDamageTaken * 100" :stroke-width="8" color="#be123c" text-inside>
             <div />
           </ElProgress>
-          <div mx-5px mt-10px flex items-center justify-between>
-            <div />
-            <div text-12px>
+          <div mx-2px mt-5px flex items-center justify-between text-12px>
+            <div>
               {{ player.damageTaken[damageTakenType].value.toLocaleString() }}
+            </div>
+            <div>
+              {{ (player.damageTaken[damageTakenType].value / totalDamageTaken.find(item => item.value === damageTakenType)!.total * 100).toFixed(2) }}%
             </div>
           </div>
         </div>
