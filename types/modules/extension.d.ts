@@ -435,6 +435,7 @@ declare module 'extension' {
     DamageTaken: Position
     NpcCount: Position
     InterruptText: Position
+    MemberList: Position
   }
 
   interface Position {

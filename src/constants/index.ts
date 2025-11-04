@@ -86,4 +86,8 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
     x: 40,
     y: 660,
   },
+  MemberList: {
+    x: 40,
+    y: 700,
+  },
 }
