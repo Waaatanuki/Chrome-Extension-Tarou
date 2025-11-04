@@ -6,6 +6,7 @@ const { position } = defineProps<{ position: { x: number, y: number } }>()
 
 <template>
   <UseDraggable
+    v-if="battleInfo.bossInfo?.interrupt_display_text"
     v-slot="{ isDragging }"
     class="absolute rounded p-1"
     ring="3 rose"
@@ -16,11 +17,7 @@ const { position } = defineProps<{ position: { x: number, y: number } }>()
       combatPanelSetting.InterruptText.y = position.y
     }"
   >
-    <div
-      v-if="battleInfo.bossInfo?.interrupt_display_text"
-      class="flex flex-col gap-4px"
-      :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
-    >
+    <div class="flex flex-col gap-4px" :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }">
       <el-tag v-for="text in battleInfo.bossInfo.interrupt_display_text.split('|')" :key="text" size="large" style="font-size: 15px;" disable-transitions>
         {{ text }}
       </el-tag>

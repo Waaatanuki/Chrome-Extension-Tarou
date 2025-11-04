@@ -5,10 +5,22 @@ import { combatPanelSetting } from '~/logic'
 
 const { position } = defineProps<{ position: { x: number, y: number } }>()
 
-const upViewList = computed(() => [
+const panelList = [
+  { key: 'RoomInfo', label: '综合信息' },
+  { key: 'BossState', label: '怪物信息' },
+  { key: 'InterruptText', label: '试炼条件' },
+  { key: 'MemberList', label: '玩家列表' },
+  { key: 'DamageRecord', label: '伤害统计' },
+  { key: 'DamageTaken', label: '承受统计' },
+  { key: 'NpcCount', label: '其他统计' },
+] as const
+
+const switchDialogVisible = ref(false)
+
+const commandList = [
+  { key: 'switch', lable: '开关面板', icon: 'carbon:switcher', handle: handleSwitchPanel },
   { key: 'reset', lable: '重置位置', icon: 'carbon:reset', handle: handleResetPosition },
-  { key: 'haha', lable: '哈哈哈', icon: 'carbon:gift', handle: handleResetPosition },
-])
+]
 
 const { width, height } = useWindowSize({ type: 'outer' })
 
@@ -16,6 +28,10 @@ watchEffect(() => {
   combatPanelSetting.value.Container.width = width.value
   combatPanelSetting.value.Container.height = height.value
 })
+
+function handleSwitchPanel() {
+  switchDialogVisible.value = true
+}
 
 function handleResetPosition() {
   chrome.windows.getCurrent((w) => {
@@ -48,11 +64,17 @@ function handleResetPosition() {
       class="fc gap-10px rounded-md bg-#3C3C3C p-5px"
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
     >
-      <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :show-after="1000" :content="view.lable" placement="bottom">
+      <el-tooltip v-for="view in commandList" :key="view.key" effect="dark" :show-after="1000" :content="view.lable" placement="bottom">
         <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 @click="view.handle">
           <Icon :icon="view.icon" text-20px />
         </div>
       </el-tooltip>
     </div>
   </UseDraggable>
+
+  <el-dialog v-model="switchDialogVisible" title="开关面板" :center="true" width="200">
+    <div class="flex flex-col gap-4px">
+      <el-checkbox v-for="panel in panelList" :key="panel.key" v-model="combatPanelSetting[panel.key].visible" :label="panel.label" />
+    </div>
+  </el-dialog>
 </template>

@@ -22,12 +22,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="relative p-20px">
-    {{ combatPanelSetting }}
+  <main class="relative">
     <component
       :is="componentMap[componentName]"
       v-for="componentName in Object.keys(componentMap)"
       :key="componentName"
+      :class="{ hidden: !combatPanelSetting[componentName as keyof CombatPanelSetting].visible }"
       :position="{
         x: combatPanelSetting[componentName as keyof CombatPanelSetting]?.x || 0,
         y: combatPanelSetting[componentName as keyof CombatPanelSetting]?.y || 0,

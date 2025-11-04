@@ -55,38 +55,47 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
   Container: {
     x: 0,
     y: 0,
+    visible: true,
     width: 800,
     height: 800,
   },
   CommandBar: {
+    visible: true,
     x: 40,
     y: 80,
   },
   BossState: {
+    visible: true,
     x: 170,
     y: 90,
   },
   RoomInfo: {
+    visible: true,
     x: 200,
     y: 300,
   },
   DamageRecord: {
+    visible: true,
     x: 40,
     y: 240,
   },
   DamageTaken: {
+    visible: true,
     x: 40,
     y: 380,
   },
   NpcCount: {
+    visible: true,
     x: 40,
     y: 520,
   },
   InterruptText: {
+    visible: true,
     x: 40,
     y: 660,
   },
   MemberList: {
+    visible: true,
     x: 40,
     y: 700,
   },

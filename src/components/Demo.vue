@@ -16,9 +16,7 @@ const interrupt_display_text = ref('nizaindiwndiwni')
     :handle="handle"
   >
     <div class="flex flex-col gap-4px" :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }">
-      <el-tag v-for="text in interrupt_display_text.split('|')" :key="text" style="font-size: 20px;" disable-transitions>
-        {{ text }}
-      </el-tag>
+      123
     </div>
   </UseDraggable>
 </template>

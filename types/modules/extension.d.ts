@@ -427,18 +427,19 @@ declare module 'extension' {
     Container: {
       width: number
       height: number
-    } & Position
-    CommandBar: Position
-    BossState: Position
-    RoomInfo: Position
-    DamageRecord: Position
-    DamageTaken: Position
-    NpcCount: Position
-    InterruptText: Position
-    MemberList: Position
+    } & PanelOption
+    CommandBar: PanelOption
+    BossState: PanelOption
+    RoomInfo: PanelOption
+    DamageRecord: PanelOption
+    DamageTaken: PanelOption
+    NpcCount: PanelOption
+    InterruptText: PanelOption
+    MemberList: PanelOption
   }
 
-  interface Position {
+  interface PanelOption {
+    visible: boolean
     x: number
     y: number
   }
