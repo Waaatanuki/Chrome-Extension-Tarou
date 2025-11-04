@@ -432,6 +432,7 @@ declare module 'extension' {
     BossState: Position
     RoomInfo: Position
     DamageRecord: Position
+    DamageTaken: Position
   }
 
   interface Position {

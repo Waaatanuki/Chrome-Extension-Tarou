@@ -74,4 +74,8 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
     x: 40,
     y: 240,
   },
+  DamageTaken: {
+    x: 40,
+    y: 380,
+  },
 }
