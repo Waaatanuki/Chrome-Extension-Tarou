@@ -99,4 +99,9 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
     x: 40,
     y: 700,
   },
+  NpcCondition: {
+    visible: true,
+    x: 40,
+    y: 740,
+  },
 }
