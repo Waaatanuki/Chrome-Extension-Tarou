@@ -82,4 +82,8 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
     x: 40,
     y: 520,
   },
+  InterruptText: {
+    x: 40,
+    y: 660,
+  },
 }

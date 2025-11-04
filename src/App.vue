@@ -32,7 +32,7 @@ const gachaInfo = ref({
 
 <template>
   <div fc flex-col flex-wrap gap-3 p-10>
-    <Demo />
+    <Demo :position="{ x: 30, y: 240 }" />
     <div h-600px w-600px ring-1>
       <div fc gap-2 p-2>
         <el-input v-model="foo" type="text" style="width: 200px;" />
