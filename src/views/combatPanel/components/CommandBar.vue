@@ -36,18 +36,31 @@ function handleSwitchPanel() {
 }
 
 function handleResetPosition() {
-  chrome.windows.getCurrent((w) => {
-    if (!w.id)
-      return
+  ElMessageBox.confirm(
+    '确认重置所有面板位置',
+    '通知',
+    {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    },
+  )
+    .then(() => {
+      chrome.windows.getCurrent((w) => {
+        if (!w.id)
+          return
 
-    combatPanelSetting.value = deepClone(defaultCombatPanelSetting)
-    chrome.windows.update(w.id, {
-      width: defaultCombatPanelSetting.Container.width,
-      height: defaultCombatPanelSetting.Container.height,
-    }).then(() => {
-      window.location.reload()
+        combatPanelSetting.value = deepClone(defaultCombatPanelSetting)
+        chrome.windows.update(w.id, {
+          width: defaultCombatPanelSetting.Container.width,
+          height: defaultCombatPanelSetting.Container.height,
+        }).then(() => {
+          window.location.reload()
+        })
+      })
     })
-  })
+    .catch(() => { })
 }
 </script>
 
