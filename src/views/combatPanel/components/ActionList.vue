@@ -33,9 +33,9 @@ watch(actionQueue, () => {
     </div>
     <el-scrollbar
       ref="scrollbarRef"
-      class="max-w-625px"
+      class="max-w-625px min-w-510px"
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
-      max-height="400"
+      max-height="600"
     >
       <div ref="innerRef" px-3>
         <ElCard v-for="list, idx in actionQueue" :key="idx" mb-2 :body-style="{ padding: '0px' }" shadow="hover">
