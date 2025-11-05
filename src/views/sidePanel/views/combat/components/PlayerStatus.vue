@@ -100,29 +100,31 @@ function isOneRow(player: DisplayPlayer) {
 
         <div flex flex-wrap>
           <div h-48px w-48px />
-          <div v-for="buff, idx in player.condition.importantBuffs" :key="idx" h-48px w-48px fc>
-            <img
-              :src="getBuffIcon(buff, turn)"
-              h-40px w-40px cursor-pointer @click="toggleImage(specPlayerBuff, buff.status.split('_')[0])"
-            >
-          </div>
-          <template v-if="!onlyShowSpecBuff">
-            <div v-for="i in Math.ceil(player.condition.commonBuffs.length / 2)" :key="i" h-48px w-24px flex flex-col>
-              <div v-if="player.condition.commonBuffs[(i - 1) * 2]" h-24px w-24px fc>
-                <img
-                  h-20px w-20px cursor-pointer
-                  :src="getBuffIcon(player.condition.commonBuffs[(i - 1) * 2], turn)"
-                  @click="toggleImage(specPlayerBuff, player.condition.commonBuffs[(i - 1) * 2].status.split('_')[0])"
-                >
-              </div>
-              <div v-if="player.condition.commonBuffs[(i - 1) * 2 + 1]" h-24px w-24px fc>
-                <img
-                  h-20px w-20px cursor-pointer
-                  :src="getBuffIcon(player.condition.commonBuffs[(i - 1) * 2 + 1], turn)"
-                  @click="toggleImage(specPlayerBuff, player.condition.commonBuffs[(i - 1) * 2 + 1].status.split('_')[0])"
-                >
-              </div>
+          <template v-if="!player.is_dead">
+            <div v-for="buff, idx in player.condition.importantBuffs" :key="idx" h-48px w-48px fc>
+              <img
+                :src="getBuffIcon(buff, turn)"
+                h-40px w-40px cursor-pointer @click="toggleImage(specPlayerBuff, buff.status.split('_')[0])"
+              >
             </div>
+            <template v-if="!onlyShowSpecBuff">
+              <div v-for="i in Math.ceil(player.condition.commonBuffs.length / 2)" :key="i" h-48px w-24px flex flex-col>
+                <div v-if="player.condition.commonBuffs[(i - 1) * 2]" h-24px w-24px fc>
+                  <img
+                    h-20px w-20px cursor-pointer
+                    :src="getBuffIcon(player.condition.commonBuffs[(i - 1) * 2], turn)"
+                    @click="toggleImage(specPlayerBuff, player.condition.commonBuffs[(i - 1) * 2].status.split('_')[0])"
+                  >
+                </div>
+                <div v-if="player.condition.commonBuffs[(i - 1) * 2 + 1]" h-24px w-24px fc>
+                  <img
+                    h-20px w-20px cursor-pointer
+                    :src="getBuffIcon(player.condition.commonBuffs[(i - 1) * 2 + 1], turn)"
+                    @click="toggleImage(specPlayerBuff, player.condition.commonBuffs[(i - 1) * 2 + 1].status.split('_')[0])"
+                  >
+                </div>
+              </div>
+            </template>
           </template>
         </div>
       </div>

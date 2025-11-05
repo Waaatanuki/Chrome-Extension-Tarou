@@ -94,7 +94,7 @@ function toggleImage(specBuff: string[], buffId: string) {
             <img w-full :src="getAssetImg(player.is_npc ? 'npc' : 'leader', player.image_id, 's')">
           </div>
 
-          <div flex>
+          <div v-if="!player.is_dead" flex>
             <div v-for="buff, idx in player.condition.importantBuffs" :key="idx" h-75px w-75px fc p-5px>
               <img
                 :src="getBuffIcon(buff, turn)" w-full cursor-pointer
