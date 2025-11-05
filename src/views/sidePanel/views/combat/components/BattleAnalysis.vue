@@ -6,7 +6,7 @@ import PlayerStatus from './PlayerStatus.vue'
 
 defineProps<{ player: Player[], formation?: number[], turn?: number }>()
 
-const tabName = defineModel<string>()
+const tabName = defineModel<string>({ default: 'damage' })
 </script>
 
 <template>

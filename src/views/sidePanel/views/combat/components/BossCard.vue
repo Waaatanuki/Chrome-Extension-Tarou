@@ -28,7 +28,7 @@ function handleCopy(text: string) {
             <img w-55px :src="bossImgSrc">
             <span text-30px>{{ percentage }}%</span>
           </div>
-          <div cursor-pointer text-15px text-rose-5 hover:text-rose-3 @click="openCombatPanel">
+          <div cursor-pointer text-15px hover:text-rose-3 @click="openCombatPanel">
             {{ battleInfo.bossInfo.name }}
           </div>
           <div text-15px>
