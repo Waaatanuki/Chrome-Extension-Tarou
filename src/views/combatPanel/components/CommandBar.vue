@@ -8,6 +8,7 @@ const { position } = defineProps<{ position: { x: number, y: number } }>()
 const panelList = [
   { key: 'RoomInfo', label: '综合信息' },
   { key: 'BossState', label: '怪物信息' },
+  { key: 'NpcCondition', label: '角色状态' },
   { key: 'InterruptText', label: '试炼条件' },
   { key: 'ActionList', label: '操作记录' },
   { key: 'MemberList', label: '玩家列表' },

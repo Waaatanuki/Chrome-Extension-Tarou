@@ -61,8 +61,8 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
   },
   CommandBar: {
     visible: true,
-    x: 40,
-    y: 80,
+    x: 15,
+    y: 15,
   },
   BossState: {
     visible: true,

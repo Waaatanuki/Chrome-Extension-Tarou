@@ -46,8 +46,13 @@ function handleCopy(text: string) {
         <el-descriptions-item label="操作时长" align="center">
           {{ formatTime(operationSecond) }}
         </el-descriptions-item>
-        <el-descriptions-item label="当前贡献" align="center">
+        <el-descriptions-item label="造成伤害" align="center">
           <div>
+            {{ currentRaid?.damage || '-' }}
+          </div>
+        </el-descriptions-item>
+        <el-descriptions-item label="获得贡献" align="center" :span="2">
+          <div text-15px text-rose>
             {{ currentRaid?.point ? Math.floor(currentRaid.point).toLocaleString() : '-' }}
           </div>
         </el-descriptions-item>
