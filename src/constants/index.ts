@@ -106,7 +106,7 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
   },
   ActionList: {
     visible: true,
-    x: 866,
+    x: 860,
     y: 15,
   },
 }

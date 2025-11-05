@@ -8,8 +8,7 @@ const { position } = defineProps<{ position: { x: number, y: number } }>()
   <UseDraggable
     v-if="battleInfo.bossInfo?.interrupt_display_text"
     v-slot="{ x, y, isDragging }"
-    class="absolute rounded p-1"
-    ring="3 rose"
+    class="absolute"
     :initial-value="position"
     :prevent-default="true"
     @end="(position) => {
@@ -21,7 +20,7 @@ const { position } = defineProps<{ position: { x: number, y: number } }>()
       {{ `X: ${parseInt(x)}, Y: ${parseInt(y)}` }}
     </div>
     <div class="flex flex-col gap-4px" :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }">
-      <el-tag v-for="text in battleInfo.bossInfo.interrupt_display_text.split('|')" :key="text" size="large" style="font-size: 15px;" disable-transitions>
+      <el-tag v-for="text in battleInfo.bossInfo.interrupt_display_text.split('|')" :key="text" size="large" type="warning" style="font-size: 15px;" disable-transitions>
         {{ text }}
       </el-tag>
     </div>

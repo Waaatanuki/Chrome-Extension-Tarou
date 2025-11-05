@@ -64,9 +64,9 @@ function toggleImage(specBuff: string[], buffId: string) {
           </el-tooltip>
           <ElCountdown
             v-if="typeof battleInfo.bossInfo.addition?.restTime === 'number'"
-            value-style="color: #b91c1c" format="mm:ss" :value="battleInfo.bossInfo.addition.restTime"
+            value-style="color: #b91c1c;font-size: 15px;" format="mm:ss" :value="battleInfo.bossInfo.addition.restTime"
           />
-          <div v-if="battleInfo.bossInfo.addition.genesis">
+          <div v-if="battleInfo.bossInfo.addition.genesis" text-15px>
             {{ battleInfo.bossInfo.addition.genesis }}
           </div>
         </div>

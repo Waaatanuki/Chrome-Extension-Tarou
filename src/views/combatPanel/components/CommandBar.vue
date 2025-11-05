@@ -13,7 +13,7 @@ const panelList = [
   { key: 'ActionList', label: '操作记录' },
   { key: 'MemberList', label: '玩家列表' },
   { key: 'DamageRecord', label: '伤害统计' },
-  { key: 'DamageTaken', label: '承受统计' },
+  { key: 'DamageTaken', label: '承伤统计' },
   { key: 'NpcCount', label: '其他统计' },
 ] as const
 
