@@ -64,7 +64,7 @@ function handleMark(member: MemberInfo) {
 <template>
   <UseDraggable
     v-if="data"
-    v-slot="{ isDragging }"
+    v-slot="{ x, y, isDragging }"
     class="absolute"
     :initial-value="position"
     :prevent-default="true"
@@ -73,6 +73,9 @@ function handleMark(member: MemberInfo) {
       combatPanelSetting.MemberList.y = position.y
     }"
   >
+    <div :class="{ hidden: !isDragging }" class="absolute left-0 top--30px w-150px">
+      {{ `X: ${parseInt(x)}, Y: ${parseInt(y)}` }}
+    </div>
     <div
       mt-10px w-460px flex flex-wrap gap-20px text-12px
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"

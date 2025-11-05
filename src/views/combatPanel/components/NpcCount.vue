@@ -14,7 +14,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
 
 <template>
   <UseDraggable
-    v-slot="{ isDragging }"
+    v-slot="{ x, y, isDragging }"
     class="absolute w-250px"
     border="~ neutral-7 rounded"
     :initial-value="position"
@@ -25,6 +25,9 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
       combatPanelSetting.NpcCount.y = position.y
     }"
   >
+    <div :class="{ hidden: !isDragging }" class="absolute left-0 top--30px w-150px">
+      {{ `X: ${parseInt(x)}, Y: ${parseInt(y)}` }}
+    </div>
     <div
       class="flex items-center justify-between bg-neutral-7 px-2 py-1 text-12px"
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"

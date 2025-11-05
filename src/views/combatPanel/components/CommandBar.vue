@@ -52,7 +52,7 @@ function handleResetPosition() {
 
 <template>
   <UseDraggable
-    v-slot="{ isDragging }"
+    v-slot="{ x, y, isDragging }"
     class="absolute"
     :initial-value="position"
     :prevent-default="true"
@@ -61,6 +61,9 @@ function handleResetPosition() {
       combatPanelSetting.CommandBar.y = position.y
     }"
   >
+    <div :class="{ hidden: !isDragging }" class="absolute left-0 top--30px w-150px">
+      {{ `X: ${parseInt(x)}, Y: ${parseInt(y)}` }}
+    </div>
     <div
       class="fc gap-10px rounded-md bg-#3C3C3C p-5px"
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"

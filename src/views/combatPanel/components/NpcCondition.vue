@@ -66,7 +66,7 @@ function toggleImage(specBuff: string[], buffId: string) {
 
 <template>
   <UseDraggable
-    v-slot="{ isDragging }"
+    v-slot="{ x, y, isDragging }"
     class="absolute"
     :initial-value="position"
     :prevent-default="true"
@@ -75,6 +75,9 @@ function toggleImage(specBuff: string[], buffId: string) {
       combatPanelSetting.NpcCondition.y = position.y
     }"
   >
+    <div :class="{ hidden: !isDragging }" class="absolute left-0 top--30px w-150px">
+      {{ `X: ${parseInt(x)}, Y: ${parseInt(y)}` }}
+    </div>
     <div
       class="flex items-center justify-between text-12px"
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"

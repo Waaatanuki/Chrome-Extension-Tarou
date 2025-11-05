@@ -16,7 +16,7 @@ function handleCopy(text: string) {
 <template>
   <UseDraggable
     v-if="battleInfo.bossInfo"
-    v-slot="{ isDragging }"
+    v-slot="{ x, y, isDragging }"
     class="absolute"
     :initial-value="position"
     :prevent-default="true"
@@ -25,6 +25,9 @@ function handleCopy(text: string) {
       combatPanelSetting.RoomInfo.y = position.y
     }"
   >
+    <div :class="{ hidden: !isDragging }" class="absolute left-0 top--30px w-150px">
+      {{ `X: ${parseInt(x)}, Y: ${parseInt(y)}` }}
+    </div>
     <div class="w-300px" :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }">
       <el-descriptions :column="2" :border="true" direction="vertical">
         <el-descriptions-item label="房间人数" align="center" label-width="150">

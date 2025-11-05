@@ -19,7 +19,7 @@ watch(actionQueue, () => {
 
 <template>
   <UseDraggable
-    v-slot="{ isDragging }"
+    v-slot="{ x, y, isDragging }"
     class="absolute"
     :initial-value="position"
     :prevent-default="true"
@@ -28,6 +28,9 @@ watch(actionQueue, () => {
       combatPanelSetting.ActionList.y = position.y
     }"
   >
+    <div :class="{ hidden: !isDragging }" class="absolute left-0 top--30px w-150px">
+      {{ `X: ${parseInt(x)}, Y: ${parseInt(y)}` }}
+    </div>
     <el-scrollbar
       ref="scrollbarRef"
       class="max-w-625px"
