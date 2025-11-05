@@ -437,6 +437,7 @@ declare module 'extension' {
     InterruptText: PanelOption
     MemberList: PanelOption
     NpcCondition: PanelOption
+    ActionList: PanelOption
   }
 
   interface PanelOption {

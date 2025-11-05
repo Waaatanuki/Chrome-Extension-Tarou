@@ -9,6 +9,7 @@ const panelList = [
   { key: 'RoomInfo', label: '综合信息' },
   { key: 'BossState', label: '怪物信息' },
   { key: 'InterruptText', label: '试炼条件' },
+  { key: 'ActionList', label: '操作记录' },
   { key: 'MemberList', label: '玩家列表' },
   { key: 'DamageRecord', label: '伤害统计' },
   { key: 'DamageTaken', label: '承受统计' },

@@ -104,4 +104,9 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
     x: 40,
     y: 740,
   },
+  ActionList: {
+    visible: true,
+    x: 40,
+    y: 780,
+  },
 }
