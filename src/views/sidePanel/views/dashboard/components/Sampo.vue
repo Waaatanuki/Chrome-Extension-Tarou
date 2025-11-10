@@ -69,10 +69,17 @@ function handleFinish() {
       <div v-if="sampoInfo.isFinished">
         -
       </div>
-      <el-countdown v-else value-style="font-size: 12px" :value="sampoInfo.remainTime" @change="handleSampoChange" @finish="handleFinish" />
+      <el-tooltip v-else :content="useDateFormat(sampoInfo.remainTime, 'MM-DD HH:mm:ss').value">
+        <el-countdown value-style="font-size: 12px" :value="sampoInfo.remainTime" @change="handleSampoChange" @finish="handleFinish" />
+      </el-tooltip>
     </el-descriptions-item>
     <el-descriptions-item label="元气全回复" align="center" label-width="100">
-      <el-countdown value-style="font-size: 12px" :value="sampoInfo.recoveryRemainTime" @change="handleStaminaChange" />
+      <div v-if="!sampoInfo.recoveryRemainTime || sampoInfo.recoveryRemainTime < Date.now()">
+        -
+      </div>
+      <el-tooltip v-else :content="useDateFormat(sampoInfo.recoveryRemainTime, 'MM-DD HH:mm:ss').value">
+        <el-countdown value-style="font-size: 12px" :value="sampoInfo.recoveryRemainTime" @change="handleStaminaChange" />
+      </el-tooltip>
     </el-descriptions-item>
   </el-descriptions>
 
