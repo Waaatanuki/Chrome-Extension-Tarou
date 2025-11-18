@@ -5,7 +5,7 @@ import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
-import { defaultCombatPanelSetting, defaultNotificationItem, defaultNotificationSetting, defaultTodoList, defaultWidget } from '~/constants'
+import { defaultCombatPanelSetting, defaultNotificationItem, defaultNotificationSetting, defaultWidget } from '~/constants'
 import { defaultArtifactRuleList } from '~/constants/artifact'
 
 // Debugger
@@ -23,7 +23,6 @@ export const userInfo = useWebExtensionStorage<Partial<UserInfo>>('userInfo', {}
 export const gachaRecord = useWebExtensionStorage<GachaRecord[]>('gachaRecord', [])
 export const saveStoneDate = useWebExtensionStorage('saveStoneDate', dayjs().unix())
 export const lastUpdateTodo = useWebExtensionStorage('lastUpdateTodo', dayjs().unix())
-export const todoList = useWebExtensionStorage('todoList', defaultTodoList)
 export const recoveryItemList = useWebExtensionStorage<RecoveryItem[]>('recoveryItemList', [])
 export const eventList = useWebExtensionStorage<EventInfo[]>('eventList', [])
 export const displayList = useWebExtensionStorage<DisplayItem[]>('displayList', [])
