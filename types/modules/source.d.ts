@@ -585,6 +585,15 @@ declare module 'source' {
         boss1_condition: Condition
       }
     }
+    uniqueGaugeUp?: {
+      param: {
+        before_gauge: number
+        after_gauge: number
+        up_value: number
+      }
+      timestamp: string
+      user_id: string
+    }
     mvpUpdate?: {
       mvpList: {
         point: string

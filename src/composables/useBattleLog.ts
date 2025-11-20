@@ -267,6 +267,10 @@ export function handleWsPayloadJson(data: WsPayloadData) {
     handleMainConditionInfo(data.bossUpdate.param.boss1_condition)
   }
 
+  if (data.uniqueGaugeUp && battleInfo.value.bossInfo) {
+    battleInfo.value.bossInfo.addition.genesis = data.uniqueGaugeUp.param.after_gauge
+  }
+
   if (data.battleFinish && battleInfo.value.bossInfo) {
     battleInfo.value.bossInfo.hp = 0
     battleInfo.value.bossInfo.hpPercent = 0
