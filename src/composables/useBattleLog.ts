@@ -172,8 +172,10 @@ function handleNormalAttackJson(data: AttackResultJson) {
     if (action.cmd === 'attack' && action.from === 'player') {
       for (let i = 0; i < action.damage.length; i++) {
         for (let j = 0; j < action.damage[i].length; j++) {
-          battleInfo.value.normalAttackInfo.hit++
-          battleInfo.value.normalAttackInfo.total += Number(action.damage[i][j].value)
+          if (!action.damage[i][j].miss) {
+            battleInfo.value.normalAttackInfo.hit++
+            battleInfo.value.normalAttackInfo.total += Number(action.damage[i][j].value)
+          }
         }
       }
     }

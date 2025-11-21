@@ -322,7 +322,7 @@ declare module 'source' {
     from: string
     to: string
     condition: Condition
-    damage: { value: number, hp: number, pos: number }[][]
+    damage: { value: number, hp: number, pos: number, miss: number }[][]
     total?: { split: string[] }[]
     is_damage_sync_effect: boolean | string
     effect?: string
