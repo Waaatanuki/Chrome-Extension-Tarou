@@ -14,6 +14,7 @@ function onSetTarget() {
     cancelButtonText: '取消',
     inputPattern: /^\d+$/,
     inputErrorMessage: '请输入正确的数字',
+    inputPlaceholder: eventInfo.value.additional.targetHonor ? `当前目标: ${eventInfo.value.additional.targetHonor.toLocaleString()}` : '',
   })
     .then(({ value }) => {
       eventInfo.value.additional.targetHonor = Number(value)
