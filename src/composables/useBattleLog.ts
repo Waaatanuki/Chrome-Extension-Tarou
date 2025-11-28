@@ -172,7 +172,7 @@ function handleNormalAttackJson(data: AttackResultJson) {
     if (action.cmd === 'attack' && action.from === 'player') {
       for (let i = 0; i < action.damage.length; i++) {
         for (let j = 0; j < action.damage[i].length; j++) {
-          if (!action.damage[i][j].miss) {
+          if (Number(action.damage[i][j].value)) {
             battleInfo.value.normalAttackInfo.hit++
             battleInfo.value.normalAttackInfo.total += Number(action.damage[i][j].value)
           }
@@ -185,7 +185,7 @@ function handleNormalAttackJson(data: AttackResultJson) {
         continue
 
       const _action = action as unknown as SpecialScenario
-      battleInfo.value.normalAttackInfo.hit += _action.total?.length ?? 0
+      battleInfo.value.normalAttackInfo.hit += _action.total?.filter(item => item.split[0] !== '0').length ?? 0
       for (let i = 0; i < _action.list.length || 0; i++) {
         const detail = _action.list[i]
         for (let j = 0; j < detail.damage.length; j++) {
@@ -198,10 +198,12 @@ function handleNormalAttackJson(data: AttackResultJson) {
     if (action.cmd === 'damage' && action.to === 'boss') {
       const _action = action as unknown as DamageScenario
       for (let i = 0; i < _action.list.length || 0; i++) {
-        battleInfo.value.normalAttackInfo.hit++
-        battleInfo.value.normalAttackInfo.total += Number(_action.list[i].value)
-        if (isAbilityDamageAction(index, scenario))
-          battleInfo.value.normalAttackInfo.ability += Number(_action.list[i].value)
+        if (Number(_action.list[i].value)) {
+          battleInfo.value.normalAttackInfo.hit++
+          battleInfo.value.normalAttackInfo.total += Number(_action.list[i].value)
+          if (isAbilityDamageAction(index, scenario))
+            battleInfo.value.normalAttackInfo.ability += Number(_action.list[i].value)
+        }
       }
     }
 
@@ -209,10 +211,12 @@ function handleNormalAttackJson(data: AttackResultJson) {
       const _action = action as unknown as LoopDamageScenario
       for (let i = 0; i < _action.list.length; i++) {
         for (let j = 0; j < _action.list[i].length; j++) {
-          battleInfo.value.normalAttackInfo.hit++
-          battleInfo.value.normalAttackInfo.total += Number(_action.list[i][j].value)
-          if (isAbilityDamageAction(index, scenario))
-            battleInfo.value.normalAttackInfo.ability += Number(_action.list[i][j].value)
+          if (Number(_action.list[i][j].value)) {
+            battleInfo.value.normalAttackInfo.hit++
+            battleInfo.value.normalAttackInfo.total += Number(_action.list[i][j].value)
+            if (isAbilityDamageAction(index, scenario))
+              battleInfo.value.normalAttackInfo.ability += Number(_action.list[i][j].value)
+          }
         }
       }
     }
