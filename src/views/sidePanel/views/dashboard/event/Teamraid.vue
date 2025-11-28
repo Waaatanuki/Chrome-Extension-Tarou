@@ -6,7 +6,7 @@ import { eventList } from '~/logic'
 
 type TeamraidInfo = EventInfo & { additional: TeamraidAdditional }
 const eventInfo = computed(() => eventList.value.find(event => event.type === 'teamraid') as TeamraidInfo)
-const token = computed(() => eventInfo.value.additional.gachaPoint + eventInfo.value.additional.honor / 1000000 * 60)
+const token = computed(() => eventInfo.value.additional.hasSpReward ? eventInfo.value.additional.gachaPoint : eventInfo.value.additional.gachaPoint + eventInfo.value.additional.honor / 1000000 * 60)
 
 function onSetTarget() {
   ElMessageBox.prompt('请输入目标贡献值', {

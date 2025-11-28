@@ -1266,6 +1266,7 @@ function processEventData(url: string, responseData: any) {
         lottery,
         honor,
         targetHonor: 0,
+        hasSpReward: $('.cnt-enemy-reward-result').length > 0,
         log: { ...log, point: [] },
       },
     }

@@ -74,6 +74,7 @@ declare module 'extension' {
     lottery: NumberLimitPair
     honor: number
     targetHonor: number
+    hasSpReward: boolean
     log: { guild1: string, guild2: string, key: string, point: number[][] }
   }
 
