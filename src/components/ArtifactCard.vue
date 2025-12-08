@@ -3,13 +3,52 @@ import type { Artifact } from 'source'
 import { artifactSkillList } from '~/constants/artifact'
 import { artifactRuleIndex, artifactRuleList, language } from '~/logic'
 
-defineProps<{ artifact: Artifact, position: string, filter: string }>()
+const { artifact, filter } = defineProps<{ artifact: Artifact, position: string, filter?: { strictMode: boolean, types: string[], ids: number[] } }>()
 
 type SkillName = 'skill1_info' | 'skill2_info' | 'skill3_info' | 'skill4_info'
 const skillNameList: SkillName[] = ['skill1_info', 'skill2_info', 'skill3_info', 'skill4_info']
 
 const currentArtifaceRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 const artifactSkillFlatList = computed(() => Object.values(artifactSkillList).flat())
+
+const isTarget = computed(() => {
+  if (!filter)
+    return true
+
+  const { types, ids, strictMode } = filter
+
+  if (types.length > 0 && !types.includes(getPointType(artifact)))
+    return false
+
+  if (ids.length > 0) {
+    if (strictMode) {
+      // 严格模式：ids的技能集合必须是神器的技能集合的子集
+      const artifactSkillIds = new Set<number>()
+      for (const skillName of skillNameList) {
+        const skill_id = Math.floor(artifact[skillName].skill_id / 10)
+        artifactSkillIds.add(skill_id)
+      }
+
+      // 检查 ids 中的每个技能是否都在神器的技能集合中
+      for (const skillId of ids) {
+        if (!artifactSkillIds.has(skillId))
+          return false
+      }
+      return true
+    }
+    else {
+      // 普通模式：只要任何一个技能在 ids 中即可
+      for (const skillName of skillNameList) {
+        const skill_id = String(Math.floor(artifact[skillName].skill_id / 10))
+        if (ids.includes(Number(skill_id)))
+          return true
+      }
+      return false
+    }
+  }
+
+  return true
+})
 
 function getSkillName(skill_id: number) {
   const hitSkill = artifactSkillFlatList.value.find(item => item.skill_id === Math.floor(skill_id / 10))
@@ -52,7 +91,7 @@ function getPointType(artifact: Artifact) {
 </script>
 
 <template>
-  <el-card v-if="!filter || filter === getPointType(artifact)" body-style="padding: 10px" relative h-full w-300px>
+  <el-card v-if="isTarget" body-style="padding: 10px" relative h-full w-300px>
     <div flex flex-col>
       <el-tag absolute left-0 top-0 type="info" size="large">
         {{ position }}

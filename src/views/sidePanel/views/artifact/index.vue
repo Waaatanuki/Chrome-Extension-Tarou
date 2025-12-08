@@ -1,11 +1,36 @@
 <script setup lang="ts">
 import copy from 'copy-text-to-clipboard'
+import { artifactSkillList } from '~/constants/artifact'
 import { artifactList, artifactRuleIndex, artifactRuleList, language } from '~/logic'
 
 const inputVisible = ref(false)
 const textarea = ref('')
-const filter = ref('')
+const strictMode = ref(false)
+const types = ref(new Set<string>())
+const ids = ref(new Set<number>())
+const filter = computed(() => ({
+  strictMode: strictMode.value,
+  types: [...types.value],
+  ids: [...ids.value],
+}))
 const currentArtifaceRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
+
+const ramanNumeral = ['I', 'II', 'III']
+
+const typeList = [
+  { value: 'danger', label: '低分' },
+  { value: 'warning', label: '普通' },
+  { value: 'success', label: '高分' },
+]
+
+function handleCheckFilter(list: Set<any>, value: any) {
+  if (list.has(value)) {
+    list.delete(value)
+  }
+  else {
+    list.add(value)
+  }
+}
 
 function handleCommand(command: string | number | object) {
   switch (command) {
@@ -53,11 +78,52 @@ function onPasteSubmit() {
           <el-option v-for="rule, idx in artifactRuleList" :key="idx" :value="idx" :label="rule.name" />
         </el-select>
 
-        <el-select v-model="filter" size="small" style="width: 70px;" placeholder="全部" clearable>
-          <el-option value="danger" label="低分" />
-          <el-option value="warning" label="普通" />
-          <el-option value="success" label="高分" />
-        </el-select>
+        <el-popover trigger="click" effect="dark" placement="bottom" width="320" popper-style="padding: 0px;">
+          <template #reference>
+            <TheButton title="筛选神器技能">
+              筛选
+            </TheButton>
+          </template>
+
+          <div flex items-center justify-between p-10px>
+            <div flex gap-10px>
+              <div
+                v-for="item in typeList" :key="item.value"
+                cursor-pointer select-none rounded-md p-5px text-12px ring-1 ring-neutral-4
+                :class="{ 'ring-blue-5! ring-2! text-blue-5!': types.has(item.value) }"
+                @click="handleCheckFilter(types, item.value)"
+              >
+                {{ item.label }}
+              </div>
+            </div>
+            <div fc gap-10px>
+              <el-checkbox v-model="strictMode" label="严格模式" size="small" />
+              <TheButton title="重置选项" color="#303133" @click="types.clear(); ids.clear(); strictMode = false">
+                重置
+              </TheButton>
+            </div>
+          </div>
+          <el-scrollbar height="500">
+            <div flex flex-col p-10px>
+              <div
+                v-for="skill, index in Object.values(artifactSkillList)" :key="index"
+                flex flex-wrap gap-10px
+              >
+                <el-divider>
+                  {{ ramanNumeral[index] }}
+                </el-divider>
+                <div
+                  v-for="item in skill" :key="item.skill_id"
+                  cursor-pointer select-none rounded-md p-5px text-12px ring-1 ring-neutral-4
+                  :class="{ 'ring-blue-5! ring-2! text-blue-5!': ids.has(item.skill_id) }"
+                  @click="handleCheckFilter(ids, item.skill_id)"
+                >
+                  {{ language === 'zh' ? item.name_zh : item.name }}
+                </div>
+              </div>
+            </div>
+          </el-scrollbar>
+        </el-popover>
       </div>
 
       <el-dropdown @command="handleCommand">
