@@ -21,8 +21,8 @@ export const combatPanelSetting = useWebExtensionStorage<CombatPanelSetting>('co
 // Dashboard
 export const userInfo = useWebExtensionStorage<Partial<UserInfo>>('userInfo', {})
 export const gachaRecord = useWebExtensionStorage<GachaRecord[]>('gachaRecord', [])
-export const saveStoneDate = useWebExtensionStorage('saveStoneDate', dayjs().unix())
-export const lastUpdateTodo = useWebExtensionStorage('lastUpdateTodo', dayjs().unix())
+export const saveStoneDate = useWebExtensionStorage<number>('saveStoneDate', dayjs().unix())
+export const lastUpdateTodo = useWebExtensionStorage<number>('lastUpdateTodo', dayjs().unix())
 export const recoveryItemList = useWebExtensionStorage<RecoveryItem[]>('recoveryItemList', [])
 export const eventList = useWebExtensionStorage<EventInfo[]>('eventList', [])
 export const displayList = useWebExtensionStorage<DisplayItem[]>('displayList', [])
