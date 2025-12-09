@@ -145,7 +145,7 @@ function copyLink(key: string) {
       </el-descriptions>
       <div mt-5px flex items-center justify-between>
         <div text-xs>
-          {{ data.startTimestamp ? useDateFormat(data.startTimestamp, 'MM/DD HH:mm') : '-' }}
+          {{ data.startTimestamp ? useDateFormat(data.startTimestamp, 'MM/DD HH:mm') : '' }}
         </div>
 
         <div fc>

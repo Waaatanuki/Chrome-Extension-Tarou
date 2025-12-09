@@ -10,5 +10,7 @@ export default antfu({
     'no-unused-vars': 'warn',
     'unused-imports/no-unused-vars': 'warn',
     'node/prefer-global/process': 'off',
+    'pnpm/yaml-enforce-settings': 'off',
+    'pnpm/json-enforce-catalog': 'off',
   },
 })

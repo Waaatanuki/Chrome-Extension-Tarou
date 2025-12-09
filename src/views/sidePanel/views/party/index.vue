@@ -31,7 +31,7 @@ async function downloadParty() {
   try {
     const element = document.querySelector(`.party-container`)!
     const result = await snapdom(element)
-    await result.download({ scale: 1.5, format: 'png', filename: `配置截图${Date.now()}`, backgroundColor: '#131313' })
+    await result.download({ scale: 1.5, type: 'png', filename: `配置截图${Date.now()}`, backgroundColor: '#131313' })
     ElMessage.success({ offset: 100, message: '保存成功' })
   }
   catch (error) {

@@ -14,7 +14,7 @@ async function exportToImg() {
   try {
     const element = document.querySelector(`#record-container`)!
     const result = await snapdom(element)
-    await result.download({ scale: 1.5, format: 'png', filename: `战斗记录${Date.now()}`, backgroundColor: '#131313' })
+    await result.download({ scale: 1.5, type: 'png', filename: `战斗记录${Date.now()}`, backgroundColor: '#131313' })
     ElMessage.success('保存成功')
   }
   catch (error) {

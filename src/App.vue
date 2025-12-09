@@ -19,7 +19,7 @@ async function handleClick() {
   try {
     const element = document.querySelector(`.foo`)!
     const result = await snapdom(element)
-    await result.download({ quality: 3, scale: 3, format: 'png', filename: `配置截图${Date.now()}` })
+    await result.download({ quality: 3, scale: 3, type: 'png', filename: `配置截图${Date.now()}` })
   }
   catch (error) {
     console.error(error)
