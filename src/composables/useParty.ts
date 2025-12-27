@@ -13,6 +13,7 @@ export function handleDeckJson(data: DeckJson) {
     leader: processLeader(data),
     npcs: processNpc(data),
     effects: processEffect(data),
+    enhance: processEnhance(data),
   })
 
   while (deckList.value.length > 3) {
@@ -153,6 +154,15 @@ function processNpc(data: DeckJson) {
 function processEffect(data: DeckJson) {
   const damageInfo = Object.keys(data.pc.after_damage_info).length === 0 ? data.pc.damage_info : data.pc.after_damage_info
   return damageInfo.effect_value_info.map(e => ({ iconImg: e.icon_img, isMax: e.is_max, value: e.value }))
+}
+
+function processEnhance(data: DeckJson) {
+  const damageInfo = Object.keys(data.pc.after_damage_info).length === 0 ? data.pc.damage_info : data.pc.after_damage_info
+  return {
+    enhance: damageInfo.weapon_skill_enhance_param.weapon_skill_enhance,
+    enhanceMagna: damageInfo.weapon_skill_enhance_param.weapon_skill_enhance_magna,
+    enhanceEvil: damageInfo.weapon_skill_enhance_param.weapon_skill_enhance_evil,
+  }
 }
 
 function formatNpcImageId(str: string) {

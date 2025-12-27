@@ -47,6 +47,6 @@ async function downloadParty() {
     <Weapon :weapons="deck.weapons" />
     <Summon :summons="deck.summons" />
   </div>
-  <Effect v-if="deck" mt-10px :effects="deck.effects" />
+  <Effect v-if="deck" mt-10px :effects="deck.effects" :enhance="deck.enhance" />
   <el-result v-else icon="info" sub-title="进入编成界面读取队伍信息" />
 </template>

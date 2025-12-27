@@ -502,6 +502,11 @@ declare module 'source' {
     assumed_normal_damage: number
     hp: number
     effect_value_info: EffectValueInfo[]
+    weapon_skill_enhance_param: {
+      weapon_skill_enhance: number
+      weapon_skill_enhance_magna: number
+      weapon_skill_enhance_evil: number
+    }
   }
 
   interface EffectValueInfo {
