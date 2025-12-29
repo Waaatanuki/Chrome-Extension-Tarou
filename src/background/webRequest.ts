@@ -205,6 +205,9 @@ function getTreasureList(domStr: string) {
 
     if (isItem) {
       const imgSrc = $(elem).find('.img-treasure-item').attr('src')
+      const imgAlt = $(elem).find('.img-treasure-item').attr('alt')
+      const itemDataKey = $(elem).data().key as string
+      const itemDataId = $(elem).data().itemId as string
       const itemKey = imgSrcToKey(imgSrc)
       if (notificationItem.value.includes(itemKey))
         showNotifications(itemKey)
@@ -212,7 +215,7 @@ function getTreasureList(domStr: string) {
       const count = $(elem).find('.prt-article-count').text().split('x')[1]
       res.push({
         box: String($(elem).data().box),
-        key: $(elem).data().key as string,
+        key: itemDataKey.startsWith('37') ? `1_${imgAlt ?? itemDataId}` : itemDataKey,
         count: count ? Number(count) : 1,
       })
     }
