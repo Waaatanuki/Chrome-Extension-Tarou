@@ -718,11 +718,13 @@ export async function unpack(parcel: string) {
   // 判断是否开启debugger
   if (url.includes('/socket/uri/raid')) {
     chrome.runtime.getContexts({}).then((ctx) => {
-      if (ctx.filter(c => c.documentUrl?.includes('src/views/sidePanel/main.html')).length === 0)
-        obTabId.value = 0
+      const isSidePanelOpen = ctx.some(c => c.documentUrl?.includes('src/views/sidePanel/main.html'))
+      const isCombatPanelOpen = ctx.some(c => c.documentUrl?.includes('src/views/combatPanel/main.html'))
 
-      if (!obTabId.value)
+      if (!isSidePanelOpen && !isCombatPanelOpen) {
+        obTabId.value = 0
         return
+      }
 
       chrome.debugger.getTargets().then((targets) => {
         const isAttached = targets.some(target => target.tabId === obTabId.value && target.attached)
