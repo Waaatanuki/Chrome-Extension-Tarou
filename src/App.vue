@@ -4,14 +4,14 @@ import { snapdom } from '@zumer/snapdom'
 
 const visible = ref(false)
 const foo = ref('')
-const currentView = ref('Dashborad')
+const currentView = ref('Dashboard')
 
 const upViewList = [
-  { key: 'Dashborad', lable: '基础信息', icon: 'material-symbols:dashboard' },
-  { key: 'Drop', lable: '掉落信息', icon: 'material-symbols:bookmark-star-sharp' },
+  { key: 'Dashboard', label: '基础信息', icon: 'material-symbols:dashboard' },
+  { key: 'Drop', label: '掉落信息', icon: 'material-symbols:bookmark-star-sharp' },
 ]
 const downViewList = [
-  { key: 'Setting', lable: '设置', icon: 'carbon:settings' },
+  { key: 'Setting', label: '设置', icon: 'carbon:settings' },
 ]
 
 async function handleClick() {
@@ -50,14 +50,14 @@ const gachaInfo = ref({
       </el-scrollbar>
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
         <div flex flex-col items-center gap-10px>
-          <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
+          <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :content="view.label" placement="left">
             <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
               <Icon :icon="view.icon" text-20px />
             </div>
           </el-tooltip>
         </div>
         <div flex flex-col items-center gap-10px>
-          <el-tooltip v-for="view in downViewList" :key="view.key" effect="dark" :content="view.lable" placement="left">
+          <el-tooltip v-for="view in downViewList" :key="view.key" effect="dark" :content="view.label" placement="left">
             <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
               <Icon :icon="view.icon" text-20px />
             </div>

@@ -216,7 +216,7 @@ declare module 'extension' {
     bossHpPercent: number
     special_skill_flag: number
     guard_status: { is_guard_status: number, num: number }[]
-    acitonList: Action[]
+    actionList: Action[]
     interrupt_display_text?: string
     normalAttackInfo?: NormalAttackInfo
   }

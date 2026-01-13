@@ -60,10 +60,10 @@ export function handleStartJson(data: BattleStartJson) {
   recordRaidInfo(data)
   // 处理开幕特动情况start
   if (data.scenario)
-    handleAttackRusultJson('start', data as AttackResultJson)
+    handleAttackResultJson('start', data as AttackResultJson)
 }
 
-export function handleAttackRusultJson(type: string, data: AttackResultJson, payload?: ResultJsonPayload) {
+export function handleAttackResultJson(type: string, data: AttackResultJson, payload?: ResultJsonPayload) {
   if (!type || !data?.scenario)
     return
 
@@ -148,7 +148,7 @@ export function handleAttackRusultJson(type: string, data: AttackResultJson, pay
     if (playerBuffs?.condition) {
       partyCondition.push({
         pos: Number(formation[i]),
-        buff: mergerCondition(playerBuffs.condition),
+        buff: mergeCondition(playerBuffs.condition),
         coating_value: playerBuffs.condition.coating_value ?? 0,
       })
     }
@@ -337,7 +337,7 @@ export function handleWsPayloadJson(data: WsPayloadData) {
   }
 }
 
-function mergerCondition(condition: Condition) {
+function mergeCondition(condition: Condition) {
   const buffs = condition.buff || []
   const debuffs = condition.debuff || []
   const totalPlayerBuffs = buffs.concat(debuffs).filter((item, index, self) => index === self.findIndex(t => t.status === item.status))
@@ -402,7 +402,7 @@ function recordRaidInfo(data: BattleStartJson) {
         other: { comment: '其他', value: 0 },
       },
       condition: {
-        buff: mergerCondition(cur.condition),
+        buff: mergeCondition(cur.condition),
         coating_value: cur.condition.coating_value ?? 0,
       },
     })
@@ -419,7 +419,7 @@ function recordRaidInfo(data: BattleStartJson) {
     turn: data.turn,
     bossHpPercent: battleInfo.value.bossInfo!.hpPercent,
     special_skill_flag: Number(data.special_skill_flag),
-    acitonList: [],
+    actionList: [],
     guard_status,
     interrupt_display_text: battleInfo.value.bossInfo!.interrupt_display_text,
   }]
@@ -718,7 +718,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       turn: currentTurn,
       bossHpPercent: battleInfo.value.bossInfo!.hpPercent,
       special_skill_flag: currentRaid.special_skill_flag!,
-      acitonList: [],
+      actionList: [],
       guard_status,
       interrupt_display_text: battleInfo.value.bossInfo!.interrupt_display_text,
     })
@@ -753,7 +753,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       }
     }
 
-    currentRaid.actionQueue.at(-1)?.acitonList.push({
+    currentRaid.actionQueue.at(-1)?.actionList.push({
       ...hit,
       icon: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.icon : hit.icon,
       id: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id : hit.id,
@@ -762,7 +762,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   }
 
   if (type === 'fc') {
-    currentRaid.actionQueue.at(-1)?.acitonList.push({
+    currentRaid.actionQueue.at(-1)?.actionList.push({
       type: 'fc',
       id: battleInfo.value.leaderAttr,
       icon: battleInfo.value.leaderAttr,
@@ -773,14 +773,14 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
     const summon_id = payload.summon_id
 
     if (summon_id === 'supporter') {
-      currentRaid.actionQueue.at(-1)?.acitonList.push({
+      currentRaid.actionQueue.at(-1)?.actionList.push({
         type: 'summon',
         id: battleInfo.value.summonInfo?.supporter.id,
         icon: battleInfo.value.summonInfo?.supporter.image_id,
       })
     }
     else {
-      currentRaid.actionQueue.at(-1)?.acitonList.push({
+      currentRaid.actionQueue.at(-1)?.actionList.push({
         type: 'summon',
         id: battleInfo.value.summonInfo?.summon[Number(summon_id) - 1].id,
         icon: battleInfo.value.summonInfo?.summon[Number(summon_id) - 1].image_id,
@@ -791,7 +791,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   if (type === 'temporary') {
     const itemId = payload.item_id ? payload.item_id : payload.character_num ? '1' : '2'
     const hitPlayer = payload.character_num ? currentRaid.player[Number(payload.character_num)] : undefined
-    currentRaid.actionQueue.at(-1)?.acitonList.push({
+    currentRaid.actionQueue.at(-1)?.actionList.push({
       type: payload.item_id ? 'coopraid' : 'temporary',
       icon: itemId,
       id: itemId,
@@ -803,7 +803,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
 
   if (type === 'event/temporary') {
     const hitPlayer = payload.character_num ? currentRaid.player[Number(payload.character_num)] : undefined
-    currentRaid.actionQueue.at(-1)?.acitonList.push({
+    currentRaid.actionQueue.at(-1)?.actionList.push({
       type: 'event/temporary',
       icon: payload.item_id,
       id: payload.item_id,
@@ -814,13 +814,13 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
   }
 
   if (type === 'recovery')
-    currentRaid.actionQueue.at(-1)?.acitonList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
+    currentRaid.actionQueue.at(-1)?.actionList.push({ type: 'recovery', icon: 'recovery', id: 'recovery' })
 
   if (type === 'normal') {
     handleNormalAttackJson(data)
     const index = dieIndex !== -1 ? -1 : -2
     if (currentRaid.actionQueue.at(index)) {
-      currentRaid.actionQueue.at(index)!.acitonList.push({ icon: 'attack', id: 'attack', type: 'attack' })
+      currentRaid.actionQueue.at(index)!.actionList.push({ icon: 'attack', id: 'attack', type: 'attack' })
       currentRaid.actionQueue.at(index)!.normalAttackInfo = { ...battleInfo.value.normalAttackInfo! }
     }
   }

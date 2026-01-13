@@ -21,21 +21,21 @@ const tabId = computed(() => Number(document.URL.split('?')[1]))
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
-  { key: 'dashboard', lable: '主页', icon: 'material-symbols:dashboard' },
-  { key: 'drop', lable: '掉落统计', icon: 'game-icons:gold-stack' },
-  { key: 'artifact', lable: '神器甄选', icon: 'game-icons:glowing-artifact' },
-  { key: 'party', lable: '队伍信息', icon: 'ri:team-fill' },
-  { key: 'build', lable: '配置查询', icon: 'material-symbols:document-search' },
-  { key: 'combat', lable: '战斗信息', icon: 'game-icons:battle-axe' },
-  { key: 'history', lable: '战斗记录', icon: 'game-icons:scroll-unfurled' },
-  { key: 'patient', lable: '标记玩家', icon: 'material-symbols:patient-list' },
-  { key: 'gacha', lable: '抽卡模拟', icon: 'game-icons:mimic-chest' },
-  { key: 'battle', lable: '接战', icon: 'game-icons:crossed-swords', hidden: !inBattle.value },
+  { key: 'dashboard', label: '主页', icon: 'material-symbols:dashboard' },
+  { key: 'drop', label: '掉落统计', icon: 'game-icons:gold-stack' },
+  { key: 'artifact', label: '神器甄选', icon: 'game-icons:glowing-artifact' },
+  { key: 'party', label: '队伍信息', icon: 'ri:team-fill' },
+  { key: 'build', label: '配置查询', icon: 'material-symbols:document-search' },
+  { key: 'combat', label: '战斗信息', icon: 'game-icons:battle-axe' },
+  { key: 'history', label: '战斗记录', icon: 'game-icons:scroll-unfurled' },
+  { key: 'patient', label: '标记玩家', icon: 'material-symbols:patient-list' },
+  { key: 'gacha', label: '抽卡模拟', icon: 'game-icons:mimic-chest' },
+  { key: 'battle', label: '接战', icon: 'game-icons:crossed-swords', hidden: !inBattle.value },
 ].filter(m => !m.hidden))
 
 const downViewList = [
-  { key: 'info', lable: '用户信息', icon: 'carbon:information-filled' },
-  { key: 'setting', lable: '设置', icon: 'carbon:settings' },
+  { key: 'info', label: '用户信息', icon: 'carbon:information-filled' },
+  { key: 'setting', label: '设置', icon: 'carbon:settings' },
 ]
 
 watchEffect(() => {
@@ -84,7 +84,7 @@ onMounted(() => {
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
         <el-scrollbar>
           <div flex flex-col items-center gap-10px>
-            <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :show-after="1000" :content="view.lable" placement="left">
+            <el-tooltip v-for="view in upViewList" :key="view.key" effect="dark" :show-after="1000" :content="view.label" placement="left">
               <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
                 <Icon :icon="view.icon" text-20px />
               </div>
@@ -92,7 +92,7 @@ onMounted(() => {
           </div>
         </el-scrollbar>
         <div flex flex-col items-center gap-10px>
-          <el-tooltip v-for="view in downViewList" :key="view.key" effect="dark" :show-after="1000" :content="view.lable" placement="left">
+          <el-tooltip v-for="view in downViewList" :key="view.key" effect="dark" :show-after="1000" :content="view.label" placement="left">
             <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 :class="{ 'bg-neutral-8!': view.key === currentView }" @click="currentView = view.key">
               <Icon :icon="view.icon" text-20px />
             </div>

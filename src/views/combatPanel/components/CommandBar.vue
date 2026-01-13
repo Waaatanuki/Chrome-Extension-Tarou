@@ -20,8 +20,8 @@ const panelList = [
 const switchDialogVisible = ref(false)
 
 const commandList = [
-  { key: 'switch', lable: '开关面板', icon: 'carbon:switcher', handle: handleSwitchPanel },
-  { key: 'reset', lable: '重置位置', icon: 'carbon:reset', handle: handleResetPosition },
+  { key: 'switch', label: '开关面板', icon: 'carbon:switcher', handle: handleSwitchPanel },
+  { key: 'reset', label: '重置位置', icon: 'carbon:reset', handle: handleResetPosition },
 ]
 
 const { width, height } = useWindowSize({ type: 'outer' })
@@ -82,7 +82,7 @@ function handleResetPosition() {
       class="fc gap-10px rounded-md bg-#3C3C3C p-5px"
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
     >
-      <el-tooltip v-for="view in commandList" :key="view.key" effect="dark" :show-after="1000" :content="view.lable" placement="bottom">
+      <el-tooltip v-for="view in commandList" :key="view.key" effect="dark" :show-after="1000" :content="view.label" placement="bottom">
         <div h-30px w-30px fc cursor-pointer rounded-md hover:bg-neutral-6 @click="view.handle">
           <Icon :icon="view.icon" text-20px />
         </div>

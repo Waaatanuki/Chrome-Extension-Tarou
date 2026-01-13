@@ -5,7 +5,7 @@ import { listDrop, listQuest } from '~/api'
 import { code, questConfig, userInfo } from '~/logic/storage'
 
 const questData = ref<Stat[]>([])
-const isMange = ref(false)
+const isManage = ref(false)
 const loading = ref(false)
 
 function toggleVisible(questId: string) {
@@ -43,7 +43,7 @@ function handleQuery() {
 }
 
 function manageQuest() {
-  isMange.value = !isMange.value
+  isManage.value = !isManage.value
   loading.value = true
 
   listQuest().then(({ data }) => {
@@ -63,7 +63,7 @@ function manageQuest() {
 }
 
 function goBack() {
-  isMange.value = !isMange.value
+  isManage.value = !isManage.value
   handleQuery()
 }
 
@@ -76,14 +76,14 @@ onMounted(() => {
   <main>
     <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-4 text-base>
       <div fc gap-2>
-        <TheButton v-if="isMange" :loading="loading" icon="material-symbols:arrow-back-ios" @click="goBack">
+        <TheButton v-if="isManage" :loading="loading" icon="material-symbols:arrow-back-ios" @click="goBack">
           返回
         </TheButton>
         <TheButton v-else :loading="loading" icon="carbon:document-download" @click="manageQuest">
           管理副本
         </TheButton>
       </div>
-      <TheButton v-if="!isMange" icon="carbon:update-now" :loading="loading" @click="handleQuery">
+      <TheButton v-if="!isManage" icon="carbon:update-now" :loading="loading" @click="handleQuery">
         刷新
       </TheButton>
     </div>
@@ -95,7 +95,7 @@ onMounted(() => {
         </div>
       </template>
       <template #default>
-        <el-card v-if="isMange" body-style="padding: 10px" my-10px h-full>
+        <el-card v-if="isManage" body-style="padding: 10px" my-10px h-full>
           <VueDraggableNext v-model="questConfig" flex flex-wrap gap-12px>
             <transition-group name="draglist">
               <div

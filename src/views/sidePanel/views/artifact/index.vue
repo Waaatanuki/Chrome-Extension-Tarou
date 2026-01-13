@@ -13,9 +13,9 @@ const filter = computed(() => ({
   types: [...types.value],
   ids: [...ids.value],
 }))
-const currentArtifaceRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
+const currentArtifactRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 
-const ramanNumeral = ['I', 'II', 'III']
+const romanNumeral = ['I', 'II', 'III']
 
 const typeList = [
   { value: 'danger', label: '低分' },
@@ -44,7 +44,7 @@ function handleCommand(command: string | number | object) {
       language.value = language.value === 'zh' ? 'ja' : 'zh'
       break
     case 'copy':
-      if (copy(JSON.stringify(currentArtifaceRuleInfo.value)))
+      if (copy(JSON.stringify(currentArtifactRuleInfo.value)))
         ElMessage.success(`已复制当前权重规则`)
       break
     case 'paste':
@@ -110,7 +110,7 @@ function onPasteSubmit() {
                 flex flex-wrap gap-10px
               >
                 <el-divider>
-                  {{ ramanNumeral[index] }}
+                  {{ romanNumeral[index] }}
                 </el-divider>
                 <div
                   v-for="item in skill" :key="item.skill_id"

@@ -8,7 +8,7 @@ const { artifact, filter } = defineProps<{ artifact: Artifact, position: string,
 type SkillName = 'skill1_info' | 'skill2_info' | 'skill3_info' | 'skill4_info'
 const skillNameList: SkillName[] = ['skill1_info', 'skill2_info', 'skill3_info', 'skill4_info']
 
-const currentArtifaceRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
+const currentArtifactRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 const artifactSkillFlatList = computed(() => Object.values(artifactSkillList).flat())
 
 const isTarget = computed(() => {
@@ -61,15 +61,15 @@ function getSkillName(skill_id: number) {
 function getPoint(artifact: Artifact) {
   const artifactKind = artifact.kind.padStart(2, '0')
   const artifactAttribute = String(artifact.attribute)
-  let count = currentArtifaceRuleInfo.value.kind[artifactKind] + currentArtifaceRuleInfo.value.attribute[artifactAttribute]
+  let count = currentArtifactRuleInfo.value.kind[artifactKind] + currentArtifactRuleInfo.value.attribute[artifactAttribute]
 
   for (const skillName of skillNameList) {
     const skill_id = String(Math.floor(artifact[skillName].skill_id / 10))
-    count += currentArtifaceRuleInfo.value.skill[skill_id] ?? 0
+    count += currentArtifactRuleInfo.value.skill[skill_id] ?? 0
     const key = `${artifactAttribute}:${artifactKind}:${skill_id}`
 
-    if (currentArtifaceRuleInfo.value.extra[key])
-      count += currentArtifaceRuleInfo.value.extra[key]
+    if (currentArtifactRuleInfo.value.extra[key])
+      count += currentArtifactRuleInfo.value.extra[key]
   }
   return count
 }
@@ -78,10 +78,10 @@ function getPointType(artifact: Artifact) {
   if (artifact.rarity !== '3')
     return 'success'
 
-  if (!currentArtifaceRuleInfo.value.highlight)
+  if (!currentArtifactRuleInfo.value.highlight)
     return 'warning'
 
-  const { high, low } = currentArtifaceRuleInfo.value.highlight
+  const { high, low } = currentArtifactRuleInfo.value.highlight
   if (high && getPoint(artifact) >= high)
     return 'success'
   if (low && getPoint(artifact) <= low)
