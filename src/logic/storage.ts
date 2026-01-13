@@ -1,6 +1,6 @@
 import type { DropInfo } from 'api'
 import type { BattleExport, BattleInfo } from 'battle'
-import type { ArtifactRule, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestMemo, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
+import type { ArtifactRule, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
@@ -37,7 +37,7 @@ export const battleInfo = useWebExtensionStorage<Partial<BattleInfo>>('battleInf
 export const battleRecord = useWebExtensionStorage<BattleRecord[]>('battleRecord', [])
 export const specBossBuff = useWebExtensionStorage<string[]>('specBossBuff', [])
 export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff', [])
-export const questMemo = useWebExtensionStorage<QuestMemo[]>('questMemo', [])
+export const questSetting = useWebExtensionStorage<QuestSetting[]>('questSetting', [])
 export const onlyShowSpecBuff = useWebExtensionStorage<boolean>('onlyShowSpecBuff', false)
 export const battleExportData = useWebExtensionStorage<Partial<BattleExport>>('battleExportData', {})
 

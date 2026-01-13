@@ -96,10 +96,10 @@ declare module 'extension' {
     date: string
   }
 
-  interface QuestMemo {
+  interface QuestSetting {
     questId: string
     questName: string
-    memo: string
+    point: number
   }
 
   interface GachaInfo {

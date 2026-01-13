@@ -2,7 +2,7 @@
 import type { RemovableRef } from '@vueuse/shared'
 import copy from 'copy-text-to-clipboard'
 import { getConfig, setConfig, updateCode } from '~/api'
-import { artifactRuleIndex, artifactRuleList, buildNpcFilter, code, combatPanelSetting, gachaRecord, markedUserList, notificationItem, notificationSetting, questConfig, questMemo, recoveryItemList, saveStoneDate, specBossBuff, specPlayerBuff, userInfo, volume, widgetList } from '~/logic/storage'
+import { artifactRuleIndex, artifactRuleList, buildNpcFilter, code, combatPanelSetting, gachaRecord, markedUserList, notificationItem, notificationSetting, questConfig, questSetting, recoveryItemList, saveStoneDate, specBossBuff, specPlayerBuff, userInfo, volume, widgetList } from '~/logic/storage'
 
 const { checkCode } = useUser()
 
@@ -69,7 +69,7 @@ const configMap: Record<string, RemovableRef<any>> = {
   widgetList,
   specBossBuff,
   specPlayerBuff,
-  questMemo,
+  questSetting,
   questConfig,
   markedUserList,
   artifactRuleIndex,

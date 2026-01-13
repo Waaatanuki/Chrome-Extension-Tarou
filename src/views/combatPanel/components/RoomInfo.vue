@@ -1,15 +1,31 @@
 <script setup lang="ts">
 import copy from 'copy-text-to-clipboard'
-import { battleInfo, battleRecord, combatPanelSetting } from '~/logic'
+import { battleInfo, battleRecord, combatPanelSetting, questSetting } from '~/logic'
 
 const { position } = defineProps<{ position: { x: number, y: number } }>()
 
 const currentRaid = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId))
 const operationSecond = computed(() => currentRaid.value ? currentRaid.value.startTimer - currentRaid.value.endTimer : 0)
+const hitQuestSetting = computed(() => questSetting.value.find(setting => setting.questId === currentRaid.value?.quest_id))
 
 function handleCopy(text: string) {
   if (copy(text))
     ElMessage.success(`已复制救援码${text}`)
+}
+
+function handleSavePoint(newValue: string) {
+  if (!currentRaid.value)
+    return
+  if (!hitQuestSetting.value) {
+    questSetting.value.push({
+      questId: currentRaid.value?.quest_id,
+      questName: currentRaid.value?.raid_name,
+      point: Number(newValue),
+    })
+  }
+  else {
+    hitQuestSetting.value.point = Number(newValue)
+  }
 }
 </script>
 
@@ -51,7 +67,10 @@ function handleCopy(text: string) {
             {{ currentRaid?.damage || '-' }}
           </div>
         </el-descriptions-item>
-        <el-descriptions-item label="获得贡献" align="center" :span="2">
+        <el-descriptions-item label="贡献提醒" align="center">
+          <EditableCell :value="hitQuestSetting?.point" @save="handleSavePoint" />
+        </el-descriptions-item>
+        <el-descriptions-item label="当前贡献" align="center">
           <div text-15px text-rose>
             {{ currentRaid?.point ? Math.floor(currentRaid.point).toLocaleString() : '-' }}
           </div>
