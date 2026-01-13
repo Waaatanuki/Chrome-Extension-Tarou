@@ -318,6 +318,7 @@ declare module 'extension' {
     isPointOverLimit: boolean
     checkUpdate: boolean
     sampoFinish: boolean
+    pointReach: boolean
   }
 
   interface ArtifactRule {

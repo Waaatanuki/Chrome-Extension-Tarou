@@ -1,11 +1,11 @@
-import type { CombatPanelSetting } from 'extension'
+import type { CombatPanelSetting, NotificationSetting } from 'extension'
 
 // export const noticeItem = [
 //   { key: '10_215', comment: '沙漏' },
 //   { key: '17_20004', comment: 'ffj' },
 // ]
 
-export const defaultNotificationSetting = {
+export const defaultNotificationSetting: NotificationSetting = {
   silent: false,
   battleWin: true,
   battleLose: true,
@@ -16,6 +16,7 @@ export const defaultNotificationSetting = {
   isPointOverLimit: true,
   checkUpdate: true,
   sampoFinish: true,
+  pointReach: true,
 }
 
 export const defaultNotificationItem = [

@@ -1,6 +1,6 @@
 import type { Action, BattleRecord, PartyCondition, Player } from 'extension'
 import type { Ability, AttackResultJson, BattleStartJson, ChatInfoEN, ChatInfoJP, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
-import { battleInfo, battleRecord, notificationSetting, userInfo } from '~/logic'
+import { battleInfo, battleRecord, notificationSetting, questSetting, userInfo } from '~/logic'
 
 export function handleStartJson(data: BattleStartJson) {
   const boss = data.boss.param[0]
@@ -467,8 +467,14 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
   const beforeAbilityDamageCmdList = ['special', 'special_npc', 'ability']
 
   for (const [idx, action] of data.scenario!.entries()) {
-    if (action.cmd === 'contribution')
+    if (action.cmd === 'contribution') {
       currentRaid.point! += action.amount || 0
+
+      const hitQuestSetting = questSetting.value.find(q => q.questId === currentRaid.quest_id)
+      if (resultType === 'normal' && notificationSetting.value.pointReach && hitQuestSetting?.point && currentRaid.point! >= hitQuestSetting.point) {
+        createNotification({ message: '到线啦!!!', sound: 'warning' })
+      }
+    }
 
     if (action.cmd === 'special' || action.cmd === 'special_npc') {
       const hitPlayer = currentRaid.player[action.num]

@@ -71,6 +71,7 @@ onMounted(() => {
     <el-checkbox v-model="notificationSetting.isPointOverLimit" label="四象点数超过上限" />
     <el-checkbox v-model="notificationSetting.sampoFinish" label="探险完成提醒" />
     <el-checkbox v-model="notificationSetting.checkUpdate" label="检测版本更新" />
+    <el-checkbox v-model="notificationSetting.pointReach" label="到线提醒" />
   </div>
   <el-alert :closable="false">
     <template #title>
