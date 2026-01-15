@@ -1,7 +1,7 @@
 import type { StorageLikeAsync, UseStorageAsyncOptions } from '@vueuse/core'
-import type { MaybeRefOrGetter, RemovableRef } from '@vueuse/shared'
+import type { RemovableRef } from '@vueuse/shared'
 import { StorageSerializers } from '@vueuse/core'
-import { pausableWatch, tryOnScopeDispose } from '@vueuse/shared'
+import { tryOnScopeDispose } from '@vueuse/shared'
 
 export type WebExtensionStorageOptions<T> = UseStorageAsyncOptions<T>
 
@@ -38,7 +38,7 @@ const storageInterface: StorageLikeAsync = {
   async getItem(key: string) {
     const storedData = await chrome.storage.local.get(key)
 
-    return storedData[key]
+    return storedData[key] as string
   },
 }
 
@@ -61,7 +61,6 @@ export function useWebExtensionStorage<T>(
     writeDefaults = true,
     mergeDefaults = false,
     shallow,
-    eventFilter,
     onError = (e) => {
       console.error(e)
     },
@@ -122,7 +121,6 @@ export function useWebExtensionStorage<T>(
     {
       flush,
       deep,
-      eventFilter,
     },
   )
 
