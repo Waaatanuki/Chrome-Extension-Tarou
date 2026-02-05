@@ -333,6 +333,7 @@ declare module 'source' {
     amount?: number
     is_last_raid?: boolean
     value?: number
+    total_attack_num?: number
   }
 
   interface SpecialScenario extends Scenario {

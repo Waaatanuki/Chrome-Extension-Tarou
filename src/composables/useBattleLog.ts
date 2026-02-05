@@ -497,14 +497,14 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
         // 记录连击数据
         if (!action.effect) {
         // 致死普攻如果不是ta就不记录
-          if (!(action.damage.length < 3 && action.damage.some(attack => attack.some(hit => hit.hp === 0)))) {
+          if (action.damage[0] && Object.values(action.damage).every(attack => attack.every(hit => hit.hp !== 0))) {
             hitPlayer.attackInfo = hitPlayer.attackInfo || { total: 0, sa: 0, da: 0, ta: 0 }
             hitPlayer.attackInfo.total++
-            if (action.damage.length === 1)
+            if (action.total_attack_num === 1)
               hitPlayer.attackInfo.sa++
-            else if (action.damage.length === 2)
+            else if (action.total_attack_num === 2)
               hitPlayer.attackInfo.da++
-            else
+            else if (action.total_attack_num === 3)
               hitPlayer.attackInfo.ta++
           }
         }
