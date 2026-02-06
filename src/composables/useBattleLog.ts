@@ -170,11 +170,11 @@ function handleNormalAttackJson(data: AttackResultJson) {
     const action = scenario[index]
 
     if (action.cmd === 'attack' && action.from === 'player') {
-      for (let i = 0; i < action.damage.length; i++) {
-        for (let j = 0; j < action.damage[i].length; j++) {
-          if (Number(action.damage[i][j].value)) {
+      for (const damageList of Object.values(action.damage)) {
+        for (const damage of damageList) {
+          if (Number(damage.value)) {
             battleInfo.value.normalAttackInfo.hit++
-            battleInfo.value.normalAttackInfo.total += Number(action.damage[i][j].value)
+            battleInfo.value.normalAttackInfo.total += Number(damage.value)
           }
         }
       }
