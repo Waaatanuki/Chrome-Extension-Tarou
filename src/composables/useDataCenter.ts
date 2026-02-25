@@ -4,8 +4,9 @@ import type { BattleStartJson, GachaRatioAppear, GachaRatioAppearItem, GachaResu
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
+import { artifactSkillList } from '~/constants/artifact'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo } from '~/logic'
+import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -713,6 +714,25 @@ export async function unpack(parcel: string) {
   // Artifact 记录当前神器信息
   if (url.includes('/rest/artifact/list')) {
     artifactList.value = responseData.list
+  }
+
+  // Artifact 记录角色神器技能排名
+  if (url.includes('/rest/artifact/npc_artifact_skill_usage_analytics/')) {
+    artifactUsage.value = {
+      image: responseData.image,
+      filterList: [
+        { iconType: 'bonus_28', filterId: Number(responseData.filter_group_list[1][1].filter_id), skillId: 0 },
+        { iconType: 'bonus_28', filterId: Number(responseData.filter_group_list[1][2].filter_id), skillId: 0 },
+        { iconType: 'bonus_29', filterId: Number(responseData.filter_group_list[2][1].filter_id), skillId: 0 },
+        { iconType: 'bonus_30', filterId: Number(responseData.filter_group_list[3][1].filter_id), skillId: 0 },
+      ],
+    }
+
+    for (const filter of artifactUsage.value.filterList!) {
+      const hitSkill = Object.values(artifactSkillList).flat().find(s => s.filterId === filter.filterId)
+      if (hitSkill)
+        filter.skillId = hitSkill.skillId
+    }
   }
 
   // 判断是否开启debugger

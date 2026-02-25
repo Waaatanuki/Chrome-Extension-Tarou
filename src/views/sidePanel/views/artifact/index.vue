@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import copy from 'copy-text-to-clipboard'
 import { artifactSkillList } from '~/constants/artifact'
-import { artifactList, artifactRuleIndex, artifactRuleList, language } from '~/logic'
+import { artifactList, artifactRuleIndex, artifactRuleList, artifactUsage, language } from '~/logic'
 
 const inputVisible = ref(false)
 const textarea = ref('')
@@ -57,6 +57,14 @@ function handleCommand(command: string | number | object) {
   }
 }
 
+function getSkillName(filterId: number) {
+  const hitSkill = Object.values(artifactSkillList).flat().find(item => item.filterId === filterId)
+  if (!hitSkill)
+    return ''
+
+  return language.value === 'zh' ? hitSkill.nameZh : hitSkill.name
+}
+
 function onPasteSubmit() {
   try {
     artifactRuleList.value[artifactRuleIndex.value].info = JSON.parse(textarea.value)
@@ -72,90 +80,107 @@ function onPasteSubmit() {
 
 <template>
   <main>
-    <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-2 text-base>
-      <div fc gap-2>
-        <el-select v-model="artifactRuleIndex" size="small" style="width: 100px;">
-          <el-option v-for="rule, idx in artifactRuleList" :key="idx" :value="idx" :label="rule.name" />
-        </el-select>
+    <div sticky inset-x-0 top-0 z-999 class="bg-#141414" pb-10px text-base>
+      <div rounded bg-neutral-8 p-8px>
+        <div flex items-center justify-between bg-neutral-8>
+          <div fc gap-2>
+            <el-select v-model="artifactRuleIndex" size="small" style="width: 100px;">
+              <el-option v-for="rule, idx in artifactRuleList" :key="idx" :value="idx" :label="rule.name" />
+            </el-select>
 
-        <el-popover trigger="click" effect="dark" placement="bottom" width="320" popper-style="padding: 0px;">
-          <template #reference>
-            <TheButton title="筛选神器技能">
-              筛选
-            </TheButton>
-          </template>
+            <el-popover trigger="click" effect="dark" placement="bottom" width="320" popper-style="padding: 0px;">
+              <template #reference>
+                <TheButton title="筛选神器技能">
+                  筛选
+                </TheButton>
+              </template>
 
-          <div flex items-center justify-between p-10px>
-            <div flex gap-10px>
-              <div
-                v-for="item in typeList" :key="item.value"
-                cursor-pointer select-none rounded-md p-5px text-12px ring-1 ring-neutral-4
-                :class="{ 'ring-blue-5! ring-2! text-blue-5!': types.has(item.value) }"
-                @click="handleCheckFilter(types, item.value)"
-              >
-                {{ item.label }}
-              </div>
-            </div>
-            <div fc gap-10px>
-              <el-checkbox v-model="strictMode" label="严格模式" size="small" />
-              <TheButton title="重置选项" color="#303133" @click="types.clear(); ids.clear(); strictMode = false">
-                重置
-              </TheButton>
-            </div>
-          </div>
-          <el-scrollbar height="500">
-            <div flex flex-col p-10px>
-              <div
-                v-for="skill, index in Object.values(artifactSkillList)" :key="index"
-                flex flex-wrap gap-10px
-              >
-                <el-divider>
-                  {{ romanNumeral[index] }}
-                </el-divider>
-                <div
-                  v-for="item in skill" :key="item.skill_id"
-                  cursor-pointer select-none rounded-md p-5px text-12px ring-1 ring-neutral-4
-                  :class="{ 'ring-blue-5! ring-2! text-blue-5!': ids.has(item.skill_id) }"
-                  @click="handleCheckFilter(ids, item.skill_id)"
-                >
-                  {{ language === 'zh' ? item.name_zh : item.name }}
+              <div flex items-center justify-between p-10px>
+                <div flex gap-10px>
+                  <div
+                    v-for="item in typeList" :key="item.value"
+                    cursor-pointer select-none rounded-md p-5px text-12px ring-1 ring-neutral-4
+                    :class="{ 'ring-blue-5! ring-2! text-blue-5!': types.has(item.value) }"
+                    @click="handleCheckFilter(types, item.value)"
+                  >
+                    {{ item.label }}
+                  </div>
+                </div>
+                <div fc gap-10px>
+                  <el-checkbox v-model="strictMode" label="严格模式" size="small" />
+                  <TheButton title="重置选项" color="#303133" @click="types.clear(); ids.clear(); strictMode = false">
+                    重置
+                  </TheButton>
                 </div>
               </div>
-            </div>
-          </el-scrollbar>
-        </el-popover>
-      </div>
+              <el-scrollbar height="500">
+                <div flex flex-col p-10px>
+                  <div
+                    v-for="skill, index in Object.values(artifactSkillList)" :key="index"
+                    flex flex-wrap gap-10px
+                  >
+                    <el-divider>
+                      {{ romanNumeral[index] }}
+                    </el-divider>
+                    <div
+                      v-for="item in skill" :key="item.skillId"
+                      cursor-pointer select-none rounded-md p-5px text-12px ring-1 ring-neutral-4
+                      :class="{ 'ring-blue-5! ring-2! text-blue-5!': ids.has(item.skillId) }"
+                      @click="handleCheckFilter(ids, item.skillId)"
+                    >
+                      {{ language === 'zh' ? item.nameZh : item.name }}
+                    </div>
+                  </div>
+                </div>
+              </el-scrollbar>
+            </el-popover>
+          </div>
 
-      <el-dropdown @command="handleCommand">
-        <TheButton>
-          操作
-        </TheButton>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item command="box">
-              弹窗展示
-            </el-dropdown-item>
-            <el-dropdown-item command="rule">
-              配置权重
-            </el-dropdown-item>
-            <el-dropdown-item command="lang">
-              切换语言
-            </el-dropdown-item>
-            <el-dropdown-item command="copy">
-              复制规则
-            </el-dropdown-item>
-            <el-dropdown-item command="paste">
-              导入规则
-            </el-dropdown-item>
-            <el-dropdown-item command="share">
-              分享
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+          <el-dropdown @command="handleCommand">
+            <TheButton>
+              操作
+            </TheButton>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="box">
+                  弹窗展示
+                </el-dropdown-item>
+                <el-dropdown-item command="rule">
+                  配置权重
+                </el-dropdown-item>
+                <el-dropdown-item command="lang">
+                  切换语言
+                </el-dropdown-item>
+                <el-dropdown-item command="copy">
+                  复制规则
+                </el-dropdown-item>
+                <el-dropdown-item command="paste">
+                  导入规则
+                </el-dropdown-item>
+                <el-dropdown-item command="share">
+                  分享
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+
+        <div v-if="artifactUsage.filterList" relative mt-2 fc gap-2 bg-neutral-8>
+          <div i-carbon:close-outline absolute right-1 top-1 icon-btn text-20px @click="artifactUsage = {}; ids.clear()" />
+          <img h-100px :src="getAssetImg('npc', artifactUsage.image!, 'quest')">
+          <div flex flex-col gap-2px text-12px line-height-18px>
+            <div v-for="skill in artifactUsage.filterList" :key="skill.filterId" flex items-center gap-5px>
+              <img w-20px :src="getBonusIcon(skill.iconType)">
+              <div cursor-pointer select-none :class="{ 'text-blue-5': ids.has(skill.skillId) }" @click="handleCheckFilter(ids, skill.skillId)">
+                {{ getSkillName(skill.filterId) }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div my-10px flex flex-wrap gap-10px>
+    <div mb-10px flex flex-wrap gap-10px>
       <ArtifactCard
         v-for="artifact, idx in artifactList" :key="artifact.id"
         :artifact="artifact"

@@ -77,13 +77,13 @@ onMounted(() => {
       <el-tabs v-model="tabName" tab-position="left" h-full>
         <el-tab-pane v-for="tab, i in skillTabs" :key="tab" :label="`${'I'.repeat(i + 1)}类技能`" :name="tab">
           <div h-500px flex flex-col gap-2 overflow-auto>
-            <div v-for="skill in artifactSkillList[tab]" :key="skill.skill_id" flex justify-between border-b-1 class="border-#4C4D4F" p-2>
+            <div v-for="skill in artifactSkillList[tab]" :key="skill.skillId" flex justify-between border-b-1 class="border-#4C4D4F" p-2>
               <div w-300px text-sm>
-                {{ language === 'zh' ? skill.name_zh : skill.name }}
+                {{ language === 'zh' ? skill.nameZh : skill.name }}
               </div>
               <div fc>
                 <el-input-number
-                  v-model="ruleInfo.skill[skill.skill_id]"
+                  v-model="ruleInfo.skill[skill.skillId]"
                   :min="1"
                   size="small"
                   style="width: 80px;"
@@ -129,13 +129,13 @@ onMounted(() => {
                       >
                         <el-option
                           v-for="item in artifactSkillList[skillType as keyof typeof artifactSkillList]"
-                          :key="item.skill_id"
+                          :key="item.skillId"
                           class="artifact-skill-select"
-                          :label="language === 'zh' ? item.name_zh : item.name"
-                          :value="item.skill_id"
+                          :label="language === 'zh' ? item.nameZh : item.name"
+                          :value="item.skillId"
                         >
-                          <el-tooltip placement="top-start" effect="dark" :content="language === 'zh' ? item.name_zh : item.name">
-                            {{ language === 'zh' ? item.name_zh : item.name }}
+                          <el-tooltip placement="top-start" effect="dark" :content="language === 'zh' ? item.nameZh : item.name">
+                            {{ language === 'zh' ? item.nameZh : item.name }}
                           </el-tooltip>
                         </el-option>
                       </el-option-group>

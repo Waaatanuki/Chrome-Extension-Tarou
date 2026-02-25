@@ -1,6 +1,6 @@
 import type { DropInfo } from 'api'
 import type { BattleExport, BattleInfo } from 'battle'
-import type { ArtifactRule, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
+import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
@@ -60,6 +60,7 @@ export const language = useWebExtensionStorage<'zh' | 'ja'>('language', 'zh')
 export const artifactList = useWebExtensionStorage<Artifact[]>('artifactList', [])
 export const artifactRuleIndex = useWebExtensionStorage<number>('artifactRuleIndex', 0)
 export const artifactRuleList = useWebExtensionStorage<ArtifactRule[]>('artifactRuleList', defaultArtifactRuleList)
+export const artifactUsage = useWebExtensionStorage<Partial<ArtifactUsage>>('artifactUsage', {})
 
 // Build
 export const buildQuestId = useWebExtensionStorage('buildQuestId', '')

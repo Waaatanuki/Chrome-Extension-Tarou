@@ -344,6 +344,21 @@ declare module 'extension' {
     value: number
   }
 
+  interface ArtifactUsage {
+    image: string
+    filterList: {
+      iconType: string
+      filterId: number
+      skillId: number
+    }[]
+  }
+
+  interface ArtifactUsageFilterItem {
+    skill_type_name: string
+    rate: string
+    filter_id: string
+  }
+
   interface DisplayItem {
     itemKey: string
     imageId: string

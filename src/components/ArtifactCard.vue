@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Artifact } from 'source'
 import { artifactSkillList } from '~/constants/artifact'
-import { artifactRuleIndex, artifactRuleList, language } from '~/logic'
+import { artifactRuleIndex, artifactRuleList, artifactUsage, language } from '~/logic'
 
 const { artifact, filter } = defineProps<{ artifact: Artifact, position: string, filter?: { strictMode: boolean, types: string[], ids: number[] } }>()
 
@@ -51,11 +51,11 @@ const isTarget = computed(() => {
 })
 
 function getSkillName(skill_id: number) {
-  const hitSkill = artifactSkillFlatList.value.find(item => item.skill_id === Math.floor(skill_id / 10))
+  const hitSkill = artifactSkillFlatList.value.find(item => item.skillId === Math.floor(skill_id / 10))
   if (!hitSkill)
     return ''
 
-  return language.value === 'zh' ? hitSkill.name_zh : hitSkill.name
+  return language.value === 'zh' ? hitSkill.nameZh : hitSkill.name
 }
 
 function getPoint(artifact: Artifact) {
@@ -87,6 +87,10 @@ function getPointType(artifact: Artifact) {
   if (low && getPoint(artifact) <= low)
     return 'danger'
   return 'warning'
+}
+
+function isRecommendSkill(skill_id: number) {
+  return artifactUsage.value.filterList?.some(item => item.skillId === Math.floor(skill_id / 10))
 }
 </script>
 
@@ -124,7 +128,7 @@ function getPointType(artifact: Artifact) {
           <el-tag self-start size="small" :type="artifact[skillName].skill_id % 10 === 5 ? 'success' : 'info'">
             {{ `${artifact[skillName].skill_id % 10}/${skillName === 'skill4_info' ? 1 : 5}` }}
           </el-tag>
-          <div>
+          <div :class="{ 'text-#67C23A': isRecommendSkill(artifact[skillName].skill_id) }">
             {{ `${getSkillName(artifact[skillName].skill_id)} ${artifact[skillName].effect_value}` }}
           </div>
         </div>
