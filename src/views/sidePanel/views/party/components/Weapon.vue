@@ -48,7 +48,8 @@ function isFWorUW(weapon: BuildWeapon) {
         <div class="prt-ultimate-star-wrapper">
           <div class="prt-ultimate-star-on" :data-level="mainWeapon.level" />
         </div>
-        <img v-if="mainWeapon.arousalForm" class="ico-arousal-main-type" :src="getArousalIcon(mainWeapon.arousalForm)">
+        <img v-if="mainWeapon.arousalForm" class="augment-main-ico" :src="getArousalIcon(mainWeapon.arousalForm)">
+        <img v-if="mainWeapon.augmentSkill" class="augment-main-ico" :src="getAugmentSkillIcon(mainWeapon.augmentSkill)">
         <div v-if="getSkillAlias(mainWeapon)" class="skill-tag rounded bg-black/90 px-4px py-1px text-12px text-rose">
           {{ getSkillAlias(mainWeapon) }}
         </div>
@@ -61,7 +62,8 @@ function isFWorUW(weapon: BuildWeapon) {
           <div class="prt-ultimate-star-wrapper">
             <div class="prt-ultimate-star-on" :data-level="w.level" />
           </div>
-          <img v-if="w.arousalForm" class="ico-arousal-type" :src="getArousalIcon(w.arousalForm)">
+          <img v-if="w.arousalForm" class="augment-sub-ico" :src="getArousalIcon(w.arousalForm)">
+          <img v-if="w.augmentSkill" class="augment-sub-ico" :src="getAugmentSkillIcon(w.augmentSkill)">
           <div v-if="getSkillAlias(w)" class="skill-tag rounded bg-black/90 px-4px py-1px text-12px text-rose">
             {{ getSkillAlias(w) }}
           </div>
@@ -74,13 +76,13 @@ function isFWorUW(weapon: BuildWeapon) {
 </template>
 
 <style scoped>
-.ico-arousal-main-type {
+.augment-main-ico {
   position: absolute;
   bottom: 25px;
   left: 1px;
   width: 30px;
 }
-.ico-arousal-type {
+.augment-sub-ico {
   position: absolute;
   bottom: 14px;
   left: -2px;

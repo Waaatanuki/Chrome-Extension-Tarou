@@ -70,6 +70,7 @@ declare module 'party' {
       image: string
     }[]
     isMain: boolean
+    augmentSkill?: string
   }
 
   interface BuildSummon {

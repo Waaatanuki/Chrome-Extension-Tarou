@@ -36,6 +36,10 @@ export function getArousalIcon(form: number) {
   return `${imgUri}/sp/ui/icon/arousal_type/type_${form}.png`
 }
 
+export function getAugmentSkillIcon(skillIcon: string) {
+  return `${imgUri}/sp/ui/icon/augment_skill/${skillIcon}.png`
+}
+
 export function getJobIcon(id: string | number) {
   return `${imgUri}/sp/ui/icon/job/${id}.png`
 }

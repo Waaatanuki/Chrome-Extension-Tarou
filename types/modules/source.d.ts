@@ -486,6 +486,13 @@ declare module 'source' {
       is_arousal_weapon: boolean
       form: number
     }
+    odiant: {
+      is_odiant_weapon: boolean
+      exorcision_level: number
+      max_exorcision_level: number
+      reduction_effect_value: number
+    }
+    augment_skill_icon_image: string[]
   }
 
   interface WeaponSkill {

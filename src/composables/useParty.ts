@@ -40,6 +40,7 @@ function processWeapon(data: DeckJson) {
           imageId: weapon.param?.image_id ?? '',
           level: weapon.param?.level ?? '',
           arousalForm: weapon.param?.arousal.form ?? 0,
+          augmentSkill: weapon.param?.odiant.is_odiant_weapon ? weapon.param.augment_skill_icon_image[0] : undefined,
           skill: [1, 2, 3].map((num) => {
             const skillType = `skill${num}` as SkillType
             const skill = weapon[skillType]
