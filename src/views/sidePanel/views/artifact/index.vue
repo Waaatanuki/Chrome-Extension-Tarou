@@ -15,6 +15,10 @@ const filter = computed(() => ({
 }))
 const currentArtifactRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 
+watch(artifactUsage, () => {
+  ids.value.clear()
+})
+
 const romanNumeral = ['I', 'II', 'III']
 
 const typeList = [
@@ -166,7 +170,7 @@ function onPasteSubmit() {
         </div>
 
         <div v-if="artifactUsage.filterList" relative mt-2 fc gap-2 bg-neutral-8>
-          <div i-carbon:close-outline absolute right-1 top-1 icon-btn text-20px @click="artifactUsage = {}; ids.clear()" />
+          <div i-carbon:close-outline absolute right-1 top-1 icon-btn text-20px @click="artifactUsage = {}" />
           <img h-100px :src="getAssetImg('npc', artifactUsage.image!, 'quest')">
           <div flex flex-col gap-2px text-12px line-height-18px>
             <div v-for="skill in artifactUsage.filterList" :key="skill.filterId" flex items-center gap-5px>
