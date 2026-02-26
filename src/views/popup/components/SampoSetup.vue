@@ -40,13 +40,11 @@ const res = computed(() => {
         continue
 
       crewList.push({
-        power: 0,
-        endurance: 0,
-        observation: 0,
-        charm: 0,
-        luck: 0,
-        ...sampoSetup.value.crew[i],
-        ...sampoSetup.value.crew[j],
+        power: sampoSetup.value.crew[i].power! + sampoSetup.value.crew[j].power!,
+        endurance: sampoSetup.value.crew[i].endurance! + sampoSetup.value.crew[j].endurance!,
+        observation: sampoSetup.value.crew[i].observation! + sampoSetup.value.crew[j].observation!,
+        charm: sampoSetup.value.crew[i].charm! + sampoSetup.value.crew[j].charm!,
+        luck: sampoSetup.value.crew[i].luck! + sampoSetup.value.crew[j].luck!,
         combination: [sampoSetup.value.crew[i].id, sampoSetup.value.crew[j].id],
       })
     }
@@ -107,30 +105,10 @@ const showRes = computed(() => res.value.filter(item => item.conditionCount === 
       <el-alert title="获取装备数据需要清空当前地图配置的队员和装备" type="warning" :center="true" :closable="false" />
     </div>
     <div flex>
-      <div v-if="sampoSetup.captain" fc>
-        <div w-35>
-          <img :src="`${imgUri}/vyrnsampo/assets/character/index_captain/${sampoSetup.captain.id}.png`">
-        </div>
-        <div w-25 flex flex-col gap-1>
-          <div flex items-center justify-between>
-            <div w-15>
-              <img :src="`${imgUri}/vyrnsampo/common_item/text_explore_level.png`">
-            </div>
-            <div>
-              {{ sampoSetup.captain.lv }}
-            </div>
-          </div>
-          <div v-for="param in Object.values(ParamEnum)" :key="param.key" flex items-center justify-between>
-            <div w-60px>
-              <img :src="`${imgUri}/vyrnsampo/assets/status_label/${param.id}.png`">
-            </div>
-            <div>
-              {{ sampoSetup.captain[param.key] }}
-            </div>
-          </div>
-        </div>
+      <div v-if="sampoSetup.captain" w-35 fc>
+        <img :src="`${imgUri}/vyrnsampo/assets/character/index_captain/${sampoSetup.captain.id}.png`">
       </div>
-      <div w-250px fc flex-wrap gap-4>
+      <div w-350px fc flex-wrap gap-4>
         <div v-for="crew in sampoSetup.crew" :key="crew.id" relative w-100px>
           <img :src="`${imgUri}/vyrnsampo/assets/character/thumb/${crew.id}.jpg`">
           <el-tag type="primary" size="small" class="absolute left-0 top-0">

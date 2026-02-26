@@ -202,18 +202,31 @@ export async function unpack(parcel: string) {
     if (!responseData || responseData.length === 0)
       return
 
-    const crewMap = {
-      1: 'observation',
-      2: 'endurance',
-      3: 'charm',
-      4: 'power',
-    } as Record<number, keyof SampoParam>
+    sampoSetup.value.crew = responseData
+      .filter((item: any) => item.is_join)
+      .map((item: any) => {
+        const param = {
+          power: 0,
+          endurance: 0,
+          observation: 0,
+          charm: 0,
+          luck: 0,
+        }
 
-    sampoSetup.value.crew = responseData.map((item: any) => ({
-      id: item.crew_id,
-      lv: item.friendship_level,
-      [crewMap[item.crew_id]]: Number(item.skill[0].comment.match(/\d+/)?.[0] || '0'),
-    }))
+        for (const skill of item.skill) {
+          param.power += skill.power ?? 0
+          param.endurance += skill.endurance ?? 0
+          param.observation += skill.observation ?? 0
+          param.charm += skill.charm ?? 0
+          param.luck += skill.luck ?? 0
+        }
+
+        return {
+          id: item.crew_id,
+          lv: item.friendship_level,
+          ...param,
+        }
+      })
   }
 
   // Dashboard 探险队地图信息
