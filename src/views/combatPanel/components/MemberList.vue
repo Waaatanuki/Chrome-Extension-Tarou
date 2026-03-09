@@ -4,7 +4,7 @@ import { battleInfo, combatPanelSetting, markedUserList, userInfo } from '~/logi
 
 defineProps<{ position: { x: number, y: number } }>()
 
-const MAX_RANK = '400'
+const MAX_RANK = '425'
 const targetStamp = ['stamp44.png', 'stamp191.png']
 
 const memberInfo = computed(() => battleInfo.value.memberInfo)
