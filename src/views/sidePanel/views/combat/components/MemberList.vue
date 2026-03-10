@@ -11,7 +11,7 @@ const props = defineProps<{
   }[]
 }>()
 
-const MAX_RANK = '400'
+const MAX_RANK = '425'
 const targetStamp = ['stamp44.png', 'stamp191.png']
 
 const stampList = computed(() => {
