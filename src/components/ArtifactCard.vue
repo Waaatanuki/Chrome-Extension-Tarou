@@ -89,6 +89,14 @@ function getPointType(artifact: Artifact) {
   return 'warning'
 }
 
+function getSkillQuality(skillName: SkillName) {
+  const max = skillName === 'skill4_info' ? 1 : 5
+  const isMax = artifact[skillName].is_max_quality
+  const quality = artifact[skillName].skill_quality
+
+  return `${isMax ? max : quality}/${max}`
+}
+
 function isRecommendSkill(skill_id: number) {
   return artifactUsage.value.filterList?.some(item => item.skillId === Math.floor(skill_id / 10))
 }
@@ -126,7 +134,7 @@ function isRecommendSkill(skill_id: number) {
             {{ `Lv${artifact[skillName].level}` }}
           </el-tag>
           <el-tag self-start size="small" :type="artifact[skillName].skill_id % 10 === 5 ? 'success' : 'info'">
-            {{ `${artifact[skillName].skill_id % 10}/${skillName === 'skill4_info' ? 1 : 5}` }}
+            {{ getSkillQuality(skillName) }}
           </el-tag>
           <div :class="{ 'text-#67C23A': isRecommendSkill(artifact[skillName].skill_id) }">
             {{ `${getSkillName(artifact[skillName].skill_id)} ${artifact[skillName].effect_value}` }}

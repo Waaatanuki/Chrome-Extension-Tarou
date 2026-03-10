@@ -692,6 +692,7 @@ declare module 'source' {
 
   interface ArtifactSkillInfo {
     skill_id: number
+    skill_quality: number
     level: number
     name: string
     is_max_quality: boolean
