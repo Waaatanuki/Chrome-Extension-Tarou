@@ -25,7 +25,7 @@ export function handleStartJson(data: BattleStartJson) {
     battleId: String(data.raid_id),
     shareId: data.twitter?.battle_id,
     imgId: boss.cjs.split('_').at(-1)!,
-    name: boss.monster,
+    name: boss.name.ja,
     hp: Number(boss.hp),
     hpmax: Number(boss.hpmax),
     hpPercent: Number.parseFloat((Number(boss.hp) / Number(boss.hpmax) * 100).toFixed(2)),
