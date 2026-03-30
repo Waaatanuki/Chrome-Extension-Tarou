@@ -46,7 +46,7 @@ watch(actionQueue, () => {
                   {{ `第${list.turn}回合` }}
                 </div>
                 <div v-if="list.interrupt_display_text" flex flex-col gap-1px>
-                  <el-tag v-for="text in list.interrupt_display_text.split('|')" :key="text" type="warning" size="small">
+                  <el-tag v-for="text in list.interrupt_display_text.split('|')" :key="text" :type="list.special_skill_interrupt ? 'success' : 'warning'" size="small">
                     {{ text }}
                   </el-tag>
                 </div>

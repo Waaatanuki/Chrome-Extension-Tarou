@@ -218,6 +218,7 @@ declare module 'extension' {
     guard_status: { is_guard_status: number, num: number }[]
     actionList: Action[]
     interrupt_display_text?: string
+    special_skill_interrupt?: boolean
     normalAttackInfo?: NormalAttackInfo
   }
 

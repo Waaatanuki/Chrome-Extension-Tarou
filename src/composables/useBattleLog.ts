@@ -124,6 +124,13 @@ export function handleAttackResultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.summonInfo.supporter.recast = status?.supporter?.recast ?? battleInfo.value.summonInfo.supporter.recast
   }
 
+  const isSpecialSkillInterrupt = scenario.some(item => item.cmd === 'special_skill_interrupt')
+  if (isSpecialSkillInterrupt) {
+    const lastInterrupt = currentRaid.actionQueue.findLast(item => item.interrupt_display_text)
+    if (lastInterrupt)
+      lastInterrupt.special_skill_interrupt = true
+  }
+
   const bossBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'boss' && item.pos === 0)
   const playerBuffs = scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === 0)
 
@@ -423,6 +430,7 @@ function recordRaidInfo(data: BattleStartJson) {
     actionList: [],
     guard_status,
     interrupt_display_text: battleInfo.value.bossInfo!.interrupt_display_text,
+    special_skill_interrupt: false,
   }]
 
   const abilityList = getAbilityList(data.ability)
@@ -722,6 +730,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       actionList: [],
       guard_status,
       interrupt_display_text: battleInfo.value.bossInfo!.interrupt_display_text,
+      special_skill_interrupt: false,
     })
   }
 

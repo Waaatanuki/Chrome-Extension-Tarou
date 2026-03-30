@@ -2,8 +2,6 @@
 const { position } = defineProps<{ position: { x: number, y: number } }>()
 
 const handle = useTemplateRef<HTMLElement>('handle')
-
-const interrupt_display_text = ref('nizaindiwndiwni')
 </script>
 
 <template>
