@@ -165,7 +165,7 @@ function handleNormalAttackJson(data: AttackResultJson) {
   if (!scenario)
     return
 
-  battleInfo.value.normalAttackInfo = { hit: 0, ability: 0, special: 0, total: 0 }
+  battleInfo.value.normalAttackInfo = { hit: 0, ability: 0, special: 0, total: 0, chain: 0 }
   for (let index = 0; index < scenario.length; index++) {
     const action = scenario[index]
 
@@ -184,6 +184,7 @@ function handleNormalAttackJson(data: AttackResultJson) {
       if (!action.list)
         continue
 
+      battleInfo.value.normalAttackInfo.chain++
       const _action = action as unknown as SpecialScenario
       battleInfo.value.normalAttackInfo.hit += _action.total?.filter(item => item.split[0] !== '0').length ?? 0
       for (let i = 0; i < _action.list.length || 0; i++) {
@@ -411,7 +412,7 @@ function recordRaidInfo(data: BattleStartJson) {
 
   battleInfo.value.mvpInfo = []
   battleInfo.value.chatList = []
-  battleInfo.value.normalAttackInfo = { hit: 0, ability: 0, special: 0, total: 0 }
+  battleInfo.value.normalAttackInfo = { hit: 0, ability: 0, special: 0, total: 0, chain: 0 }
   const formation = Object.values(data.ability).map(a => a.pos)
   const guard_status = Object.values(data.ability).map(a => ({ num: a.pos, is_guard_status: 0 }))
 

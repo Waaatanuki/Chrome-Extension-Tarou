@@ -74,6 +74,7 @@ declare module 'battle' {
     ability: number
     special: number
     total: number
+    chain: number
   }
 
   interface BattleExport {
