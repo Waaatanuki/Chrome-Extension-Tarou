@@ -59,6 +59,7 @@ declare module 'source' {
       count: string
     }
     limit_number?: string
+    turn_waiting: number
     multi_raid_member_info?: MultiRaidMemberInfo[]
     twitter: { battle_id: string }
     summon: Summon[]

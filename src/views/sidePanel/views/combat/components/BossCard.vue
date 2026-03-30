@@ -5,6 +5,7 @@ import { battleInfo, battleRecord } from '~/logic'
 const currentRaid = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId))
 const bossImgSrc = computed(() => getBossImg('enemy', battleInfo.value.bossInfo!.imgId, 's'))
 const operationSecond = computed(() => currentRaid.value ? currentRaid.value.startTimer - currentRaid.value.endTimer : 0)
+const countdownRef = ref<CountdownInstance>()
 
 function handleCopy(text: string) {
   if (copy(text))
@@ -24,7 +25,11 @@ function handleCopy(text: string) {
             </div>
             <ElCountdown v-else :value="battleInfo.bossInfo.countDownTime" />
           </div>
-          <div fc>
+          <div relative fc>
+            <ElCountdown v-show="false" ref="countdownRef" format="s.SSS" :value="battleInfo.bossInfo.turnWaiting" />
+            <div v-if="countdownRef?.displayValue !== '0.000'" absolute left-30px w-50px fc text-end text-15px text-white>
+              {{ Number(countdownRef?.displayValue).toFixed(1) }}
+            </div>
             <img w-55px :src="bossImgSrc">
             <span text-30px>{{ percentage }}%</span>
           </div>

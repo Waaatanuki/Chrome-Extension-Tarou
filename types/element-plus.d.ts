@@ -11,4 +11,5 @@ declare global {
   type CarouselInstance = import('element-plus').CarouselInstance
   type DateModelType = import('element-plus').DateModelType
   type CascaderInstance = import('element-plus').CascaderInstance
+  type CountdownInstance = import('element-plus').CountdownInstance
 }

@@ -38,6 +38,7 @@ export function handleStartJson(data: BattleStartJson) {
     attribute: boss.attribute,
     limitNum: Number(data.limit_number || 1),
     fellow: data.multi_raid_member_info?.length || 1,
+    turnWaiting: data.turn_waiting,
   }
 
   battleInfo.value.summonInfo = {
