@@ -187,7 +187,9 @@ export function setupWebRequestListener() {
           }
         })
 
-        eventList.value.forEach((event) => { event.isActive = currentEventList.includes(event.type) })
+        eventList.value.forEach((event) => {
+          event.isActive = currentEventList.includes(event.type)
+        })
       }).catch((err) => {
         console.log(err)
       })

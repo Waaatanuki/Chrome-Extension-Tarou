@@ -10,5 +10,6 @@ export default antfu({
     'pnpm/yaml-enforce-settings': 'off',
     'pnpm/json-enforce-catalog': 'off',
     'e18e/prefer-static-regex': 'off',
+    'no-console': 'off',
   },
 })

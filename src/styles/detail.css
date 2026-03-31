@@ -1,43 +1,43 @@
 @charset "UTF-8";
-.prt-ultimate-star-on[data-level="210"] {
+.prt-ultimate-star-on[data-level='210'] {
   display: block;
-  background: url("../assets/image/common/evolution_star.png") no-repeat 0 -25px;
+  background: url('../assets/image/common/evolution_star.png') no-repeat 0 -25px;
   -webkit-background-size: 22px 417px;
   background-size: 22px 417px;
   width: 22px;
   height: 22px;
 }
 
-.prt-ultimate-star-on[data-level="220"] {
+.prt-ultimate-star-on[data-level='220'] {
   display: block;
-  background: url("../assets/image/common/evolution_star.png") no-repeat 0 -75px;
+  background: url('../assets/image/common/evolution_star.png') no-repeat 0 -75px;
   -webkit-background-size: 22px 417px;
   background-size: 22px 417px;
   width: 22px;
   height: 22px;
 }
 
-.prt-ultimate-star-on[data-level="230"] {
+.prt-ultimate-star-on[data-level='230'] {
   display: block;
-  background: url("../assets/image/common/evolution_star.png") no-repeat 0 -100px;
+  background: url('../assets/image/common/evolution_star.png') no-repeat 0 -100px;
   -webkit-background-size: 22px 417px;
   background-size: 22px 417px;
   width: 22px;
   height: 22px;
 }
 
-.prt-ultimate-star-on[data-level="240"] {
+.prt-ultimate-star-on[data-level='240'] {
   display: block;
-  background: url("../assets/image/common/evolution_star.png") no-repeat 0 -125px;
+  background: url('../assets/image/common/evolution_star.png') no-repeat 0 -125px;
   -webkit-background-size: 22px 417px;
   background-size: 22px 417px;
   width: 22px;
   height: 22px;
 }
 
-.prt-ultimate-star-on[data-level="250"] {
+.prt-ultimate-star-on[data-level='250'] {
   display: block;
-  background: url("../assets/image/common/evolution_star.png") no-repeat 0 0;
+  background: url('../assets/image/common/evolution_star.png') no-repeat 0 0;
   -webkit-background-size: 22px 417px;
   background-size: 22px 417px;
   width: 22px;

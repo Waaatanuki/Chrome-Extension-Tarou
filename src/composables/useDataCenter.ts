@@ -675,7 +675,9 @@ export async function unpack(parcel: string) {
       })),
     }
     console.log('sendBossInfo', bossInfo)
-    sendBossInfo(bossInfo).catch((err) => { console.log(err.message) })
+    sendBossInfo(bossInfo).catch((err) => {
+      console.log(err.message)
+    })
   }
 
   // Drop 记录未结算战斗信息
