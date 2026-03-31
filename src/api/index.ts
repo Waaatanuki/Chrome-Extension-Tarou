@@ -36,7 +36,7 @@ export function sendBossInfo(data: StartJsonBoss) {
 
 // 获取副本信息
 export function listQuest() {
-  return request<{ data: Omit<Quest, 'visible'>[] }>('/ext/quest', {
+  return request<{ data: (Omit<Quest, 'visible'> & { deprecated?: boolean })[] }>('/ext/quest', {
     method: 'get',
   })
 }

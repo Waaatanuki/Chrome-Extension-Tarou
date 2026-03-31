@@ -53,7 +53,7 @@ function manageQuest() {
     })
 
     questConfig.value = questConfig.value.filter(q =>
-      data.some(quest => quest.questId === q.questId),
+      data.some(quest => quest.questId === q.questId && !quest.deprecated),
     )
   }).catch((err) => {
     ElMessage.error(err.message)
