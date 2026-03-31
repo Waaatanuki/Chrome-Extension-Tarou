@@ -34,7 +34,7 @@ function handleFinish() {
 
   if (notificationSetting.value.sampoFinish) {
     createNotification({
-      message: '探险完成',
+      message: 'Expedition complete',
       iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/vyrnsampo/assets/character/team_captain/1.png',
       sound: 'warning',
     })
@@ -44,28 +44,28 @@ function handleFinish() {
 
 <template>
   <el-descriptions v-if="sampoInfo.areaName" :column="3" :border="true" direction="vertical" w-300px size="small">
-    <el-descriptions-item label="探险队情报" align="center" :span="3">
+    <el-descriptions-item label="Expedition Info" align="center" :span="3">
       <template #label>
         <div flex justify-between>
-          <el-tooltip content="打开探险队配装" placement="top">
+          <el-tooltip content="Open expedition setup" placement="top">
             <div cursor-pointer text-12px text-teal-6 hover:text-teal-4 @click="openPopupWindow('SampoSetup')">
-              {{ `探险队 Lv${sampoInfo.level}` }}
+              {{ `Expedition Lv${sampoInfo.level}` }}
             </div>
           </el-tooltip>
 
           <el-tag v-if="sampoInfo.areaName" :type="sampoInfo.isFinished ? 'success' : 'danger' ">
-            {{ sampoInfo.isFinished ? '待机中' : '探险中' }}
+            {{ sampoInfo.isFinished ? 'Idle' : 'Exploring' }}
           </el-tag>
         </div>
       </template>
       {{ sampoInfo.areaName }}
     </el-descriptions-item>
-    <el-descriptions-item label="当前/结束" align="center" label-width="100">
-      <el-tooltip content="当前元气/探险结束时元气">
+    <el-descriptions-item label="Current/End" align="center" label-width="100">
+      <el-tooltip content="Current stamina / stamina at end">
         {{ sampoInfo.maxStamina ? `${sampoInfo.currentStamina}/${sampoInfo.isFinished ? '-' : sampoInfo.endStamina}` : '-' }}
       </el-tooltip>
     </el-descriptions-item>
-    <el-descriptions-item label="探险倒计时" align="center" label-width="100">
+    <el-descriptions-item label="Expedition Countdown" align="center" label-width="100">
       <div v-if="sampoInfo.isFinished">
         -
       </div>
@@ -73,7 +73,7 @@ function handleFinish() {
         <el-countdown value-style="font-size: 12px" :value="sampoInfo.remainTime" @change="handleSampoChange" @finish="handleFinish" />
       </el-tooltip>
     </el-descriptions-item>
-    <el-descriptions-item label="元气全回复" align="center" label-width="100">
+    <el-descriptions-item label="Full Stamina In" align="center" label-width="100">
       <div v-if="!sampoInfo.recoveryRemainTime || sampoInfo.recoveryRemainTime < Date.now()">
         -
       </div>
@@ -83,5 +83,5 @@ function handleFinish() {
     </el-descriptions-item>
   </el-descriptions>
 
-  <el-alert v-else title="未获取探险信息" type="info" :center="true" :closable="false" />
+  <el-alert v-else title="No expedition data yet" type="info" :center="true" :closable="false" />
 </template>

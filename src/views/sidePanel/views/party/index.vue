@@ -9,8 +9,8 @@ import Weapon from './components/Weapon.vue'
 const deck = computed(() => deckList.value[0])
 
 const commands = [
-  { label: '复制配置', icon: 'material-symbols:content-copy', handler: copyParty },
-  { label: '下载配置', icon: 'streamline-flex:screenshot', handler: downloadParty },
+  { label: 'Copy Setup', icon: 'material-symbols:content-copy', handler: copyParty },
+  { label: 'Download Setup', icon: 'streamline-flex:screenshot', handler: downloadParty },
   { label: '配置对比', icon: 'material-symbols:compare', handler: () => openPopupWindow('BuildCompare') },
 ]
 
@@ -20,7 +20,7 @@ async function copyParty() {
     const result = await snapdom(element)
     const clipboardItem = new ClipboardItem({ 'image/png': await result.toBlob({ scale: 1.5, type: 'png', backgroundColor: '#131313' }) })
     await navigator.clipboard.write([clipboardItem])
-    ElMessage.success({ offset: 100, message: '已复制到剪贴板' })
+    ElMessage.success({ offset: 100, message: 'Copied to clipboard' })
   }
   catch (error) {
     createNotification({ message: String(error) })
@@ -32,7 +32,7 @@ async function downloadParty() {
     const element = document.querySelector(`.party-container`)!
     const result = await snapdom(element)
     await result.download({ scale: 1.5, type: 'png', filename: `配置截图${Date.now()}`, backgroundColor: '#131313' })
-    ElMessage.success({ offset: 100, message: '保存成功' })
+    ElMessage.success({ offset: 100, message: 'Saved successfully' })
   }
   catch (error) {
     createNotification({ message: String(error) })

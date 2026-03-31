@@ -56,7 +56,7 @@ onMounted(() => {
     <template #title>
       <div w-268px flex items-center justify-between gap-2>
         <div>
-          弹窗通知
+          Popup notifications
         </div>
         <VolumeControl />
       </div>

@@ -20,8 +20,8 @@ const panelList = [
 const switchDialogVisible = ref(false)
 
 const commandList = [
-  { key: 'switch', label: '开关面板', icon: 'carbon:switcher', handle: handleSwitchPanel },
-  { key: 'reset', label: '重置位置', icon: 'carbon:reset', handle: handleResetPosition },
+  { key: 'switch', label: 'Toggle Panels', icon: 'carbon:switcher', handle: handleSwitchPanel },
+  { key: 'reset', label: 'Reset Positions', icon: 'carbon:reset', handle: handleResetPosition },
 ]
 
 const { width, height } = useWindowSize({ type: 'outer' })
@@ -37,12 +37,12 @@ function handleSwitchPanel() {
 
 function handleResetPosition() {
   ElMessageBox.confirm(
-    '确认重置所有面板位置',
-    '通知',
+    'Reset all panel positions?',
+    'Notice',
     {
       dangerouslyUseHTMLString: true,
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
+      confirmButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
       type: 'warning',
     },
   )
@@ -90,7 +90,7 @@ function handleResetPosition() {
     </div>
   </UseDraggable>
 
-  <el-dialog v-model="switchDialogVisible" title="开关面板" :center="true" width="200">
+  <el-dialog v-model="switchDialogVisible" title="Toggle Panels" :center="true" width="200">
     <div class="flex flex-col gap-4px">
       <el-checkbox v-for="panel in panelList" :key="panel.key" v-model="combatPanelSetting[panel.key].visible" :label="panel.label" />
     </div>

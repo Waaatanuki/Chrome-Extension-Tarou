@@ -36,7 +36,7 @@ function handleQuery() {
   listDrop(questIds).then(({ data }) => {
     questData.value = data
   }).catch(() => {
-    ElMessage.error('请求失败')
+    ElMessage.error('Request failed')
   }).finally(() => {
     loading.value = false
   })
@@ -77,7 +77,7 @@ onMounted(() => {
     <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-4 text-base>
       <div fc gap-2>
         <TheButton v-if="isManage" :loading="loading" icon="material-symbols:arrow-back-ios" @click="goBack">
-          返回
+          Back
         </TheButton>
         <TheButton v-else :loading="loading" icon="carbon:document-download" @click="manageQuest">
           管理副本

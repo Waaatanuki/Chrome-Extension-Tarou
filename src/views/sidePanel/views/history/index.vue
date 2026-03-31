@@ -64,15 +64,15 @@ function handleCopyBuild() {
     return
 
   if (!currentDeck.value)
-    return ElMessage.warning('请先切换到游戏里的编成界面')
+    return ElMessage.warning('Please switch to the party setup screen first')
 
   ElMessageBox.confirm(
-    '确认使用当前队伍配置进行上传?<br>(可在游戏中切换队伍)',
-    '通知',
+    'Use the current party setup for upload?<br>(You can switch party setup in-game)',
+    'Notice',
     {
       dangerouslyUseHTMLString: true,
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
       type: 'warning',
     },
   )
@@ -119,7 +119,7 @@ function processData(): BattleExport {
 
 function copyLink(key: string) {
   if (copy(`https://gbf.pub/build?key=${key}`))
-    ElMessage.success('已复制分享链接')
+    ElMessage.success('Share link copied')
 }
 </script>
 
@@ -159,7 +159,7 @@ function copyLink(key: string) {
             详情
           </TheButton>
           <TheButton @click="handleCommand('export', data)">
-            导出
+            Export
           </TheButton>
         </div>
       </div>
@@ -179,8 +179,8 @@ function copyLink(key: string) {
                 <el-switch
                   v-model="anonymous"
                   inline-prompt
-                  active-text="是"
-                  inactive-text="否"
+                    active-text="Yes"
+                    inactive-text="No"
                 />
               </div>
               <div fc gap-2>
@@ -188,8 +188,8 @@ function copyLink(key: string) {
                 <el-switch
                   v-model="currentRecord!.isFa"
                   inline-prompt
-                  active-text="是"
-                  inactive-text="否"
+                    active-text="Yes"
+                    inactive-text="No"
                 />
               </div>
             </div>

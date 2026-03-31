@@ -13,7 +13,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'i
         <div>
           转世外传({{ eventInfo.count }}点数)
         </div>
-        <el-tooltip content="最后更新时间" placement="top">
+        <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
         </el-tooltip>
       </div>

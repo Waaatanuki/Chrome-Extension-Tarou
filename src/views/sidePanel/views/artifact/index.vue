@@ -49,7 +49,7 @@ function handleCommand(command: string | number | object) {
       break
     case 'copy':
       if (copy(JSON.stringify(currentArtifactRuleInfo.value)))
-        ElMessage.success(`已复制当前权重规则`)
+        ElMessage.success('Current weight rule copied')
       break
     case 'paste':
       textarea.value = ''
@@ -73,11 +73,11 @@ function onPasteSubmit() {
   try {
     artifactRuleList.value[artifactRuleIndex.value].info = JSON.parse(textarea.value)
     inputVisible.value = false
-    ElMessage.success('导入成功')
+    ElMessage.success('Import successful')
   }
   catch (error: any) {
     console.log(error)
-    ElMessage.error('数据异常，复制失败')
+    ElMessage.error('Invalid data, copy failed')
   }
 }
 </script>
@@ -112,8 +112,8 @@ function onPasteSubmit() {
                 </div>
                 <div fc gap-10px>
                   <el-checkbox v-model="strictMode" label="严格模式" size="small" />
-                  <TheButton title="重置选项" color="#303133" @click="types.clear(); ids.clear(); strictMode = false">
-                    重置
+                  <TheButton title="Reset options" color="#303133" @click="types.clear(); ids.clear(); strictMode = false">
+                    Reset
                   </TheButton>
                 </div>
               </div>
@@ -142,24 +142,24 @@ function onPasteSubmit() {
 
           <el-dropdown @command="handleCommand">
             <TheButton>
-              操作
+              Actions
             </TheButton>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item command="box">
-                  弹窗展示
+                  Popup View
                 </el-dropdown-item>
                 <el-dropdown-item command="rule">
-                  配置权重
+                  Rule Weights
                 </el-dropdown-item>
                 <el-dropdown-item command="lang">
-                  切换语言
+                  Switch Language
                 </el-dropdown-item>
                 <el-dropdown-item command="copy">
-                  复制规则
+                  Copy Rule
                 </el-dropdown-item>
                 <el-dropdown-item command="paste">
-                  导入规则
+                  Import Rule
                 </el-dropdown-item>
                 <el-dropdown-item command="share">
                   分享
@@ -197,10 +197,10 @@ function onPasteSubmit() {
       <el-input v-model="textarea" :rows="6" type="textarea" />
       <template #footer>
         <TheButton @click="inputVisible = false">
-          取消
+          Cancel
         </TheButton>
         <TheButton @click="onPasteSubmit">
-          确认
+          Confirm
         </TheButton>
       </template>
     </el-dialog>

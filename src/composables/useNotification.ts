@@ -31,7 +31,7 @@ export function createNotification(options: NotificationOptions) {
     message,
     silent: true,
     type: 'basic',
-    title: '通知',
+    title: 'Notice',
   }, () => {
     if (chrome.runtime.lastError) {
       chrome.notifications.create({
@@ -39,7 +39,7 @@ export function createNotification(options: NotificationOptions) {
         message,
         silent: true,
         type: 'basic',
-        title: '通知',
+        title: 'Notice',
       })
     }
   })

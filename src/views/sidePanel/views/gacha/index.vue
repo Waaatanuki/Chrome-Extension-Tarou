@@ -98,7 +98,7 @@ function closeAnimation() {
         <div>{{ `${ssrCount}(${count ? ((ssrCount / count) * 100).toFixed(2) : 0}%)` }}</div>
       </div>
       <TheButton @click="reset">
-        重置
+        Reset
       </TheButton>
     </div>
     <div class="h-140px fc flex-col gap-4px rounded p-4px ring-1 ring-neutral-7">
@@ -139,16 +139,16 @@ function closeAnimation() {
           </div>
         </div>
         <div v-else text-center>
-          未获取卡池信息
+          Gacha pool info not fetched
         </div>
       </template>
       <div text-12px>
         <div flex items-center justify-between>
-          <div>{{ `卡池概率1(${gachaInfo.ratio1?.id || '未获取'})` }}</div>
+          <div>{{ `Pool Rate 1 (${gachaInfo.ratio1?.id || 'Not fetched'})` }}</div>
           <div>{{ gachaInfo.ratio1 ? useDateFormat(gachaInfo.ratio1.updateTime, 'MM-DD HH:mm') : '' }}</div>
         </div>
         <div flex items-center justify-between>
-          <div>{{ `卡池概率2(${gachaInfo.ratio2?.id || '未获取'})` }}</div>
+          <div>{{ `Pool Rate 2 (${gachaInfo.ratio2?.id || 'Not fetched'})` }}</div>
           <div>{{ gachaInfo.ratio2 ? useDateFormat(gachaInfo.ratio2.updateTime, 'MM-DD HH:mm') : '' }}</div>
         </div>
       </div>

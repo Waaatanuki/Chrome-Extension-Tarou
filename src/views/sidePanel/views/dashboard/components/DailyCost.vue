@@ -11,14 +11,14 @@ const showList = computed(() => {
   <el-card v-if="dailyCost.dateTime" body-style="padding: 10px" header-class="my-card-header" h-full w-300px>
     <template #header>
       <div flex items-center justify-between>
-        <el-tooltip content="点击显示每日掉落统计" placement="top">
+        <el-tooltip content="Click to open daily drop stats" placement="top">
           <div cursor-pointer text-12px text-teal-6 hover:text-teal-4 @click="openPopupWindow('RewardList')">
-            {{ `每日统计(${useDateFormat(dailyCost.dateTime, 'MM-DD').value})` }}
+            {{ `Daily Stats (${useDateFormat(dailyCost.dateTime, 'MM-DD').value})` }}
           </div>
         </el-tooltip>
 
         <div fc gap-1>
-          <el-tooltip :content="`AP(${Math.ceil((dailyCost.ap || 0) / 75)}小红)`" placement="top">
+          <el-tooltip :content="`AP (${Math.ceil((dailyCost.ap || 0) / 75)} Half Elixirs)`" placement="top">
             <el-tag type="success">
               {{ dailyCost.ap }}
             </el-tag>

@@ -43,7 +43,7 @@ function saveEdit() {
       ref="inputRef"
       v-model="inputValue"
       type="text"
-      placeholder="请输入数字"
+      placeholder="Please enter a number"
       size="small"
       @input="handleInput"
       @blur="saveEdit"

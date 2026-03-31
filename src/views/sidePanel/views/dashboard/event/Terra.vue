@@ -24,7 +24,7 @@ const loopNum = computed(() => {
         <div>
           十天众战记({{ loopNum }}周目)
         </div>
-        <el-tooltip content="最后更新时间" placement="top">
+        <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
         </el-tooltip>
       </div>

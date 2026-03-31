@@ -10,7 +10,7 @@ const hitQuestSetting = computed(() => questSetting.value.find(setting => settin
 
 function handleCopy(text: string) {
   if (copy(text))
-    ElMessage.success(`已复制救援码${text}`)
+    ElMessage.success(`Rescue code copied: ${text}`)
 }
 
 function handleSavePoint(newValue: string) {

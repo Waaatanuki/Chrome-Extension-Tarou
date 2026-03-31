@@ -11,7 +11,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
         <div>
           炼金活动({{ eventInfo.count }}个)
         </div>
-        <el-tooltip content="最后更新时间" placement="top">
+        <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
         </el-tooltip>
       </div>

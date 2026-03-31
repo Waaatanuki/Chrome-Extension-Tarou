@@ -13,7 +13,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
         <div>
           四象降临(<span :class="{ 'overflowed-point': eventInfo.additional.isOverflowed }">{{ eventInfo.count.toLocaleString() }}</span>)
         </div>
-        <el-tooltip content="最后更新时间" placement="top">
+        <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
         </el-tooltip>
       </div>

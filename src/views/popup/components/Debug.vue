@@ -16,7 +16,7 @@ function handleCommand(command: 'get' | 'set' | 'copy' | 'reset') {
           text.value = result[key.value]
         }
         finally {
-          ElMessage.success('获取成功')
+          ElMessage.success('Loaded successfully')
         }
       })
       break
@@ -24,20 +24,20 @@ function handleCommand(command: 'get' | 'set' | 'copy' | 'reset') {
       try {
         console.log(JSON.parse(text.value))
         chrome.storage.local.set({ [key.value]: text.value }).then(() => {
-          ElMessage.success('更新成功')
+          ElMessage.success('Updated successfully')
         })
       }
       catch (error) {
-        ElMessage.error('数据不合法')
+        ElMessage.error('Invalid data format')
       }
       break
     case 'copy':
       if (copy(text.value))
-        ElMessage.success(`复制成功`)
+        ElMessage.success('Copied successfully')
       break
     case 'reset':
       chrome.storage.local.remove(key.value).then(() => {
-        ElMessage.success('重置成功')
+        ElMessage.success('Reset successfully')
         handleCommand('get')
       })
       break
@@ -55,7 +55,7 @@ onMounted(() => {
   <div fc flex-wrap gap-3 p-10>
     <div h-600px w-500px>
       <el-alert type="error" :closable="false" center>
-        调试用功能，不要随意操作！
+        Debug tool. Use with caution.
       </el-alert>
       <div mt-2 fc gap-2 p-2>
         <el-select v-model="key" style="width: 200px" placeholder="" size="small" filterable @change="handleCommand('get')">
@@ -63,13 +63,13 @@ onMounted(() => {
         </el-select>
 
         <TheButton ml-2 @click="handleCommand('set')">
-          更新
+          Update
         </TheButton>
         <TheButton @click="handleCommand('copy')">
-          复制
+          Copy
         </TheButton>
         <TheButton @click="handleCommand('reset')">
-          重置
+          Reset
         </TheButton>
       </div>
 

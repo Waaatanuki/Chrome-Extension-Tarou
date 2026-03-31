@@ -29,7 +29,7 @@ onChange(async (files) => {
       }
     }
     markedUserList.value = [...mapData.values()]
-    ElMessage.success('导入成功')
+    ElMessage.success('Import successful')
   }
   catch (error) {
     ElMessage.error(String(error))
@@ -56,7 +56,7 @@ function handleImport() {
 
 function handleExport() {
   if (markedUserList.value.length === 0)
-    return ElMessage.info('没有数据可以导出')
+    return ElMessage.info('No data to export')
   const event = new Date()
   const filename = `标记玩家 ${event.toLocaleDateString()}`
   downloadJSON(JSON.stringify(markedUserList.value, null, 2), filename)
@@ -79,18 +79,18 @@ function downloadJSON(dataSet: string, filename: string) {
   <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-4 text-base>
     <div fc gap-2>
       <TheButton :loading="uploadBtnLoading" @click="handleImport">
-        导入
+        Import
       </TheButton>
 
       <TheButton @click="handleExport">
-        导出
+        Export
       </TheButton>
     </div>
 
-    <el-popconfirm title="清空操作无法恢复，确认清空吗?" width="300" @confirm="markedUserList = []">
+    <el-popconfirm title="This clear action cannot be undone. Continue?" width="300" @confirm="markedUserList = []">
       <template #reference>
         <TheButton>
-          清空
+          Clear
         </TheButton>
       </template>
     </el-popconfirm>

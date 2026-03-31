@@ -7,8 +7,8 @@ const tabName = ref('skill1')
 const ruleName = ref('')
 const ruleInfo = ref<ArtifactRuleInfo>()
 const skillTabs: ('skill1' | 'skill2' | 'skill3')[] = ['skill1', 'skill2', 'skill3']
-const attrList = ['火', '水', '土', '风', '光', '暗']
-const kindList = ['剑', '短', '枪', '斧', '杖', '铳', '拳', '弓', '琴', '刀']
+const attrList = ['Fire', 'Water', 'Earth', 'Wind', 'Light', 'Dark']
+const kindList = ['Sword', 'Dagger', 'Spear', 'Axe', 'Staff', 'Gun', 'Fist', 'Bow', 'Harp', 'Knife']
 
 const extraList = ref<Partial<ExtraRule>[]>([])
 
@@ -60,15 +60,15 @@ onMounted(() => {
     <template #header>
       <div flex items-center justify-between>
         <div fc gap-2>
-          <div>规则名称: </div>
+          <div>Filter name: </div>
           <el-input v-model="ruleName" style="width: 150px;" size="small" />
         </div>
         <div fc>
           <TheButton color="#3c3c3c" @click="handleCancel">
-            取消
+            Cancel
           </TheButton>
           <TheButton @click="onSubmit">
-            确认
+            Confirm
           </TheButton>
         </div>
       </div>

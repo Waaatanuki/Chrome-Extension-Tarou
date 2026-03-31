@@ -22,7 +22,7 @@ async function request<T>(api: string, options?: RequestInit): Promise<T> {
     const data = await response.json()
 
     if (!response.ok) {
-      throw new Error(data.message || '请求失败')
+      throw new Error(data.message || 'Request failed')
     }
     return data
   }

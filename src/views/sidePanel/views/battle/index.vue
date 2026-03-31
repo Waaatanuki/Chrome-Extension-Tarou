@@ -71,25 +71,25 @@ const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | 
 
   const s1 = Number.isNaN(lastSpeed.s1) ? 0 : Number(lastSpeed.s1)
   const s2 = Number.isNaN(lastSpeed.s2) ? 0 : Number(lastSpeed.s2)
-  const diffPoint = (lastPoint[1] - lastPoint[2]) / 100000000
+  const diffPoint = (lastPoint[1] - lastPoint[2]) / 1000000
   const showPoint = Math.abs(diffPoint).toFixed(2)
 
   if (diffPoint > 0 && s1 >= s2)
-    return { type: 'success', title: `领先${showPoint}亿, 稳住!!!` }
+    return { type: 'success', title: `Leading by ${showPoint} million pts, keep it up!!!` }
 
   if (diffPoint < 0 && s1 <= s2)
-    return { type: 'error', title: `落后${showPoint}亿, 加油!!!` }
+    return { type: 'error', title: `Behind by ${showPoint} million pts, pick up the pace!!!` }
 
   if (diffPoint > 0 && s1 < s2) {
     const time = (diffPoint / (s2 - s1)).toFixed(2)
-    return { type: 'error', title: `领先${showPoint}亿, ${time}小时后被反超` }
+    return { type: 'error', title: `Leading by ${showPoint} million pts, ${time} hours for the opponent to catch up` }
   }
   if (diffPoint < 0 && s1 > s2) {
     const time = (-diffPoint / (s1 - s2)).toFixed(2)
-    return { type: 'success', title: `落后${showPoint}亿, ${time}小时后反超` }
+    return { type: 'success', title: `Behind by ${showPoint} million pts, ${time} hours to catch up at current pace` }
   }
   if (diffPoint === 0)
-    return { type: 'warning', title: '持平!!!' }
+    return { type: 'warning', title: 'Tied!!!' }
 
   return undefined
 })
@@ -112,5 +112,5 @@ const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | 
       <el-table-column prop="s2" label="敌速" align="center" :formatter="(row, col, value) => Number.isNaN(value) ? '-' : value.toFixed(1) " />
     </el-table>
   </div>
-  <el-result v-else icon="info" sub-title="还未获取数据" />
+  <el-result v-else icon="info" sub-title="No data yet" />
 </template>

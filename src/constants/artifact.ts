@@ -1,4 +1,5 @@
 import type { ArtifactRule } from 'extension'
+import { deepClone } from '~/composables/useUtils'
 
 const defaultArtifactRule = {
   skill: {
