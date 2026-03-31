@@ -27,7 +27,7 @@ function handleCopy(text: string) {
           </div>
           <div relative fc>
             <ElCountdown v-show="false" ref="countdownRef" format="s.SSS" :value="battleInfo.bossInfo.turnWaiting" />
-            <div v-if="countdownRef?.displayValue !== '0.000'" absolute left-30px w-50px fc text-end text-15px text-white>
+            <div v-if="countdownRef?.displayValue !== '0.000'" absolute left-25px w-50px fc text-end text-15px text-white>
               {{ Number(countdownRef?.displayValue).toFixed(1) }}
             </div>
             <img w-55px :src="bossImgSrc">
