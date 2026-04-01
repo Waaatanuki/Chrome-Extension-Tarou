@@ -1,7 +1,7 @@
 export const weaponSkill = [
   {
     series_id: ['3'],
-    name: '法武插件',
+    name: 'Opus Weapon Key',
     type: 'skill3',
     list: [{
       id: '4048',
@@ -42,56 +42,56 @@ export const weaponSkill = [
     }, {
       id: '6155',
       name: '謳歌のチェイン',
-      alias: '讴歌',
+      alias: 'Glorification (C.A.)',
       comment: 'キャラの奥義性能UP(大)/チェインバースト性能UP(大)',
       comment_en: 'allies\' C.A. specs and chain burst specs',
     }, {
       id: '6156',
       name: '誘惑のチェイン',
-      alias: '诱惑',
+      alias: 'Temptation (Freyr)',
       comment: 'バトル開始時に様々な強化効果/最大HP-30%',
       comment_en: 'At start of battle: Various buffs to all allies / 30% hit to max HP',
     }, {
       id: '6157',
       name: '禁忌のチェイン',
-      alias: '禁忌',
+      alias: 'Forbiddance (Apple)',
       comment: '奥義性能UP/奥義発動時にダメージを受ける',
       comment_en: 'Boost to C.A. specs / Take DMG upon using charge attack',
     }, {
       id: '6158',
       name: '邪罪のチェイン',
-      alias: '邪罪',
+      alias: 'Depravity (Plain DMG)',
       comment: '自分のHPが50%以下の時、ターン終了時敵全体に無属性ダメージ/毎ターンダメージを受ける',
       comment_en: 'Plain DMG to all foes at end of turn when HP is 50% or below / Take DMG every turn',
     }, {
       id: '6159',
       name: '虚詐のチェイン',
-      alias: '虚诈',
+      alias: 'Falsehood (Eresh)',
       comment: '自属性追撃効果/奥義ゲージ上昇量大幅DOWN',
       comment_en: 'Bonus Elemental DMG effect / Sharp hit to charge bar gain',
     }, {
       id: '14005',
       name: '絶涯のペンデュラム',
-      alias: '极破',
+      alias: 'Extremity (N.A.)',
       comment: '通常攻撃の与ダメージUP',
       comment_en: 'Amplify normal attack DMG',
     }, {
       id: '14006',
       name: '窮理のペンデュラム',
-      alias: '极技',
+      alias: 'Sagacity (Skill)',
       comment: 'アビリティの与ダメージUP',
       comment_en: 'Amplify skill DMG',
     }, {
       id: '14007',
       name: '天髄のペンデュラム',
-      alias: '极奥',
+      alias: 'Supremacy (C.A.)',
       comment: '奥義の与ダメージUP',
       comment_en: 'Amplify chain burst DMG',
     }],
   },
   {
     series_id: ['13'],
-    name: 'U武插件',
+    name: 'Ultima Weapon Key',
     type: 'skill3',
     list: [{
       id: '6549',
@@ -121,7 +121,7 @@ export const weaponSkill = [
   },
   {
     series_id: ['27', '40'],
-    name: '龙武插件',
+    name: 'Draconic Weapon Teluma',
     type: 'skill2',
     list: [{
       id: '4995',
@@ -181,7 +181,7 @@ export const weaponSkill = [
   },
   {
     series_id: ['44'],
-    name: '破坏插件',
+    name: 'Destruction Bangle',
     type: 'skill3',
     list: [
       {

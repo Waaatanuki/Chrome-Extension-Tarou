@@ -79,7 +79,7 @@ onMounted(() => {
           <div h-500px flex flex-col gap-2 overflow-auto>
             <div v-for="skill in artifactSkillList[tab]" :key="skill.skillId" flex justify-between border-b-1 class="border-#4C4D4F" p-2>
               <div w-300px text-sm>
-                {{ language === 'zh' ? skill.nameZh : skill.name }}
+                {{ language === 'en' ? skill.nameEn : skill.name }}
               </div>
               <div fc>
                 <el-input-number
@@ -94,23 +94,23 @@ onMounted(() => {
           </div>
         </el-tab-pane>
 
-        <el-tab-pane label="额外权重" name="extra">
+        <el-tab-pane label="Increased Rate" name="extra">
           <el-scrollbar height="460" pr-1>
             <el-form :inline="true" size="small" label-width="40">
               <div flex flex-col gap-2 py-2 pr-2>
                 <el-card v-for="extra, index in extraList" :key="index" body-style="padding:10px 0 0 10px" shadow="never">
-                  <el-form-item label="属性">
+                  <el-form-item label="Element">
                     <el-select v-model="extra.attribute" style="width: 55px;" placeholder="">
                       <el-option v-for="item, idx in attrList" :key="item" :value="String(idx + 1)" :label="item" />
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="类型">
+                  <el-form-item label="Type">
                     <el-select v-model="extra.kind" style="width: 55px;" placeholder="">
                       <el-option v-for="item, idx in kindList" :key="item" :value="String(idx + 1).padStart(2, '0')" :label="item" />
                     </el-select>
                   </el-form-item>
 
-                  <el-form-item label="权重">
+                  <el-form-item label="Rate">
                     <el-input-number
                       v-model="extra.value"
                       :min="1"
@@ -120,7 +120,7 @@ onMounted(() => {
                     />
                   </el-form-item>
 
-                  <el-form-item label="技能">
+                  <el-form-item label="Skill">
                     <el-select v-model="extra.skillId" style="width: 250px;" filterable placeholder="">
                       <el-option-group
                         v-for="skillType in Object.keys(artifactSkillList)"
@@ -131,11 +131,11 @@ onMounted(() => {
                           v-for="item in artifactSkillList[skillType as keyof typeof artifactSkillList]"
                           :key="item.skillId"
                           class="artifact-skill-select"
-                          :label="language === 'zh' ? item.nameZh : item.name"
+                          :label="language === 'en' ? item.nameEn : item.name"
                           :value="item.skillId"
                         >
-                          <el-tooltip placement="top-start" effect="dark" :content="language === 'zh' ? item.nameZh : item.name">
-                            {{ language === 'zh' ? item.nameZh : item.name }}
+                          <el-tooltip placement="top-start" effect="dark" :content="language === 'en' ? item.nameEn : item.name">
+                            {{ language === 'en' ? item.nameEn : item.name }}
                           </el-tooltip>
                         </el-option>
                       </el-option-group>
@@ -153,16 +153,16 @@ onMounted(() => {
           </el-scrollbar>
           <div mb-2 pl--10px pr-10px>
             <TheButton w-full text-center size="default" @click="handleAdd(extraList.length)">
-              新增额外权重
+              Increase Rate
             </TheButton>
           </div>
         </el-tab-pane>
 
-        <el-tab-pane label="基础权重" name="base">
+        <el-tab-pane label="Base Rate" name="base">
           <div flex pl-4>
             <div class="w-50%">
               <div my-2 font-bold>
-                属性
+                Element
               </div>
               <div flex flex-col gap-4>
                 <div v-for="value, key in ruleInfo.attribute" :key="key" flex gap-2>
@@ -179,7 +179,7 @@ onMounted(() => {
             </div>
             <div class="w-50%">
               <div my-2 font-bold>
-                类型
+                Type
               </div>
               <div flex flex-col gap-4>
                 <div v-for="value, key in ruleInfo.kind" :key="key" flex gap-2>
@@ -197,11 +197,11 @@ onMounted(() => {
           </div>
         </el-tab-pane>
 
-        <el-tab-pane label="高亮" name="highlight">
+        <el-tab-pane label="Highlight" name="highlight">
           <div flex flex-col gap-2 p-4>
             <div flex gap-2>
               <div>
-                低分高亮
+                Low-Score Highlight
               </div>
               <el-input-number
                 v-model="ruleInfo.highlight.low"
@@ -213,7 +213,7 @@ onMounted(() => {
             </div>
             <div flex gap-2>
               <div>
-                高分高亮
+                High-Score Highlight
               </div>
               <el-input-number
                 v-model="ruleInfo.highlight.high"

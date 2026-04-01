@@ -55,7 +55,7 @@ function getSkillName(skill_id: number) {
   if (!hitSkill)
     return ''
 
-  return language.value === 'zh' ? hitSkill.nameZh : hitSkill.name
+  return language.value === 'en' ? hitSkill.nameEn : hitSkill.name
 }
 
 function getPoint(artifact: Artifact) {

@@ -4,11 +4,11 @@ import { sampoSetup } from '~/logic'
 const imgUri = 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp'
 
 const ParamEnum = {
-  power: { key: 'power', label: '战斗', id: 1 },
-  observation: { key: 'observation', label: '观察', id: 3 },
-  endurance: { key: 'endurance', label: '忍耐', id: 2 },
-  charm: { key: 'charm', label: '爱娇', id: 4 },
-  luck: { key: 'luck', label: '幸运', id: 5 },
+  power: { key: 'power', label: 'Combat', id: 1 },
+  observation: { key: 'observation', label: 'Perception', id: 3 },
+  endurance: { key: 'endurance', label: 'Endurance', id: 2 },
+  charm: { key: 'charm', label: 'Affinity', id: 4 },
+  luck: { key: 'luck', label: 'Luck', id: 5 },
 } as const
 
 const conditionCount = ref(5)

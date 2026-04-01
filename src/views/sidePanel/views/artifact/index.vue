@@ -45,7 +45,7 @@ function handleCommand(command: string | number | object) {
       openPopupWindow('ArtifactRule')
       break
     case 'lang':
-      language.value = language.value === 'zh' ? 'ja' : 'zh'
+      language.value = language.value === 'en' ? 'ja' : 'en'
       break
     case 'copy':
       if (copy(JSON.stringify(currentArtifactRuleInfo.value)))
@@ -66,7 +66,7 @@ function getSkillName(filterId: number) {
   if (!hitSkill)
     return ''
 
-  return language.value === 'zh' ? hitSkill.nameZh : hitSkill.name
+  return language.value === 'en' ? hitSkill.nameEn : hitSkill.name
 }
 
 function onPasteSubmit() {
@@ -132,7 +132,7 @@ function onPasteSubmit() {
                       :class="{ 'ring-blue-5! ring-2! text-blue-5!': ids.has(item.skillId) }"
                       @click="handleCheckFilter(ids, item.skillId)"
                     >
-                      {{ language === 'zh' ? item.nameZh : item.name }}
+                      {{ language === 'en' ? item.nameEn : item.name }}
                     </div>
                   </div>
                 </div>

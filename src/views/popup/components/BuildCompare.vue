@@ -96,12 +96,12 @@ const showDamage = computed(() => {
     return
 
   return [{
-    label: '预测伤害',
+    label: 'Estimated DMG',
     before: deckInfo.value[0]!.leader.normalDamage.toLocaleString(),
     after: deckInfo.value[1]!.leader.normalDamage.toLocaleString(),
     diff: deckInfo.value[1]!.leader.normalDamage - deckInfo.value[0]!.leader.normalDamage,
   }, {
-    label: '克属伤害',
+    label: 'Superior Element DMG',
     before: deckInfo.value[0]!.leader.advantageDamage.toLocaleString(),
     after: deckInfo.value[1]!.leader.advantageDamage.toLocaleString(),
     diff: deckInfo.value[1]!.leader.advantageDamage - deckInfo.value[0]!.leader.advantageDamage,

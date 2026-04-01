@@ -11,7 +11,7 @@ const deck = computed(() => deckList.value[0])
 const commands = [
   { label: 'Copy Setup', icon: 'material-symbols:content-copy', handler: copyParty },
   { label: 'Download Setup', icon: 'streamline-flex:screenshot', handler: downloadParty },
-  { label: '配置对比', icon: 'material-symbols:compare', handler: () => openPopupWindow('BuildCompare') },
+  { label: 'Compare Setups', icon: 'material-symbols:compare', handler: () => openPopupWindow('BuildCompare') },
 ]
 
 async function copyParty() {
@@ -31,7 +31,7 @@ async function downloadParty() {
   try {
     const element = document.querySelector(`.party-container`)!
     const result = await snapdom(element)
-    await result.download({ scale: 1.5, type: 'png', filename: `配置截图${Date.now()}`, backgroundColor: '#131313' })
+    await result.download({ scale: 1.5, type: 'png', filename: `Save Setup ${Date.now()}`, backgroundColor: '#131313' })
     ElMessage.success({ offset: 100, message: 'Saved successfully' })
   }
   catch (error) {

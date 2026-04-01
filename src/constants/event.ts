@@ -1,6 +1,6 @@
 const eventGachaInfo = [
   {
-    name: '古战场',
+    name: 'Unite and Fight',
     type: 'teamraid',
     boxToken: [
       [1600, 1],
@@ -11,7 +11,7 @@ const eventGachaInfo = [
     last: 15000,
   },
   {
-    name: '月末战货',
+    name: 'Story Boxing Event',
     type: 'treasureraid',
     boxToken: [
       [1200, 1],
@@ -22,7 +22,7 @@ const eventGachaInfo = [
     last: 2104,
   },
   {
-    name: '公会战',
+    name: 'Dread Barrage',
     type: 'teamforce',
     boxToken: [
       [1600, 1],
@@ -57,7 +57,7 @@ export function getEventGachaBoxNum(opt: { eventType: string, currentToken: numb
     }
   }
 
-  // 计算额外可开启的宝箱数量
+  // If the player has enough tokens to clear all boxes, calculate how many additional boxes they can draw with the remaining tokens
   if (totalBox >= tokenList.length) {
     totalBox += Math.floor(remainingToken / event.last)
   }

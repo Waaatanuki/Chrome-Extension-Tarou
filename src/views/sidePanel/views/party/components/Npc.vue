@@ -10,21 +10,21 @@ const { isBuild = false, priority } = defineProps<{
 }>()
 
 const NPC_AROUSAL_FORM: Record<string, string> = {
-  1: '平衡',
-  2: '攻击',
-  3: '防御',
-  4: '连击',
+  1: 'BAL',
+  2: 'ATK',
+  3: 'DEF',
+  4: 'DATA',
 }
 
 const questId = computed(() => priority.slice(0, 6))
 
 function updateNpcFilter(masterId: number) {
   if (buildNpcFilter.value.includes(masterId)) {
-    ElMessage.success('已标记')
+    ElMessage.success('Bookmarked')
   }
   else {
     buildNpcFilter.value.push(masterId)
-    ElMessage.success('标记成功')
+    ElMessage.success('Bookmarked successfully')
   }
 }
 
