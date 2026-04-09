@@ -13,7 +13,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 't
     <template #header>
       <div flex justify-between>
         <div>
-          公会战({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: eventInfo.additional.gachaPoint, drawnBox: eventInfo.additional.drawnBox }) }}箱)
+          Dread Barrage({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: eventInfo.additional.gachaPoint, drawnBox: eventInfo.additional.drawnBox }) }} boxes)
         </div>
         <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
@@ -29,11 +29,11 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 't
             size="5"
           />
           <div>
-            强敌挑战
+            Strong Foe Challenge
           </div>
         </div>
         <div>
-          {{ `${eventInfo.count}回` }}
+          {{ `${eventInfo.count} times` }}
         </div>
       </div>
       <MissionList :mission-list="eventInfo.mission" />

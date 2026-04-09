@@ -9,19 +9,19 @@ const showList = computed(() => order.value
 </script>
 
 <template>
-  <el-card w-717px header="掉落统计" :body-style="{ padding: '20px 5px 20px 5px' }">
+  <el-card w-717px header="Drop Statistics" :body-style="{ padding: '20px 5px 20px 5px' }">
     <template #header>
       <div flex items-center justify-between>
         <div text-lg>
-          掉落统计
+          Drop Statistics
         </div>
         <div>
           <el-switch
             v-model="order"
             inline-prompt
             style="--el-switch-on-color: #3c3c3c; --el-switch-off-color: #6c6c6c"
-            active-text="获取顺序"
-            inactive-text="数量顺序"
+            active-text="Acquisition Order"
+            inactive-text="Quantity Order"
           />
         </div>
       </div>

@@ -29,6 +29,7 @@ const series = computed(() =>
   }]),
 )
 
+// speed in million pts per hour 
 const tableData = computed(() => {
   if (pointLog.value.length === 0)
     return []
@@ -71,8 +72,8 @@ const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | 
 
   const s1 = Number.isNaN(lastSpeed.s1) ? 0 : Number(lastSpeed.s1)
   const s2 = Number.isNaN(lastSpeed.s2) ? 0 : Number(lastSpeed.s2)
-  const diffPoint = (lastPoint[1] - lastPoint[2]) / 1000000
-  const showPoint = Math.abs(diffPoint).toFixed(2)
+  const diffPoint = (lastPoint[1] - lastPoint[2]) / 100000000
+  const showPoint = parseInt(Math.abs(diffPoint).toFixed(2)) * 100 
 
   if (diffPoint > 0 && s1 >= s2)
     return { type: 'success', title: `Leading by ${showPoint} million pts, keep it up!!!` }
@@ -81,11 +82,11 @@ const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | 
     return { type: 'error', title: `Behind by ${showPoint} million pts, pick up the pace!!!` }
 
   if (diffPoint > 0 && s1 < s2) {
-    const time = (diffPoint / (s2 - s1)).toFixed(2)
+    const time = Number((diffPoint / (s2 - s1)).toFixed(2))
     return { type: 'error', title: `Leading by ${showPoint} million pts, ${time} hours for the opponent to catch up` }
   }
   if (diffPoint < 0 && s1 > s2) {
-    const time = (-diffPoint / (s1 - s2)).toFixed(2)
+    const time = Number((-diffPoint / (s1 - s2)).toFixed(2))
     return { type: 'success', title: `Behind by ${showPoint} million pts, ${time} hours to catch up at current pace` }
   }
   if (diffPoint === 0)
@@ -108,8 +109,8 @@ const msg = computed<{ title: string, type: 'error' | 'success' | 'warning' } | 
     <LineChart id="lineChart" :labels="labels" :series="series" />
     <el-table :data="tableData" :border="true" mt-10px w-300px :max-height="height - 400">
       <el-table-column prop="time" label="" align="center" width="65" />
-      <el-table-column prop="s1" label="我速" align="center" :formatter="(row, col, value) => Number.isNaN(value) ? '-' : value.toFixed(1) " />
-      <el-table-column prop="s2" label="敌速" align="center" :formatter="(row, col, value) => Number.isNaN(value) ? '-' : value.toFixed(1) " />
+      <el-table-column prop="s1" label="My Speed" align="center" :formatter="(row, col, value) => Number.isNaN(value) ? '-' : value.toFixed(1) " />
+      <el-table-column prop="s2" label="Enemy Speed" align="center" :formatter="(row, col, value) => Number.isNaN(value) ? '-' : value.toFixed(1) " />
     </el-table>
   </div>
   <el-result v-else icon="info" sub-title="No data yet" />

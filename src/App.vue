@@ -7,11 +7,11 @@ const foo = ref('')
 const currentView = ref('Dashboard')
 
 const upViewList = [
-  { key: 'Dashboard', label: '基础信息', icon: 'material-symbols:dashboard' },
-  { key: 'Drop', label: '掉落信息', icon: 'material-symbols:bookmark-star-sharp' },
+  { key: 'Dashboard', label: 'Basic Info', icon: 'material-symbols:dashboard' },
+  { key: 'Drop', label: 'Drop Info', icon: 'material-symbols:bookmark-star-sharp' },
 ]
 const downViewList = [
-  { key: 'Setting', label: '设置', icon: 'carbon:settings' },
+  { key: 'Setting', label: 'Settings', icon: 'carbon:settings' },
 ]
 
 async function handleClick() {
@@ -19,7 +19,7 @@ async function handleClick() {
   try {
     const element = document.querySelector(`.foo`)!
     const result = await snapdom(element)
-    await result.download({ quality: 3, scale: 3, type: 'png', filename: `配置截图${Date.now()}` })
+    await result.download({ quality: 3, scale: 3, type: 'png', filename: `Save Setup ${Date.now()}` })
   }
   catch (error) {
     console.error(error)
@@ -36,8 +36,8 @@ const gachaInfo = ref({
     <div h-600px w-600px ring-1>
       <div fc gap-2 p-2>
         <el-input v-model="foo" type="text" style="width: 200px;" />
-        <TheButton title="测试" @click="handleClick">
-          按钮
+        <TheButton title="Test" @click="handleClick">
+          Button
         </TheButton>
       </div>
     </div>

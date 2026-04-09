@@ -75,7 +75,7 @@ onMounted(() => {
     </template>
     <div v-if="ruleInfo" m-auto h-500px w-550px border-1 class="border-#4C4D4F" rounded-lg>
       <el-tabs v-model="tabName" tab-position="left" h-full>
-        <el-tab-pane v-for="tab, i in skillTabs" :key="tab" :label="`${'I'.repeat(i + 1)}类技能`" :name="tab">
+        <el-tab-pane v-for="tab, i in skillTabs" :key="tab" :label="`${'I'.repeat(i + 1)}Skill Category`" :name="tab">
           <div h-500px flex flex-col gap-2 overflow-auto>
             <div v-for="skill in artifactSkillList[tab]" :key="skill.skillId" flex justify-between border-b-1 class="border-#4C4D4F" p-2>
               <div w-300px text-sm>

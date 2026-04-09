@@ -7,11 +7,11 @@ type DamageType = 'total' | 'attack' | 'ability' | 'special' | 'other'
 const damageType = ref<DamageType>('total')
 
 const damageTypeOptions = ref<{ value: DamageType, label: string }[]>([
-  { value: 'attack', label: '通常攻击&反击' },
-  { value: 'ability', label: '技能伤害' },
-  { value: 'special', label: '奥义伤害' },
-  { value: 'other', label: '其他' },
-  { value: 'total', label: '总计' },
+  { value: 'attack', label: 'Normal Attack & Counter' },
+  { value: 'ability', label: 'Skill DMG' },
+  { value: 'special', label: 'C.A. DMG' },
+  { value: 'other', label: 'Other' },
+  { value: 'total', label: 'Total' },
 ])
 
 const maxDamage = computed(() =>
@@ -80,7 +80,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
             <div>
               <ElTooltip
                 v-if="player.attackInfo"
-                :content="`总次数: ${player.attackInfo.total} TA: ${getRengeki('ta', player.attackInfo)} DA: ${getRengeki('da', player.attackInfo)}  SA: ${getRengeki('sa', player.attackInfo)}`"
+                :content="`Total Hits: ${player.attackInfo.total} TA: ${getRengeki('ta', player.attackInfo)} DA: ${getRengeki('da', player.attackInfo)}  SA: ${getRengeki('sa', player.attackInfo)}`"
                 placement="top" effect="dark"
               >
                 <div w-60px text-12px>
@@ -106,7 +106,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
       </div>
       <div v-else mt-10px w-full flex justify-end text-base>
         <div fc gap-10px>
-          合计： {{ totalDamage[4].total.toLocaleString() }}
+          Total： {{ totalDamage[4].total.toLocaleString() }}
           <el-popover placement="top-end" width="200">
             <template #reference>
               <div i-carbon:information />

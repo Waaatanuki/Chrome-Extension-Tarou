@@ -65,7 +65,7 @@ onMounted(() => {
     />
 
     <TheButton w-full @click="openPopupWindow('RecoveryItem')">
-      回复道具信息
+      Recovery Item Info
     </TheButton>
   </div>
 

@@ -22,5 +22,5 @@ const normalAttackInfo = computed(() => currentRecord.value?.actionQueue.findLas
     </div>
     <MemberList :member-info="battleInfo.memberInfo" :mvp-info="battleInfo.mvpInfo" />
   </div>
-  <el-result v-else icon="info" sub-title="进入战斗时将会读取相关信息" />
+  <el-result v-else icon="info" sub-title="Enter combat to read related data" />
 </template>

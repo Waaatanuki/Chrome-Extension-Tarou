@@ -8,10 +8,10 @@ const damageTakenType = ref<'total' | 'attack' | 'super' | 'other'>('total')
 const hasDamageTaken = computed(() => props.playerInfo.every(p => p.damageTaken))
 
 const damageTakenTypeOptions = ref([
-  { value: 'total', label: '总计' },
-  { value: 'attack', label: '通常攻击&反击' },
-  { value: 'super', label: '特动' },
-  { value: 'other', label: '其他' },
+  { value: 'total', label: 'Total' },
+  { value: 'attack', label: 'Normal Attack & Counter' },
+  { value: 'super', label: 'Special Trigger' },
+  { value: 'other', label: 'Other' },
 ])
 
 const maxDamageTaken = computed(() =>
@@ -74,7 +74,7 @@ const totalDamageTaken = computed(() =>
         </div>
       </div>
       <div mr-5px mt-10px w-full text-end text-base>
-        合计： {{ totalDamageTaken.toLocaleString() }}
+        Total： {{ totalDamageTaken.toLocaleString() }}
       </div>
     </div>
   </div>

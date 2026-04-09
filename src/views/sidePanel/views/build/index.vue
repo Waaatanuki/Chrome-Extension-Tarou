@@ -15,13 +15,13 @@ const buildList = ref<BuildResponse[]>([])
 const dialogVisible = ref(false)
 const currentBuild = ref<BuildResponse>()
 const detailType = ref<DetailType>('party')
-const msg = ref('进入副本前自动获取副本ID')
+const msg = ref('Auto-fetch quest ID before entering quest')
 
 function handleQuery() {
   loading.value = true
   listBuild({ questId: buildQuestId.value, npcFilter: buildNpcFilter.value }).then(({ data }) => {
     buildList.value = data.list
-    msg.value = buildList.value.length === 0 ? '未找到匹配的数据' : ''
+    msg.value = buildList.value.length === 0 ? 'No matching data found' : ''
   }).finally(() => {
     loading.value = false
   })
@@ -38,33 +38,33 @@ function handleCommand(command: DetailType, data: BuildResponse) {
   <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-4 text-base>
     <div fc gap-2 text-14px>
       <div>
-        副本ID
+        QuestID
       </div>
       <el-input v-model="buildQuestId" clearable size="small" style="width: 100px;">
-        管理副本
+        Manage Quests
       </el-input>
     </div>
     <TheButton icon="carbon:search" :loading="loading" @click="handleQuery">
-      查询
+      Search
     </TheButton>
   </div>
   <div mt-10px flex flex-col flex-wrap gap-10px>
     <el-result v-if="msg" icon="info" :sub-title="msg" />
     <el-card v-for="data, idx in buildList" :key="idx" w-300px body-style="padding: 5px">
       <el-descriptions size="small" direction="vertical" :column="3" border>
-        <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
+        <el-descriptions-item label="Quest" label-width="60" :rowspan="2" align="center">
           <img v-if="data.bossImage" h-44px w-44px :src="getBossImg('enemy', data.bossImage, 's')">
         </el-descriptions-item>
-        <el-descriptions-item label="伤害" label-width="113" align="center">
+        <el-descriptions-item label="Damage" label-width="113" align="center">
           {{ data.damage }}
         </el-descriptions-item>
-        <el-descriptions-item label="操作时长/跑速" align="center">
+        <el-descriptions-item label="Action Duration / Speed" align="center">
           {{ data.realSpeed }}
         </el-descriptions-item>
-        <el-descriptions-item label="贡献" align="center">
+        <el-descriptions-item label="Contribution" align="center">
           {{ data.point ? Math.floor(data.point).toLocaleString() : '-' }}
         </el-descriptions-item>
-        <el-descriptions-item label="回合数" align="center">
+        <el-descriptions-item label="Turn Count" align="center">
           {{ data.turn }}
         </el-descriptions-item>
       </el-descriptions>
@@ -74,8 +74,8 @@ function handleCommand(command: DetailType, data: BuildResponse) {
         </div>
 
         <div fc>
-          <TheButton icon="material-symbols:sticky-note-2-outline" title="配置" @click="handleCommand('party', data)" />
-          <TheButton icon="material-symbols:follow-the-signs" title="操作流程" @click="handleCommand('action', data)" />
+          <TheButton icon="material-symbols:sticky-note-2-outline" title="Setup" @click="handleCommand('party', data)" />
+          <TheButton icon="material-symbols:follow-the-signs" title="Action Flow" @click="handleCommand('action', data)" />
         </div>
       </div>
     </el-card>

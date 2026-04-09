@@ -79,7 +79,7 @@ function handleCopyBuild() {
     .then(() => {
       loading.value = true
       uploadBuild({ ...processData(), anonymous: anonymous.value }).then((data) => {
-        ElMessage.success('上传成功')
+        ElMessage.success('Upload Successful')
         const record = battleRecord.value.find(record => record.raid_id === currentRecord.value?.raid_id)
         if (record)
           record.key = data.key
@@ -127,19 +127,19 @@ function copyLink(key: string) {
   <div flex flex-col flex-wrap gap-10px>
     <el-card v-for="data, idx in battleRecord" :key="idx" w-300px body-style="padding: 5px">
       <el-descriptions size="small" direction="vertical" :column="3" border>
-        <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
+        <el-descriptions-item label="Quest" label-width="60" :rowspan="2" align="center">
           <img h-44px w-44px :src="getBossImg('enemy', data.imgId!, 's')">
         </el-descriptions-item>
-        <el-descriptions-item label="伤害" label-width="113" align="center">
+        <el-descriptions-item label="Damage" label-width="113" align="center">
           {{ data.damage }}
         </el-descriptions-item>
-        <el-descriptions-item label="操作时长/跑速" align="center">
+        <el-descriptions-item label="Action Duration / Speed" align="center">
           {{ getRealTimeSpeed(data) }}
         </el-descriptions-item>
-        <el-descriptions-item label="贡献" align="center">
+        <el-descriptions-item label="Contribution" align="center">
           {{ data.point ? Math.floor(data.point).toLocaleString() : '-' }}
         </el-descriptions-item>
-        <el-descriptions-item label="回合数" align="center">
+        <el-descriptions-item label="Turn Count" align="center">
           {{ data.turn }}
         </el-descriptions-item>
       </el-descriptions>
@@ -150,13 +150,13 @@ function copyLink(key: string) {
 
         <div fc>
           <TheButton v-if="data.key" @click="copyLink(data.key)">
-            分享
+            Share
           </TheButton>
           <TheButton v-else @click="handleCommand('upload', data)">
-            上传
+            Upload
           </TheButton>
           <TheButton @click="handleCommand('detail', data)">
-            详情
+            Details
           </TheButton>
           <TheButton @click="handleCommand('export', data)">
             Export
@@ -175,7 +175,7 @@ function copyLink(key: string) {
           <div v-if="currentDeck" my-20px flex items-center justify-between>
             <div fc gap-4>
               <div fc gap-2>
-                匿名上传
+                Anonymous Upload
                 <el-switch
                   v-model="anonymous"
                   inline-prompt
@@ -194,10 +194,10 @@ function copyLink(key: string) {
               </div>
             </div>
             <TheButton :loading="loading" @click="handleCopyBuild">
-              上传配置信息
+              Upload Setup info
             </TheButton>
           </div>
-          <el-result v-else icon="info" sub-title="切换至战斗记录所使用的的队伍" />
+          <el-result v-else icon="info" sub-title="Switch to Party used in this Battle Record" />
 
           <div v-if="currentDeck" m-auto w-300px flex flex-col gap-10px>
             <Npc :leader="currentDeck.leader" :npcs="currentDeck.npcs" :priority="currentDeck.priority" />

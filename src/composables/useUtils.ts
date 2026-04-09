@@ -19,15 +19,15 @@ export function deepClone<T>(obj: T): T {
 }
 
 /**
- * 深度合并默认配置和用户配置
- * @param defaultConfig 默认配置
- * @param userConfig 用户当前配置
- * @returns 合并后的新配置
+ * 深度合并默认Setup和用户Setup
+ * @param defaultConfig 默认Setup
+ * @param userConfig 用户Current Setup
+ * @returns 合并后的新Setup
  */
 export function mergeConfig<T extends Record<string, any>>(defaultConfig: T, userConfig: Partial<T>): T {
   const result = {} as T
 
-  // 只遍历默认配置，构建结果对象
+  // 只遍历默认Setup，构建结果对象
   for (const key in defaultConfig) {
     const defaultValue = defaultConfig[key]
     const userValue = userConfig[key]

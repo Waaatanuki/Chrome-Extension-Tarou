@@ -44,7 +44,7 @@ const order = [1, 2, 3, 4, 5, 6]
             ID: {{ userInfo.uid }}
           </div>
           <div>
-            昵称: {{ userInfo.name }}
+            Nickname: {{ userInfo.name }}
           </div>
         </div>
       </div>

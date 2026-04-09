@@ -46,12 +46,12 @@ function handleSavePoint(newValue: string) {
     </div>
     <div class="w-300px" :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }">
       <el-descriptions :column="2" :border="true" direction="vertical">
-        <el-descriptions-item label="房间人数" align="center" label-width="150">
+        <el-descriptions-item label="Room Players" align="center" label-width="150">
           <div>
             {{ battleInfo.bossInfo.limitNum === 1 ? '-' : `${battleInfo.bossInfo.fellow}/${battleInfo.bossInfo.limitNum}` }}
           </div>
         </el-descriptions-item>
-        <el-descriptions-item label="救援码" align="center" label-width="150">
+        <el-descriptions-item label="Backup Code" align="center" label-width="150">
           <div v-if="battleInfo.bossInfo.shareId" hover:text-amber @click="handleCopy(battleInfo.bossInfo.shareId)">
             {{ battleInfo.bossInfo.shareId }}
           </div>
@@ -59,18 +59,18 @@ function handleSavePoint(newValue: string) {
             -
           </div>
         </el-descriptions-item>
-        <el-descriptions-item label="操作时长" align="center">
+        <el-descriptions-item label="Action Duration" align="center">
           {{ formatTime(operationSecond) }}
         </el-descriptions-item>
-        <el-descriptions-item label="造成伤害" align="center">
+        <el-descriptions-item label="Damage Dealt" align="center">
           <div>
             {{ currentRaid?.damage || '-' }}
           </div>
         </el-descriptions-item>
-        <el-descriptions-item label="贡献提醒" align="center">
+        <el-descriptions-item label="Contribution Reminder" align="center">
           <EditableCell :value="hitQuestSetting?.point" @save="handleSavePoint" />
         </el-descriptions-item>
-        <el-descriptions-item label="当前贡献" align="center">
+        <el-descriptions-item label="Current Contribution" align="center">
           <div text-15px text-rose>
             {{ currentRaid?.point ? Math.floor(currentRaid.point).toLocaleString() : '-' }}
           </div>

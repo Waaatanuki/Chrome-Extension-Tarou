@@ -22,7 +22,7 @@ const loopNum = computed(() => {
     <template #header>
       <div flex justify-between>
         <div>
-          十天众战记({{ loopNum }}周目)
+          Eternals Saga ({{ loopNum }} cycles)
         </div>
         <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}

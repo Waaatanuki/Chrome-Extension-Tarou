@@ -43,7 +43,7 @@ watch(actionQueue, () => {
             <div flex>
               <div relative fc shrink-0 flex-col gap-10px bg-neutral-8 p-10px border-b="1  solid #414243">
                 <div text-base font-bold>
-                  {{ `第${list.turn}回合` }}
+                  {{ `Turn ${list.turn}` }}
                 </div>
                 <div v-if="list.interrupt_display_text" flex flex-col gap-1px>
                   <el-tag v-for="text in list.interrupt_display_text.split('|')" :key="text" :type="list.special_skill_interrupt ? 'success' : 'danger'" size="small">

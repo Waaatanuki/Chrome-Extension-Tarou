@@ -21,7 +21,7 @@ export async function unpack(parcel: string) {
   // Dashboard 处理活动信息展示
   processEventData(url, responseData)
 
-  // Dashboard 每日消耗-获取自发副本AP信息
+  // Dashboard 每日消耗-获取自发QuestAP信息
   if (url.includes('/quest/quest_data')) {
     initDailyCost()
     const payload = JSON.parse(requestData!)
@@ -34,7 +34,7 @@ export async function unpack(parcel: string) {
     questInfo.ap = Number(responseData.action_point)
   }
 
-  // Dashboard 每日消耗-获取沙盒自发副本APP信息
+  // Dashboard 每日消耗-获取沙盒自发QuestAPP信息
   if (url.includes('/rest/replicard/user_aap_recovery_info')) {
     initDailyCost()
     const payload = JSON.parse(requestData!)
@@ -47,7 +47,7 @@ export async function unpack(parcel: string) {
     questInfo.ap = Number(responseData.consume_aap)
   }
 
-  // Dashboard 每日消耗-进入自发副本
+  // Dashboard 每日消耗-进入自发Quest
   if (url.includes('/quest/create_quest')) {
     initDailyCost()
     const payload = JSON.parse(requestData!)
@@ -62,7 +62,7 @@ export async function unpack(parcel: string) {
     getDisplayList(responseData)
   }
 
-  // Dashboard 每日消耗-记录扫荡副本
+  // Dashboard 每日消耗-记录扫荡Quest
   if (url.includes('/rest/quest/questskip/skip')) {
     initDailyCost()
     const payload = JSON.parse(requestData!)
@@ -75,7 +75,7 @@ export async function unpack(parcel: string) {
       skipQuestInfo.limitedCount--
   }
 
-  // Dashboard 每日消耗-进入他人创建的副本
+  // Dashboard 每日消耗-进入他人创建的Quest
   if (url.includes('/quest/raid_deck_data_create')) {
     initDailyCost()
     const payload = JSON.parse(requestData!)
@@ -393,7 +393,7 @@ export async function unpack(parcel: string) {
       gachaRecord.value.unshift(hit)
     }
 
-    // 避免刷新结果重复计算
+    // 避免Refresh结果重复计算
     if (hit.use_count === Number(RawData.ceiling.use_count))
       return
     hit.use_count = Number(RawData.ceiling.use_count)
@@ -445,7 +445,7 @@ export async function unpack(parcel: string) {
     recoveryItemList.value.unshift(res)
   }
 
-  // Dashboard skip副本信息
+  // Dashboard skipQuest信息
   if (url.includes('/rest/quest/skip_quest_list')) {
     skipQuest.value.updateTime = Date.now()
     skipQuest.value.list = Object.values(responseData.list)
@@ -506,7 +506,7 @@ export async function unpack(parcel: string) {
     localNpcList.value = localNpcList.value.filter(n => !Object.hasOwn(n, 'id'))
   }
 
-  // Party 记录伤害计算设置
+  // Party 记录Damage计算Settings
   if (url.includes('party/calculate_setting')) {
     const regex = /calculate_setting\/(\d+)\/(\d+)/
     const matches = url.match(regex)
@@ -515,13 +515,13 @@ export async function unpack(parcel: string) {
       handleCalculateSetting({ priority, setting: responseData })
   }
 
-  // Party 记录更改伤害计算设置
+  // Party 记录更改Damage计算Settings
   if (url.includes('party/save_calculate_setting')) {
     const setting = JSON.parse(requestData!)
     handleCalculateSetting({ priority: String(setting.group_priority) + String(setting.priority), setting })
   }
 
-  // Party 主角技能
+  // Party 主角Skill
   if (url.includes('/party/job_equipped')) {
     const jobInfo = responseData.job
     const job_param_id = jobInfo.param.id
@@ -551,7 +551,7 @@ export async function unpack(parcel: string) {
     jobAbilityList.value = jobAbilityList.value.filter(a => !Object.hasOwn(a, 'action_id'))
   }
 
-  // Party 角色技能切换fa开关
+  // Party 角色Skill切换fa开关
   if (url.includes('/npc/full_auto_ability_setting')) {
     const faAbilitySetting = JSON.parse(requestData!)
     const hit = localNpcList.value.find(npc => npc.paramId === faAbilitySetting.user_npc_id)
@@ -559,7 +559,7 @@ export async function unpack(parcel: string) {
       hit.ability[faAbilitySetting.ability_num - 1].fa = !!faAbilitySetting.auto_execute_flag
   }
 
-  //  Party 主角技能切换fa开关
+  //  Party 主角Skill切换fa开关
   if (url.includes('/job/fullautosetting/pc_full_auto_setting')) {
     const faAbilitySetting = JSON.parse(requestData!)
     const hit = jobAbilityList.value.find(a => a.actionId === String(faAbilitySetting.ability_id))
@@ -567,7 +567,7 @@ export async function unpack(parcel: string) {
       hit.fa = !!faAbilitySetting.auto_execute_flag
   }
 
-  // BattleLog 记录单次攻击日志
+  // BattleLog 记录单次ATK日志
   if (/\/rest\/(?:raid|multiraid)\/normal_attack_result\.json/.test(url)) {
     handleAttackResultJson('normal', responseData, JSON.parse(requestData!))
   }
@@ -582,12 +582,12 @@ export async function unpack(parcel: string) {
     handleAttackResultJson('fc', responseData, JSON.parse(requestData!))
   }
 
-  // BattleLog 记录使用技能日志
+  // BattleLog 记录使用Skill日志
   if (/\/rest\/(?:raid|multiraid)\/ability_result\.json/.test(url)) {
     handleAttackResultJson('ability', responseData, JSON.parse(requestData!))
   }
 
-  // BattleLog 记录使用DC连锁技能日志
+  // BattleLog 记录使用DC连锁Skill日志
   if (/\/rest\/(?:raid|multiraid)\/group_gauge_action_result\.json/.test(url)) {
     handleAttackResultJson('ability', responseData, JSON.parse(requestData!))
   }
@@ -607,12 +607,12 @@ export async function unpack(parcel: string) {
     handleAttackResultJson('recovery', responseData, JSON.parse(requestData!))
   }
 
-  // BattleLog 战斗结算
+  // BattleLog Combat结算
   if (/\/result(?:multi)?\/content\/(?:index|skip_raid)\/\d+/.test(url)) {
     handleResultContent(responseData)
   }
 
-  // BattleLog 记录副本start信息
+  // BattleLog 记录Queststart信息
   if (/\/rest\/(?:raid|multiraid)\/start\.json/.test(url)) {
     const battleId = String(responseData.raid_id)
     const timestamp = new Date().valueOf()
@@ -632,7 +632,7 @@ export async function unpack(parcel: string) {
     battleInfo.value.inLobby = false
     const battleStartJson: BattleStartJson = responseData
 
-    // 统计每日副本
+    // 统计每日Quest
     if (dailyCost.value.dateTime && dayjs().isSame(dailyCost.value.dateTime, 'day')) {
       const hitIndex = dailyCost.value.raidIds!.findIndex(id => id === Number(battleStartJson.raid_id))
 
@@ -650,10 +650,10 @@ export async function unpack(parcel: string) {
       }
     }
 
-    // 分析副本数据
+    // 分析Quest数据
     handleStartJson(battleStartJson)
 
-    // 上传副本信息
+    // UploadQuest信息
     const matchName = battleStartJson.boss.param.reduce<string[]>((pre, cur) => {
       pre.push(cur.name.ja, cur.name.en)
       return pre
@@ -680,7 +680,7 @@ export async function unpack(parcel: string) {
     })
   }
 
-  // Drop 记录未结算战斗信息
+  // Drop 记录未结算Combat Info
   if (url.includes('/quest/unclaimed_reward')) {
     for (const battle of responseData.list) {
       const hitMemo = battleMemo.value.find(memo => memo.battleId === String(battle.raid_id))
@@ -695,7 +695,7 @@ export async function unpack(parcel: string) {
         date: dayjs(formatFinishTime(battle.finish_time)).format('YYYY-MM-DD HH:mm:ss'),
       }
 
-      console.log('未记录过的战斗信息', battleInfo)
+      console.log('未记录过的Combat Info', battleInfo)
 
       battleMemo.value.push({ ...battleInfo })
     }
@@ -706,7 +706,7 @@ export async function unpack(parcel: string) {
     console.log('memoList==>', battleMemo.value)
   }
 
-  // Build 获取自发副本的questId
+  // Build 获取自发Quest的questId
   if (url.includes('/quest/content/supporter/')) {
     const regex = /\/quest\/content\/supporter\/(\d+)\//
     const match = url.match(regex)
@@ -714,24 +714,24 @@ export async function unpack(parcel: string) {
       buildQuestId.value = match[1]
   }
 
-  // Build 获取参战他人副本的questId
+  // Build 获取参战他人Quest的questId
   if (url.includes('/quest/check_multi_start')) {
     const payload = JSON.parse(requestData!)
     if (payload.quest_id)
       buildQuestId.value = String(payload.quest_id)
   }
 
-  // Party 记录当前队伍信息
+  // Party 记录Current Party Info
   if (url.includes('party/deck')) {
     handleDeckJson(responseData.deck)
   }
 
-  // Artifact 记录当前神器信息
+  // Artifact 记录Current 神器信息
   if (url.includes('/rest/artifact/list')) {
     artifactList.value = responseData.list
   }
 
-  // Artifact 记录角色神器技能排名
+  // Artifact 记录角色神器Skill排名
   if (url.includes('/rest/artifact/npc_artifact_skill_usage_analytics/')) {
     artifactUsage.value = {
       image: responseData.image,
@@ -773,7 +773,7 @@ export async function unpack(parcel: string) {
     })
   }
 
-  // BattleLog 查询房间成员
+  // BattleLog Search房间成员
   if (url.includes('/lobby/content/room_member')) {
     battleInfo.value.inLobby = true
     battleInfo.value.lobbyMemberList = []
@@ -793,7 +793,7 @@ export async function unpack(parcel: string) {
     })
   }
 
-  // BattleLog 记录子技能日志
+  // BattleLog 记录子Skill日志
   if (/\/rest\/(?:raid|multiraid)\/get_select_if\.json/.test(url)) {
     const data = responseData
     const payload = JSON.parse(requestData!)
@@ -810,9 +810,9 @@ export async function unpack(parcel: string) {
     }))
   }
 
-  // BattleLog 记录暗器设置
+  // BattleLog 记录暗器Settings
   if (/\/rest\/(?:raid|multiraid)\/get_hiddenweapon/.test(url)) {
-    // 两个使用暗器职业的一技能ID
+    // 两个使用暗器职业的一SkillID
     const HIDDEN_WEAPON_ABILITY_ID = ['7241', '201581']
     const data = responseData
     const payload = JSON.parse(requestData!) as { raid_id: number, pid: string }
@@ -835,13 +835,13 @@ export async function unpack(parcel: string) {
     handleGuardSettingJson({ raid_id: payload.raid_id, guard_status: responseData.guard_status })
   }
 
-  // BattleLog 记录切换奥义温存日志
+  // BattleLog 记录切换C.A.温存日志
   if (/\/rest\/(?:raid|multiraid)\/special_skill_setting/.test(url)) {
     const payload = JSON.parse(requestData!)
     handleSpecialSkillSettingJson(payload)
   }
 
-  // BattleLog 记录战斗结果
+  // BattleLog 记录Combat结果
   if (url.includes('resultmulti/content/detail')) {
     const regex = /\/detail\/(\d+)\?/
     const match = regex.exec(url) as RegExpExecArray
@@ -882,17 +882,17 @@ export async function unpack(parcel: string) {
           is_npc: cur.is_npc,
           is_dead: false,
           damage: {
-            total: { comment: '总计', value: Number(cur.damage) },
-            attack: { comment: '通常攻击&反击', value: Number(cur.normal_damage) },
-            ability: { comment: '技能伤害', value: Number(cur.ability_damage) },
-            special: { comment: '奥义伤害', value: Number(cur.special_damage) },
-            other: { comment: '其他', value: Number(cur.other_damage) },
+            total: { comment: 'Total', value: Number(cur.damage) },
+            attack: { comment: 'Normal Attack & Counter', value: Number(cur.normal_damage) },
+            ability: { comment: 'Skill DMG', value: Number(cur.ability_damage) },
+            special: { comment: 'C.A. DMG', value: Number(cur.special_damage) },
+            other: { comment: 'Other', value: Number(cur.other_damage) },
           },
           damageTaken: {
-            total: { comment: '总计', value: 0 },
-            attack: { comment: '通常攻击&反击', value: 0 },
-            super: { comment: '特动', value: 0 },
-            other: { comment: '其他', value: 0 },
+            total: { comment: 'Total', value: 0 },
+            attack: { comment: 'Normal Attack & Counter', value: 0 },
+            super: { comment: 'Special Trigger', value: 0 },
+            other: { comment: 'Other', value: 0 },
           },
           condition: {
             buff: [],
@@ -937,7 +937,7 @@ export async function unpack(parcel: string) {
   }
 }
 
-// 处理战斗结算数据
+// 处理Combat结算数据
 function handleResultContent(responseData: any) {
   getDisplayList(responseData)
   initDailyCost()
@@ -946,17 +946,17 @@ function handleResultContent(responseData: any) {
     return
 
   if (result_data.appearance?.is_quest && !result_data.appearance?.is_retry && notificationSetting.value.appearanceQuest)
-    createNotification({ message: 'Hell提醒', sound: 'hell' })
+    createNotification({ message: 'Hell Reminder', sound: 'hell' })
 
   if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent) {
     createNotification({
-      message: '沙盒宝箱提醒',
+      message: 'Replicard Chest Reminder',
       iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png',
       sound: 'hell',
     })
   }
 
-  // 非古战场副本,非扫荡副本结算时探险时间减60秒
+  // 非Unite and FightQuest,非扫荡Quest结算时探险时间减60秒
   if (result_data.event?.event_type !== 3 && result_data.quest_type !== 28 && sampoInfo.value.remainTime) {
     sampoInfo.value.remainTime -= 60000
   }
@@ -965,7 +965,7 @@ function handleResultContent(responseData: any) {
   const isInSolotreasure = !!eventList.value.find(e => e.type === 'solotreasure')?.isActive
   const isInBiography = !!eventList.value.find(e => e.type === 'biography')?.isActive
 
-  // 收集掉落信息
+  // 收集Drop Info
   for (const element of Object.values(result_data.rewards.reward_list)) {
     for (const [key, value] of Object.entries(element as Record<string, any>)) {
       const reward = {
@@ -990,7 +990,7 @@ function handleResultContent(responseData: any) {
         }
       }
 
-      // 更新剧情复刻道具数量
+      // 更新Story Rerun道具数量
       if (isInSolotreasure) {
         const additional = eventList.value.find(event => event.type === 'solotreasure')?.additional as Record<string, number> | undefined
         if (additional && additional[key]) {
@@ -998,7 +998,7 @@ function handleResultContent(responseData: any) {
         }
       }
 
-      // 更新剧情活动道具数量
+      // 更新Story Event道具数量
       if (isInBiography) {
         const additional = eventList.value.find(event => event.type === 'biography')?.additional as Record<string, number> | undefined
         if (additional && additional[key]) {
@@ -1038,7 +1038,7 @@ function handleResultContent(responseData: any) {
     }
   }
 
-  // 更新战货活动任务信息
+  // 更新Token Drawbox Event任务信息
   if (result_data.popup_data?.treasureraid_mission && Object.keys(result_data.popup_data?.treasureraid_mission).length > 0) {
     const eventInfo = eventList.value.find(event => event.type === 'treasureraid')
     const progress = result_data.popup_data.treasureraid_mission.progress ?? []
@@ -1060,7 +1060,7 @@ function handleResultContent(responseData: any) {
     }
   }
 
-  // 更新古战场活动任务信息
+  // 更新Unite and Fight活动任务信息
   if (result_data.popup_data?.teamraid_mission_beginner && Object.keys(result_data.popup_data?.teamraid_mission_beginner).length > 0) {
     const eventInfo = eventList.value.find(event => event.type === 'teamraid')
     const progress = result_data.popup_data.teamraid_mission_beginner.progress ?? []
@@ -1082,7 +1082,7 @@ function handleResultContent(responseData: any) {
     }
   }
 
-  // 更新古战场果报古箱掉落信息
+  // 更新Unite and Fight果报古 boxesDrop Info
   if (result_data.character_message?.lottery_reward_info) {
     const hitItem = result_data.character_message?.lottery_reward_info.find((reward: any) => reward.item_image.includes('30711'))
     const eventInfo = eventList.value.find(event => event.type === 'teamraid')
@@ -1091,7 +1091,7 @@ function handleResultContent(responseData: any) {
     }
   }
 
-  // 更新古战场贡献信息
+  // 更新Unite and FightContribution信息
   if (result_data.event?.data) {
     const hitItem = result_data.event?.data.find((reward: any) => reward.item_image === 'service')
     const eventInfo = eventList.value.find(event => event.type === 'teamraid')
@@ -1126,7 +1126,7 @@ function handleResultContent(responseData: any) {
   if (isInAdvent) {
     const is_over_limit = result_data.advent_info?.is_over_limit
     if (is_over_limit && notificationSetting.value.isPointOverLimit)
-      createNotification({ message: '四象点数已经超过上限!!!', sound: 'warning' })
+      createNotification({ message: '四象点数已经超过Cap!!!', sound: 'warning' })
 
     const eventInfo = eventList.value.find(event => event.type === 'advent')
     if (eventInfo) {
@@ -1135,7 +1135,7 @@ function handleResultContent(responseData: any) {
     }
   }
 
-  // 更新四象，剧情活动和剧情复刻任务信息
+  // 更新四象，Story Event和Story Rerun任务信息
   if (result_data.popup_data?.daily_mission) {
     const targetEvent = ['advent', 'solotreasure', 'biography']
     for (const eventType of targetEvent) {
@@ -1152,21 +1152,21 @@ function handleResultContent(responseData: any) {
     }
   }
 
-  // 更新炼金活动token数量
+  // 更新Alchemy Eventtoken数量
   if (result_data.alchemist?.lottery_reward_info && Object.keys(result_data.alchemist?.lottery_reward_info).length > 0) {
     const eventInfo = eventList.value.find(event => event.type === 'alchemist')
     if (eventInfo)
       eventInfo.count = Number(result_data.alchemist.lottery_reward_info[0].possession_num)
   }
 
-  // 更新转世外传token数量
+  // 更新Arcarum Gaidentoken数量
   if (result_data.interlude_info && Object.keys(result_data.interlude_info).length > 0) {
     const eventInfo = eventList.value.find(event => event.type === 'interlude')
     if (eventInfo)
       eventInfo.count += Number(result_data.interlude_info.token)
   }
 
-  // 更新转世外传任务信息
+  // 更新Arcarum Gaiden任务信息
   if (result_data.replicard.event_mission_result?.mission_list) {
     const eventInfo = eventList.value.find(event => event.type === 'interlude')
     if (eventInfo) {
@@ -1181,7 +1181,7 @@ function handleResultContent(responseData: any) {
     }
   }
 
-  // 更新十天众战记任务信息
+  // 更新Eternals Saga任务信息
   if (result_data.popup_data?.terra && Object.keys(result_data.popup_data?.terra).length > 0) {
     const eventInfo = eventList.value.find(event => event.type === 'terra')
     if (!eventInfo)
@@ -1222,7 +1222,7 @@ function handleResultContent(responseData: any) {
 }
 
 function processEventData(url: string, responseData: any) {
-  // 战货活动
+  // Token Drawbox Event
   if (/\/treasureraid\d+\/top\/content\/newindex/.test(url)) {
     if (!responseData.option)
       return
@@ -1257,7 +1257,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 古战场
+  // Unite and Fight
   if (/\/teamraid\d+\/top\/content\/index/.test(url)) {
     if (!responseData.option)
       return
@@ -1342,7 +1342,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 古战场战货
+  // Unite and Fight战货
   if (/\/teamraid\d+\/gacha\/content\/index/.test(url)) {
     const eventType = 'teamraid'
     const eventInfo = eventList.value.find(event => event.type === eventType)
@@ -1425,7 +1425,7 @@ function processEventData(url: string, responseData: any) {
     eventInfo.additional.gachaPoint = gachaPoint
   }
 
-  // 炼金活动
+  // Alchemy Event
   if (url.includes('/frontier/alchemy/content/index')) {
     if (!responseData.option)
       return
@@ -1455,7 +1455,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 神灭战
+  // Proving Grounds
   if (url.includes('rest/godslayer/top/quest_list')) {
     const eventType = 'godslayer'
     const eventInfo = {
@@ -1482,7 +1482,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 四象降临
+  // Rise of the Beasts
   if (url.includes('/advent/top/content/newindex')) {
     const eventType = 'advent'
     const htmlString = decodeURIComponent(responseData.data)
@@ -1534,7 +1534,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 转世外传
+  // Arcarum Gaiden
   if (url.includes('/interlude/top/content/index')) {
     if (!responseData.option)
       return
@@ -1593,7 +1593,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 转世外传任务
+  // Arcarum Gaiden任务
   if (url.includes('/rest/interlude/mission/mission_list')) {
     const eventType = 'interlude'
     const eventInfo = eventList.value.find(event => event.type === eventType)
@@ -1622,7 +1622,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 剧情活动
+  // Story Event
   if (/\/biography\d+\/top\/content\/newindex/.test(url)) {
     if (!responseData.option)
       return
@@ -1672,7 +1672,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 剧情复刻
+  // Story Rerun
   if (/\/solotreasure\d+\/top\/content\/newindex/.test(url)) {
     if (!responseData.option)
       return
@@ -1722,7 +1722,7 @@ function processEventData(url: string, responseData: any) {
     }
   }
 
-  // 十天众战记
+  // Eternals Saga
   if (url.includes('/terra/content/index')) {
     if (!responseData.option)
       return

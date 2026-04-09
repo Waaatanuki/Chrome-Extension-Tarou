@@ -6,15 +6,15 @@ import { combatPanelSetting } from '~/logic'
 const { position } = defineProps<{ position: { x: number, y: number } }>()
 
 const panelList = [
-  { key: 'RoomInfo', label: '综合信息' },
-  { key: 'BossState', label: '怪物信息' },
-  { key: 'NpcCondition', label: '角色状态' },
-  { key: 'InterruptText', label: '试炼条件' },
-  { key: 'ActionList', label: '操作记录' },
-  { key: 'MemberList', label: '玩家列表' },
-  { key: 'DamageRecord', label: '伤害统计' },
-  { key: 'DamageTaken', label: '承伤统计' },
-  { key: 'NpcCount', label: '其他统计' },
+  { key: 'RoomInfo', label: 'Overview' },
+  { key: 'BossState', label: 'Boss Info' },
+  { key: 'NpcCondition', label: 'Character Status' },
+  { key: 'InterruptText', label: 'Trial Conditions' },
+  { key: 'ActionList', label: 'Action Log' },
+  { key: 'MemberList', label: 'Player List' },
+  { key: 'DamageRecord', label: 'Damage Stats' },
+  { key: 'DamageTaken', label: 'Damage Taken Stats' },
+  { key: 'NpcCount', label: 'Other Stats' },
 ] as const
 
 const switchDialogVisible = ref(false)

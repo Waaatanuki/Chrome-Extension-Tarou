@@ -10,7 +10,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'g
     <template #header>
       <div flex justify-between>
         <div>
-          神灭战(印章Lv{{ eventInfo.count }})
+          Proving Grounds (Seal Lv{{ eventInfo.count }})
         </div>
         <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}

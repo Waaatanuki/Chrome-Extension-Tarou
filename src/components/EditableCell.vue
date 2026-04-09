@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { value, placeholder = '点击设置' } = defineProps<{
+const { value, placeholder = 'Click to configure' } = defineProps<{
   value?: number
   placeholder?: string
 }>()

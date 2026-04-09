@@ -179,7 +179,7 @@ onMounted(() => {
           </el-link>
         </div>
         <div>
-          <el-link>QQ交流群: 194260754</el-link>
+          <el-link>QQ Group: 194260754</el-link>
         </div>
       </div>
     </el-descriptions-item>

@@ -74,7 +74,7 @@ const defaultArtifactRule = {
 }
 
 export const defaultArtifactRuleList: ArtifactRule[] = Array.from({ length: 6 }, (_, i) => ({
-  name: `规则${i + 1}`,
+  name: `Rule ${i + 1}`,
   info: deepClone(defaultArtifactRule),
 }))
 
@@ -112,7 +112,7 @@ export const artifactSkillList = {
     },
     {
       skillId: 3004,
-      name: '弱体成功率',
+      name: 'Debuff Success Rate',
       nameEn: 'Debuff Success Rate',
       filterId: 6,
     },
@@ -130,7 +130,7 @@ export const artifactSkillList = {
     },
     {
       skillId: 3007,
-      name: '防御',
+      name: 'DEF',
       nameEn: 'DEF',
       filterId: 9,
     },
@@ -160,7 +160,7 @@ export const artifactSkillList = {
     },
     {
       skillId: 3012,
-      name: '有利属性軽減',
+      name: '有利Element軽減',
       nameEn: 'Superior Element Reduction',
       filterId: 14,
     },
@@ -168,19 +168,19 @@ export const artifactSkillList = {
   skill2: [
     {
       skillId: 3013,
-      name: '通常攻撃ダメージ上限',
+      name: '通常攻撃ダメージCap',
       nameEn: 'N.A DMG Cap',
       filterId: 15,
     },
     {
       skillId: 3014,
-      name: 'アビリティダメージ上限',
+      name: 'アビリティダメージCap',
       nameEn: 'Skill DMG Cap',
       filterId: 16,
     },
     {
       skillId: 3015,
-      name: '奥義ダメージ上限',
+      name: '奥義ダメージCap',
       nameEn: 'C.A. DMG Cap',
       filterId: 17,
     },
@@ -204,7 +204,7 @@ export const artifactSkillList = {
     },
     {
       skillId: 3019,
-      name: '奥義ダメージ特殊上限UP',
+      name: '奥義ダメージ特殊CapUP',
       nameEn: 'Special C.A. DMG Cap',
       filterId: 21,
     },
@@ -222,7 +222,7 @@ export const artifactSkillList = {
     },
     {
       skillId: 3022,
-      name: '再生',
+      name: 'Regeneration',
       nameEn: 'Regeneration',
       filterId: 24,
     },
@@ -252,25 +252,25 @@ export const artifactSkillList = {
     },
     {
       skillId: 3027,
-      name: '最大HP上昇/防御力-70%',
+      name: '最大HP上昇/DEF力-70%',
       nameEn: 'Max HP boost for a 70% hit to DEF',
       filterId: 29,
     },
     {
       skillId: 3028,
-      name: '通常攻撃ダメージ上限UP/アビリティダメージ上限-80%/奥義ダメージ上限-60%',
+      name: '通常攻撃ダメージ上限UP/アビリティダメージCap-80%/奥義ダメージCap-60%',
       nameEn: 'N.A DMG Cap UP/Skill DMG Cap-80%/C.A. DMG Cap-60%',
       filterId: 30,
     },
     {
       skillId: 3029,
-      name: 'アビリティダメージ上限UP/通常攻撃ダメージ上限-20%/奥義ダメージ上限-60%',
+      name: 'アビリティダメージ上限UP/通常攻撃ダメージCap-20%/奥義ダメージCap-60%',
       nameEn: 'Skill DMG Cap UP/N.A DMG Cap-20%/C.A. DMG Cap-60%',
       filterId: 31,
     },
     {
       skillId: 3030,
-      name: '奥義ダメージ上限UP/通常攻撃ダメージ上限-20%/アビリティダメージ上限-80%',
+      name: '奥義ダメージ上限UP/通常攻撃ダメージCap-20%/アビリティダメージCap-80%',
       nameEn: 'C.A. DMG Cap UP/N.A DMG Cap-20%/Skill DMG Cap-80%',
       filterId: 32,
     },
@@ -291,7 +291,7 @@ export const artifactSkillList = {
     {
       skillId: 5002,
       name: '弱体アビリティ使用時、敵に被ダメージUP(2回)',
-      nameEn: 'Upon using a debuff skill: Amplify foe\'s DMG taken (2 times)',
+      nameEn: 'Upon using a debuff skill: Amplify foe\'s DMG taken (2回)',
       filterId: 35,
     },
     {
@@ -332,7 +332,7 @@ export const artifactSkillList = {
     },
     {
       skillId: 5010,
-      name: 'ターン終了時、自分がそのターン中に消費したHPに応じて敵に無属性ダメージ',
+      name: 'ターン終了時、自分がそのターン中に消費したHPに応じて敵に無Elementダメージ',
       nameEn: 'Plain DMG to a foe at end of turn based on how much HP the equipper lost that turn',
       filterId: 42,
     },

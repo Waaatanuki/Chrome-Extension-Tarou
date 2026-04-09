@@ -98,7 +98,7 @@ function goWiki(masterId: number) {
 
           <div class="text-12px text-#f2eee2" w-250px bg-black pb-2 pt-1 leading-none>
             <div v-if="(!npc.exlb || npc.exlb.length === 0) && (!npc.artifact || npc.artifact.length === 0) " text-center>
-              未读取该角色信息
+              Character Data not loaded
             </div>
             <template v-for="exlb, idx in npc.exlb" :key="idx">
               <div class="prt-extra-lb-title" my-1>

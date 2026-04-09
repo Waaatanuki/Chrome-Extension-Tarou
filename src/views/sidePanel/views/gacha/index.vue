@@ -53,12 +53,12 @@ function gacha10() {
 
 function draw(times: number) {
   if (!gachaInfo.value.id || !gachaInfo.value.ratio1 || !gachaInfo.value.ratio2) {
-    ElMessage.error('卡池数据未获取')
+    ElMessage.error('Gacha Pool data not retrieved')
     return
   }
 
   if (gachaInfo.value.id !== gachaInfo.value.ratio1.id || gachaInfo.value.id !== gachaInfo.value.ratio2.id) {
-    ElMessage.error('卡池数据不一致')
+    ElMessage.error('Gacha Pool data inconsistent')
     return
   }
   animationVisible.value = true
@@ -129,7 +129,7 @@ function closeAnimation() {
       <template #header>
         <div v-if="gachaInfo.id" flex items-center justify-between text-12px>
           <div>
-            <el-tooltip :content="`编号: ${gachaInfo.id}`" placement="top">
+            <el-tooltip :content="`ID: ${gachaInfo.id}`" placement="top">
               <img w-100px :src="getGachaBanner(gachaInfo.randomKey!)">
             </el-tooltip>
           </div>

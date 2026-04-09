@@ -6,17 +6,17 @@ type DamageTakenType = 'total' | 'attack' | 'super' | 'other'
 const { position } = defineProps<{ position: { x: number, y: number } }>()
 
 const damageTakenTypeOptions = [
-  { value: 'attack', label: '通常攻击&反击' },
-  { value: 'super', label: '特动' },
-  { value: 'other', label: '其他' },
-  { value: 'total', label: '总计' },
+  { value: 'attack', label: 'Normal Attack & Counter' },
+  { value: 'super', label: 'Special Trigger' },
+  { value: 'other', label: 'Other' },
+  { value: 'total', label: 'Total' },
 ] as const
 
 const playerInfo = computed(() => battleRecord.value.find(record => String(record.raid_id) === battleInfo.value.bossInfo?.battleId)?.player ?? [])
 
 const handle = useTemplateRef<HTMLElement>('handle')
 const damageTakenType = ref<DamageTakenType>('total')
-const damageTakenTypeDesc = computed(() => damageTakenTypeOptions.find(item => item.value === damageTakenType.value)?.label || '总计')
+const damageTakenTypeDesc = computed(() => damageTakenTypeOptions.find(item => item.value === damageTakenType.value)?.label || 'Total')
 
 const maxDamageTaken = computed(() =>
   playerInfo.value.reduce((pre, cur) => pre > cur.damageTaken[damageTakenType.value].value
@@ -64,7 +64,7 @@ function handleCommand(command: DamageTakenType) {
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
     >
       <div ref="handle" flex-1>
-        承伤: {{ damageTakenTypeDesc }}
+        Damage Taken: {{ damageTakenTypeDesc }}
       </div>
 
       <el-dropdown placement="top" size="small" @command="handleCommand">

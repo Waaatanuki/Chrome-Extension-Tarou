@@ -177,7 +177,7 @@ export function setupWebRequestListener() {
           total: parseNumberLimit($('.prt-follow-point-box').text()),
         }
 
-        // 获取当前进行中的活动信息
+        // 获取Current 进行中的活动信息
         const currentEventList: string[] = []
         $('.btn-global-banner').each((index, element) => {
           const dataHref = $(element).data('href') as string | undefined

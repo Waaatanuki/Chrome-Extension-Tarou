@@ -10,7 +10,7 @@ export function updateCode(data: { code: string }) {
   })
 }
 
-// 发送掉落信息
+// 发送Drop Info
 export function sendDropInfo(data: DropInfo) {
   return request('/ext/drop', {
     method: 'post',
@@ -18,7 +18,7 @@ export function sendDropInfo(data: DropInfo) {
   })
 }
 
-// 批量发送掉落信息
+// 批量发送Drop Info
 export function sendMultiDropInfo(data: DropInfo[]) {
   return request('/ext/multiDrop', {
     method: 'post',
@@ -34,14 +34,14 @@ export function sendBossInfo(data: StartJsonBoss) {
   })
 }
 
-// 获取副本信息
+// 获取Quest信息
 export function listQuest() {
   return request<{ data: (Omit<Quest, 'visible'> & { deprecated?: boolean })[] }>('/ext/quest', {
     method: 'get',
   })
 }
 
-// 获取掉落统计信息
+// 获取Drop Statistics信息
 export function listDrop(questIds: string[]) {
   return request<{ data: Stat[] }>('/ext/stat', {
     method: 'post',
@@ -49,7 +49,7 @@ export function listDrop(questIds: string[]) {
   })
 }
 
-// 上传配置
+// UploadSetup
 export function uploadBuild(data: any) {
   return request<{ key: string }>('/ext/build', {
     method: 'post',
@@ -57,7 +57,7 @@ export function uploadBuild(data: any) {
   })
 }
 
-// 查询配置
+// SearchSetup
 export function listBuild(data: { questId: string, npcFilter: number[] }) {
   return request<{ data: { list: BuildResponse[], total: number } }>('/ext/getBuild', {
     method: 'post',
@@ -65,7 +65,7 @@ export function listBuild(data: { questId: string, npcFilter: number[] }) {
   })
 }
 
-// 上传用户插件配置
+// Upload用户插件Setup
 export function setConfig(data: any) {
   return request('/ext/config/set', {
     method: 'post',
@@ -73,7 +73,7 @@ export function setConfig(data: any) {
   })
 }
 
-// 查询用户插件配置
+// Search用户插件Setup
 export function getConfig() {
   return request<{ data: any }>('/ext/config/get', {
     method: 'post',

@@ -21,21 +21,21 @@ function getDropRatio(item?: Stat) {
 
 const msg = computed(() => {
   if (!props.data)
-    return '收藏后刷新获取数据'
+    return 'Bookmark and refresh to fetch data'
 
   const itemObj: { [key: string]: string } = {
-    '17_20004': '金',
-    '10_215': '沙漏',
+    '17_20004': 'Gold',
+    '10_215': 'Hourglass',
   }
 
   const itemName = itemObj[props.data.targetItemKey]
 
   if (props.data.targetItemCount === 0)
-    return `还未出过${itemName}`
+    return `No drops for ${itemName}`
 
-  const type = props.data.isBlueTreasure ? '蓝箱' : '场'
-  const prefix = props.data.lastDropTake ? `上次${props.data.lastDropTake}${type}，` : ''
-  return `${prefix}当前${props.data.lastDropCount}${type}`
+  const type = props.data.isBlueTreasure ? 'blue chests' : 'runs'
+  const prefix = props.data.lastDropTake ? `Last ${props.data.lastDropTake} ${type}, ` : ''
+  return `${prefix}Current ${props.data.lastDropCount} ${type}`
 })
 </script>
 

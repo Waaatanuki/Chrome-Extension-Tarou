@@ -36,7 +36,7 @@ export default function useUser() {
           })
           .catch(() => {
             setBadge()
-            reject(new Error('上传失败'))
+            reject(new Error('Upload失败'))
           })
       }
 

@@ -28,7 +28,7 @@ function onSetTarget() {
     <template #header>
       <div flex justify-between>
         <div>
-          古战场({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: token, drawnBox: eventInfo.additional.drawnBox }) }}箱)
+          Unite and Fight({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: token, drawnBox: eventInfo.additional.drawnBox }) }} boxes)
         </div>
         <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
@@ -44,7 +44,7 @@ function onSetTarget() {
             size="5"
           />
           <div>
-            果報の古箱
+            Fortune Old Chests
           </div>
         </div>
         <NumberLimitDisplay :value="{ number: eventInfo.additional.lottery.number, limit: eventInfo.additional.lottery.limit }" />

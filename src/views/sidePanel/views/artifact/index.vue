@@ -22,9 +22,9 @@ watch(artifactUsage, () => {
 const romanNumeral = ['I', 'II', 'III']
 
 const typeList = [
-  { value: 'danger', label: '低分' },
-  { value: 'warning', label: '普通' },
-  { value: 'success', label: '高分' },
+  { value: 'danger', label: 'Low Score' },
+  { value: 'warning', label: 'Normal' },
+  { value: 'success', label: 'High Score' },
 ]
 
 function handleCheckFilter(list: Set<any>, value: any) {
@@ -94,8 +94,8 @@ function onPasteSubmit() {
 
             <el-popover trigger="click" effect="dark" placement="bottom" width="320" popper-style="padding: 0px;">
               <template #reference>
-                <TheButton title="筛选神器技能">
-                  筛选
+                <TheButton title="Filter Artifact Skills">
+                  Filter
                 </TheButton>
               </template>
 
@@ -111,7 +111,7 @@ function onPasteSubmit() {
                   </div>
                 </div>
                 <div fc gap-10px>
-                  <el-checkbox v-model="strictMode" label="严格模式" size="small" />
+                  <el-checkbox v-model="strictMode" label="Strict Mode" size="small" />
                   <TheButton title="Reset options" color="#303133" @click="types.clear(); ids.clear(); strictMode = false">
                     Reset
                   </TheButton>
@@ -162,7 +162,7 @@ function onPasteSubmit() {
                   Import Rule
                 </el-dropdown-item>
                 <el-dropdown-item command="share">
-                  分享
+                  Share
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>

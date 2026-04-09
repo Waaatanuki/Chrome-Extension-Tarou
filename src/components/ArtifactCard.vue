@@ -22,14 +22,14 @@ const isTarget = computed(() => {
 
   if (ids.length > 0) {
     if (strictMode) {
-      // 严格模式：ids的技能集合必须是神器的技能集合的子集
+      // Strict Mode：ids的Skill集合必须是神器的Skill集合的子集
       const artifactSkillIds = new Set<number>()
       for (const skillName of skillNameList) {
         const skill_id = Math.floor(artifact[skillName].skill_id / 10)
         artifactSkillIds.add(skill_id)
       }
 
-      // 检查 ids 中的每个技能是否都在神器的技能集合中
+      // 检查 ids 中的每个Skill是否都在神器的Skill集合中
       for (const skillId of ids) {
         if (!artifactSkillIds.has(skillId))
           return false
@@ -37,7 +37,7 @@ const isTarget = computed(() => {
       return true
     }
     else {
-      // 普通模式：只要任何一个技能在 ids 中即可
+      // Normal模式：只要任何一个Skill在 ids 中即可
       for (const skillName of skillNameList) {
         const skill_id = String(Math.floor(artifact[skillName].skill_id / 10))
         if (ids.includes(Number(skill_id)))
@@ -110,7 +110,7 @@ function isRecommendSkill(skill_id: number) {
       </el-tag>
 
       <el-tag absolute right-0 top-0 size="large" :type="getPointType(artifact)">
-        得分: {{ artifact.rarity === '3' ? getPoint(artifact) : '∞' }}
+        Score: {{ artifact.rarity === '3' ? getPoint(artifact) : '∞' }}
       </el-tag>
 
       <div flex items-center gap-6 pl-55px>

@@ -12,7 +12,7 @@ function toggleVisible(questId: string) {
   const hit = questConfig.value.find(q => q.questId === questId)
   if (hit) {
     if (!hit.visible && questConfig.value.filter(q => q.visible).length >= 7)
-      return ElMessage.info('最多选择7个副本')
+      return ElMessage.info('You can select up to 7 quests')
 
     hit.visible = !hit.visible
   }
@@ -23,13 +23,13 @@ function handleQuery() {
     return
 
   if (!code.value || !userInfo.value.uid) {
-    ElMessage.error('请先获取引继码和玩家ID')
+    ElMessage.error('Please get transfer code and player ID first')
     return
   }
 
   const questIds = questConfig.value.filter(q => q.visible).map(q => q.questId)
   if (questIds.length === 0) {
-    console.log('还未收藏副本')
+    console.log('No bookmarked quests yet')
     return
   }
   loading.value = true
@@ -80,11 +80,11 @@ onMounted(() => {
           Back
         </TheButton>
         <TheButton v-else :loading="loading" icon="carbon:document-download" @click="manageQuest">
-          管理副本
+          Manage Quests
         </TheButton>
       </div>
       <TheButton v-if="!isManage" icon="carbon:update-now" :loading="loading" @click="handleQuery">
-        刷新
+        Refresh
       </TheButton>
     </div>
 
@@ -113,7 +113,7 @@ onMounted(() => {
         <div v-else my-10px fc flex-wrap gap-10px>
           <QuestCard v-for="quest in questData" :key="quest.questId" :data="quest" />
           <div v-if="questConfig.filter(q => q.visible).length === 0" mt-10px h-50px text-center text-xl>
-            还未收藏副本
+            No bookmarked quests yet
           </div>
         </div>
       </template>

@@ -21,21 +21,21 @@ const tabId = computed(() => Number(document.URL.split('?')[1]))
 const inBattle = computed(() => eventList.value.find(e => e.type === 'teamraid')?.isActive)
 
 const upViewList = computed(() => [
-  { key: 'dashboard', label: '主页', icon: 'material-symbols:dashboard' },
-  { key: 'drop', label: '掉落统计', icon: 'game-icons:gold-stack' },
-  { key: 'artifact', label: '神器甄选', icon: 'game-icons:glowing-artifact' },
-  { key: 'party', label: '队伍信息', icon: 'ri:team-fill' },
-  { key: 'build', label: '配置查询', icon: 'material-symbols:document-search' },
-  { key: 'combat', label: '战斗信息', icon: 'game-icons:battle-axe' },
-  { key: 'history', label: '战斗记录', icon: 'game-icons:scroll-unfurled' },
-  { key: 'patient', label: '标记玩家', icon: 'material-symbols:patient-list' },
-  { key: 'gacha', label: '抽卡模拟', icon: 'game-icons:mimic-chest' },
-  { key: 'battle', label: '接战', icon: 'game-icons:crossed-swords', hidden: !inBattle.value },
+  { key: 'dashboard', label: 'Home', icon: 'material-symbols:dashboard' },
+  { key: 'drop', label: 'Drop Statistics', icon: 'game-icons:gold-stack' },
+  { key: 'artifact', label: 'Artifact Picker', icon: 'game-icons:glowing-artifact' },
+  { key: 'party', label: 'Party Info', icon: 'ri:team-fill' },
+  { key: 'build', label: 'SetupSearch', icon: 'material-symbols:document-search' },
+  { key: 'combat', label: 'Combat Info', icon: 'game-icons:battle-axe' },
+  { key: 'history', label: 'Combat Log', icon: 'game-icons:scroll-unfurled' },
+  { key: 'patient', label: 'Bookmark Player', icon: 'material-symbols:patient-list' },
+  { key: 'gacha', label: 'Gacha Simulator', icon: 'game-icons:mimic-chest' },
+  { key: 'battle', label: 'In Battle', icon: 'game-icons:crossed-swords', hidden: !inBattle.value },
 ].filter(m => !m.hidden))
 
 const downViewList = [
-  { key: 'info', label: '用户信息', icon: 'carbon:information-filled' },
-  { key: 'setting', label: '设置', icon: 'carbon:settings' },
+  { key: 'info', label: 'User Info', icon: 'carbon:information-filled' },
+  { key: 'setting', label: 'Settings', icon: 'carbon:settings' },
 ]
 
 watchEffect(() => {
@@ -53,7 +53,7 @@ watchEffect(() => {
 onMounted(() => {
   chrome.runtime.getContexts({}).then((ctx) => {
     if (ctx.filter(c => c.documentUrl?.includes('src/views/sidePanel/main.html')).length > 1) {
-      createNotification({ message: '只能打开一个侧边栏' })
+      createNotification({ message: 'Only one side panel can be opened' })
       window.close()
       return
     }

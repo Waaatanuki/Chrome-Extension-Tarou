@@ -55,22 +55,22 @@ function handleCopy(text: string) {
         {{ text }}
       </el-tag>
     </div>
-    <el-tooltip content="操作时长">
+    <el-tooltip content="Action Duration">
       <div absolute left-0 top-0 select-none>
         {{ formatTime(operationSecond) }}
       </div>
     </el-tooltip>
-    <el-tooltip v-if="currentRaid?.point" content="贡献" placement="top">
+    <el-tooltip v-if="currentRaid?.point" content="Contribution" placement="top">
       <div absolute bottom-0 left-0 select-none>
         {{ Math.floor(currentRaid.point).toLocaleString() }}
       </div>
     </el-tooltip>
-    <el-tooltip v-if="battleInfo.bossInfo.shareId" content="救援码">
+    <el-tooltip v-if="battleInfo.bossInfo.shareId" content="Backup Code">
       <div absolute right-0 top-0 cursor-pointer hover:text-amber @click="handleCopy(battleInfo.bossInfo.shareId)">
         {{ battleInfo.bossInfo.shareId }}
       </div>
     </el-tooltip>
-    <el-tooltip v-if="battleInfo.bossInfo.limitNum !== 1" content="人数" placement="top">
+    <el-tooltip v-if="battleInfo.bossInfo.limitNum !== 1" content="Players" placement="top">
       <div absolute bottom-0 right-0>
         {{ `${battleInfo.bossInfo.fellow}/${battleInfo.bossInfo.limitNum}` }}
       </div>

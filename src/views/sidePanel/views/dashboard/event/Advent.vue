@@ -11,7 +11,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
     <template #header>
       <div flex justify-between>
         <div>
-          四象降临(<span :class="{ 'overflowed-point': eventInfo.additional.isOverflowed }">{{ eventInfo.count.toLocaleString() }}</span>)
+          Rise of the Beasts(<span :class="{ 'overflowed-point': eventInfo.additional.isOverflowed }">{{ eventInfo.count.toLocaleString() }}</span>)
         </div>
         <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
@@ -24,7 +24,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
         <div v-for="reward in eventInfo.additional.defeatReward" :key="reward.key" fc flex-col text-12px>
           <img w-52px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/event/defeat/${reward.key}/s/5000.jpg`">
           <div>
-            {{ `${reward.value}枚` }}
+            {{ `${reward.value} tokens` }}
           </div>
         </div>
       </div>

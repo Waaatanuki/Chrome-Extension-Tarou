@@ -125,13 +125,13 @@ const showRes = computed(() => res.value.filter(item => item.conditionCount === 
           <div w-250px fc flex-wrap gap-2>
             <div v-for="i in 4" :key="i" w-120px>
               <el-button :type="conditionCount === i ? 'primary' : 'default'" size="small" plain link @click="conditionCount = i">
-                {{ `满足${i}种条件(${res.filter(item => item.conditionCount >= i).length})` }}
+                {{ `Meets ${i} conditions(${res.filter(item => item.conditionCount >= i).length})` }}
               </el-button>
             </div>
           </div>
           <div>
             <el-button :type="conditionCount === 5 ? 'primary' : 'default'" size="small" plain link @click="conditionCount = 5">
-              {{ `满足全部条件(${res.filter(item => item.conditionCount === 5).length})` }}
+              {{ `Meets all conditions (${res.filter(item => item.conditionCount === 5).length})` }}
             </el-button>
           </div>
         </div>

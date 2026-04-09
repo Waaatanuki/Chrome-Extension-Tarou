@@ -6,7 +6,7 @@ import { onMessage, sendMessage } from 'webext-bridge/content-script'
     return new Promise((resolve) => {
       const start = setInterval(() => {
         if (!/\/#result(?:_multi)?\/\d+/.test(document.URL)) {
-          console.log('战斗结算检测中断', document.URL)
+          console.log('Combat结算检测中断', document.URL)
           clearInterval(start)
           resolve({})
         }
@@ -22,12 +22,12 @@ import { onMessage, sendMessage } from 'webext-bridge/content-script'
     })
   })
 
-  // 获取历史战斗掉落数据
+  // 获取历史Combat掉落数据
   onMessage('getBattleHistoryResult', () => {
     return new Promise((resolve) => {
       const start = setInterval(() => {
         if (!document.URL.includes('#result_multi/detail')) {
-          console.log('历史战斗结算检测中断', document.URL)
+          console.log('历史Combat结算检测中断', document.URL)
           clearInterval(start)
           resolve({})
         }
@@ -48,12 +48,12 @@ import { onMessage, sendMessage } from 'webext-bridge/content-script'
     return new Promise((resolve) => {
       const start = setInterval(() => {
         if (!document.URL.includes('#profile')) {
-          console.log('主页检测中断', document.URL)
+          console.log('Home检测中断', document.URL)
           clearInterval(start)
           resolve({})
         }
 
-        console.log('监测到主页')
+        console.log('监测到Home')
         const targetEl = document.querySelector('.cnt-profile')
 
         if (targetEl) {
@@ -74,7 +74,7 @@ import { onMessage, sendMessage } from 'webext-bridge/content-script'
           resolve({})
         }
 
-        console.log('监测到角色详情')
+        console.log('监测到角色Details')
         const targetEl = document.querySelector('div.cnt-zenith.npc')
 
         if (targetEl) {
@@ -95,7 +95,7 @@ import { onMessage, sendMessage } from 'webext-bridge/content-script'
           resolve({})
         }
 
-        console.log('监测到主页')
+        console.log('监测到Home')
         const targetEl = document.querySelector('#status-accordion-wrapper')
         const contentEl = document.querySelector('.contents')
 

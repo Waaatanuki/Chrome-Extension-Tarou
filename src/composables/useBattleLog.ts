@@ -59,7 +59,7 @@ export function handleStartJson(data: BattleStartJson) {
 
   handleMainConditionInfo(boss.condition, leader.condition)
   recordRaidInfo(data)
-  // 处理开幕特动情况start
+  // 处理开幕Special Trigger情况start
   if (data.scenario)
     handleAttackResultJson('start', data as AttackResultJson)
 }
@@ -71,7 +71,7 @@ export function handleAttackResultJson(type: string, data: AttackResultJson, pay
   const scenario = data.scenario
   const isWin = scenario.some(item => item.cmd === 'win' && item.is_last_raid)
   if (isWin && notificationSetting.value.battleWin) {
-    createNotification({ message: `战斗结束`, sound: 'win' })
+    createNotification({ message: `Combat结束`, sound: 'win' })
   }
 
   const isLose = scenario.some(item => item.cmd === 'lose')
@@ -398,17 +398,17 @@ function recordRaidInfo(data: BattleStartJson) {
       use_ability_count: 0,
       use_special_skill_count: 0,
       damage: {
-        total: { comment: '总计', value: 0 },
-        attack: { comment: '通常攻击&反击', value: 0 },
-        ability: { comment: '技能伤害', value: 0 },
-        special: { comment: '奥义伤害', value: 0 },
-        other: { comment: '其他', value: 0 },
+        total: { comment: 'Total', value: 0 },
+        attack: { comment: 'Normal Attack & Counter', value: 0 },
+        ability: { comment: 'Skill DMG', value: 0 },
+        special: { comment: 'C.A. DMG', value: 0 },
+        other: { comment: 'Other', value: 0 },
       },
       damageTaken: {
-        total: { comment: '总计', value: 0 },
-        attack: { comment: '通常攻击&反击', value: 0 },
-        super: { comment: '特动', value: 0 },
-        other: { comment: '其他', value: 0 },
+        total: { comment: 'Total', value: 0 },
+        attack: { comment: 'Normal Attack & Counter', value: 0 },
+        super: { comment: 'Special Trigger', value: 0 },
+        other: { comment: 'Other', value: 0 },
       },
       condition: {
         buff: mergeCondition(cur.condition),
@@ -504,7 +504,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
           return pre
         }, 0)
 
-        // 记录连击数据
+        // 记录DATA数据
         if (!action.effect) {
         // 致死普攻如果不是ta就不记录
           if (action.damage[0] && Object.values(action.damage).every(attack => attack.every(hit => hit.hp !== 0))) {
@@ -608,7 +608,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
     if (action.cmd === 'rematch')
       currentRaid.player.forEach(p => p.is_dead = false)
 
-    // 统计承伤
+    // 统计Damage Taken
     if (action.cmd === 'super' && action.target === 'player')
       processSuperScenario(currentRaid, action as SuperScenario)
     if (action.cmd === 'attack' && action.from === 'boss') {
@@ -636,7 +636,7 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
   })
   currentRaid.damage = damage.toLocaleString()
 
-  // 更新前排角色位置信息
+  // 更新Frontline角色位置信息
   if (data.status?.formation)
     currentRaid.formation = data.status.formation.map(num => Number(num))
 }
@@ -751,7 +751,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
     }
 
     if (payload.ability_sub_param?.length === 2) {
-      // 忍者、魔战一技能ID
+      // 忍者、魔战一SkillID
       const NINJA_MAGIC = ['7030', '201531']
       for (let i = 0; i < 2; i++) {
         if (NINJA_MAGIC.includes(payload.ability_id)) {
@@ -836,7 +836,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
     }
   }
 
-  // 更新技能列表
+  // 更新Skill列表
   const currentAbilityList = getAbilityList(data.status.ability)
   currentAbilityList.forEach((abi) => {
     const hit = currentRaid.abilityList.find(a => a.id === abi.id)

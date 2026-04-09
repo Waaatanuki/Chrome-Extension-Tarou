@@ -33,7 +33,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
       :class="{ 'cursor-grabbing': isDragging, 'cursor-grab': !isDragging }"
     >
       <div ref="handle" flex-1>
-        其他统计
+        Other Stats
       </div>
     </div>
 
@@ -62,7 +62,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
         <div w-130px>
           <ElTooltip
             v-if="player.attackInfo"
-            :content="`总次数: ${player.attackInfo.total} TA: ${getRengeki('ta', player.attackInfo)} DA: ${getRengeki('da', player.attackInfo)}  SA: ${getRengeki('sa', player.attackInfo)}`"
+            :content="`Total Hits: ${player.attackInfo.total} TA: ${getRengeki('ta', player.attackInfo)} DA: ${getRengeki('da', player.attackInfo)}  SA: ${getRengeki('sa', player.attackInfo)}`"
             placement="top" effect="dark" :show-after="500"
           >
             <div ml-5px w-full flex items-center gap-5px text-12px>

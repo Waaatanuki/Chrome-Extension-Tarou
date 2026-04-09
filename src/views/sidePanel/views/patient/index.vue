@@ -58,7 +58,7 @@ function handleExport() {
   if (markedUserList.value.length === 0)
     return ElMessage.info('No data to export')
   const event = new Date()
-  const filename = `标记玩家 ${event.toLocaleDateString()}`
+  const filename = `Bookmark Player ${event.toLocaleDateString()}`
   downloadJSON(JSON.stringify(markedUserList.value, null, 2), filename)
 }
 
@@ -104,17 +104,17 @@ function downloadJSON(dataSet: string, filename: string) {
             {{ user.id }}
           </el-link>
         </el-descriptions-item>
-        <el-descriptions-item label="昵称" width="150" align="center">
+        <el-descriptions-item label="Nickname" width="150" align="center">
           {{ user.name }}
         </el-descriptions-item>
-        <el-descriptions-item label="等级" width="100" align="center">
+        <el-descriptions-item label="Level" width="100" align="center">
           {{ user.rank }}
         </el-descriptions-item>
-        <el-descriptions-item label="备注">
+        <el-descriptions-item label="Note">
           <template #label>
             <div flex items-center justify-between>
               <div fc gap-10px>
-                备注 <el-rate v-model="user.rate" clearable size="small" />
+                Note <el-rate v-model="user.rate" clearable size="small" />
               </div>
               <div i-carbon:trash-can icon-btn @click="markedUserList.splice(idx, 1)" />
             </div>

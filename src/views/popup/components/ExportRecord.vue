@@ -14,7 +14,7 @@ async function exportToImg() {
   try {
     const element = document.querySelector(`#record-container`)!
     const result = await snapdom(element)
-    await result.download({ scale: 1.5, type: 'png', filename: `战斗记录${Date.now()}`, backgroundColor: '#131313' })
+    await result.download({ scale: 1.5, type: 'png', filename: `Battle Record ${Date.now()}`, backgroundColor: '#131313' })
     ElMessage.success('Saved successfully')
   }
   catch (error) {
@@ -32,19 +32,19 @@ async function exportToImg() {
       <div flex flex-col gap-10px>
         <el-card w-300px body-style="padding: 5px">
           <el-descriptions size="small" direction="vertical" :column="3" border>
-            <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
+            <el-descriptions-item label="Quest" label-width="60" :rowspan="2" align="center">
               <img h-44px w-44px :src="getBossImg('enemy', battleExportData.bossImage!, 's')">
             </el-descriptions-item>
-            <el-descriptions-item label="伤害" label-width="113" align="center">
+            <el-descriptions-item label="Damage" label-width="113" align="center">
               {{ battleExportData.damage }}
             </el-descriptions-item>
-            <el-descriptions-item label="操作时长/跑速" align="center">
+            <el-descriptions-item label="Action Duration / Speed" align="center">
               {{ battleExportData.realSpeed }}
             </el-descriptions-item>
-            <el-descriptions-item label="贡献" align="center">
+            <el-descriptions-item label="Contribution" align="center">
               {{ battleExportData.point ? Math.floor(battleExportData.point).toLocaleString() : '-' }}
             </el-descriptions-item>
-            <el-descriptions-item label="回合数" align="center">
+            <el-descriptions-item label="Turn Count" align="center">
               {{ battleExportData.turn }}
             </el-descriptions-item>
           </el-descriptions>

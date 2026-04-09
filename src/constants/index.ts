@@ -1,7 +1,7 @@
 import type { CombatPanelSetting, NotificationSetting } from 'extension'
 
 // export const noticeItem = [
-//   { key: '10_215', comment: '沙漏' },
+//   { key: '10_215', comment: 'Hourglass' },
 //   { key: '17_20004', comment: 'ffj' },
 // ]
 
