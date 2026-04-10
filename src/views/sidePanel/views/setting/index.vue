@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VueDraggableNext } from 'vue-draggable-next'
 import { defaultWidget } from '~/constants'
-import { buildNpcFilter, notificationItem, notificationSetting, widgetList } from '~/logic'
+import { buildNpcFilter, notificationItem, notificationSetting, soundNormalAttack, widgetList } from '~/logic'
 
 function handleDelete(item: string) {
   const index = notificationItem.value.findIndex(i => i === item)
@@ -72,6 +72,7 @@ onMounted(() => {
     <el-checkbox v-model="notificationSetting.sampoFinish" label="探险完成提醒" />
     <el-checkbox v-model="notificationSetting.checkUpdate" label="检测版本更新" />
     <el-checkbox v-model="notificationSetting.pointReach" label="到线提醒" />
+    <el-checkbox v-model="soundNormalAttack" label="攻击发出后提醒（古战场FA）" />
   </div>
   <el-alert :closable="false">
     <template #title>

@@ -1,6 +1,7 @@
 import type { Action, BattleRecord, PartyCondition, Player } from 'extension'
 import type { Ability, AttackResultJson, BattleStartJson, ChatInfoEN, ChatInfoJP, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
 import { battleInfo, battleRecord, notificationSetting, questSetting, userInfo } from '~/logic'
+import { checkAndPlayAbilitySound, checkAndPlayNormalAttackSound } from '~/composables/useAbilitySound'
 
 export function handleStartJson(data: BattleStartJson) {
   const boss = data.boss.param[0]
@@ -764,12 +765,16 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       }
     }
 
+    const pushedId = hit.subAbility
+      ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id ?? hit.id
+      : hit.id
     currentRaid.actionQueue.at(-1)?.actionList.push({
       ...hit,
       icon: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.icon : hit.icon,
-      id: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id : hit.id,
+      id: pushedId,
       aim,
     })
+    checkAndPlayAbilitySound(pushedId)
   }
 
   if (type === 'fc') {
@@ -833,6 +838,7 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
     if (currentRaid.actionQueue.at(index)) {
       currentRaid.actionQueue.at(index)!.actionList.push({ icon: 'attack', id: 'attack', type: 'attack' })
       currentRaid.actionQueue.at(index)!.normalAttackInfo = { ...battleInfo.value.normalAttackInfo! }
+      checkAndPlayNormalAttackSound()
     }
   }
 

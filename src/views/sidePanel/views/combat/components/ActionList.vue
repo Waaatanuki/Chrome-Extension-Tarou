@@ -34,7 +34,12 @@ const { mode = 'vertical' } = defineProps<{ actionQueue: ActionQueue[], mode?: '
         </div>
         <div flex flex-1 flex-wrap items-center justify-start gap-10px p-10px border-b="1  solid #414243">
           <div v-for="action, i in list.actionList" :key="i" fc gap-5px>
-            <img h-47px :src="getActionIcon(action)">
+            <img
+              h-47px
+              :src="getActionIcon(action)"
+              :class="action.type === 'ability' && action.id ? [isAbilitySoundEnabled(action.id) ? 'ring-2 ring-yellow-4' : '', 'cursor-pointer rounded-sm'] : ''"
+              @click.stop="action.type === 'ability' && action.id && toggleAbilitySound(action.id)"
+            >
             <template v-if="action.aim?.length">
               <div class="i-game-icons:fast-forward-button text-xl" />
               <template v-for="a, n in action.aim" :key="n">
