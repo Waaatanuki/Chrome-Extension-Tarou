@@ -13,10 +13,10 @@ export const defaultNotificationSetting: NotificationSetting = {
   replicardEvent: true,
   appearanceQuest: true,
   itemGoal: true,
-  isPointOverLimit: true,
   checkUpdate: true,
   sampoFinish: true,
   pointReach: true,
+  actionTrigger: true,
 }
 
 export const defaultNotificationItem = [

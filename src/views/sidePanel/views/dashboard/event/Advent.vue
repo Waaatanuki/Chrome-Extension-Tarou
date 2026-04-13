@@ -11,7 +11,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
     <template #header>
       <div flex justify-between>
         <div>
-          四象降临(<span :class="{ 'overflowed-point': eventInfo.additional.isOverflowed }">{{ eventInfo.count.toLocaleString() }}</span>)
+          四象降临(<span>{{ eventInfo.count.toLocaleString() }}</span>)
         </div>
         <el-tooltip content="最后更新时间" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
@@ -31,16 +31,3 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
     </div>
   </el-card>
 </template>
-
-<style>
-.overflowed-point {
-  color: #e3b7ff;
-  text-shadow:
-    0px 0px 1px #7f12b7,
-    0px 0px 1px #7f12b7,
-    0px 0px 1px #7f12b7,
-    0px 0px 2px #7f12b7,
-    0px 0px 2px #7f12b7,
-    0px 0px 2px #7f12b7;
-}
-</style>
