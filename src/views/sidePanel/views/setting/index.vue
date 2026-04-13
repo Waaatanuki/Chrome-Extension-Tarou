@@ -72,6 +72,7 @@ onMounted(() => {
     <el-checkbox v-model="notificationSetting.sampoFinish" label="探险完成提醒" />
     <el-checkbox v-model="notificationSetting.checkUpdate" label="检测版本更新" />
     <el-checkbox v-model="notificationSetting.pointReach" label="到线提醒" />
+    <el-checkbox v-model="notificationSetting.actionTrigger" label="动作触发提醒" />
   </div>
   <el-alert :closable="false">
     <template #title>

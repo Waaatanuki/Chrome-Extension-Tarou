@@ -320,6 +320,7 @@ declare module 'extension' {
     checkUpdate: boolean
     sampoFinish: boolean
     pointReach: boolean
+    actionTrigger: boolean
   }
 
   interface ArtifactRule {

@@ -764,10 +764,13 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       }
     }
 
+    const pushedId = hit.subAbility
+      ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id ?? hit.id
+      : hit.id
     currentRaid.actionQueue.at(-1)?.actionList.push({
       ...hit,
       icon: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.icon : hit.icon,
-      id: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id : hit.id,
+      id: pushedId,
       aim,
     })
   }
@@ -835,6 +838,9 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       currentRaid.actionQueue.at(index)!.normalAttackInfo = { ...battleInfo.value.normalAttackInfo! }
     }
   }
+
+  const checkIndex = (type === 'normal' && dieIndex === -1) ? -2 : -1
+  checkActionTrigger(currentRaid.actionQueue.at(checkIndex)?.actionList.at(-1))
 
   // 更新技能列表
   const currentAbilityList = getAbilityList(data.status.ability)

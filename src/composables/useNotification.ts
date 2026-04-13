@@ -1,5 +1,6 @@
+import type { Action } from 'extension'
 import { notificationSound } from '~/constants'
-import { volume } from '~/logic'
+import { actionTriggerList, notificationSetting, volume } from '~/logic'
 
 async function playSoundInTab(sound: keyof typeof notificationSound) {
   const [tab] = await chrome.tabs.query({ url: ['*://*.granbluefantasy.jp/*', '*://gbf.game.mbga.jp/*'] })
@@ -43,6 +44,24 @@ export function createNotification(options: NotificationOptions) {
       })
     }
   })
+}
+
+export function checkActionTrigger(action?: Action) {
+  if (!notificationSetting.value.actionTrigger || !action)
+    return
+
+  const key = `${action.type}_${action.id}`
+  if (actionTriggerList.value.includes(key))
+    createNotification({ message: '动作触发提示', sound: 'tip', iconUrl: getActionIcon(action) })
+}
+
+export function toggleActionTrigger(action: Action) {
+  const key = `${action.type}_${action.id}`
+  const index = actionTriggerList.value.indexOf(key)
+  if (index >= 0)
+    actionTriggerList.value.splice(index, 1)
+  else
+    actionTriggerList.value.push(key)
 }
 
 interface NotificationOptions {

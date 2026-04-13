@@ -61,7 +61,7 @@ async function exportToImg() {
       </div>
     </div>
     <div v-if="battleExportData.detail" m-auto mt-20px w-610px>
-      <ActionList :action-queue="battleExportData.detail.actionQueue" mode="horizontal" />
+      <ActionList :action-queue="battleExportData.detail.actionQueue" :is-export="true" mode="horizontal" />
     </div>
   </div>
 </template>
