@@ -31,7 +31,7 @@ export function useVersionCheck() {
     try {
       const manifest = chrome.runtime.getManifest()
       const localVersion = manifest.version
-      const response = await fetch('https://hub.gitmirror.com/https://raw.githubusercontent.com/Waaatanuki/Chrome-Extension-Tarou/main/changelog.json')
+      const response = await fetch('https://raw.githubusercontent.com/Waaatanuki/Chrome-Extension-Tarou/main/changelog.json')
       const changelogData = await response.json()
 
       if (changelogData.length > 0) {
