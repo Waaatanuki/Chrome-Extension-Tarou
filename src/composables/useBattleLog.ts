@@ -1,7 +1,6 @@
 import type { Action, BattleRecord, PartyCondition, Player } from 'extension'
 import type { Ability, AttackResultJson, BattleStartJson, ChatInfoEN, ChatInfoJP, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
 import { battleInfo, battleRecord, notificationSetting, questSetting, userInfo } from '~/logic'
-import { checkAndPlayAbilitySound, checkAndPlayNormalAttackSound } from '~/composables/useAbilitySound'
 
 export function handleStartJson(data: BattleStartJson) {
   const boss = data.boss.param[0]
@@ -774,7 +773,6 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       id: pushedId,
       aim,
     })
-    checkAndPlayAbilitySound(pushedId)
   }
 
   if (type === 'fc') {
@@ -838,9 +836,11 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
     if (currentRaid.actionQueue.at(index)) {
       currentRaid.actionQueue.at(index)!.actionList.push({ icon: 'attack', id: 'attack', type: 'attack' })
       currentRaid.actionQueue.at(index)!.normalAttackInfo = { ...battleInfo.value.normalAttackInfo! }
-      checkAndPlayNormalAttackSound()
     }
   }
+
+  const checkIndex = (type === 'normal' && dieIndex === -1) ? -2 : -1
+  checkActionTrigger(currentRaid.actionQueue.at(checkIndex)?.actionList.at(-1))
 
   // 更新技能列表
   const currentAbilityList = getAbilityList(data.status.ability)

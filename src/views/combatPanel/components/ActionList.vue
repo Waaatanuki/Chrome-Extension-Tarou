@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { battleInfo, battleRecord, combatPanelSetting } from '~/logic'
+import { actionTriggerList, battleInfo, battleRecord, combatPanelSetting } from '~/logic'
 import NormalAttackInfo from '~/views/sidePanel/views/combat/components/NormalAttackInfo.vue'
 
 const { position } = defineProps<{ position: { x: number, y: number } }>()
@@ -67,10 +67,10 @@ watch(actionQueue, () => {
               <div flex flex-1 flex-wrap items-center justify-start gap-10px p-10px border-b="1  solid #414243">
                 <div v-for="action, i in list.actionList" :key="i" fc gap-5px>
                   <img
-                    h-47px
+                    h-47px cursor-pointer
                     :src="getActionIcon(action)"
-                    :class="action.type === 'ability' && action.id ? [isAbilitySoundEnabled(action.id) ? 'ring-2 ring-yellow-4' : '', 'cursor-pointer rounded-sm'] : ''"
-                    @click.stop="action.type === 'ability' && action.id && toggleAbilitySound(action.id)"
+                    :class="actionTriggerList.includes(`${action.type}_${action.id}`) ? 'ring-3 rounded ring-red-6' : ''"
+                    @click="toggleActionTrigger(action)"
                   >
                   <template v-if="action.aim?.length">
                     <div class="i-game-icons:fast-forward-button text-xl" />

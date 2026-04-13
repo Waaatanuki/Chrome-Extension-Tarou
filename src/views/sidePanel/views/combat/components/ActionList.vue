@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { ActionQueue } from 'extension'
+import { actionTriggerList } from '~/logic'
 import NormalAttackInfo from './NormalAttackInfo.vue'
 
-const { mode = 'vertical' } = defineProps<{ actionQueue: ActionQueue[], mode?: 'horizontal' | 'vertical' }>()
+const { mode = 'vertical', actionQueue, isExport = false } = defineProps<{ actionQueue: ActionQueue[], isExport?: boolean, mode?: 'horizontal' | 'vertical' }>()
 </script>
 
 <template>
@@ -35,10 +36,10 @@ const { mode = 'vertical' } = defineProps<{ actionQueue: ActionQueue[], mode?: '
         <div flex flex-1 flex-wrap items-center justify-start gap-10px p-10px border-b="1  solid #414243">
           <div v-for="action, i in list.actionList" :key="i" fc gap-5px>
             <img
-              h-47px
+              h-47px cursor-pointer
               :src="getActionIcon(action)"
-              :class="action.type === 'ability' && action.id ? [isAbilitySoundEnabled(action.id) ? 'ring-2 ring-yellow-4' : '', 'cursor-pointer rounded-sm'] : ''"
-              @click.stop="action.type === 'ability' && action.id && toggleAbilitySound(action.id)"
+              :class="actionTriggerList.includes(`${action.type}_${action.id}`) && !isExport ? 'ring-3 rounded ring-red-6' : ''"
+              @click="toggleActionTrigger(action)"
             >
             <template v-if="action.aim?.length">
               <div class="i-game-icons:fast-forward-button text-xl" />

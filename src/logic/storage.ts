@@ -40,8 +40,7 @@ export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff',
 export const questSetting = useWebExtensionStorage<QuestSetting[]>('questSetting', [])
 export const onlyShowSpecBuff = useWebExtensionStorage<boolean>('onlyShowSpecBuff', false)
 export const battleExportData = useWebExtensionStorage<Partial<BattleExport>>('battleExportData', {})
-export const soundTriggerAbilities = useWebExtensionStorage<string[]>('soundTriggerAbilities', [])
-export const soundNormalAttack = useWebExtensionStorage<boolean>('soundNormalAttack', false)
+export const actionTriggerList = useWebExtensionStorage<string[]>('actionTriggerList', [])
 
 // Drop
 export const questConfig = useWebExtensionStorage<Quest[]>('questConfig', [])
