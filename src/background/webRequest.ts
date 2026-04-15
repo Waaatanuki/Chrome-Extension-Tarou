@@ -208,8 +208,8 @@ function getTreasureList(domStr: string) {
     if (isItem) {
       const imgSrc = $(elem).find('.img-treasure-item').attr('src')
       const imgAlt = $(elem).find('.img-treasure-item').attr('alt')
-      const itemDataKey = $(elem).data().key as string
-      const itemDataId = $(elem).data().itemId as string
+      const itemDataKey = String($(elem).data().key)
+      const itemDataId = $(elem).data().itemId
       const itemKey = imgSrcToKey(imgSrc)
       if (notificationItem.value.includes(itemKey))
         showNotifications(itemKey)
