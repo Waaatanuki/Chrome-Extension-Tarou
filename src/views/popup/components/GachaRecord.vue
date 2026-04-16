@@ -13,6 +13,10 @@ const summary = computed(() =>
     return pre
   }, { count: 0, ssrNum: 0 }),
 )
+
+function handleDelete(index: number) {
+  gachaRecord.value.splice(index, 1)
+}
 </script>
 
 <template>
@@ -20,10 +24,10 @@ const summary = computed(() =>
     <div mb-15px flex items-center justify-between>
       <div>
         <ElCheckboxGroup v-model="resultFilter.type">
-          <ElCheckboxButton label="weapon">
+          <ElCheckboxButton value="weapon">
             武器
           </ElCheckboxButton>
-          <ElCheckboxButton label="summon">
+          <ElCheckboxButton value="summon">
             召唤
           </ElCheckboxButton>
         </ElCheckboxGroup>
@@ -36,12 +40,15 @@ const summary = computed(() =>
       </ElTag>
     </div>
     <ElScrollbar :max-height="height - 100">
-      <div v-for="data in gachaRecord" :key="data.random_key" mb-15px>
+      <div v-for="(data, index) in gachaRecord" :key="data.random_key" relative mb-15px class="group">
         <ElCard>
           <template #header>
             <div flex items-center justify-between>
-              <div>
+              <div fc gap-4>
                 <img w-200px :src="getGachaBanner(data.random_key)">
+                <TheButton class="invisible group-hover:visible" @click="handleDelete(index)">
+                  删除
+                </TheButton>
               </div>
               <div flex flex-col items-end justify-center gap-10px>
                 <div>{{ `${data.service_start} - ${data.service_end}` }}</div>
