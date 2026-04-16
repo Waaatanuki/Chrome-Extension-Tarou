@@ -3,7 +3,7 @@ import { displayList } from '~/logic'
 </script>
 
 <template>
-  <el-card v-if="displayList.length" body-style="padding: 10px" h-full w-300px>
+  <el-card v-if="displayList.length" h-full w-300px>
     <div flex flex-wrap gap-7px>
       <el-tooltip
         v-for="item in displayList" :key="item.itemKey"

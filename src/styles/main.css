@@ -61,10 +61,6 @@ body {
   left: 0px;
 }
 
-.my-card-header {
-  padding: 10px !important;
-}
-
 .text-max {
   color: #f0cb4f;
 }
@@ -83,4 +79,12 @@ body {
 
 .draglist-leave-active {
   position: absolute;
+}
+
+.el-card__header {
+  padding: 10px !important;
+}
+
+.el-card__body {
+  padding: 10px !important;
 }

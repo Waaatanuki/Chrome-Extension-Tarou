@@ -18,7 +18,7 @@ const loopNum = computed(() => {
 </script>
 
 <template>
-  <el-card v-if="eventInfo && eventInfo.isActive" body-style="padding: 10px" header-class="my-card-header" h-full w-300px>
+  <el-card v-if="eventInfo && eventInfo.isActive" h-full w-300px>
     <template #header>
       <div flex justify-between>
         <div>

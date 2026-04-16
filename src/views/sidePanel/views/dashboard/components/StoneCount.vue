@@ -10,7 +10,7 @@ function reset() {
 </script>
 
 <template>
-  <el-card body-style="padding: 10px" header-class="my-card-header" h-full w-300px>
+  <el-card h-full w-300px>
     <template #header>
       <div flex justify-between>
         <div fc gap-2>

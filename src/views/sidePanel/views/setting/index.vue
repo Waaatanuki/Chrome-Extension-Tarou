@@ -86,7 +86,7 @@ onMounted(() => {
     </template>
   </el-alert>
   <div px-5>
-    <el-card my-10px body-style="padding: 10px">
+    <el-card my-10px>
       <div flex flex-wrap gap-12px>
         <div v-for="item in notificationItem" :key="item" relative fc flex-col select-none class="group">
           <img h-50px w-50px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`">
@@ -109,7 +109,7 @@ onMounted(() => {
     </template>
   </el-alert>
   <div v-if="buildNpcFilter.length" px-5>
-    <el-card my-10px body-style="padding: 10px">
+    <el-card my-10px>
       <div flex flex-wrap gap-12px>
         <div v-for="item in buildNpcFilter" :key="item" relative fc flex-col select-none class="group">
           <img :src="getAssetImg('npc', `${item}_01`, 's')" h-50px w-50px>

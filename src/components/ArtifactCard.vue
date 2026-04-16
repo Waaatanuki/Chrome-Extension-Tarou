@@ -103,7 +103,7 @@ function isRecommendSkill(skill_id: number) {
 </script>
 
 <template>
-  <el-card v-if="isTarget" body-style="padding: 10px" relative h-full w-300px>
+  <el-card v-if="isTarget" relative h-full w-300px>
     <div flex flex-col>
       <el-tag absolute left-0 top-0 type="info" size="large">
         {{ position }}
