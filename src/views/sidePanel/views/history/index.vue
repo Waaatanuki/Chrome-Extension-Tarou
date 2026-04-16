@@ -125,7 +125,7 @@ function copyLink(key: string) {
 
 <template>
   <div flex flex-col flex-wrap gap-10px>
-    <el-card v-for="data, idx in battleRecord" :key="idx" w-300px body-style="padding: 5px">
+    <el-card v-for="data, idx in battleRecord" :key="idx" w-300px body-style="padding: 5px !important">
       <el-descriptions size="small" direction="vertical" :column="3" border>
         <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
           <img h-44px w-44px :src="getBossImg('enemy', data.imgId!, 's')">
