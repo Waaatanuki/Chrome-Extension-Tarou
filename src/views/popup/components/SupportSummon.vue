@@ -5,7 +5,7 @@ const order = [1, 2, 3, 4, 5, 6]
 </script>
 
 <template>
-  <div v-if="userInfo.imgPc" relative h-285px w-530px>
+  <div v-if="userInfo.imgPc" relative h-285px w-650px>
     <img absolute h-full w-full :src="getLocalImg('frame')">
     <div relative z-10 flex gap-10px px-25px py-20px>
       <div>
@@ -14,9 +14,9 @@ const order = [1, 2, 3, 4, 5, 6]
       <div v-if="userInfo.support" flex flex-col items-stretch justify-between>
         <div flex gap-10px>
           <div v-for="i in order" :key="i" space-y-10px>
-            <div v-for="j in 2" :key="`${i}${j}`" relative cursor-pointer @click="userInfo.support[`${i}${j - 1}`].necessary = !userInfo.support[`${i}${j - 1}`]?.necessary">
+            <div v-for="j in 3" :key="`${i}${j}`" relative cursor-pointer @click="userInfo.support[`${i}${j - 1}`].necessary = !userInfo.support[`${i}${j - 1}`]?.necessary">
               <template v-if="userInfo.support[`${i}${j - 1}`]">
-                <img w-50px :src="getAssetImg('summon', userInfo.support[`${i}${j - 1}`].imgId, 'raid_normal') ">
+                <img w-70px :src="getAssetImg('summon', userInfo.support[`${i}${j - 1}`].imgId, 's') ">
                 <div v-if="userInfo.support[`${i}${j - 1}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`${i}${j - 1}`].rank}-style`">
                   {{ `Lv${userInfo.support[`${i}${j - 1}`].name.match(/\d+/)![0]}` }}
                 </div>
@@ -24,12 +24,12 @@ const order = [1, 2, 3, 4, 5, 6]
               </template>
             </div>
           </div>
-          <div space-y-10px>
-            <div v-for="i in 2" :key="i" space-y-2px>
+          <div space-y-6px>
+            <div v-for="i in 2" :key="i" space-y-6px>
               <div v-for="j in 2" :key="`0${2 * i + j - 3}`" relative cursor-pointer @click="userInfo.support[`0${2 * i + j - 3}`].necessary = !userInfo.support[`0${2 * i + j - 3}`]?.necessary">
                 <template v-if="userInfo.support[`0${2 * i + j - 3}`]">
-                  <img v-if="userInfo.support[`0${2 * i + j - 3}`].imgId !== 'empty'" w-50px :src="getAssetImg('summon', userInfo.support[`0${2 * i + j - 3}`].imgId, 's') ">
-                  <div v-else h-50px w-50px />
+                  <img v-if="userInfo.support[`0${2 * i + j - 3}`].imgId !== 'empty'" w-53px :src="getAssetImg('summon', userInfo.support[`0${2 * i + j - 3}`].imgId, 's') ">
+                  <div v-else h-53px w-53px />
                   <div v-if="userInfo.support[`0${2 * i + j - 3}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`0${2 * i + j - 3}`].rank}-style`">
                     {{ `Lv${userInfo.support[`0${2 * i + j - 3}`].name.match(/\d+/)![0]}` }}
                   </div>
