@@ -1,42 +1,36 @@
 <script setup lang="ts">
 import { userInfo } from '~/logic'
-
-const order = [1, 2, 3, 4, 5, 6]
 </script>
 
 <template>
-  <div v-if="userInfo.imgPc" relative h-285px w-650px>
+  <div v-if="userInfo.imgPc" relative h-300px w-650px>
     <img absolute h-full w-full :src="getLocalImg('frame')">
     <div relative z-10 flex gap-10px px-25px py-20px>
       <div>
-        <img w-60px :src="getAssetImg('leader', userInfo.imgPc, 'raid_chain')">
+        <img w-65px :src="getAssetImg('leader', userInfo.imgPc, 'raid_chain')">
       </div>
-      <div v-if="userInfo.support" flex flex-col items-stretch justify-between>
+      <div v-if="userInfo.support" flex flex-col justify-between>
         <div flex gap-10px>
-          <div v-for="i in order" :key="i" space-y-10px>
-            <div v-for="j in 3" :key="`${i}${j}`" relative cursor-pointer>
-              <template v-if="userInfo.support[`${i}${j - 1}`]?.name">
-                <img w-70px :src="getAssetImg('summon', userInfo.support[`${i}${j - 1}`].imgId, 's') ">
-                <div v-if="userInfo.support[`${i}${j - 1}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`${i}${j - 1}`].rank}-style`">
-                  {{ `Lv${userInfo.support[`${i}${j - 1}`].name.match(/\d+/)![0]}` }}
-                </div>
-              </template>
-              <template v-else>
-                <div h-70px w-70px />
-              </template>
-            </div>
-          </div>
-          <div space-y-6px>
-            <div v-for="i in 2" :key="i" space-y-6px>
-              <div v-for="j in 2" :key="`0${2 * i + j - 3}`" relative cursor-pointer>
-                <template v-if="userInfo.support[`0${2 * i + j - 3}`]">
-                  <img v-if="userInfo.support[`0${2 * i + j - 3}`].imgId !== 'empty'" w-53px :src="getAssetImg('summon', userInfo.support[`0${2 * i + j - 3}`].imgId, 's') ">
-                  <div v-else h-53px w-53px />
-                  <div v-if="userInfo.support[`0${2 * i + j - 3}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`0${2 * i + j - 3}`].rank}-style`">
-                    {{ `Lv${userInfo.support[`0${2 * i + j - 3}`].name.match(/\d+/)![0]}` }}
+          <div grid grid-cols-6 gap-10px>
+            <div v-for="i in 6" :key="i" grid gap-10px>
+              <div v-for="j in 3" :key="`${i}${j}`" relative h-70px w-70px>
+                <template v-if="userInfo.support[`${i}${j - 1}`]?.name">
+                  <img :src="getAssetImg('summon', userInfo.support[`${i}${j - 1}`].imgId, 's') ">
+                  <div absolute bottom-0 right-0 select-none rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`${i}${j - 1}`].rank}-style`">
+                    {{ `Lv${userInfo.support[`${i}${j - 1}`].name.match(/\d+/)![0]}` }}
                   </div>
                 </template>
               </div>
+            </div>
+          </div>
+          <div grid gap-4px>
+            <div v-for="i in 4" :key="i" relative h-53px w-53px>
+              <template v-if="userInfo.support[`0${i - 1}`]?.name">
+                <img :src="getAssetImg('summon', userInfo.support[`0${i - 1}`].imgId, 's') ">
+                <div absolute bottom-0 right-0 select-none rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`0${i - 1}`].rank}-style`">
+                  {{ `Lv${userInfo.support[`0${i - 1}`].name.match(/\d+/)![0]}` }}
+                </div>
+              </template>
             </div>
           </div>
         </div>
