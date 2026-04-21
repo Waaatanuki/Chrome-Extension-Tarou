@@ -31,7 +31,7 @@ function handleClick(quest: typeof skipQuest.value.list[number]) {
           </div>
           <img
             w-full
-            :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/quest/assets/${quest.thumbnailImage}.png`"
+            :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/quest/assets/${quest.thumbnailImage}.png`"
           >
         </div>
       </div>

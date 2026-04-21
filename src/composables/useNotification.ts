@@ -9,7 +9,7 @@ async function playSoundInTab(sound: keyof typeof notificationSound) {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: playSound,
-      args: [`https://prd-game-a5-granbluefantasy.akamaized.net/assets/sound/se/${notificationSound[sound]}.mp3`, volume.value],
+      args: [`https://prd-game-a-granbluefantasy.akamaized.net/assets/sound/se/${notificationSound[sound]}.mp3`, volume.value],
     }).catch((err) => {
       console.log(err)
     })

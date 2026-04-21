@@ -22,7 +22,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
       <MissionList :mission-list="eventInfo.mission" />
       <div fc gap-10px>
         <div v-for="reward in eventInfo.additional.defeatReward" :key="reward.key" fc flex-col text-12px>
-          <img w-52px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/event/defeat/${reward.key}/s/5000.jpg`">
+          <img w-52px :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/event/defeat/${reward.key}/s/5000.jpg`">
           <div>
             {{ `${reward.value}枚` }}
           </div>

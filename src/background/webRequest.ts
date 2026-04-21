@@ -255,7 +255,7 @@ function showNotifications(item: string) {
 
   createNotification({
     message: `G${str}t☆Daze!`,
-    iconUrl: `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`,
+    iconUrl: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`,
     sound: 'drop',
   })
 }

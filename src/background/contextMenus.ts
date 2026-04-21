@@ -39,7 +39,7 @@ export function setupContextMenuListener() {
           notificationItem.value.push(itemKey)
           createNotification({
             message: '添加成功',
-            iconUrl: `https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${itemKey}`,
+            iconUrl: `https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets${itemKey}`,
             sound: 'tip',
           })
         }

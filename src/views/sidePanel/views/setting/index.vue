@@ -89,7 +89,7 @@ onMounted(() => {
     <el-card my-10px>
       <div flex flex-wrap gap-12px>
         <div v-for="item in notificationItem" :key="item" relative fc flex-col select-none class="group">
-          <img h-50px w-50px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`">
+          <img h-50px w-50px :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`">
           <div absolute hidden h-full w-full fc bg-black opacity-70 group-hover:flex>
             <div i-carbon:close-filled absolute icon-btn @click="handleDelete(item)" />
           </div>

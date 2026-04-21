@@ -951,7 +951,7 @@ function handleResultContent(responseData: any) {
   if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent) {
     createNotification({
       message: '沙盒宝箱提醒',
-      iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png',
+      iconUrl: 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png',
       sound: 'hell',
     })
   }
