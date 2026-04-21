@@ -303,7 +303,6 @@ declare module 'extension' {
       imgId: string
       name: string
       rank: string
-      necessary: boolean
     }
   }
 

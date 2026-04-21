@@ -101,10 +101,10 @@ export function setupWebRequestListener() {
               const name = $(`#js-fix-summon${i}${j}-name`).text()
               const infoClass = $(`#js-fix-summon${i}${j}-info`).attr('class')
               const rank = infoClass?.match(/bless-(.*?)-style/)
-              userInfo.value.support[`${i}${j}`] = { imgId, name, rank: rank ? rank[1] : '', necessary: userInfo.value.support[`${i}${j}`]?.necessary ?? false }
+              userInfo.value.support[`${i}${j}`] = { imgId, name, rank: rank ? rank[1] : '' }
             }
             else {
-              userInfo.value.support[`${i}${j}`] = { imgId: 'empty', name: '', rank: '', necessary: userInfo.value.support[`${i}${j}`]?.necessary ?? false }
+              userInfo.value.support[`${i}${j}`] = { imgId: 'empty', name: '', rank: '' }
             }
           }
         }
