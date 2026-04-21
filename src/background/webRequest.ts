@@ -95,8 +95,6 @@ export function setupWebRequestListener() {
 
         for (let i = 0; i < 7; i++) {
           for (let j = 0; j < 4; j++) {
-            if (i !== 0 && j > 1)
-              continue
             const target = $(`#js-fix-summon${i}${j}`)
             if (target.length) {
               const imgId = String(target.data().imageId)

@@ -15,12 +15,15 @@ const order = [1, 2, 3, 4, 5, 6]
         <div flex gap-10px>
           <div v-for="i in order" :key="i" space-y-10px>
             <div v-for="j in 3" :key="`${i}${j}`" relative cursor-pointer @click="userInfo.support[`${i}${j - 1}`].necessary = !userInfo.support[`${i}${j - 1}`]?.necessary">
-              <template v-if="userInfo.support[`${i}${j - 1}`]">
+              <template v-if="userInfo.support[`${i}${j - 1}`].name">
                 <img w-70px :src="getAssetImg('summon', userInfo.support[`${i}${j - 1}`].imgId, 's') ">
                 <div v-if="userInfo.support[`${i}${j - 1}`].name" absolute bottom-0 right-0 rounded bg-slate px-1 text-10px :class="`bless-${userInfo.support[`${i}${j - 1}`].rank}-style`">
                   {{ `Lv${userInfo.support[`${i}${j - 1}`].name.match(/\d+/)![0]}` }}
                 </div>
                 <div v-if="userInfo.support[`${i}${j - 1}`].necessary" i-twemoji:pushpin absolute right--8px top--8px />
+              </template>
+              <template v-else>
+                <div h-70px w-70px />
               </template>
             </div>
           </div>
