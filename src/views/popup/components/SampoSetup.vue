@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { sampoSetup } from '~/logic'
 
-const imgUri = 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp'
+const imgUri = 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp'
 
 const ParamEnum = {
   power: { key: 'power', label: 'Combat', id: 1 },

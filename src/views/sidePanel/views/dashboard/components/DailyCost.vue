@@ -8,7 +8,7 @@ const showList = computed(() => {
 </script>
 
 <template>
-  <el-card v-if="dailyCost.dateTime" body-style="padding: 10px" header-class="my-card-header" h-full w-300px>
+  <el-card v-if="dailyCost.dateTime" h-full w-300px>
     <template #header>
       <div flex items-center justify-between>
         <el-tooltip content="Click to open daily drop stats" placement="top">

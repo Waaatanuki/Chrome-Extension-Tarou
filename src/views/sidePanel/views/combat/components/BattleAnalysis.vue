@@ -10,7 +10,7 @@ const tabName = defineModel<string>({ default: 'damage' })
 </script>
 
 <template>
-  <ElCard v-if="player" w-300px shrink-0 body-style="padding: 5px">
+  <ElCard v-if="player" w-300px shrink-0 body-style="padding: 5px !important">
     <ElTabs v-model="tabName" stretch>
       <ElTabPane v-if="turn" label="Character Status" name="status">
         <PlayerStatus :player-info="player" :formation="formation" :turn="turn" />

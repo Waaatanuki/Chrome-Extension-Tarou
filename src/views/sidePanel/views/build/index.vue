@@ -50,7 +50,7 @@ function handleCommand(command: DetailType, data: BuildResponse) {
   </div>
   <div mt-10px flex flex-col flex-wrap gap-10px>
     <el-result v-if="msg" icon="info" :sub-title="msg" />
-    <el-card v-for="data, idx in buildList" :key="idx" w-300px body-style="padding: 5px">
+    <el-card v-for="data, idx in buildList" :key="idx" w-300px body-style="padding: 5px !important">
       <el-descriptions size="small" direction="vertical" :column="3" border>
         <el-descriptions-item label="Quest" label-width="60" :rowspan="2" align="center">
           <img v-if="data.bossImage" h-44px w-44px :src="getBossImg('enemy', data.bossImage, 's')">

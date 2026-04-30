@@ -40,7 +40,7 @@ const msg = computed(() => {
 </script>
 
 <template>
-  <el-card body-style="padding: 10px" h-full w-300px>
+  <el-card h-full w-300px>
     <div flex gap-10px text-sm>
       <div w-90px shrink-0>
         <img w-full draggable="false" :src="getQuestImg(data.questId, 'lobby')">

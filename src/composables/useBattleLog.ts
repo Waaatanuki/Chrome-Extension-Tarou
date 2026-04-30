@@ -383,10 +383,18 @@ function handleMainConditionInfo(bossCondition?: Condition, playerCondition?: Co
 }
 
 function recordRaidInfo(data: BattleStartJson) {
-  const isRecorded = battleRecord.value.some(b => String(b.raid_id) === battleInfo.value.bossInfo?.battleId)
+  const hitRecord = battleRecord.value.find(b => String(b.raid_id) === battleInfo.value.bossInfo?.battleId)
 
-  if (isRecorded)
+  if (hitRecord) {
+    // 防止死亡事件没有捕获时，角色存活状态与实际不符
+    for (const player of data.player.param) {
+      const hitPlayer = hitRecord.player.find(p => p.pid === player.pid.split('_')[0])
+      if (hitPlayer) {
+        hitPlayer.is_dead = !player.alive
+      }
+    }
     return
+  }
   const boss = data.boss.param[0]
 
   const player = data.player.param.reduce<Player[]>((pre, cur) => {
@@ -764,10 +772,13 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
       }
     }
 
+    const pushedId = hit.subAbility
+      ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id ?? hit.id
+      : hit.id
     currentRaid.actionQueue.at(-1)?.actionList.push({
       ...hit,
       icon: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.icon : hit.icon,
-      id: hit.subAbility ? hit.subAbility.find(a => a.index === String(payload.ability_sub_param[0]))?.id : hit.id,
+      id: pushedId,
       aim,
     })
   }
@@ -836,7 +847,10 @@ function handleActionQueue(type: string, data: AttackResultJson, payload?: Resul
     }
   }
 
-  // 更新Skill列表
+  const checkIndex = (type === 'normal' && dieIndex === -1) ? -2 : -1
+  checkActionTrigger(currentRaid.actionQueue.at(checkIndex)?.actionList.at(-1))
+
+  // 更新技能列表
   const currentAbilityList = getAbilityList(data.status.ability)
   currentAbilityList.forEach((abi) => {
     const hit = currentRaid.abilityList.find(a => a.id === abi.id)

@@ -30,7 +30,7 @@ async function exportToImg() {
   <div id="record-container" p-4>
     <div v-if="battleExportData" m-auto w-620px fc gap-10px rounded p-10px ring-1 ring-neutral-7>
       <div flex flex-col gap-10px>
-        <el-card w-300px body-style="padding: 5px">
+        <el-card w-300px body-style="padding: 5px !important">
           <el-descriptions size="small" direction="vertical" :column="3" border>
             <el-descriptions-item label="Quest" label-width="60" :rowspan="2" align="center">
               <img h-44px w-44px :src="getBossImg('enemy', battleExportData.bossImage!, 's')">
@@ -61,7 +61,7 @@ async function exportToImg() {
       </div>
     </div>
     <div v-if="battleExportData.detail" m-auto mt-20px w-610px>
-      <ActionList :action-queue="battleExportData.detail.actionQueue" mode="horizontal" />
+      <ActionList :action-queue="battleExportData.detail.actionQueue" :is-export="true" mode="horizontal" />
     </div>
   </div>
 </template>

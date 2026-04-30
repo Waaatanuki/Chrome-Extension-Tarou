@@ -11,7 +11,7 @@ function handleClick(quest: typeof skipQuest.value.list[number]) {
 </script>
 
 <template>
-  <el-card body-style="padding: 10px" header-class="my-card-header" h-full w-300px>
+  <el-card h-full w-300px>
     <template #header>
       <div flex justify-between>
         <div>
@@ -31,7 +31,7 @@ function handleClick(quest: typeof skipQuest.value.list[number]) {
           </div>
           <img
             w-full
-            :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/quest/assets/${quest.thumbnailImage}.png`"
+            :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/quest/assets/${quest.thumbnailImage}.png`"
           >
         </div>
       </div>

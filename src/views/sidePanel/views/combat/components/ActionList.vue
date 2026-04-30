@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { ActionQueue } from 'extension'
+import { actionTriggerList } from '~/logic'
 import NormalAttackInfo from './NormalAttackInfo.vue'
 
-const { mode = 'vertical' } = defineProps<{ actionQueue: ActionQueue[], mode?: 'horizontal' | 'vertical' }>()
+const { mode = 'vertical', actionQueue, isExport = false } = defineProps<{ actionQueue: ActionQueue[], isExport?: boolean, mode?: 'horizontal' | 'vertical' }>()
 </script>
 
 <template>
@@ -32,13 +33,18 @@ const { mode = 'vertical' } = defineProps<{ actionQueue: ActionQueue[], mode?: '
             {{ Math.ceil(list.bossHpPercent) }}
           </div>
         </div>
-        <div flex flex-1 flex-wrap items-center justify-start gap-10px p-10px border-b="1  solid #414243">
+        <div flex flex-1 flex-wrap items-center justify-start gap-8px p-10px border-b="1  solid #414243">
           <div v-for="action, i in list.actionList" :key="i" fc gap-5px>
-            <img h-47px :src="getActionIcon(action)">
+            <img
+              h-45px cursor-pointer
+              :src="getActionIcon(action)"
+              :class="actionTriggerList.includes(`${action.type}_${action.id}`) && !isExport ? 'ring-3 rounded ring-red-6' : ''"
+              @click="toggleActionTrigger(action)"
+            >
             <template v-if="action.aim?.length">
               <div class="i-game-icons:fast-forward-button text-xl" />
               <template v-for="a, n in action.aim" :key="n">
-                <img h-47px :src="getOfficialUrl(a)">
+                <img h-45px :src="getOfficialUrl(a)">
               </template>
             </template>
           </div>

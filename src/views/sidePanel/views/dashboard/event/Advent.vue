@@ -7,11 +7,11 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
 </script>
 
 <template>
-  <el-card v-if="eventInfo && eventInfo.isActive" body-style="padding: 10px" header-class="my-card-header" h-full w-300px>
+  <el-card v-if="eventInfo && eventInfo.isActive" h-full w-300px>
     <template #header>
       <div flex justify-between>
         <div>
-          Rise of the Beasts(<span :class="{ 'overflowed-point': eventInfo.additional.isOverflowed }">{{ eventInfo.count.toLocaleString() }}</span>)
+          RotB(<span>{{ eventInfo.count.toLocaleString() }}</span>)
         </div>
         <el-tooltip content="Last updated" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}
@@ -22,7 +22,7 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
       <MissionList :mission-list="eventInfo.mission" />
       <div fc gap-10px>
         <div v-for="reward in eventInfo.additional.defeatReward" :key="reward.key" fc flex-col text-12px>
-          <img w-52px :src="`https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/item/event/defeat/${reward.key}/s/5000.jpg`">
+          <img w-52px :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/event/defeat/${reward.key}/s/5000.jpg`">
           <div>
             {{ `${reward.value} tokens` }}
           </div>
@@ -31,16 +31,3 @@ const eventInfo = computed(() => eventList.value.find(event => event.type === 'a
     </div>
   </el-card>
 </template>
-
-<style>
-.overflowed-point {
-  color: #e3b7ff;
-  text-shadow:
-    0px 0px 1px #7f12b7,
-    0px 0px 1px #7f12b7,
-    0px 0px 1px #7f12b7,
-    0px 0px 2px #7f12b7,
-    0px 0px 2px #7f12b7,
-    0px 0px 2px #7f12b7;
-}
-</style>

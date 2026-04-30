@@ -66,7 +66,7 @@ function getRengeki(type: 'sa' | 'da' | 'ta', info: { total: number, sa: number,
             placement="top" effect="dark" :show-after="500"
           >
             <div ml-5px w-full flex items-center gap-5px text-12px>
-              <img w-30px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/skill/ex_skill_ta.png">
+              <img w-30px src="https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/skill/ex_skill_ta.png">
               <div>
                 {{ `${player.attackInfo.ta}/${player.attackInfo.total} (${getRengeki('ta', player.attackInfo)})` }}
               </div>

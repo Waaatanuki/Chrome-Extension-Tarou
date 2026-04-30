@@ -8,6 +8,12 @@ const { artifact, filter } = defineProps<{ artifact: Artifact, position: string,
 type SkillName = 'skill1_info' | 'skill2_info' | 'skill3_info' | 'skill4_info'
 const skillNameList: SkillName[] = ['skill1_info', 'skill2_info', 'skill3_info', 'skill4_info']
 
+const PointTypeColorMap = {
+  success: 'ring-#67C23A',
+  warning: 'ring-#E6A23C',
+  danger: 'ring-#F56C6C',
+}
+
 const currentArtifactRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 const artifactSkillFlatList = computed(() => Object.values(artifactSkillList).flat())
 
@@ -103,17 +109,13 @@ function isRecommendSkill(skill_id: number) {
 </script>
 
 <template>
-  <el-card v-if="isTarget" body-style="padding: 10px" relative h-full w-300px>
+  <el-card v-if="isTarget" relative h-full w-300px>
     <div flex flex-col>
       <el-tag absolute left-0 top-0 type="info" size="large">
         {{ position }}
       </el-tag>
 
-      <el-tag absolute right-0 top-0 size="large" :type="getPointType(artifact)">
-        Score: {{ artifact.rarity === '3' ? getPoint(artifact) : '∞' }}
-      </el-tag>
-
-      <div flex items-center gap-6 pl-55px>
+      <div relative flex items-center gap-6 pl-55px>
         <div relative h-50px w-50px shrink-0>
           <img :src="getAssetImg('artifact', artifact.artifact_id, 's')">
           <img absolute bottom-0 left-0 :src="getArtifactIcon(`icn_type_${artifact.attribute}`)" width="30%" height="30%">
@@ -125,6 +127,10 @@ function isRecommendSkill(skill_id: number) {
           <div v-else h-50px w-50px fc text-10px ring-1 ring-neutral-7>
             EMPTY
           </div>
+        </div>
+
+        <div absolute right-2 top-2 h-35px w-35px fc rounded-full ring-3 :class="PointTypeColorMap[getPointType(artifact)]">
+          {{ artifact.rarity === '3' ? getPoint(artifact) : '∞' }}
         </div>
       </div>
 

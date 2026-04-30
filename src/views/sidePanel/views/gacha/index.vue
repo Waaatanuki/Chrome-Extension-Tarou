@@ -125,7 +125,7 @@ function closeAnimation() {
         </div>
       </el-scrollbar>
     </div>
-    <el-card header-class="my-card-header" body-style="padding: 10px">
+    <el-card>
       <template #header>
         <div v-if="gachaInfo.id" flex items-center justify-between text-12px>
           <div>

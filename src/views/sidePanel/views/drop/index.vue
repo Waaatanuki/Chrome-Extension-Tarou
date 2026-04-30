@@ -95,7 +95,7 @@ onMounted(() => {
         </div>
       </template>
       <template #default>
-        <el-card v-if="isManage" body-style="padding: 10px" my-10px h-full>
+        <el-card v-if="isManage" my-10px h-full>
           <VueDraggableNext v-model="questConfig" flex flex-wrap gap-12px>
             <transition-group name="draglist">
               <div

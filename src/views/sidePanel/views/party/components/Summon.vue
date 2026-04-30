@@ -19,8 +19,9 @@ const subSummon = computed(() => summons.filter(summon => !summon.isMain))
         <img v-if="s.isQuick" :src="getLocalImg('ico-summon-quick')" absolute left-1 top-1 h-25px w-25px>
       </div>
     </div>
-    <div v-if="mainSummon[1]" h-140px shrink-0>
-      <img h-full :src="getAssetImg('summon', mainSummon[1].imageId, 'ls')">
+    <div h-140px shrink-0>
+      <img v-if="mainSummon[1]" h-full :src="getAssetImg('summon', mainSummon[1].imageId, 'ls')">
+      <img v-else h-full w-66px :src="getAssetImg('summon', 'empty', 'raid_normal')">
     </div>
   </div>
 </template>

@@ -64,7 +64,6 @@ declare module 'extension' {
   }
 
   interface AdventAdditional {
-    isOverflowed: boolean
     defeatReward: { id: string, label: string, key: string, value: number }[]
   }
 
@@ -304,7 +303,6 @@ declare module 'extension' {
       imgId: string
       name: string
       rank: string
-      necessary: boolean
     }
   }
 
@@ -316,10 +314,10 @@ declare module 'extension' {
     replicardEvent: boolean
     appearanceQuest: boolean
     itemGoal: boolean
-    isPointOverLimit: boolean
     checkUpdate: boolean
     sampoFinish: boolean
     pointReach: boolean
+    actionTrigger: boolean
   }
 
   interface ArtifactRule {

@@ -950,8 +950,8 @@ function handleResultContent(responseData: any) {
 
   if (result_data.replicard?.has_occurred_event && notificationSetting.value.replicardEvent) {
     createNotification({
-      message: 'Replicard Chest Reminder',
-      iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png',
+      message: 'Replicard Chest Alert',
+      iconUrl: 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/enemy/s/4200151.png',
       sound: 'hell',
     })
   }
@@ -1124,15 +1124,9 @@ function handleResultContent(responseData: any) {
 
   // 更新四象点数信息
   if (isInAdvent) {
-    const is_over_limit = result_data.advent_info?.is_over_limit
-    if (is_over_limit && notificationSetting.value.isPointOverLimit)
-      createNotification({ message: '四象点数已经超过Cap!!!', sound: 'warning' })
-
     const eventInfo = eventList.value.find(event => event.type === 'advent')
-    if (eventInfo) {
+    if (eventInfo)
       eventInfo.count += result_data.advent_info.final_point
-      eventInfo.additional!.isOverflowed = is_over_limit
-    }
   }
 
   // 更新四象，Story Event和Story Rerun任务信息
@@ -1487,7 +1481,7 @@ function processEventData(url: string, responseData: any) {
     const eventType = 'advent'
     const htmlString = decodeURIComponent(responseData.data)
     const $ = load(htmlString)
-    const [point, pointLimit] = $('.prt-point').text().replace(/,/g, '').split('/').map(Number)
+    const [point] = $('.prt-point').text().replace(/,/g, '').split('/').map(Number)
 
     const missionList: Mission[] = []
     const $dailyMission = load($('#tpl-pop-check-daily-mission').text())
@@ -1519,7 +1513,6 @@ function processEventData(url: string, responseData: any) {
       count: point,
       updateTime: dayjs().valueOf(),
       additional: {
-        isOverflowed: point >= pointLimit,
         defeatReward,
       },
     }

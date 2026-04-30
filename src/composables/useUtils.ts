@@ -64,7 +64,7 @@ export function openPopupWindow(key: string) {
     ExportRecord: { height: 800, width: 800 },
     RecoveryItem: { height: 1000, width: 900 },
     SampoSetup: { height: 900, width: 600 },
-    SupportSummon: { height: 400, width: 600 },
+    SupportSummon: { height: 400, width: 700 },
   }
 
   const getWindowSize = (key: string) => {

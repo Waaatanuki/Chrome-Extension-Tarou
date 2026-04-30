@@ -2,7 +2,7 @@ import type { Action } from 'extension'
 import type { BuildWeapon, SkillType } from 'party'
 import type { Buff } from 'source'
 
-const imgUri = 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img'
+const imgUri = 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img'
 
 export function getLocalIcon(id: string) {
   return new URL(`/src/assets/icon/${id}.png`, import.meta.url).href

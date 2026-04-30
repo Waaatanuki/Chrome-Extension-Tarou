@@ -35,7 +35,7 @@ function handleFinish() {
   if (notificationSetting.value.sampoFinish) {
     createNotification({
       message: 'Expedition complete',
-      iconUrl: 'https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/vyrnsampo/assets/character/team_captain/1.png',
+      iconUrl: 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/vyrnsampo/assets/character/team_captain/1.png',
       sound: 'warning',
     })
   }

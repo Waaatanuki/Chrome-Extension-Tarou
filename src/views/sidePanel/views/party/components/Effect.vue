@@ -10,15 +10,15 @@ defineProps<{
 <template>
   <div v-if="enhance" class="my-10px flex items-center justify-between">
     <div class="w-80px flex items-center justify-between gap-10px">
-      <img w-30px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/weapon_skill_enhance/icon_skillenhance_1.png">
+      <img w-30px src="https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/weapon_skill_enhance/icon_skillenhance_1.png">
       <div>{{ enhance.enhance }}%</div>
     </div>
     <div class="w-80px flex items-center justify-between gap-10px">
-      <img w-30px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/weapon_skill_enhance/icon_skillenhance_2.png">
+      <img w-30px src="https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/weapon_skill_enhance/icon_skillenhance_2.png">
       <div>{{ enhance.enhanceMagna }}%</div>
     </div>
     <div class="w-80px flex items-center justify-between gap-10px">
-      <img w-30px src="https://prd-game-a1-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/weapon_skill_enhance/icon_skillenhance_3.png">
+      <img w-30px src="https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/weapon_skill_enhance/icon_skillenhance_3.png">
       <div>{{ enhance.enhanceEvil }}%</div>
     </div>
   </div>

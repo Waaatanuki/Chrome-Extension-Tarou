@@ -2,7 +2,7 @@
 import { volume } from '~/logic'
 
 function updateVolume() {
-  const audio = new Audio('https://prd-game-a5-granbluefantasy.akamaized.net/assets/sound/se/chat_se_1.mp3')
+  const audio = new Audio('https://prd-game-a-granbluefantasy.akamaized.net/assets/sound/se/chat_se_1.mp3')
   audio.volume = volume.value
   audio.play()
 }
