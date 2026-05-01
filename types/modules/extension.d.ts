@@ -461,4 +461,13 @@ declare module 'extension' {
     x: number
     y: number
   }
+
+  interface JoinedRaid {
+    raidId: number
+    type: 'multiraid' | 'event'
+    imgId: string
+    hpWidth: number
+    member: NumberLimitPair
+    remainingTimestamp: number
+  }
 }

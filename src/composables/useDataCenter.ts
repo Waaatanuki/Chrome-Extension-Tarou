@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { artifactSkillList } from '~/constants/artifact'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo } from '~/logic'
+import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -81,6 +81,24 @@ export async function unpack(parcel: string) {
     const payload = JSON.parse(requestData!)
     dailyCost.value.bp! += Number(payload.select_bp)
     dailyCost.value.raidIds!.push(Number(payload.raid_id))
+  }
+
+  // Dashboard 记录当前正在进行的副本
+  if (url.includes('/quest/content/newassist/') || url.includes('/rest/quest/assist_list/0')) {
+    const assist_raids_data = responseData.assist_raids_data || responseData.option.quest.assist_list.assist_raids_data
+    joinedRaid.value = assist_raids_data
+      .filter((data: any) => data['data-raid-type'] === 0)
+      .map((data: any) => ({
+        raidId: data.raid.multi_raid_id,
+        type: 'multiraid',
+        imgId: data.boss_image,
+        hpWidth: data.boss_hp_width,
+        member: {
+          number: data.member_count,
+          limit: data.assist_user_limit,
+        },
+        remainingTimestamp: formatRemainingTime(data.remaining_time),
+      }))
   }
 
   // Dashboard 首页数据
@@ -704,6 +722,8 @@ export async function unpack(parcel: string) {
       battleMemo.value.shift()
 
     console.log('memoList==>', battleMemo.value)
+
+    joinedRaid.value = joinedRaid.value.filter(raid => !responseData.list.some((b: any) => b.raid_id === raid.raidId))
   }
 
   // Build 获取自发副本的questId

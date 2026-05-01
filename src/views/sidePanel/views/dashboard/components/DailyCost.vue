@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { dailyCost } from '~/logic'
+import { dailyCost, joinedRaid } from '~/logic'
 
 const showList = computed(() => {
   const list = dailyCost.value.quest?.filter(q => q.bossImgId)
@@ -8,7 +8,7 @@ const showList = computed(() => {
 </script>
 
 <template>
-  <el-card v-if="dailyCost.dateTime" h-full w-300px>
+  <el-card v-if="dailyCost.dateTime" h-full w-300px class="daily-cost">
     <template #header>
       <div flex items-center justify-between>
         <el-tooltip content="点击显示每日掉落统计" placement="top">
@@ -47,5 +47,66 @@ const showList = computed(() => {
         </el-tooltip>
       </div>
     </el-scrollbar>
+
+    <template v-if="joinedRaid.length">
+      <el-divider>
+        <div class="ico-enter" />
+      </el-divider>
+
+      <div grid grid-cols-3 gap-15px>
+        <div v-for="raid in joinedRaid" :key="raid.raidId" relative fc flex-col>
+          <img :src="getBossImg('summon', raid.imgId, 'qm')">
+          <el-countdown class="mt--5px" value-style="font-size: 12px" :value="raid.remainingTimestamp" />
+          <div class="absolute right-1px top-1px rounded bg-black/70 px-2px text-end text-10px">
+            <NumberLimitDisplay class="daily-cost-member-txt" :value="raid.member" />
+            <div class="daily-cost-hp-txt">
+              {{ `${raid.hpWidth}%` }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
   </el-card>
 </template>
+
+<style>
+.daily-cost .ico-enter {
+  display: block;
+  background: url('~/assets/image/common/parts_assist.png') no-repeat 0 -1613px;
+  -webkit-background-size: 303px 1796px;
+  background-size: 303px 1796px;
+  width: 56px;
+  height: 18px;
+}
+
+.daily-cost .el-divider__text {
+  background-color: rgb(29, 30, 31);
+  padding: 0 10px;
+}
+
+.daily-cost-member-txt {
+  color: #f2eee2;
+  text-shadow:
+    0 0 1px #258eb5,
+    0 0 1px #258eb5,
+    0 0 1px #258eb5,
+    0 0 1px #258eb5,
+    0 0 2px #258eb5,
+    0 0 2px #258eb5,
+    0 0 2px #258eb5,
+    0 0 2px #258eb5;
+}
+
+.daily-cost-hp-txt {
+  color: #f2eee2;
+  text-shadow:
+    0 0 1px #c73636,
+    0 0 1px #c73636,
+    0 0 1px #c73636,
+    0 0 1px #c73636,
+    0 0 2px #c73636,
+    0 0 2px #c73636,
+    0 0 2px #c73636,
+    0 0 2px #c73636;
+}
+</style>

@@ -36,6 +36,13 @@ export function formatFinishTime(finishTime: string) {
   return finishDate.valueOf()
 }
 
+// 将HH:mm:ss 格式时间转化为时间戳
+export function formatRemainingTime(remaining_time: string): number {
+  const [hours, minutes, seconds] = remaining_time.split(':').map(Number)
+  const totalSeconds = hours * 3600 + minutes * 60 + seconds
+  return Date.now() + totalSeconds * 1000
+}
+
 export function imgSrcToKey(src = '') {
   const arr = src.split(/\/assets(?:_en)?\/img(?:_low|_mid)?\/sp\/assets/)
   if (arr.length === 2) {

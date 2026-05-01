@@ -1,6 +1,6 @@
 import type { DropInfo } from 'api'
 import type { BattleExport, BattleInfo } from 'battle'
-import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, MarkedUser, NotificationSetting, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
+import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, JoinedRaid, MarkedUser, NotificationSetting, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
 import dayjs from 'dayjs'
@@ -27,6 +27,7 @@ export const recoveryItemList = useWebExtensionStorage<RecoveryItem[]>('recovery
 export const eventList = useWebExtensionStorage<EventInfo[]>('eventList', [])
 export const displayList = useWebExtensionStorage<DisplayItem[]>('displayList', [])
 export const dailyCost = useWebExtensionStorage<Partial<DailyCost>>('dailyCost', {})
+export const joinedRaid = useWebExtensionStorage<JoinedRaid[]>('joinedRaid', [])
 export const widgetList = useWebExtensionStorage<Widget[]>('widgetList', defaultWidget)
 export const skipQuest = useWebExtensionStorage<SkipQuest>('skipQuest', { updateTime: 0, list: [] })
 export const sampoInfo = useWebExtensionStorage<Partial<SampoInfo>>('sampoInfo', {})
