@@ -54,15 +54,17 @@ const showList = computed(() => {
       </el-divider>
 
       <div grid grid-cols-3 gap-15px>
-        <div v-for="raid in joinedRaid" :key="raid.raidId" relative fc flex-col>
-          <img :src="getBossImg('summon', raid.imgId, 'qm')">
-          <el-countdown class="mt--5px" value-style="font-size: 12px" :value="raid.remainingTimestamp" />
-          <div class="absolute right-1px top-1px rounded bg-black/70 px-2px text-end text-10px">
-            <NumberLimitDisplay class="daily-cost-member-txt" :value="raid.member" />
-            <div class="daily-cost-hp-txt">
-              {{ `${raid.hpWidth}%` }}
+        <div v-for="raid in joinedRaid" :key="raid.raidId" fc flex-col>
+          <div relative>
+            <img :src="getBossImg('summon', raid.imgId, 'qm')">
+            <div class="absolute inset-x-1px bottom-1px flex justify-between rounded bg-black/90 px-3px py-1px text-12px">
+              <NumberLimitDisplay class="daily-cost-member-txt" :value="raid.member" />
+              <div class="daily-cost-hp-txt">
+                {{ `${raid.hpWidth}%` }}
+              </div>
             </div>
           </div>
+          <el-countdown class="mt--5px" value-style="font-size: 12px" :value="raid.remainingTimestamp" />
         </div>
       </div>
     </template>

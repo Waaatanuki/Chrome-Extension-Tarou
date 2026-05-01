@@ -9,7 +9,7 @@ const showList = computed(() => order.value
 </script>
 
 <template>
-  <el-card w-717px header="掉落统计" :body-style="{ padding: '20px 5px 20px 5px' }">
+  <el-card w-717px header="掉落统计">
     <template #header>
       <div flex items-center justify-between>
         <div text-lg>
@@ -26,7 +26,7 @@ const showList = computed(() => order.value
         </div>
       </div>
     </template>
-    <el-scrollbar :height="600" px-15px>
+    <el-scrollbar :height="600" px-10px>
       <div flex flex-wrap gap-5px text-14px>
         <div v-for="reward in showList" :key="reward.key" w-80px fc flex-col>
           <img :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${reward.imgId}.jpg`">
