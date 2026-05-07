@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { snapdom } from '@zumer/snapdom'
+import Feed from '~/views/sidePanel/views/feed/index.vue'
 
 const visible = ref(false)
 const foo = ref('')
@@ -45,7 +46,7 @@ const gachaInfo = ref({
     <div h-600px w-360px flex rounded-xl>
       <el-scrollbar flex-1 ring-1>
         <div p-10px class="foo">
-          content
+          <Feed />
         </div>
       </el-scrollbar>
       <div class="bg-#3C3C3C" w-40px flex shrink-0 flex-col justify-between p-5px>
