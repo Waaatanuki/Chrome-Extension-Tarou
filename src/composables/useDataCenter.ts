@@ -1662,10 +1662,11 @@ function processEventData(url: string, responseData: any) {
       })
     })
 
-    const articleInfo = responseData.option.status.article_item.reduce((obj: any, item: any) => {
-      obj[`${item.item_kind}_${item.id}`] = Number (item.possessed)
-      return obj
-    }, {} as Record<number, number>)
+    const articleInfo = Object.values(responseData.option.status.article_item)
+      .reduce<Record<string, number>>((obj: any, item: any) => {
+        obj[`${item.item_kind}_${item.id}`] = Number(item.possessed)
+        return obj
+      }, {})
 
     const eventInfo = {
       type: eventType,
