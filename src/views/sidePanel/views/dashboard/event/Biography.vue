@@ -19,6 +19,7 @@ const articleIitemNum = computed(() => Object.values (eventInfo.value?.additiona
     </template>
     <div flex flex-col gap-3 text-12px>
       <MissionList :mission-list="eventInfo.mission" />
+      <el-alert v-if="eventInfo.mission.length === 0" title="活动任务暂未开启" type="info" :center="true" :closable="false" />
     </div>
   </el-card>
 </template>
