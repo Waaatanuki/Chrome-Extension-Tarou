@@ -105,9 +105,9 @@ function getSkillQuality(skillName: SkillName) {
 
 function getArtifactStatusIcon(artifact: Artifact) {
   if (artifact.is_locked)
-    return 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/artifact/ui/icn_favorite.png'
+    return getOfficialUrl('/sp/artifact/ui/icn_favorite.png')
   if (artifact.is_unnecessary)
-    return 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/artifact/ui/icn_unnecessary.png'
+    return getOfficialUrl('/sp/artifact/ui/icn_unnecessary.png')
   return undefined
 }
 

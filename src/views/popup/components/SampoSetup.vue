@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { sampoSetup } from '~/logic'
 
-const imgUri = 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp'
-
 const ParamEnum = {
   power: { key: 'power', label: '战斗', id: 1 },
   observation: { key: 'observation', label: '观察', id: 3 },
@@ -106,11 +104,11 @@ const showRes = computed(() => res.value.filter(item => item.conditionCount === 
     </div>
     <div flex>
       <div v-if="sampoSetup.captain" w-35 fc>
-        <img :src="`${imgUri}/vyrnsampo/assets/character/index_captain/${sampoSetup.captain.id}.png`">
+        <img :src="getOfficialUrl(`/sp/vyrnsampo/assets/character/index_captain/${sampoSetup.captain.id}.png`)">
       </div>
       <div w-350px fc flex-wrap gap-4>
         <div v-for="crew in sampoSetup.crew" :key="crew.id" relative w-100px>
-          <img :src="`${imgUri}/vyrnsampo/assets/character/thumb/${crew.id}.jpg`">
+          <img :src="getOfficialUrl(`/sp/vyrnsampo/assets/character/thumb/${crew.id}.jpg`)">
           <el-tag type="primary" size="small" class="absolute left-0 top-0">
             {{ `Lv ${crew.lv}` }}
           </el-tag>
@@ -120,7 +118,7 @@ const showRes = computed(() => res.value.filter(item => item.conditionCount === 
 
     <div v-if="currentArea" fc flex-col gap-2 rounded px-4 py-2 ring-1 ring-neutral-5>
       <div fc gap-10>
-        <img w-140px :src="`${imgUri}/vyrnsampo/assets/area/thumb/${currentArea.id}.png`">
+        <img w-140px :src="getOfficialUrl(`/sp/vyrnsampo/assets/area/thumb/${currentArea.id}.png`)">
         <div w-250px fc flex-col gap-2>
           <div w-250px fc flex-wrap gap-2>
             <div v-for="i in 4" :key="i" w-120px>
@@ -144,10 +142,10 @@ const showRes = computed(() => res.value.filter(item => item.conditionCount === 
             :label="item.id"
             :value="item.id"
           >
-            <img h-60px :src="`${imgUri}/vyrnsampo/assets/character/thumb/${item.id}.jpg`">
+            <img h-60px :src="getOfficialUrl(`/sp/vyrnsampo/assets/character/thumb/${item.id}.jpg`)">
           </el-option>
           <template #tag>
-            <img v-for="id in filter.crew" :key="id" h-60px :src="`${imgUri}/vyrnsampo/assets/character/thumb/${id}.jpg`">
+            <img v-for="id in filter.crew" :key="id" h-60px :src="getOfficialUrl(`/sp/vyrnsampo/assets/character/thumb/${id}.jpg`)">
           </template>
         </el-select>
 
@@ -159,10 +157,10 @@ const showRes = computed(() => res.value.filter(item => item.conditionCount === 
             :value="item.id"
             class="sampo-filter"
           >
-            <img h-60px :src="`${imgUri}/assets/item/cosmetic/s/${item.id}.jpg`">
+            <img h-60px :src="getOfficialUrl(`/sp/assets/item/cosmetic/s/${item.id}.jpg`)">
           </el-option>
           <template #label="{ value }">
-            <img h-60px :src="`${imgUri}/assets/item/cosmetic/s/${value}.jpg`">
+            <img h-60px :src="getOfficialUrl(`/sp/assets/item/cosmetic/s/${value}.jpg`)">
           </template>
         </el-select>
 
@@ -173,10 +171,10 @@ const showRes = computed(() => res.value.filter(item => item.conditionCount === 
             :label="item.id"
             :value="item.id"
           >
-            <img h-60px :src="`${imgUri}/assets/item/cosmetic/s/${item.id}.jpg`">
+            <img h-60px :src="getOfficialUrl(`/sp/assets/item/cosmetic/s/${item.id}.jpg`)">
           </el-option>
           <template #label="{ value }">
-            <img h-60px :src="`${imgUri}/assets/item/cosmetic/s/${value}.jpg`">
+            <img h-60px :src="getOfficialUrl(`/sp/assets/item/cosmetic/s/${value}.jpg`)">
           </template>
         </el-select>
       </div>
@@ -191,16 +189,16 @@ const showRes = computed(() => res.value.filter(item => item.conditionCount === 
         <div v-for="item, idx in showRes" :key="idx" rounded px-4 py-2 ring-1 ring-neutral-5>
           <div fc gap-2>
             <div v-for="crewId in item.combination.crew" :key="crewId">
-              <img h-70px :src="`${imgUri}/vyrnsampo/assets/character/thumb/${crewId}.jpg`">
+              <img h-70px :src="getOfficialUrl(`/sp/vyrnsampo/assets/character/thumb/${crewId}.jpg`)">
             </div>
             <div v-for="equipId in item.combination.equip" :key="equipId">
-              <img h-70px :src="`${imgUri}/assets/item/cosmetic/s/${equipId}.jpg`">
+              <img h-70px :src="getOfficialUrl(`/sp/assets/item/cosmetic/s/${equipId}.jpg`)">
             </div>
           </div>
           <div mt-2 flex gap-4>
             <div v-for="param in Object.values(ParamEnum)" :key="param.key" flex items-center justify-between gap-1>
               <div w-60px>
-                <img :src="`${imgUri}/vyrnsampo/assets/status_label/${param.id}.png`">
+                <img :src="getOfficialUrl(`/sp/vyrnsampo/assets/status_label/${param.id}.png`)">
               </div>
               <div :class="item[param.key] >= currentArea[param.key] ? 'text-#67C23A' : 'text-#F56C6C'">
                 {{ item[param.key] }}

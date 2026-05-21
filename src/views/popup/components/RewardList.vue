@@ -29,7 +29,7 @@ const showList = computed(() => order.value
     <el-scrollbar :height="600" px-10px>
       <div flex flex-wrap gap-5px text-14px>
         <div v-for="reward in showList" :key="reward.key" w-80px fc flex-col>
-          <img :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/${reward.imgId}.jpg`">
+          <img :src="getOfficialUrl(`/sp/assets/${reward.imgId}.jpg`)">
           <div>{{ reward.count }}</div>
         </div>
       </div>

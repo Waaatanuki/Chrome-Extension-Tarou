@@ -69,20 +69,6 @@ function goWiki(masterId: number) {
                   {{ NPC_AROUSAL_FORM[npc.arousalForm] }}
                 </div>
 
-                <!-- <div relative h-15px pt-10px>
-                  <img m-auto h-5px w-52px :src="getLocalImg('status_hp')">
-                  <div absolute bottom--1px right-2px w-52px text-end text-12px class="txt-hp-value">
-                    123456
-                  </div>
-                </div>
-
-                <div class="txt-hp-value" flex items-center justify-end gap-1px px-3px>
-                  <img w-12px src="https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/ui/icon/skill/ex_skill_ta.png">
-                  <div text-10px>
-                    100%
-                  </div>
-                </div> -->
-
                 <div h-12px flex items-center justify-start gap-4px px-4px>
                   <div v-for="ability, i in npc.ability" :key="i" relative fc>
                     <div

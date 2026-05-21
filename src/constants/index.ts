@@ -1,9 +1,7 @@
 import type { CombatPanelSetting, NotificationSetting } from 'extension'
 
-// export const noticeItem = [
-//   { key: '10_215', comment: '沙漏' },
-//   { key: '17_20004', comment: 'ffj' },
-// ]
+export const IMG_URI = 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img'
+export const SOUND_URI = 'https://prd-game-a-granbluefantasy.akamaized.net/assets/sound'
 
 export const defaultNotificationSetting: NotificationSetting = {
   silent: false,

@@ -1,5 +1,5 @@
 import type { Action } from 'extension'
-import { notificationSound } from '~/constants'
+import { notificationSound, SOUND_URI } from '~/constants'
 import { actionTriggerList, notificationSetting, volume } from '~/logic'
 
 async function playSoundInTab(sound: keyof typeof notificationSound) {
@@ -9,7 +9,7 @@ async function playSoundInTab(sound: keyof typeof notificationSound) {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: playSound,
-      args: [`https://prd-game-a-granbluefantasy.akamaized.net/assets/sound/se/${notificationSound[sound]}.mp3`, volume.value],
+      args: [`${SOUND_URI}/se/${notificationSound[sound]}.mp3`, volume.value],
     }).catch((err) => {
       console.log(err)
     })

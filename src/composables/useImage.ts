@@ -1,8 +1,7 @@
 import type { Action } from 'extension'
 import type { BuildWeapon, SkillType } from 'party'
 import type { Buff } from 'source'
-
-const imgUri = 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img'
+import { IMG_URI } from '~/constants'
 
 export function getLocalIcon(id: string) {
   return new URL(`/src/assets/icon/${id}.png`, import.meta.url).href
@@ -13,60 +12,60 @@ export function getLocalImg(prop: string, type = 'common') {
 }
 
 export function getQuestImg(questId: string | number, position: string) {
-  return `${imgUri}/sp/quest/assets/${position}/${questId}.png`
+  return `${IMG_URI}/sp/quest/assets/${position}/${questId}.png`
 }
 
 export function getBossImg(type: string, id: string, size = 'm') {
-  return `${imgUri}/sp/assets/${type}/${size}/${id}.png`
+  return `${IMG_URI}/sp/assets/${type}/${size}/${id}.png`
 }
 
 export function getAssetImg(type: string, id: string | number, size = 'm') {
-  return `${imgUri}/sp/assets/${type}/${size}/${id}.jpg`
+  return `${IMG_URI}/sp/assets/${type}/${size}/${id}.jpg`
 }
 
 export function getAssetsItemImg(type: string, id: string, size = 's') {
-  return `${imgUri}/sp/assets/item/${type}/${size}/${id}.jpg`
+  return `${IMG_URI}/sp/assets/item/${type}/${size}/${id}.jpg`
 }
 
 export function getGachaBanner(key: string) {
-  return `${imgUri}/sp/banner/gacha/banner_${key}_1.png`
+  return `${IMG_URI}/sp/banner/gacha/banner_${key}_1.png`
 }
 
 export function getArousalIcon(form: number) {
-  return `${imgUri}/sp/ui/icon/arousal_type/type_${form}.png`
+  return `${IMG_URI}/sp/ui/icon/arousal_type/type_${form}.png`
 }
 
 export function getAugmentSkillIcon(skillIcon: string) {
-  return `${imgUri}/sp/ui/icon/augment_skill/${skillIcon}.png`
+  return `${IMG_URI}/sp/ui/icon/augment_skill/${skillIcon}.png`
 }
 
 export function getJobIcon(id: string | number) {
-  return `${imgUri}/sp/ui/icon/job/${id}.png`
+  return `${IMG_URI}/sp/ui/icon/job/${id}.png`
 }
 
 export function getAbilityIcon(id: string) {
-  return `${imgUri}/sp/ui/icon/ability/m/${id}.png`
+  return `${IMG_URI}/sp/ui/icon/ability/m/${id}.png`
 }
 
 export function getSkillIcon(weapon: BuildWeapon, skillType: SkillType) {
   const skill = weapon.skill.find(s => s.type === skillType)
-  return `${imgUri}/sp/ui/icon/skill/${skill?.image}.png`
+  return `${IMG_URI}/sp/ui/icon/skill/${skill?.image}.png`
 }
 
 export function getSkillLabelIcon(id: string) {
-  return `${imgUri}/sp/ui/icon/weapon_skill_label/${id}`
+  return `${IMG_URI}/sp/ui/icon/weapon_skill_label/${id}`
 }
 export function getBonusIcon(id: string) {
-  return `${imgUri}/sp/ui/icon/bonus/${id}.png`
+  return `${IMG_URI}/sp/ui/icon/bonus/${id}.png`
 }
 
 export function getArtifactIcon(id: string) {
-  return `${imgUri}/sp/artifact/ui/icon/${id}.png`
+  return `${IMG_URI}/sp/artifact/ui/icon/${id}.png`
 }
 
 export function getActionIcon(action: Action) {
   if (action.icon?.startsWith('/sp'))
-    return `${imgUri}${action.icon}`
+    return `${IMG_URI}${action.icon}`
   if (action.type === 'ability')
     return getAbilityIcon(action.icon!)
   if (action.type === 'fc')
@@ -86,7 +85,7 @@ export function getActionIcon(action: Action) {
 }
 
 export function getBuffIcon(buff: Buff, turn: number) {
-  const iconUrl = `${imgUri}/sp/ui/icon/status/x64/status_`
+  const iconUrl = `${IMG_URI}/sp/ui/icon/status/x64/status_`
   const endTurn = buff.personal_buff_end_turn || buff.personal_debuff_end_turn
   if (buff.personal_status !== buff.status && endTurn)
     return `${iconUrl}${buff.personal_status}${Number(endTurn) - turn}.png`
@@ -95,15 +94,15 @@ export function getBuffIcon(buff: Buff, turn: number) {
 }
 
 export function getStamp(content: string) {
-  return `${imgUri}/sp/assets/stamp/full//${content}`
+  return `${IMG_URI}/sp/assets/stamp/full//${content}`
 }
 
 export function getOfficialUrl(url: string) {
   if (url.startsWith('/sp'))
-    return `${imgUri}${url}`
+    return `${IMG_URI}${url}`
   return url
 }
 
 export function getGroupIcon(group_num: number) {
-  return `${imgUri}/sp/raid/assets/ui_exception/group_gauge/singularity_chain/icon_${group_num}.png`
+  return `${IMG_URI}/sp/raid/assets/ui_exception/group_gauge/singularity_chain/icon_${group_num}.png`
 }

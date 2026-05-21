@@ -12,7 +12,7 @@ import { displayList } from '~/logic'
         placement="top"
       >
         <div fc flex-col>
-          <img w-50px :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets/item/article/s/${item.imageId}.jpg`" alt="" srcset="">
+          <img w-50px :src="getOfficialUrl(`/sp/assets/item/article/s/${item.imageId}.jpg`)" alt="" srcset="">
           <div text-12px :class="{ 'text-max': item.limit && item.number >= item.limit }">
             {{ item.number }}
           </div>

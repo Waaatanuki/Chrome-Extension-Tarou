@@ -88,7 +88,7 @@ onMounted(() => {
   <el-card my-10px>
     <div grid grid-cols-5 gap-10px>
       <div v-for="item in notificationItem" :key="item" relative fc flex-col select-none class="group">
-        <img :src="`https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/assets${item}`">
+        <img :src="getOfficialUrl(`/sp/assets${item}`)">
         <div absolute hidden h-full w-full fc bg-black opacity-70 group-hover:flex>
           <div i-carbon:close-filled absolute icon-btn @click="handleDelete(item)" />
         </div>
