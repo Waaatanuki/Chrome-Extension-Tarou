@@ -751,6 +751,16 @@ export async function unpack(parcel: string) {
     artifactList.value = responseData.list
   }
 
+  // Artifact 记录神器切换锁定和删除状态
+  if (/\/rest\/artifact\/(?:set_locked|set_unnecessary)/.test(url)) {
+    const payload = JSON.parse(requestData!)
+    const hitArtifact = artifactList.value.find(a => a.id === Number(payload.user_artifact_id))
+    if (hitArtifact) {
+      hitArtifact.is_unnecessary = payload.is_unnecessary ?? hitArtifact.is_unnecessary
+      hitArtifact.is_locked = payload.is_locked ?? hitArtifact.is_locked
+    }
+  }
+
   // Artifact 记录角色神器技能排名
   if (url.includes('/rest/artifact/npc_artifact_skill_usage_analytics/')) {
     artifactUsage.value = {

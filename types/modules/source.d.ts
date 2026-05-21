@@ -683,6 +683,7 @@ declare module 'source' {
     exp_width: number
     is_used: boolean
     is_locked: boolean
+    is_quirk: boolean
     is_unnecessary: boolean
     equip_npc_info?: {
       user_npc_id?: number

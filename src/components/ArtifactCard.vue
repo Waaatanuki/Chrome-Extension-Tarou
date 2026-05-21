@@ -103,6 +103,14 @@ function getSkillQuality(skillName: SkillName) {
   return `${isMax ? max : quality}/${max}`
 }
 
+function getArtifactStatusIcon(artifact: Artifact) {
+  if (artifact.is_locked)
+    return 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/artifact/ui/icn_favorite.png'
+  if (artifact.is_unnecessary)
+    return 'https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/artifact/ui/icn_unnecessary.png'
+  return undefined
+}
+
 function isRecommendSkill(skill_id: number) {
   return artifactUsage.value.filterList?.some(item => item.skillId === Math.floor(skill_id / 10))
 }
@@ -120,6 +128,11 @@ function isRecommendSkill(skill_id: number) {
           <img :src="getAssetImg('artifact', artifact.artifact_id, 's')">
           <img absolute bottom-0 left-0 :src="getArtifactIcon(`icn_type_${artifact.attribute}`)" width="30%" height="30%">
           <img absolute right-0 top-0 :src="getArtifactIcon(`icn_weapon_${artifact.kind.padStart(2, '0')}`) " width="30%" height="30%">
+          <img
+            v-if="artifact.is_locked || artifact.is_unnecessary"
+            absolute left--8px top--8px h-20px w-20px
+            :src="getArtifactStatusIcon(artifact) "
+          >
         </div>
 
         <div h-50px>
@@ -130,16 +143,16 @@ function isRecommendSkill(skill_id: number) {
         </div>
 
         <div absolute right-2 top-2 h-35px w-35px fc rounded-full ring-3 :class="PointTypeColorMap[getPointType(artifact)]">
-          {{ artifact.rarity === '3' ? getPoint(artifact) : '∞' }}
+          {{ artifact.is_quirk ? '∞' : getPoint(artifact) }}
         </div>
       </div>
 
-      <div v-if="artifact.rarity === '3'" mt-2 flex flex-col gap-5px>
+      <div v-if="!artifact.is_quirk" mt-2 flex flex-col gap-5px>
         <div v-for="skillName in skillNameList" :key="skillName" flex items-center justify-start gap-5px text-12px>
           <el-tag self-start size="small" :type="artifact[skillName].level === 5 ? 'success' : 'info'">
             {{ `Lv${artifact[skillName].level}` }}
           </el-tag>
-          <el-tag self-start size="small" :type="artifact[skillName].skill_id % 10 === 5 ? 'success' : 'info'">
+          <el-tag self-start size="small" :type="artifact[skillName].is_max_quality && skillName !== 'skill4_info' ? 'success' : 'info'">
             {{ getSkillQuality(skillName) }}
           </el-tag>
           <div :class="{ 'text-#67C23A': isRecommendSkill(artifact[skillName].skill_id) }">
