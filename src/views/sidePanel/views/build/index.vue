@@ -1,20 +1,10 @@
 <script setup lang="ts">
 import type { BuildResponse } from 'api'
-import { listBuild } from '~/api'
-import { buildNpcFilter, buildQuestId } from '~/logic'
-import ActionList from '../combat/components/ActionList.vue'
-import BattleAnalysis from '../combat/components/BattleAnalysis.vue'
-import Npc from '../party/components/Npc.vue'
-import Summon from '../party/components/Summon.vue'
-import Weapon from '../party/components/Weapon.vue'
-
-type DetailType = 'party' | 'action'
+import { detailBuild, listBuild } from '~/api'
+import { battleExportData, buildNpcFilter, buildQuestId } from '~/logic'
 
 const loading = ref(false)
 const buildList = ref<BuildResponse[]>([])
-const dialogVisible = ref(false)
-const currentBuild = ref<BuildResponse>()
-const detailType = ref<DetailType>('party')
 const msg = ref('进入副本前自动获取副本ID')
 
 function handleQuery() {
@@ -27,10 +17,11 @@ function handleQuery() {
   })
 }
 
-function handleCommand(command: DetailType, data: BuildResponse) {
-  detailType.value = command
-  dialogVisible.value = true
-  currentBuild.value = data
+function checkDetail(build: BuildResponse) {
+  detailBuild(build.key).then(({ data }) => {
+    battleExportData.value = { ...build, ...data }
+    openPopupWindow('ExportRecord')
+  })
 }
 </script>
 
@@ -70,28 +61,13 @@ function handleCommand(command: DetailType, data: BuildResponse) {
       </el-descriptions>
       <div mt-5px flex items-center justify-between>
         <div text-xs>
-          {{ useDateFormat(data.createTime, 'MM/DD HH:mm') }}{{ ` @ ${data.account}` }}
+          {{ data.account }} @ {{ useDateFormat(data.createTime, 'MM-DD HH:mm:ss').value }}
         </div>
 
-        <div fc>
-          <TheButton icon="material-symbols:sticky-note-2-outline" title="配置" @click="handleCommand('party', data)" />
-          <TheButton icon="material-symbols:follow-the-signs" title="操作流程" @click="handleCommand('action', data)" />
-        </div>
+        <TheButton @click="checkDetail(data)">
+          详情
+        </TheButton>
       </div>
     </el-card>
-
-    <el-dialog v-model="dialogVisible" :fullscreen="true">
-      <div v-if="currentBuild" m-auto mt-20px w-300px flex flex-col gap-10px>
-        <template v-if="detailType === 'party'">
-          <Npc :leader="currentBuild.deck.leader" :npcs="currentBuild.deck.npcs" :is-build="true" :priority="currentBuild.deck.priority" />
-          <Weapon :weapons="currentBuild.deck.weapons" />
-          <Summon :summons="currentBuild.deck.summons" />
-          <BattleAnalysis :player="currentBuild.detail.player" />
-        </template>
-        <template v-if="detailType === 'action'">
-          <ActionList :action-queue="currentBuild.detail.actionQueue" />
-        </template>
-      </div>
-    </el-dialog>
   </div>
 </template>

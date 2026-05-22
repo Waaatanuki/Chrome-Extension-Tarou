@@ -51,17 +51,24 @@ export function listDrop(questIds: string[]) {
 
 // 上传配置
 export function uploadBuild(data: any) {
-  return request<{ key: string }>('/ext/build', {
+  return request<{ key: string }>('/ext/build/upsert', {
     method: 'post',
     body: JSON.stringify(data),
   })
 }
 
-// 查询配置
+// 查询配置列表
 export function listBuild(data: { questId: string, npcFilter: number[] }) {
-  return request<{ data: { list: BuildResponse[], total: number } }>('/ext/getBuild', {
+  return request<{ data: { list: BuildResponse[], total: number } }>('/ext/build/list', {
     method: 'post',
     body: JSON.stringify(data),
+  })
+}
+
+// 查询配置详情
+export function detailBuild(key: string) {
+  return request<{ data: { deck: any, detail: any } }>(`/ext/build/detail?key=${key}`, {
+    method: 'get',
   })
 }
 
