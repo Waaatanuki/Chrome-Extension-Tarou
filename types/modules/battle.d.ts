@@ -93,4 +93,12 @@ declare module 'battle' {
     deck: Deck
     detail: BuildDetail
   }
+
+  interface BattleExportData extends BattleExport {
+    key?: string
+    questName?: string
+    questImage?: string
+    account?: string
+    createTime?: number
+  }
 }

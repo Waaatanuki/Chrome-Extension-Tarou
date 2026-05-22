@@ -1,5 +1,5 @@
 import type { DropInfo } from 'api'
-import type { BattleExport, BattleInfo } from 'battle'
+import type { BattleExportData, BattleInfo } from 'battle'
 import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, JoinedRaid, MarkedUser, NotificationSetting, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact, CalculateSetting } from 'source'
@@ -40,7 +40,7 @@ export const specBossBuff = useWebExtensionStorage<string[]>('specBossBuff', [])
 export const specPlayerBuff = useWebExtensionStorage<string[]>('specPlayerBuff', [])
 export const questSetting = useWebExtensionStorage<QuestSetting[]>('questSetting', [])
 export const onlyShowSpecBuff = useWebExtensionStorage<boolean>('onlyShowSpecBuff', false)
-export const battleExportData = useWebExtensionStorage<Partial<BattleExport>>('battleExportData', {})
+export const battleExportData = useWebExtensionStorage<Partial<BattleExportData>>('battleExportData', {})
 export const actionTriggerList = useWebExtensionStorage<string[]>('actionTriggerList', [])
 
 // Drop

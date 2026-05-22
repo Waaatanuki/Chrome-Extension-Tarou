@@ -1,6 +1,5 @@
 declare module 'api' {
-  import type { BuildDetail } from 'extension'
-  import type { Deck } from 'party'
+  import type { BattleExport } from 'battle'
 
   interface DropInfo {
     battleId: string
@@ -57,24 +56,11 @@ declare module 'api' {
     lastDropTake: number
   }
 
-  interface BuildResponse {
+  interface BuildResponse extends BattleExport {
     key: string
-    questId: string
     questName: string
     questImage: string
     account: string
     createTime: number
-    raidId: number
-    raidName: string
-    bossImage?: string
-    turn: number
-    startTime?: number
-    realSpeed: string
-    fullSpeed: string
-    damage?: string
-    point?: number
-    isFa: boolean
-    deck: Deck
-    detail: BuildDetail
   }
 }

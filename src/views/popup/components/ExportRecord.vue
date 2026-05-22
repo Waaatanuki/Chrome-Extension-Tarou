@@ -8,7 +8,8 @@ import Npc from '../../sidePanel/views/party/components/Npc.vue'
 import Summon from '../../sidePanel/views/party/components/Summon.vue'
 import Weapon from '../../sidePanel/views/party/components/Weapon.vue'
 
-const deck = computed(() => deckList.value[0])
+const userName = computed(() => battleExportData.value.key ? battleExportData.value.account : userInfo.value.name)
+const deck = computed(() => battleExportData.value.key ? battleExportData.value.deck : deckList.value[0])
 
 async function exportToImg() {
   try {
@@ -49,7 +50,7 @@ async function exportToImg() {
             </el-descriptions-item>
           </el-descriptions>
           <div mt-5px text-end text-xs>
-            {{ `${userInfo.name} @ ${useDateFormat(battleExportData.startTime! * 1000, 'MM-DD HH:mm:ss').value}` }}
+            {{ `${userName} @ ${useDateFormat(battleExportData.startTime! * 1000, 'MM-DD HH:mm:ss').value}` }}
           </div>
         </el-card>
         <DamageRecord v-if="battleExportData.detail" m-auto :player-info="battleExportData.detail.player" :is-export="true" />
