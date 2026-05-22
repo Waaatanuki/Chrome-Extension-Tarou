@@ -515,7 +515,11 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
         // 记录连击数据
         if (!action.effect) {
         // 致死普攻如果不是ta就不记录
-          if (action.damage[0] && Object.values(action.damage).every(attack => attack.every(hit => hit.hp !== 0))) {
+          const nextAction = data.scenario![idx + 1]
+          const isLastAttack = nextAction.cmd === 'normal_attack_end'
+          const isTa = action.total_attack_num === 3
+          const isBossAlive = Object.values(action.damage).every(attack => attack.every(hit => hit.hp !== 0))
+          if (isLastAttack && (isBossAlive || isTa)) {
             hitPlayer.attackInfo = hitPlayer.attackInfo || { total: 0, sa: 0, da: 0, ta: 0 }
             hitPlayer.attackInfo.total++
             if (action.total_attack_num === 1)
