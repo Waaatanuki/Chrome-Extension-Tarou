@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { GachaNpc } from 'extension'
+import copy from 'copy-text-to-clipboard'
 import { gachaInfo } from '~/logic'
 import GachaAnimation from './GachaAnimation.vue'
 
@@ -19,6 +20,17 @@ const groupedResult = computed(() => {
     resultValue.slice(7, 10),
   ]
 })
+
+function copyGachaInfo() {
+  const info = {
+    serviceStart: gachaInfo.value.serviceStart,
+    serviceEnd: gachaInfo.value.serviceEnd,
+    ratio1: gachaInfo.value.ratio1,
+    ratio2: gachaInfo.value.ratio2,
+  }
+  if (copy(JSON.stringify(info, null, 2)))
+    ElMessage.success(`已复制抽卡概率`)
+}
 
 function gacha(ratioType: 'ratio1' | 'ratio2') {
   const appear = gachaInfo.value[ratioType]!.appear
@@ -130,7 +142,7 @@ function closeAnimation() {
         <div v-if="gachaInfo.id" flex items-center justify-between text-12px>
           <div>
             <el-tooltip :content="`编号: ${gachaInfo.id}`" placement="top">
-              <img w-100px :src="getGachaBanner(gachaInfo.randomKey!)">
+              <img w-100px :src="getGachaBanner(gachaInfo.randomKey!)" @click="copyGachaInfo">
             </el-tooltip>
           </div>
           <div flex flex-col items-end justify-center gap-5px>
