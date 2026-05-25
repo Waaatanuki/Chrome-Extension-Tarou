@@ -61,7 +61,7 @@ function handleFinish() {
       {{ sampoInfo.areaName }}
     </el-descriptions-item>
     <el-descriptions-item label="当前/结束" align="center" label-width="100">
-      <el-tooltip content="当前元气/探险结束时元气">
+      <el-tooltip content="当前元气/探险结束时元气" :show-after="500">
         {{ sampoInfo.maxStamina ? `${sampoInfo.currentStamina}/${sampoInfo.isFinished ? '-' : sampoInfo.endStamina}` : '-' }}
       </el-tooltip>
     </el-descriptions-item>
@@ -69,7 +69,7 @@ function handleFinish() {
       <div v-if="sampoInfo.isFinished">
         -
       </div>
-      <el-tooltip v-else :content="useDateFormat(sampoInfo.remainTime, 'MM-DD HH:mm:ss').value">
+      <el-tooltip v-else :content="useDateFormat(sampoInfo.remainTime, 'MM-DD HH:mm:ss').value" :show-after="500">
         <el-countdown value-style="font-size: 12px" :value="sampoInfo.remainTime" @change="handleSampoChange" @finish="handleFinish" />
       </el-tooltip>
     </el-descriptions-item>
@@ -77,7 +77,7 @@ function handleFinish() {
       <div v-if="!sampoInfo.recoveryRemainTime || sampoInfo.recoveryRemainTime < Date.now()">
         -
       </div>
-      <el-tooltip v-else :content="useDateFormat(sampoInfo.recoveryRemainTime, 'MM-DD HH:mm:ss').value">
+      <el-tooltip v-else :content="useDateFormat(sampoInfo.recoveryRemainTime, 'MM-DD HH:mm:ss').value" :show-after="500">
         <el-countdown value-style="font-size: 12px" :value="sampoInfo.recoveryRemainTime" @change="handleStaminaChange" />
       </el-tooltip>
     </el-descriptions-item>

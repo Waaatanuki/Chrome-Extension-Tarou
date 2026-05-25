@@ -50,7 +50,7 @@ function goWiki(masterId: number) {
     </div>
     <div flex flex-wrap gap-5px>
       <template v-for="npc, index in npcs" :key="npc.paramId">
-        <el-popover placement="top-start" width="274">
+        <el-popover placement="top-start" width="274" :show-after="500">
           <template #reference>
             <div relative w-56px class="group">
               <img w-full :src="getAssetImg('npc', npc.imageId, 'raid_normal')">

@@ -13,6 +13,7 @@ const { missionList = [] } = defineProps<{ missionList?: Mission[] }>()
       :disabled="!mission.reward"
       raw-content
       placement="top-start"
+      :show-after="500"
     >
       <div fc gap-1>
         <Icon
