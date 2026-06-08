@@ -5,7 +5,6 @@ declare module 'api' {
     battleId: string
     questName: string
     questImage?: string
-    questType?: string
     timestamp: number
     reward: Treasure[]
   }

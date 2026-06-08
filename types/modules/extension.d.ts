@@ -90,9 +90,9 @@ declare module 'extension' {
     battleId: string
     questName: string
     questImage?: string
-    questType?: string
     timestamp: number
     date: string
+    priority?: string
   }
 
   interface QuestSetting {
@@ -182,6 +182,7 @@ declare module 'extension' {
   }
 
   interface BattleRecord {
+    priority?: string
     quest_id: string
     raid_id: number
     raid_name: string

@@ -60,6 +60,17 @@ export async function unpack(parcel: string) {
         dailyCost.value.ap! += questInfo.ap || 0
     }
     getDisplayList(responseData)
+
+    const battleId = String(responseData.raid_id)
+    const timestamp = new Date().valueOf()
+    const memo = {
+      battleId,
+      questName: '',
+      timestamp,
+      date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'),
+      priority: String(payload.deck_id),
+    }
+    battleMemo.value.push(memo)
   }
 
   // Dashboard 每日消耗-记录扫荡副本
@@ -81,6 +92,17 @@ export async function unpack(parcel: string) {
     const payload = JSON.parse(requestData!)
     dailyCost.value.bp! += Number(payload.select_bp)
     dailyCost.value.raidIds!.push(Number(payload.raid_id))
+
+    const battleId = String(payload.raid_id)
+    const timestamp = new Date().valueOf()
+    const memo = {
+      battleId,
+      questName: '',
+      timestamp,
+      date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss'),
+      priority: String(payload.user_deck_priority),
+    }
+    battleMemo.value.push(memo)
   }
 
   // Dashboard 记录当前正在进行的副本
@@ -635,15 +657,19 @@ export async function unpack(parcel: string) {
     const battleId = String(responseData.raid_id)
     const timestamp = new Date().valueOf()
     const hitMemo = battleMemo.value.find(memo => memo.battleId === battleId)
-    if (!hitMemo && responseData.boss) {
-      const questName = responseData.boss.param[0].monster
+    const questName = responseData.boss.param[0].monster
 
-      const memo = { battleId, questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') }
-      battleMemo.value.push(memo)
-      console.log('新增memo==>', memo)
+    if (questName) {
+      if (hitMemo) {
+        hitMemo.questName = hitMemo.questName || questName
+      }
+      else {
+        const memo = { battleId, questName, timestamp, date: dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss') }
+        battleMemo.value.push(memo)
 
-      if (battleMemo.value.length > MaxMemoLength)
-        battleMemo.value.shift()
+        if (battleMemo.value.length > MaxMemoLength)
+          battleMemo.value.shift()
+      }
       console.log('memoList==>', battleMemo.value)
     }
 
@@ -708,7 +734,6 @@ export async function unpack(parcel: string) {
       const battleInfo = {
         battleId: String(battle.raid_id),
         questName: battle.chapter_name,
-        questType: '1',
         timestamp: formatFinishTime(battle.finish_time),
         date: dayjs(formatFinishTime(battle.finish_time)).format('YYYY-MM-DD HH:mm:ss'),
       }

@@ -25,7 +25,6 @@ export function setupWebRequestListener() {
           battleId: hitMemo.battleId,
           questName: hitMemo.questName,
           questImage: hitMemo.questImage,
-          questType: hitMemo.questType,
           timestamp: hitMemo.timestamp,
           reward: treasureList,
         }
@@ -58,7 +57,6 @@ export function setupWebRequestListener() {
           battleId,
           questName,
           questImage,
-          questType: '1',
           timestamp: formatFinishTime(finishTime),
           reward: treasureList,
         }
