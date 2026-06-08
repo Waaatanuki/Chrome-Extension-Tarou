@@ -2,7 +2,7 @@ import type { DropInfo } from 'api'
 import type { BattleExportData, BattleInfo } from 'battle'
 import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, JoinedRaid, MarkedUser, NotificationSetting, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
-import type { Artifact, CalculateSetting } from 'source'
+import type { Artifact } from 'source'
 import dayjs from 'dayjs'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultCombatPanelSetting, defaultNotificationItem, defaultNotificationSetting, defaultWidget } from '~/constants'
@@ -52,7 +52,6 @@ export const failedDropInfoList = useWebExtensionStorage<DropInfo[]>('failedDrop
 export const deckList = useWebExtensionStorage<Deck[]>('deckList', [])
 export const jobAbilityList = useWebExtensionStorage<BuildLeaderAbility[]>('jobAbilityList', [])
 export const localNpcList = useWebExtensionStorage<BuildNpc[]>('localNpcList', [])
-export const calculateSettingList = useWebExtensionStorage<CalculateSetting[]>('calculateSettingList', [])
 
 // MarkedUser
 export const markedUserList = useWebExtensionStorage<MarkedUser[]>('markedUserList', [])

@@ -1,10 +1,16 @@
 import type { BuildLeaderAbility, BuildNpc, BuildSummon, BuildWeapon, SkillType } from 'party'
 import type { CalculateSetting, DeckJson } from 'source'
-import { calculateSettingList, deckList, jobAbilityList, localNpcList } from '~/logic'
+import { deckList, jobAbilityList, localNpcList } from '~/logic'
 
 export function handleDeckJson(data: DeckJson) {
   if (!data)
     return
+
+  const hit = deckList.value.findIndex(d => d.priority === String(data.priority))
+
+  if (hit !== -1) {
+    deckList.value.splice(hit, 1)
+  }
 
   deckList.value.unshift({
     priority: String(data.priority),
@@ -15,18 +21,12 @@ export function handleDeckJson(data: DeckJson) {
     effects: processEffect(data),
     enhance: processEnhance(data),
   })
-
-  while (deckList.value.length > 3) {
-    deckList.value.pop()
-  }
 }
 
 export function handleCalculateSetting(data: CalculateSetting) {
-  const hit = calculateSettingList.value.find(item => item.priority === data?.priority)
+  const hit = deckList.value.find(item => item.priority === data?.priority)
   if (hit)
     hit.setting = { ...data.setting }
-  else
-    calculateSettingList.value.push(deepClone(data))
 }
 
 function processWeapon(data: DeckJson) {
@@ -61,7 +61,7 @@ function processWeapon(data: DeckJson) {
 }
 
 function processSummon(data: DeckJson) {
-  const hitSetting = calculateSettingList.value.find(item => item.priority === String(data.priority))
+  const hitDeck = deckList.value.find(item => item.priority === String(data.priority))
 
   const { summons, sub_summons, quick_user_summon_id } = data.pc
   const quickSummonId = Number(quick_user_summon_id)
@@ -83,12 +83,12 @@ function processSummon(data: DeckJson) {
     ...[1, 2].map(i => createSummon(sub_summons[i], false)),
   ]
 
-  if (hitSetting?.setting.summon_id) {
+  if (hitDeck?.setting?.summon_id) {
     summon.push ({
       paramId: 0,
       masterId: 0,
       rarity: 0,
-      imageId: hitSetting.setting.image_id!,
+      imageId: hitDeck.setting.image_id!,
       isMain: true,
       isQuick: false,
     })

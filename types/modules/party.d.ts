@@ -7,6 +7,7 @@ declare module 'party' {
     npcs: BuildNpc[]
     effects: BuildEffect[]
     enhance: BuildEnhance
+    setting?: CalculateSetting
   }
 
   type SkillType = 'skill1' | 'skill2' | 'skill3'
