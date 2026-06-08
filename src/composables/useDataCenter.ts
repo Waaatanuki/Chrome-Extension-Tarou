@@ -768,7 +768,7 @@ export async function unpack(parcel: string) {
 
   // Party 记录当前队伍信息
   if (url.includes('party/deck')) {
-    handleDeckJson(responseData.deck)
+    handleDeckJson(responseData.deck, url.includes('true'))
   }
 
   // Artifact 记录当前神器信息

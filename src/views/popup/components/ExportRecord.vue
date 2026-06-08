@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { snapdom } from '@zumer/snapdom'
-import { battleExportData, deckList, userInfo } from '~/logic'
+import { battleExportData, userInfo } from '~/logic'
 import ActionList from '../../sidePanel/views/combat/components/ActionList.vue'
 import DamageRecord from '../../sidePanel/views/combat/components/DamageRecord.vue'
 import Npc from '../../sidePanel/views/party/components/Npc.vue'
 import Summon from '../../sidePanel/views/party/components/Summon.vue'
 import Weapon from '../../sidePanel/views/party/components/Weapon.vue'
 
-const userName = computed(() => battleExportData.value.key ? battleExportData.value.account : userInfo.value.name)
-const deck = computed(() => battleExportData.value.key ? battleExportData.value.deck : deckList.value[0])
+const userName = computed(() => battleExportData.value.key ? battleExportData.value.userName : userInfo.value.name)
+const deck = computed(() => battleExportData.value.deck)
 
 async function exportToImg() {
   try {
@@ -29,7 +29,7 @@ async function exportToImg() {
     <Icon icon="streamline-flex:screenshot" text-25px text-teal-6 />
   </div>
   <div id="record-container" p-4>
-    <div v-if="battleExportData" m-auto w-620px fc gap-10px rounded p-10px ring-1 ring-neutral-7>
+    <div v-if="battleExportData" m-auto w-620px flex items-start justify-center gap-10px rounded p-10px ring-1 ring-neutral-7>
       <div flex flex-col gap-10px>
         <el-card w-300px body-style="padding: 5px !important">
           <el-descriptions size="small" direction="vertical" :column="3" border>
@@ -40,7 +40,7 @@ async function exportToImg() {
               {{ battleExportData.damage }}
             </el-descriptions-item>
             <el-descriptions-item label="操作时长/跑速" align="center">
-              {{ battleExportData.realSpeed }}
+              {{ battleExportData.realTime }} / {{ battleExportData.realSpeed }}
             </el-descriptions-item>
             <el-descriptions-item label="贡献" align="center">
               {{ battleExportData.point ? Math.floor(battleExportData.point).toLocaleString() : '-' }}
@@ -59,6 +59,9 @@ async function exportToImg() {
         <Npc :leader="deck.leader" :npcs="deck.npcs" :priority="deck.priority" />
         <Weapon :weapons="deck.weapons" />
         <Summon :summons="deck.summons" />
+      </div>
+      <div v-else w-300px fc self-stretch text-15px>
+        未获取队伍信息
       </div>
     </div>
     <div v-if="battleExportData.detail" m-auto mt-20px w-610px>

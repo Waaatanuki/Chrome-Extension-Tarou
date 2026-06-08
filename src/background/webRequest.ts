@@ -6,7 +6,7 @@ import { sendMessage } from 'webext-bridge/background'
 import { battleMemo, eventList, localNpcList, notificationItem, notificationSetting, userInfo } from '~/logic/storage'
 
 export function setupWebRequestListener() {
-  const { checkUser, sendInfo } = useUser()
+  const { checkUser, sendDrop, sendBuild } = useUser()
 
   chrome.webRequest.onCompleted.addListener((details) => {
     // 记录掉落结果
@@ -30,9 +30,11 @@ export function setupWebRequestListener() {
         }
 
         console.log('sendDropInfo', dropInfo)
-        sendInfo([dropInfo])
+        sendDrop([dropInfo])
           .then(() => { cleanBattleMemo(battleId) })
           .catch((err) => { console.log(err.message) })
+
+        sendBuild(battleId)
       }).catch((err) => {
         console.log(err)
       })
@@ -62,7 +64,7 @@ export function setupWebRequestListener() {
         }
 
         console.log('sendDropInfo', dropInfo)
-        sendInfo([dropInfo])
+        sendDrop([dropInfo])
           .then(() => { cleanBattleMemo(battleId) })
           .catch((err) => { console.log(err.message) })
       }).catch((err) => {

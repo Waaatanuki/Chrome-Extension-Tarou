@@ -2,14 +2,16 @@ import type { BuildLeaderAbility, BuildNpc, BuildSummon, BuildWeapon, SkillType 
 import type { CalculateSetting, DeckJson } from 'source'
 import { deckList, jobAbilityList, localNpcList } from '~/logic'
 
-export function handleDeckJson(data: DeckJson) {
+export function handleDeckJson(data: DeckJson, isTrue: boolean) {
   if (!data)
     return
 
-  const hit = deckList.value.findIndex(d => d.priority === String(data.priority))
+  const hitIndex = deckList.value.findIndex(d => d.priority === String(data.priority))
+  let createTime = Date.now()
 
-  if (hit !== -1) {
-    deckList.value.splice(hit, 1)
+  if (hitIndex !== -1) {
+    deckList.value.splice(hitIndex, 1)
+    createTime = isTrue ? deckList.value[hitIndex].createTime : createTime
   }
 
   deckList.value.unshift({
@@ -20,6 +22,7 @@ export function handleDeckJson(data: DeckJson) {
     npcs: processNpc(data),
     effects: processEffect(data),
     enhance: processEnhance(data),
+    createTime,
   })
 }
 

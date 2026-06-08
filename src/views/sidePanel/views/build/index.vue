@@ -50,7 +50,7 @@ function checkDetail(build: BuildResponse) {
           {{ data.damage }}
         </el-descriptions-item>
         <el-descriptions-item label="操作时长/跑速" align="center">
-          {{ data.realSpeed }}
+          {{ data.realTime }} / {{ data.realSpeed }}
         </el-descriptions-item>
         <el-descriptions-item label="贡献" align="center">
           {{ data.point ? Math.floor(data.point).toLocaleString() : '-' }}

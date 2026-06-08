@@ -79,18 +79,20 @@ declare module 'battle' {
   }
 
   interface BattleExport {
+    partyKey: string
+    userName: string
     questId: string
     raidId: number
     raidName: string
     bossImage?: string
     turn: number
     startTime?: number
-    realSpeed: string
+    realTime: string
+    realSpeed: number
     fullSpeed: string
     damage?: string
     point?: number
-    isFa: boolean
-    deck: Deck
+    deck?: Deck
     detail: BuildDetail
   }
 
@@ -98,7 +100,7 @@ declare module 'battle' {
     key?: string
     questName?: string
     questImage?: string
-    account?: string
+    userName?: string
     createTime?: number
   }
 }

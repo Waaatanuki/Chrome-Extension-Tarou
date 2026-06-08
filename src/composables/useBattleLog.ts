@@ -1,6 +1,6 @@
 import type { Action, BattleRecord, PartyCondition, Player } from 'extension'
 import type { Ability, AttackResultJson, BattleStartJson, ChatInfoEN, ChatInfoJP, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
-import { battleInfo, battleMemo, battleRecord, notificationSetting, questSetting, userInfo } from '~/logic'
+import { battleInfo, battleMemo, battleRecord, deckList, notificationSetting, questSetting, userInfo } from '~/logic'
 
 export function handleStartJson(data: BattleStartJson) {
   const boss = data.boss.param[0]
@@ -453,9 +453,9 @@ function recordRaidInfo(data: BattleStartJson) {
   }
 
   const hitMemo = battleMemo.value.find(m => m.battleId === String(data.raid_id))
+  const hitDeck = deckList.value.find(d => d.priority === hitMemo?.priority)
 
   battleRecord.value.unshift({
-    priority: hitMemo?.priority,
     quest_id: data.quest_id,
     raid_id: data.raid_id,
     raid_name: boss.monster,
@@ -470,6 +470,7 @@ function recordRaidInfo(data: BattleStartJson) {
     actionQueue,
     abilityList,
     point: 0,
+    deck: deepClone(hitDeck),
   })
 
   while (battleRecord.value.length > 10) {

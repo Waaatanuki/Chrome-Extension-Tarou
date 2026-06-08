@@ -1,7 +1,7 @@
 import type { DropInfo } from 'api'
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
-import { sendMultiDropInfo } from '~/api'
-import { code, failedDropInfoList, userInfo } from '~/logic'
+import { sendMultiDropInfo, uploadBuild } from '~/api'
+import { battleRecord, code, failedDropInfoList, uploadBuildMemo, userInfo } from '~/logic'
 
 export default function useUser() {
   function checkUser(url: string) {
@@ -14,7 +14,7 @@ export default function useUser() {
       code.value = uuidv4()
   }
 
-  function sendInfo(dropInfo: DropInfo[], upload = false) {
+  function sendDrop(dropInfo: DropInfo[], upload = false) {
     if (!upload)
       beforeSend(dropInfo)
     const array = deepClone(upload ? dropInfo : failedDropInfoList.value)
@@ -70,9 +70,34 @@ export default function useUser() {
     })
   }
 
+  function sendBuild(battleId: string) {
+    const hitRecord = battleRecord.value.find(r => r.raid_id === Number(battleId))
+    if (!hitRecord?.deck?.createTime)
+      return
+
+    const key = `${hitRecord.quest_id}-${userInfo.value.uid}-${hitRecord.deck.priority}`
+    const hitMemo = uploadBuildMemo.value.find(m => m.key === key)
+
+    if (hitMemo) {
+      if (hitMemo.value >= hitRecord.deck.createTime)
+        return
+      else
+        hitMemo.value = hitRecord.deck.createTime
+    }
+    else {
+      uploadBuildMemo.value.push({ key, value: hitRecord.deck.createTime })
+    }
+    uploadBuild(formatBuild(hitRecord)).catch(() => {})
+
+    while (uploadBuildMemo.value.length > 100) {
+      uploadBuildMemo.value.shift()
+    }
+  }
+
   return {
     checkUser,
     checkCode,
-    sendInfo,
+    sendDrop,
+    sendBuild,
   }
 }

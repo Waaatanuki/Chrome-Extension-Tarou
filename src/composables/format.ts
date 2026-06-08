@@ -1,4 +1,7 @@
+import type { BattleExport } from 'battle'
+import type { BattleRecord } from 'extension'
 import dayjs from 'dayjs'
+import { userInfo } from '~/logic'
 
 // 将秒数转化为HH:mm:ss
 export function formatTime(seconds: number): string {
@@ -73,4 +76,60 @@ export function formatEventDate(timestamp: number): string {
   }
 
   return `${prefix}${time}`
+}
+
+export function getRealTimeSpeed(row: BattleRecord) {
+  const seconds = row.startTimer - row.endTimer
+  if (!seconds || !row.damage)
+    return { time: '', speed: 0, set: '-' }
+  const damage = Number(row.damage?.split(',').join(''))
+  const time = formatTime(seconds)
+  const speed = Number((damage / (seconds / 60) / 1000000).toFixed(0))
+  return { time, speed, set: `${time} / ${speed}` }
+}
+
+export function getFullTimeSpeed(row: BattleRecord) {
+  if (!row.duration || !row.damage)
+    return '-'
+
+  const damage = Number(row.damage?.split(',').join(''))
+  let formatted_time = row.duration
+
+  if (row.duration.split(':').length === 2)
+    formatted_time = `00:${formatted_time}`
+
+  const hour = Number(formatted_time.split(':')[0])
+  const minute = Number(formatted_time.split(':')[1])
+  const second = Number(formatted_time.split(':')[2])
+  const seconds = hour * 3600 + minute * 60 + second
+
+  return `${row.duration} / ${(damage / (seconds / 60) / 1000000).toFixed(0)}`
+}
+
+export function formatBuild(record: BattleRecord): BattleExport {
+  const { time, speed } = getRealTimeSpeed(record)
+  const partyKey = record.deck!.leader.masterId + record.deck?.npcs.reduce((acc, npc) => acc + npc.masterId, '')
+  return {
+    partyKey,
+    userName: userInfo.value.name || '',
+    questId: record.quest_id,
+    raidId: record.raid_id,
+    raidName: record.raid_name,
+    bossImage: record.imgId,
+    turn: record.turn,
+    startTime: Math.floor((record.startTimestamp ?? Date.now()) / 1000),
+    realTime: time,
+    realSpeed: speed,
+    fullSpeed: getFullTimeSpeed(record),
+    point: record.point,
+    damage: record.damage,
+    deck: record.deck,
+    detail: {
+      player: record.player?.map((player) => {
+        const { condition, ...rest } = player
+        return rest
+      }),
+      actionQueue: record.actionQueue,
+    },
+  }
 }

@@ -66,6 +66,7 @@ export const artifactUsage = useWebExtensionStorage<Partial<ArtifactUsage>>('art
 // Build
 export const buildQuestId = useWebExtensionStorage('buildQuestId', '')
 export const buildNpcFilter = useWebExtensionStorage<number[]>('buildNpcFilter', [])
+export const uploadBuildMemo = useWebExtensionStorage<{ key: string, value: number }[]>('uploadBuildMemo', [])
 
 // Gacha
 export const gachaInfo = useWebExtensionStorage<GachaInfo>('gachaInfo', {})

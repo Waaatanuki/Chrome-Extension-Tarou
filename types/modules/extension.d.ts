@@ -1,5 +1,6 @@
 declare module 'extension' {
   import type { NormalAttackInfo } from 'battle'
+  import type { Deck } from 'party'
   import type { Buff } from 'source'
 
   interface UserInfo {
@@ -182,7 +183,6 @@ declare module 'extension' {
   }
 
   interface BattleRecord {
-    priority?: string
     quest_id: string
     raid_id: number
     raid_name: string
@@ -202,8 +202,8 @@ declare module 'extension' {
     duration?: string
     treasureList?: { src: string, number: string, boxClass: string }[]
     abilityList: Action[]
-    isFa?: boolean
     key?: string
+    deck?: Deck
   }
 
   interface BuildDetail {
