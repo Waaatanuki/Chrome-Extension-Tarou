@@ -1,4 +1,4 @@
-import type { BuildResponse, DropInfo, StartJsonBoss, Stat } from 'api'
+import type { BuildItem, DropInfo, StartJsonBoss, Stat } from 'api'
 import type { Quest } from 'extension'
 import request from './request'
 
@@ -59,7 +59,7 @@ export function uploadBuild(data: any) {
 
 // 查询配置列表
 export function listBuild(data: { questId: string, npcFilter: number[] }) {
-  return request<{ data: { list: BuildResponse[], total: number } }>('/ext/build/list', {
+  return request<{ data: { list: BuildItem[], total: number } }>('/ext/build/list', {
     method: 'post',
     body: JSON.stringify(data),
   })

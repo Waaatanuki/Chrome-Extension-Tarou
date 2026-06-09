@@ -1,4 +1,4 @@
-import type { BattleExport } from 'battle'
+import type { BuildResDto } from 'api'
 import type { BattleRecord } from 'extension'
 import dayjs from 'dayjs'
 import { userInfo } from '~/logic'
@@ -88,7 +88,7 @@ export function getRealTimeSpeed(row: BattleRecord) {
   return { time, speed, set: `${time} / ${speed}` }
 }
 
-export function formatBuild(record: BattleRecord): BattleExport {
+export function formatBuild(record: BattleRecord): BuildResDto {
   const { time, speed } = getRealTimeSpeed(record)
   const partyKey = record.deck!.leader.masterId + record.deck?.npcs.reduce((acc, npc) => acc + npc.masterId, '')
   return {
@@ -96,7 +96,6 @@ export function formatBuild(record: BattleRecord): BattleExport {
     userName: userInfo.value.name || '',
     questId: record.quest_id,
     raidId: record.raid_id,
-    raidName: record.raid_name,
     bossImage: record.imgId,
     turn: record.turn,
     createTime: record.startTimestamp,

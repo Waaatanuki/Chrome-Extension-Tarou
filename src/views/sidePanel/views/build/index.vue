@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { BuildResponse } from 'api'
+import type { BuildItem } from 'api'
 import { detailBuild, listBuild } from '~/api'
-import { battleExportData, buildNpcFilter, buildQuestId } from '~/logic'
+import { buildNpcFilter, buildQuestId, buildRecord } from '~/logic'
 
 const loading = ref(false)
-const buildList = ref<BuildResponse[]>([])
+const buildList = ref<BuildItem[]>([])
 const msg = ref('进入副本前自动获取副本ID')
 
 function handleQuery() {
@@ -17,9 +17,9 @@ function handleQuery() {
   })
 }
 
-function checkDetail(build: BuildResponse) {
+function checkDetail(build: BuildItem) {
   detailBuild(build.key).then(({ data }) => {
-    battleExportData.value = { ...build, ...data }
+    buildRecord.value = { ...build, ...data }
     openPopupWindow('ExportRecord')
   }).catch((error) => {
     ElMessage.error(error.message)

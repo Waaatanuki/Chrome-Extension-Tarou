@@ -1,6 +1,4 @@
 declare module 'battle' {
-  import type { BuildDetail } from 'extension'
-  import type { Deck } from 'party'
   import type { Buff, Summon } from 'source'
 
   interface BattleInfo {
@@ -76,30 +74,5 @@ declare module 'battle' {
     special: number
     total: number
     chain: number
-  }
-
-  interface BattleExport {
-    partyKey: string
-    userName: string
-    questId: string
-    raidId: number
-    raidName: string
-    bossImage?: string
-    turn: number
-    realTime: string
-    realSpeed: number
-    damage?: string
-    point?: number
-    deck?: Deck
-    detail: BuildDetail
-    createTime: number
-  }
-
-  interface BattleExportData extends BattleExport {
-    key?: string
-    questName?: string
-    questImage?: string
-    userName?: string
-    createTime?: number
   }
 }

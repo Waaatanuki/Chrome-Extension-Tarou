@@ -10,10 +10,10 @@ function handleCommand(command: 'get' | 'set' | 'copy' | 'reset') {
     case 'get':
       chrome.storage.local.get([key.value]).then((result) => {
         try {
-          text.value = JSON.stringify(JSON.parse(result[key.value]), null, 2)
+          text.value = JSON.stringify(JSON.parse(result[key.value] as string), null, 2)
         }
         catch (error) {
-          text.value = result[key.value]
+          text.value = result[key.value] as string
         }
         finally {
           ElMessage.success('获取成功')

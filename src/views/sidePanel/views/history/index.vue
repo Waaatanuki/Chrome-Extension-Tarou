@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { BattleRecord } from 'extension'
-import { battleExportData, battleRecord } from '~/logic'
+import { battleRecord, buildRecord } from '~/logic'
 
 function handleDetail(data: BattleRecord) {
-  battleExportData.value = formatBuild(data)
+  buildRecord.value = formatBuild(data)
   openPopupWindow('ExportRecord')
 }
 </script>
