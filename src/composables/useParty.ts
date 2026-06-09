@@ -1,4 +1,4 @@
-import type { BuildLeaderAbility, BuildNpc, BuildSummon, BuildWeapon, SkillType } from 'party'
+import type { BuildLeaderAbility, BuildNpc, BuildSummon, BuildSupporter, BuildWeapon, SkillType } from 'party'
 import type { CalculateSetting, DeckJson } from 'source'
 import { deckList, jobAbilityList, localNpcList } from '~/logic'
 
@@ -8,28 +8,50 @@ export function handleDeckJson(data: DeckJson, isTrue: boolean) {
 
   const hitIndex = deckList.value.findIndex(d => d.priority === String(data.priority))
   let createTime = Date.now()
+  let supporter: BuildSupporter | undefined
 
   if (hitIndex !== -1) {
-    deckList.value.splice(hitIndex, 1)
     createTime = isTrue ? deckList.value[hitIndex].createTime : createTime
+    supporter = deckList.value[hitIndex].supporter
+    deckList.value.splice(hitIndex, 1)
   }
 
   deckList.value.unshift({
     priority: String(data.priority),
     weapons: processWeapon(data),
-    summons: processSummon(data),
+    summons: processSummon(data, supporter),
     leader: processLeader(data),
     npcs: processNpc(data),
     effects: processEffect(data),
     enhance: processEnhance(data),
+    supporter,
     createTime,
   })
 }
 
 export function handleCalculateSetting(data: CalculateSetting) {
   const hit = deckList.value.find(item => item.priority === data?.priority)
-  if (hit)
-    hit.setting = { ...data.setting }
+  if (hit) {
+    hit.supporter = {
+      summonId: String(data.setting.summon_id),
+      imageId: String(data.setting.image_id),
+    }
+  }
+}
+
+export function handleSupporterInfo(responseData: any) {
+  const decks_info = responseData.option.auto_select.decks_info
+  const groupPriority = decks_info.last_used_group_priority
+  const deckPriority = decks_info.last_used_deck_priority
+  const priority = String(groupPriority) + String(deckPriority)
+  const hitDeck = deckList.value.find(d => d.priority === priority)
+
+  if (hitDeck) {
+    hitDeck.supporter = {
+      imageId: String(decks_info.supporter.summon_image_id),
+      summonId: String(decks_info.supporter.summon_id),
+    }
+  }
 }
 
 function processWeapon(data: DeckJson) {
@@ -63,9 +85,7 @@ function processWeapon(data: DeckJson) {
   return Array.from({ length: 13 }, (_, i) => i + 1).map(i => createWeapon(weapons[i], i === 1))
 }
 
-function processSummon(data: DeckJson) {
-  const hitDeck = deckList.value.find(item => item.priority === String(data.priority))
-
+function processSummon(data: DeckJson, supporter: BuildSupporter | undefined) {
   const { summons, sub_summons, quick_user_summon_id } = data.pc
   const quickSummonId = Number(quick_user_summon_id)
 
@@ -86,12 +106,12 @@ function processSummon(data: DeckJson) {
     ...[1, 2].map(i => createSummon(sub_summons[i], false)),
   ]
 
-  if (hitDeck?.setting?.summon_id) {
+  if (supporter) {
     summon.push ({
       paramId: 0,
       masterId: 0,
       rarity: 0,
-      imageId: hitDeck.setting.image_id!,
+      imageId: supporter.imageId,
       isMain: true,
       isQuick: false,
     })

@@ -8,7 +8,7 @@ declare module 'party' {
     effects: BuildEffect[]
     enhance: BuildEnhance
     createTime: number
-    setting?: CalculateSetting
+    supporter?: BuildSupporter
   }
 
   type SkillType = 'skill1' | 'skill2' | 'skill3'
@@ -94,5 +94,10 @@ declare module 'party' {
     enhance: number
     enhanceMagna: number
     enhanceEvil: number
+  }
+
+  interface BuildSupporter {
+    summonId: string
+    imageId: string
   }
 }

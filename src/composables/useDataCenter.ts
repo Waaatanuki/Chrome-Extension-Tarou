@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { artifactSkillList } from '~/constants/artifact'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo } from '~/logic'
+import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, deckList, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -670,7 +670,6 @@ export async function unpack(parcel: string) {
         if (battleMemo.value.length > MaxMemoLength)
           battleMemo.value.shift()
       }
-      console.log('memoList==>', battleMemo.value)
     }
 
     battleInfo.value.inLobby = false
@@ -746,8 +745,6 @@ export async function unpack(parcel: string) {
     while (battleMemo.value.length > MaxMemoLength)
       battleMemo.value.shift()
 
-    console.log('memoList==>', battleMemo.value)
-
     joinedRaid.value = joinedRaid.value.filter(raid => !responseData.list.some((b: any) => b.raid_id === raid.raidId))
   }
 
@@ -757,6 +754,13 @@ export async function unpack(parcel: string) {
     const match = url.match(regex)
     if (match)
       buildQuestId.value = match[1]
+
+    handleSupporterInfo(responseData)
+  }
+
+  // Build 获取参战他人副本的友招信息
+  if (url.includes('/quest/content/supporter_raid/')) {
+    handleSupporterInfo(responseData)
   }
 
   // Build 获取参战他人副本的questId
