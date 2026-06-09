@@ -15,6 +15,7 @@ export const defaultNotificationSetting: NotificationSetting = {
   sampoFinish: true,
   pointReach: true,
   actionTrigger: true,
+  cancelAutoUploadBuild: false,
 }
 
 export const defaultNotificationItem = [

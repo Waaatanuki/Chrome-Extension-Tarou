@@ -319,6 +319,7 @@ declare module 'extension' {
     sampoFinish: boolean
     pointReach: boolean
     actionTrigger: boolean
+    cancelAutoUploadBuild: boolean
   }
 
   interface ArtifactRule {

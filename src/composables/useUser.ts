@@ -1,7 +1,7 @@
 import type { DropInfo } from 'api'
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
 import { sendMultiDropInfo, uploadBuild } from '~/api'
-import { battleRecord, code, failedDropInfoList, uploadBuildMemo, userInfo } from '~/logic'
+import { battleRecord, code, failedDropInfoList, notificationSetting, uploadBuildMemo, userInfo } from '~/logic'
 
 export default function useUser() {
   function checkUser(url: string) {
@@ -71,6 +71,9 @@ export default function useUser() {
   }
 
   function sendBuild(battleId: string) {
+    if (notificationSetting.value.cancelAutoUploadBuild)
+      return
+
     const hitRecord = battleRecord.value.find(r => r.raid_id === Number(battleId))
     if (!hitRecord?.deck?.createTime)
       return

@@ -72,6 +72,7 @@ onMounted(() => {
     <el-checkbox v-model="notificationSetting.checkUpdate" label="检测版本更新" />
     <el-checkbox v-model="notificationSetting.pointReach" label="到线提醒" />
     <el-checkbox v-model="notificationSetting.actionTrigger" label="动作触发提醒" />
+    <el-checkbox v-model="notificationSetting.cancelAutoUploadBuild" label="取消自动上传队伍配置" />
   </div>
   <el-alert :closable="false">
     <template #title>
