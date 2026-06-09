@@ -2,11 +2,11 @@
 import type { BuildLeader, BuildNpc } from 'party'
 import { buildNpcFilter } from '~/logic'
 
-const { isBuild = false, priority } = defineProps<{
+const { isRemote = false, priority } = defineProps<{
   leader: BuildLeader
   npcs: BuildNpc[]
   priority: string
-  isBuild?: boolean
+  isRemote?: boolean
 }>()
 
 const NPC_AROUSAL_FORM: Record<string, string> = {
@@ -24,7 +24,7 @@ function updateNpcFilter(masterId: number) {
   }
   else {
     buildNpcFilter.value.push(masterId)
-    ElMessage.success('标记成功')
+    ElMessage.success('标记为未持有')
   }
 }
 
@@ -54,9 +54,9 @@ function goWiki(masterId: number) {
           <template #reference>
             <div relative w-56px class="group">
               <img w-full :src="getAssetImg('npc', npc.imageId, 'raid_normal')">
-              <div absolute inset-0 z-999 hidden fc bg-black opacity-70 class="group-hover:flex">
-                <div v-if="isBuild" class="i-carbon:close-filled" absolute icon-btn @click="updateNpcFilter(npc.masterId)" />
-                <div v-else class="i-mdi:wikipedia" absolute icon-btn @click="goWiki(npc.masterId)" />
+              <div absolute inset-0 z-999 hidden fc flex-col gap-20px bg-black text-16px opacity-70 class="group-hover:flex">
+                <div class="i-mdi:wikipedia" icon-btn @click="goWiki(npc.masterId)" />
+                <div v-if="isRemote" class="i-carbon:close-filled" icon-btn @click="updateNpcFilter(npc.masterId)" />
               </div>
               <img v-if="npc.isAugment" absolute left-0 top-0 w-20px :src="getLocalImg('icon_augment')">
               <img v-if="npc.attribute" absolute right-0 top-0 :src="getArtifactIcon(`icn_type_${npc.attribute}`)" w-20px>

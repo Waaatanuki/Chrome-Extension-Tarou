@@ -56,7 +56,7 @@ async function exportToImg() {
         <DamageRecord v-if="buildRecord.detail" m-auto :player-info="buildRecord.detail.player" :is-export="true" />
       </div>
       <div v-if="deck" flex flex-col gap-10px>
-        <Npc :leader="deck.leader" :npcs="deck.npcs" :priority="deck.priority" />
+        <Npc :leader="deck.leader" :npcs="deck.npcs" :priority="deck.priority" :is-remote="!!buildRecord.key" />
         <Weapon :weapons="deck.weapons" />
         <Summon :summons="deck.summons" />
       </div>

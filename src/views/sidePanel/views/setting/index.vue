@@ -101,7 +101,7 @@ onMounted(() => {
       <div w-268px>
         <el-tooltip content="点击配置查询中的角色进行设置" placement="top-start">
           <span>
-            未拥有角色
+            未持有角色
           </span>
         </el-tooltip>
       </div>
