@@ -89,7 +89,6 @@ declare module 'battle' {
     startTime?: number
     realTime: string
     realSpeed: number
-    fullSpeed: string
     damage?: string
     point?: number
     deck?: Deck

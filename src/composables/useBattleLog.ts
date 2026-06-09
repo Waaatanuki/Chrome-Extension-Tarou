@@ -115,7 +115,6 @@ export function handleAttackResultJson(type: string, data: AttackResultJson, pay
     battleInfo.value.bossInfo.hpPercent = 0
     battleInfo.value.bossInfo.timer = status?.timer ?? battleInfo.value.bossInfo.timer
     battleInfo.value.bossInfo.countDownTime = status?.timer ? Date.now() + status.timer * 1000 : battleInfo.value.bossInfo.countDownTime
-    currentRaid.endTimestamp = Date.now()
   }
 
   if (battleInfo.value.summonInfo) {
@@ -469,6 +468,7 @@ function recordRaidInfo(data: BattleStartJson) {
     special_skill_flag: Number(data.special_skill_flag),
     actionQueue,
     abilityList,
+    damage: '0',
     point: 0,
     deck: deepClone(hitDeck),
   })

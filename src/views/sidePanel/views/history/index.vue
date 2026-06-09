@@ -30,7 +30,7 @@ function handleDetail(data: BattleRecord) {
       </el-descriptions>
       <div mt-5px flex items-center justify-between>
         <div text-xs>
-          {{ data.startTimestamp ? useDateFormat(data.startTimestamp, 'MM/DD HH:mm') : '' }}
+          {{ useDateFormat(data.startTimestamp, 'MM/DD HH:mm') }}
         </div>
 
         <div fc>

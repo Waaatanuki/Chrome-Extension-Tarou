@@ -61,7 +61,7 @@ function checkDetail(build: BuildResponse) {
       </el-descriptions>
       <div mt-5px flex items-center justify-between>
         <div text-xs>
-          {{ data.account }} @ {{ useDateFormat(data.createTime, 'MM-DD HH:mm:ss').value }}
+          {{ data.userName }} @ {{ useDateFormat(data.createTime, 'MM-DD HH:mm:ss').value }}
         </div>
 
         <TheButton @click="checkDetail(data)">

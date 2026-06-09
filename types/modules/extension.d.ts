@@ -186,23 +186,18 @@ declare module 'extension' {
     quest_id: string
     raid_id: number
     raid_name: string
-    special_skill_flag?: number
-    imgId?: string
+    special_skill_flag: number
+    imgId: string
     turn: number
-    startTimestamp?: number
-    endTimestamp?: number
+    startTimestamp: number
     startTimer: number
     endTimer: number
     formation: number[]
     player: Player[]
     actionQueue: ActionQueue[]
-    hasResult?: boolean
-    damage?: string
-    point?: number
-    duration?: string
-    treasureList?: { src: string, number: string, boxClass: string }[]
+    damage: string
+    point: number
     abilityList: Action[]
-    key?: string
     deck?: Deck
   }
 

@@ -55,11 +55,15 @@ declare module 'api' {
     lastDropTake: number
   }
 
-  interface BuildResponse extends BattleExport {
+  interface BuildResponse {
     key: string
-    questName: string
-    questImage: string
-    account: string
+    userName: string
+    bossImage: string
+    damage: string
+    point: number
+    turn: number
+    realTime: string
+    realSpeed: number
     createTime: number
   }
 }
