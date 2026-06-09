@@ -99,7 +99,7 @@ export function formatBuild(record: BattleRecord): BattleExport {
     raidName: record.raid_name,
     bossImage: record.imgId,
     turn: record.turn,
-    startTime: Math.floor((record.startTimestamp ?? Date.now()) / 1000),
+    createTime: record.startTimestamp,
     realTime: time,
     realSpeed: speed,
     point: record.point,

@@ -40,6 +40,9 @@ export function handleCalculateSetting(data: CalculateSetting) {
 }
 
 export function handleSupporterInfo(responseData: any) {
+  if (!responseData.option)
+    return
+
   const decks_info = responseData.option.auto_select.decks_info
   const groupPriority = decks_info.last_used_group_priority
   const deckPriority = decks_info.last_used_deck_priority

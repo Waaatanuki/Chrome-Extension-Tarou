@@ -19,6 +19,10 @@ async function request<T>(api: string, options?: RequestInit): Promise<T> {
 
   try {
     const response = await fetch(baseURL + api, fetchOptions)
+
+    if (response.status === 204)
+      return null as unknown as T
+
     const data = await response.json()
 
     if (!response.ok) {

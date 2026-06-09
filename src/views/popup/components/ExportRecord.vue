@@ -50,7 +50,7 @@ async function exportToImg() {
             </el-descriptions-item>
           </el-descriptions>
           <div mt-5px text-end text-xs>
-            {{ `${userName} @ ${useDateFormat(battleExportData.startTime! * 1000, 'MM-DD HH:mm:ss').value}` }}
+            {{ `${userName} @ ${useDateFormat(battleExportData.createTime, 'MM-DD HH:mm:ss').value}` }}
           </div>
         </el-card>
         <DamageRecord v-if="battleExportData.detail" m-auto :player-info="battleExportData.detail.player" :is-export="true" />

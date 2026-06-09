@@ -21,6 +21,8 @@ function checkDetail(build: BuildResponse) {
   detailBuild(build.key).then(({ data }) => {
     battleExportData.value = { ...build, ...data }
     openPopupWindow('ExportRecord')
+  }).catch((error) => {
+    ElMessage.error(error.message)
   })
 }
 </script>

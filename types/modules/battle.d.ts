@@ -86,13 +86,13 @@ declare module 'battle' {
     raidName: string
     bossImage?: string
     turn: number
-    startTime?: number
     realTime: string
     realSpeed: number
     damage?: string
     point?: number
     deck?: Deck
     detail: BuildDetail
+    createTime: number
   }
 
   interface BattleExportData extends BattleExport {
