@@ -14,16 +14,7 @@ const msg = ref('进入副本前自动获取副本ID')
 
 const ATTR_OPTIONS = [1, 2, 3, 4, 5, 6]
 
-function checkAttr(attr: number) {
-  if (queryParams.value.attrs.includes(attr)) {
-    queryParams.value.attrs = queryParams.value.attrs.filter(a => a !== attr)
-  }
-  else {
-    queryParams.value.attrs.push(attr)
-  }
-}
-
-function handleQuery() {
+const handleQuery = useDebounceFn(() => {
   loading.value = true
   listBuild({ questId: buildQuestId.value, npcFilter: buildNpcFilter.value, ...queryParams.value }).then(({ data }) => {
     buildList.value = data.list
@@ -31,6 +22,21 @@ function handleQuery() {
   }).finally(() => {
     loading.value = false
   })
+}, 500)
+
+function checkAttr(attr: number) {
+  if (queryParams.value.attrs.includes(attr)) {
+    queryParams.value.attrs = queryParams.value.attrs.filter(a => a !== attr)
+  }
+  else {
+    queryParams.value.attrs.push(attr)
+  }
+  handleQuery()
+}
+
+function checkReload() {
+  queryParams.value.noReload = !queryParams.value.noReload
+  handleQuery()
 }
 
 function checkDetail(build: BuildItem) {
@@ -60,7 +66,7 @@ function checkDetail(build: BuildItem) {
           :class="queryParams.noReload
             ? 'shadow-[0_0_3px_3px_#059669]'
             : 'ring-1 ring-neutral-6'"
-          @click="queryParams.noReload = !queryParams.noReload"
+          @click="checkReload"
         >
           无刷新
         </button>
