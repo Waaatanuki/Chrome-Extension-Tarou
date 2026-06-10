@@ -6,7 +6,7 @@ import { buildNpcFilter, buildQuestId, buildRecord } from '~/logic'
 const loading = ref(false)
 const queryParams = ref({
   attrs: [] as number[],
-  noFresh: false,
+  noReload: false,
 })
 
 const buildList = ref<BuildItem[]>([])
@@ -57,10 +57,10 @@ function checkDetail(build: BuildItem) {
       <div fc gap-2>
         <button
           class="rounded-lg px-2 text-12px"
-          :class="queryParams.noFresh
+          :class="queryParams.noReload
             ? 'shadow-[0_0_3px_3px_#059669]'
             : 'ring-1 ring-neutral-6'"
-          @click="queryParams.noFresh = !queryParams.noFresh"
+          @click="queryParams.noReload = !queryParams.noReload"
         >
           无刷新
         </button>

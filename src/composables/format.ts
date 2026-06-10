@@ -111,5 +111,6 @@ export function formatBuild(record: BattleRecord): BuildResDto {
       }),
       actionQueue: record.actionQueue,
     },
+    noReload: record.noReload,
   }
 }

@@ -80,6 +80,7 @@ declare module 'api' {
     point: number
     createTime: number
     detail: BuildDetail
+    noReload: boolean
     key?: string
     partyKey?: string
     deck?: Deck

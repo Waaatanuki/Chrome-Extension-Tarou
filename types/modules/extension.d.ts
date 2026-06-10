@@ -198,6 +198,7 @@ declare module 'extension' {
     damage: string
     point: number
     abilityList: Action[]
+    noReload: boolean
     deck?: Deck
   }
 

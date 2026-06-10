@@ -385,6 +385,8 @@ function recordRaidInfo(data: BattleStartJson) {
   const hitRecord = battleRecord.value.find(b => String(b.raid_id) === battleInfo.value.bossInfo?.battleId)
 
   if (hitRecord) {
+    // 更新刷新状态
+    hitRecord.noReload = false
     // 防止死亡事件没有捕获时，角色存活状态与实际不符
     for (const player of data.player.param) {
       const hitPlayer = hitRecord.player.find(p => p.pid === player.pid.split('_')[0])
@@ -470,6 +472,7 @@ function recordRaidInfo(data: BattleStartJson) {
     abilityList,
     damage: '0',
     point: 0,
+    noReload: true,
     deck: deepClone(hitDeck),
   })
 
