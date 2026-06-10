@@ -3,6 +3,8 @@ import type { Ability, AttackResultJson, BattleStartJson, ChatInfoEN, ChatInfoJP
 import { battleInfo, battleMemo, battleRecord, deckList, notificationSetting, questSetting, userInfo } from '~/logic'
 
 export function handleStartJson(data: BattleStartJson) {
+  userInfo.value.name = data.nickname
+
   const boss = data.boss.param[0]
   const leader = data.player.param[0]
   battleInfo.value.leaderAttr = leader.attr

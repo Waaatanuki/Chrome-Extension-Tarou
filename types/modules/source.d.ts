@@ -48,6 +48,7 @@ declare module 'source' {
   }
 
   interface BattleStartJson {
+    nickname: string
     boss: Boss
     player: Player
     turn: number
