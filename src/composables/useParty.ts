@@ -18,6 +18,7 @@ export function handleDeckJson(data: DeckJson, isTrue: boolean) {
 
   deckList.value.unshift({
     priority: String(data.priority),
+    attr: Number(data.pc.weapons[1].master?.attribute),
     weapons: processWeapon(data),
     summons: processSummon(data, supporter),
     leader: processLeader(data),

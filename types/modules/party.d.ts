@@ -1,6 +1,7 @@
 declare module 'party' {
   interface Deck {
     priority: string
+    attr: number
     weapons: BuildWeapon[]
     summons: BuildSummon[]
     leader: BuildLeader
