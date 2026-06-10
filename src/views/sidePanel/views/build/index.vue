@@ -4,12 +4,28 @@ import { detailBuild, listBuild } from '~/api'
 import { buildNpcFilter, buildQuestId, buildRecord } from '~/logic'
 
 const loading = ref(false)
+const queryParams = ref({
+  attrs: [] as number[],
+  noFresh: false,
+})
+
 const buildList = ref<BuildItem[]>([])
 const msg = ref('进入副本前自动获取副本ID')
 
+const ATTR_OPTIONS = [1, 2, 3, 4, 5, 6]
+
+function checkAttr(attr: number) {
+  if (queryParams.value.attrs.includes(attr)) {
+    queryParams.value.attrs = queryParams.value.attrs.filter(a => a !== attr)
+  }
+  else {
+    queryParams.value.attrs.push(attr)
+  }
+}
+
 function handleQuery() {
   loading.value = true
-  listBuild({ questId: buildQuestId.value, npcFilter: buildNpcFilter.value }).then(({ data }) => {
+  listBuild({ questId: buildQuestId.value, npcFilter: buildNpcFilter.value, ...queryParams.value }).then(({ data }) => {
     buildList.value = data.list
     msg.value = buildList.value.length === 0 ? '未找到匹配的数据' : ''
   }).finally(() => {
@@ -28,18 +44,47 @@ function checkDetail(build: BuildItem) {
 </script>
 
 <template>
-  <div sticky inset-x-0 top-0 z-999 h-10 flex items-center justify-between rounded bg-neutral-8 px-4 text-base>
-    <div fc gap-2 text-14px>
-      <div>
-        副本ID
+  <div sticky inset-x-0 top-0 z-999 grid rounded bg-neutral-8 p-2 text-base>
+    <div flex items-center justify-between>
+      <div fc gap-2 text-12px>
+        <div>
+          副本ID
+        </div>
+        <el-input v-model="buildQuestId" size="small" style="width: 60px;">
+          管理副本
+        </el-input>
       </div>
-      <el-input v-model="buildQuestId" clearable size="small" style="width: 100px;">
-        管理副本
-      </el-input>
+      <div fc gap-2>
+        <button
+          class="rounded-lg px-2 text-12px"
+          :class="queryParams.noFresh
+            ? 'shadow-[0_0_3px_3px_#059669]'
+            : 'ring-1 ring-neutral-6'"
+          @click="queryParams.noFresh = !queryParams.noFresh"
+        >
+          无刷新
+        </button>
+
+        <TheButton icon="carbon:search" :loading="loading" @click="handleQuery">
+          查询
+        </TheButton>
+      </div>
     </div>
-    <TheButton icon="carbon:search" :loading="loading" @click="handleQuery">
-      查询
-    </TheButton>
+
+    <div class="grid grid-cols-6 mt-4 gap-2">
+      <button
+        v-for="item in ATTR_OPTIONS"
+        :key="item"
+        type="button"
+        class="fc gap-2 rounded-lg p-1"
+        :class="queryParams.attrs.includes(item)
+          ? 'shadow-[0_0_3px_3px_#059669]'
+          : 'ring-1 ring-neutral-6'"
+        @click="checkAttr(item)"
+      >
+        <img :src="getOfficialUrl(`/sp/artifact/ui/icon/icn_type_${item}.png`)" alt="属性图标" class="size-25px">
+      </button>
+    </div>
   </div>
   <div mt-10px flex flex-col flex-wrap gap-10px>
     <el-result v-if="msg" icon="info" :sub-title="msg" />
