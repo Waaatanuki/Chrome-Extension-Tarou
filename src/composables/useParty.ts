@@ -44,9 +44,10 @@ export function handleSupporterInfo(responseData: any) {
   if (!responseData.option)
     return
 
-  const decks_info = responseData.option.auto_select.decks_info
-  const groupPriority = decks_info.last_used_group_priority
-  const deckPriority = decks_info.last_used_deck_priority
+  const option = responseData.option
+  const decks_info = option.auto_select.decks_info
+  const groupPriority = decks_info ? decks_info.last_used_group_priority : option.last_used_group_priority
+  const deckPriority = decks_info ? decks_info.last_used_deck_priority : option.last_used_deck_priority
   const priority = String(groupPriority) + String(deckPriority)
   const hitDeck = deckList.value.find(d => d.priority === priority)
 
