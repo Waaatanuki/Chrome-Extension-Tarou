@@ -90,7 +90,7 @@ export function getRealTimeSpeed(row: BattleRecord) {
 
 export function formatBuild(record: BattleRecord): BuildResDto {
   const { time, speed } = getRealTimeSpeed(record)
-  const partyKey = record.deck!.leader.masterId + record.deck?.npcs.reduce((acc, npc) => acc + npc.masterId, '')
+  const partyKey = (record.deck?.leader.masterId || '') + record.deck?.npcs.reduce((acc, npc) => acc + npc.masterId, '')
   return {
     partyKey,
     userName: userInfo.value.name || '',
