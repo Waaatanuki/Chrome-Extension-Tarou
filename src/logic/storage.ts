@@ -1,6 +1,6 @@
 import type { BuildResDto, DropInfo } from 'api'
 import type { BattleInfo } from 'battle'
-import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, JoinedRaid, MarkedUser, NotificationSetting, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
+import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, JoinedRaid, MarkedUser, NotificationSetting, OdiantWeapon, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact } from 'source'
 import dayjs from 'dayjs'
@@ -61,6 +61,9 @@ export const artifactList = useWebExtensionStorage<Artifact[]>('artifactList', [
 export const artifactRuleIndex = useWebExtensionStorage<number>('artifactRuleIndex', 0)
 export const artifactRuleList = useWebExtensionStorage<ArtifactRule[]>('artifactRuleList', defaultArtifactRuleList)
 export const artifactUsage = useWebExtensionStorage<Partial<ArtifactUsage>>('artifactUsage', {})
+
+// Odiant
+export const weaponList = useWebExtensionStorage<OdiantWeapon[]>('weaponList', [])
 
 // Build
 export const buildQuestId = useWebExtensionStorage('buildQuestId', '')

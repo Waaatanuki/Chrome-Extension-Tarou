@@ -468,4 +468,13 @@ declare module 'extension' {
     member: NumberLimitPair
     remainingTimestamp: number
   }
+
+  interface OdiantWeapon {
+    position: string
+    masterId: string
+    isOdiantWeapon: boolean
+    skillId: number
+    skillDepth: number
+    skillImage: string
+  }
 }

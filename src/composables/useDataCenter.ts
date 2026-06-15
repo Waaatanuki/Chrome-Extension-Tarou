@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { artifactSkillList } from '~/constants/artifact'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, deckList, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo } from '~/logic'
+import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, deckList, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo, weaponList } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -773,6 +773,22 @@ export async function unpack(parcel: string) {
   // Party 记录当前队伍信息
   if (url.includes('party/deck')) {
     handleDeckJson(responseData.deck, url.includes('true'))
+  }
+
+  // Odiant 记录当前列表、回收和分解时的武器信息
+  if (/\/weapon\/(?:(?:container_)?list|(?:recycling|decompose)\/list)\//.test(url)) {
+    weaponList.value = responseData.list
+      .map((weapon: any, idx: number) => {
+        const skillInfo: any = Object.values(weapon.param.augment_skill_info).flat()[0]
+        return {
+          position: `${Math.floor(idx / 4 + 1)}-${idx % 4 + 1}`,
+          masterId: weapon.master.id,
+          isOdiantWeapon: weapon.param.odiant.is_odiant_weapon,
+          skillId: skillInfo?.skill_id,
+          skillDepth: skillInfo?.depth,
+          skillImage: weapon.param.augment_image[0],
+        }
+      })
   }
 
   // Artifact 记录当前神器信息

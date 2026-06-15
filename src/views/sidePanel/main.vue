@@ -24,6 +24,7 @@ const upViewList = computed(() => [
   { key: 'dashboard', label: '主页', icon: 'material-symbols:dashboard' },
   { key: 'drop', label: '掉落统计', icon: 'game-icons:gold-stack' },
   { key: 'artifact', label: '神器甄选', icon: 'game-icons:glowing-artifact' },
+  { key: 'odiant', label: '禁祸祛除', icon: 'game-icons:custodian-helmet' },
   { key: 'party', label: '队伍信息', icon: 'ri:team-fill' },
   { key: 'build', label: '配置查询', icon: 'material-symbols:document-search' },
   { key: 'combat', label: '战斗信息', icon: 'game-icons:battle-axe' },
