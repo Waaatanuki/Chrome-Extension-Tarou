@@ -91,7 +91,7 @@ function goWiki(masterId: number) {
                 {{ exlb.type }}
               </div>
               <div class="text-#ffff5f" flex flex-col gap-1>
-                <div v-for="bonus, i in exlb.bonuse" :key="i" flex items-center justify-start gap-1 px-20px>
+                <div v-for="bonus, i in exlb.bonus" :key="i" flex items-center justify-start gap-1 px-20px>
                   <div :class="bonus.icon" />
                   <div>
                     {{ bonus.name }}

@@ -54,7 +54,7 @@ declare module 'party' {
 
   interface Exlb {
     type: string
-    bonuse: {
+    bonus: {
       icon: string
       name: string
       value: string

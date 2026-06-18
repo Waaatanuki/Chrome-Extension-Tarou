@@ -131,11 +131,11 @@ export function setupWebRequestListener() {
         const exlb: Exlb[] = []
         $('#prt-extra-lb-list').children('.prt-extra-lb-title').each((i, elem) => {
           const type = $(elem).text()
-          const lb: Exlb = { type, bonuse: [] }
+          const lb: Exlb = { type, bonus: [] }
           exlb.push(lb)
           $(elem).next('.prt-extra-lb-info').children('.prt-bonus-detail').each((i, elem) => {
             if (!$(elem).hasClass('is-master')) {
-              lb.bonuse.push({
+              lb.bonus.push({
                 icon: $(elem).find('.prt-bonus-icon').attr('class')?.replace('prt-bonus-icon ', '') || '',
                 name: $(elem).find('.txt-bonus-name').text().trim(),
                 value: $(elem).find('.txt-current-bonus').text().trim(),
@@ -143,7 +143,7 @@ export function setupWebRequestListener() {
             }
           })
         })
-        hitNpc.exlb = exlb.filter(i => i.bonuse.length !== 0)
+        hitNpc.exlb = exlb.filter(i => i.bonus.length !== 0)
       }).catch((err) => {
         console.log(err)
       })
