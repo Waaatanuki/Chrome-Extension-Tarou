@@ -192,9 +192,3 @@ function processEnhance(data: DeckJson) {
     enhanceEvil: damageInfo.weapon_skill_enhance_param.weapon_skill_enhance_evil,
   }
 }
-
-function formatNpcImageId(str: string) {
-  const regex = /^skin\/(.+?)_[^_]+$/
-  const match = str.match(regex)
-  return match ? match[1] : str
-}

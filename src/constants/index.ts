@@ -101,3 +101,10 @@ export const defaultCombatPanelSetting: CombatPanelSetting = {
     y: 15,
   },
 }
+
+export const NPC_AROUSAL_FORM: Record<string, string> = {
+  1: '平衡',
+  2: '攻击',
+  3: '防御',
+  4: '连击',
+}

@@ -510,7 +510,7 @@ export async function unpack(parcel: string) {
       paramId: npcDetail.id,
       masterId: Number(npcDetail.master.id),
       attribute: npcDetail.master.attribute,
-      imageId: '',
+      imageId: formatNpcImageId(npcDetail.param.image_id_9),
       isAugment: npcDetail.has_npcaugment_constant,
       arousalForm: npcDetail.npc_arousal_form,
       ability: [],
@@ -529,6 +529,7 @@ export async function unpack(parcel: string) {
       const artifactSkillInfo = npcDetail.artifact[`skill${i}_info`]
       if (artifactSkillInfo) {
         npcInfo.artifact!.push({
+          id: artifactSkillInfo.skill_id,
           value: artifactSkillInfo.effect_value,
           icon: artifactSkillInfo.icon_image,
           level: artifactSkillInfo.level,

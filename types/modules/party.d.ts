@@ -44,6 +44,7 @@ declare module 'party' {
       fa: boolean
     }[]
     artifact?: {
+      id: number
       value: string
       icon: string
       level: number

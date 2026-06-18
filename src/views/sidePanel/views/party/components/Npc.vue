@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BuildLeader, BuildNpc } from 'party'
+import { NPC_AROUSAL_FORM } from '~/constants'
 import { buildNpcFilter } from '~/logic'
 
 const { isRemote = false, priority } = defineProps<{
@@ -8,13 +9,6 @@ const { isRemote = false, priority } = defineProps<{
   priority: string
   isRemote?: boolean
 }>()
-
-const NPC_AROUSAL_FORM: Record<string, string> = {
-  1: '平衡',
-  2: '攻击',
-  3: '防御',
-  4: '连击',
-}
 
 const questId = computed(() => priority.slice(0, 6))
 

@@ -62,6 +62,7 @@ export function openPopupWindow(key: string) {
     ArtifactRule: { height: 700, width: 700 },
     BuildCompare: { height: 900, width: 1100 },
     ExportRecord: { height: 800, width: 800 },
+    NpcDetail: { height: 1000, width: 1000 },
     RecoveryItem: { height: 1000, width: 900 },
     SampoSetup: { height: 900, width: 600 },
     SupportSummon: { height: 400, width: 700 },

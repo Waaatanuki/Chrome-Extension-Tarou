@@ -8,6 +8,7 @@ import Weapon from './components/Weapon.vue'
 const deck = computed(() => deckList.value[0])
 
 const commands = [
+  { label: '角色详情', icon: 'mdi:information-outline', handler: () => openPopupWindow('NpcDetail') },
   { label: '复制配置', icon: 'material-symbols:content-copy', handler: copyParty },
   { label: '下载配置', icon: 'streamline-flex:screenshot', handler: downloadParty },
   { label: '配置对比', icon: 'material-symbols:compare', handler: () => openPopupWindow('BuildCompare') },

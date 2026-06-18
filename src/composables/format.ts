@@ -116,3 +116,9 @@ export function formatBuild(record: BattleRecord): BuildResDto {
     noReload: record.noReload,
   }
 }
+
+export function formatNpcImageId(str: string) {
+  const regex = /^skin\/(.+?)_[^_]+$/
+  const match = str.match(regex)
+  return match ? match[1] : str
+}
