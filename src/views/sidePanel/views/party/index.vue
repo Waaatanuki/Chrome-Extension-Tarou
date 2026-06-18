@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { snapdom } from '@zumer/snapdom'
 import { deckList } from '~/logic'
 import Effect from './components/Effect.vue'
 import Npc from './components/Npc.vue'
@@ -17,7 +16,7 @@ const commands = [
 async function copyParty() {
   try {
     const element = document.querySelector(`.party-container`)!
-    const result = await snapdom(element)
+    const result = await useSnapdom(element)
     const clipboardItem = new ClipboardItem({ 'image/png': await result.toBlob({ scale: 1.5, type: 'png', backgroundColor: '#131313' }) })
     await navigator.clipboard.write([clipboardItem])
     ElMessage.success({ offset: 100, message: '已复制到剪贴板' })
@@ -30,7 +29,7 @@ async function copyParty() {
 async function downloadParty() {
   try {
     const element = document.querySelector(`.party-container`)!
-    const result = await snapdom(element)
+    const result = await useSnapdom(element)
     await result.download({ scale: 1.5, type: 'png', filename: `配置截图${Date.now()}`, backgroundColor: '#131313' })
     ElMessage.success({ offset: 100, message: '保存成功' })
   }

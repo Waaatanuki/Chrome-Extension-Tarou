@@ -7,8 +7,16 @@ body,
   height: 100%;
 }
 
+@font-face {
+  font-family: 'LXGW WenKai Screen';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/font/LXGWWenKaiScreen.min.woff2') format('woff2');
+}
+
 body {
-  font-family: 'LXGW WenKai Screen', sans-serif;
+  font-family: 'LXGW WenKai Screen', cursive;
 }
 
 .party_weapon_wrapper {

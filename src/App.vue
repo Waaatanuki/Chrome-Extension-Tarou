@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { snapdom } from '@zumer/snapdom'
 
 const visible = ref(false)
 const foo = ref('')
@@ -18,7 +17,7 @@ async function handleClick() {
   console.log('handleClick')
   try {
     const element = document.querySelector(`.foo`)!
-    const result = await snapdom(element)
+    const result = await useSnapdom(element)
     await result.download({ quality: 3, scale: 3, type: 'png', filename: `配置截图${Date.now()}` })
   }
   catch (error) {

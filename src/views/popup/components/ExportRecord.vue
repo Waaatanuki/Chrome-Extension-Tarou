@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { snapdom } from '@zumer/snapdom'
 import { buildRecord, userInfo } from '~/logic'
 import ActionList from '../../sidePanel/views/combat/components/ActionList.vue'
 import DamageRecord from '../../sidePanel/views/combat/components/DamageRecord.vue'
@@ -14,7 +13,7 @@ const deck = computed(() => buildRecord.value.deck)
 async function exportToImg() {
   try {
     const element = document.querySelector(`#record-container`)!
-    const result = await snapdom(element)
+    const result = await useSnapdom(element)
     await result.download({ scale: 1.5, type: 'png', filename: `战斗记录${Date.now()}`, backgroundColor: '#131313' })
     ElMessage.success('保存成功')
   }
