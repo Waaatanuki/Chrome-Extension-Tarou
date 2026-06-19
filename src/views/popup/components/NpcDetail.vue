@@ -42,78 +42,72 @@ async function exportToImg() {
     <Icon icon="streamline-flex:screenshot" text-25px text-teal-6 />
   </div>
   <div id="npc-container" grid m-auto w-800px gap-10px p-4>
-    <div v-for="npc in npcList" :key="npc.paramId" class="flex gap-10px">
-      <div relative h-245px w-114px fc>
-        <template v-if="npc.imageId">
-          <img h-245px :src="getAssetImg('npc', npc.imageId, 'f')">
-          <img v-if="npc.isAugment" absolute left-0 top-0 w-40px :src="getLocalImg('icon_augment')">
+    <el-descriptions v-for="npc in npcList" :key="npc.paramId" direction="vertical" :column="3" :border="true" size="small">
+      <el-descriptions-item label="角色" align="center" label-width="100" :rowspan="2">
+        <div v-if="npc.imageId" relative mx-auto my-5px w-80px>
+          <img w-full :src="getAssetImg('npc', npc.imageId, 'f')">
+          <img v-if="npc.isAugment" absolute left-0 top-0 w-30px :src="getLocalImg('icon_augment')">
           <div
             v-if="npc.arousalForm" :class="`txt-form-color-${npc.arousalForm}`"
-            class="bg-black/60" absolute bottom-0 right-0 rounded px-4px py-2px text-15px
+            class="bg-black/60" absolute bottom-0 right-0 rounded-lt px-4px text-12px
           >
             {{ NPC_AROUSAL_FORM[npc.arousalForm] }}
           </div>
-        </template>
+        </div>
         <div v-else text-neutral>
           未获取
         </div>
-      </div>
-      <el-descriptions direction="vertical" :column="2" :border="true">
-        <el-descriptions-item
-          label="戒指"
-          align="center"
-          label-width="300"
-        >
-          <div h-105px flex flex-col gap-1>
-            <div v-for="bonus, i in getExlbBonus(npc, 'EXリミットボーナス')" :key="i" flex items-center justify-start gap-1 px-20px>
-              <div :class="bonus.icon" />
-              <div>
-                {{ bonus.name }}
-              </div>
-              <div>
-                {{ bonus.value }}
-              </div>
+      </el-descriptions-item>
+      <el-descriptions-item label="戒指" align="center" label-width="250">
+        <div flex flex-col gap-1>
+          <div v-for="bonus, i in getExlbBonus(npc, 'EXリミットボーナス')" :key="i" flex items-center justify-start gap-1 px-20px>
+            <div :class="bonus.icon" />
+            <div>
+              {{ bonus.name }}
             </div>
-            <div v-if="!getExlbBonus(npc, 'EXリミットボーナス').length" fc flex-1 text-neutral>
-              未获取
+            <div>
+              {{ bonus.value }}
             </div>
           </div>
-        </el-descriptions-item>
-        <el-descriptions-item label="创造物" :rowspan="2" align="center" label-width="380">
-          <div flex flex-col gap-2>
-            <div v-for="skill, idx in npc.artifact" :key="idx" flex items-center justify-start gap-4px px-20px>
-              <div flex shrink-0 self-start gap-2px>
-                <div>{{ `Lv${skill.level}` }}</div>
-                <img width="16" height="16" :src="getBonusIcon(skill.icon)">
-              </div>
+          <div v-if="!getExlbBonus(npc, 'EXリミットボーナス').length" fc flex-1 text-neutral>
+            未获取
+          </div>
+        </div>
+      </el-descriptions-item>
+      <el-descriptions-item label="创造物" :rowspan="2" align="center" label-width="380">
+        <div flex flex-col gap-2>
+          <div v-for="skill, idx in npc.artifact" :key="idx" flex items-center justify-start gap-4px px-20px>
+            <div flex shrink-0 self-start gap-2px>
+              <div>{{ `Lv${skill.level}` }}</div>
+              <img width="16" height="16" :src="getBonusIcon(skill.icon)">
+            </div>
 
-              <div break-all text-start>
-                {{ `${getSkillName(skill.id)} ${skill.value}` }}
-              </div>
-            </div>
-            <div v-if="!npc.artifact?.length" fc flex-1 text-neutral>
-              未获取
+            <div break-all text-start>
+              {{ `${getSkillName(skill.id)} ${skill.value}` }}
             </div>
           </div>
-        </el-descriptions-item>
-        <el-descriptions-item label="耳环" align="center">
-          <div h-25px flex flex-1 flex-col gap-1>
-            <div v-for="bonus, i in getExlbBonus(npc, 'エーテリアルプラス')" :key="i" flex items-center justify-start gap-1 px-20px>
-              <div :class="bonus.icon" />
-              <div>
-                {{ bonus.name }}
-              </div>
-              <div>
-                {{ bonus.value }}
-              </div>
+          <div v-if="!npc.artifact?.length" fc flex-1 text-neutral>
+            未获取
+          </div>
+        </div>
+      </el-descriptions-item>
+      <el-descriptions-item label="耳环" align="center">
+        <div flex flex-1 flex-col gap-1>
+          <div v-for="bonus, i in getExlbBonus(npc, 'エーテリアルプラス')" :key="i" flex items-center justify-start gap-1 px-20px>
+            <div :class="bonus.icon" />
+            <div>
+              {{ bonus.name }}
             </div>
-            <div v-if="!getExlbBonus(npc, 'エーテリアルプラス').length" fc flex-1 text-neutral>
-              未获取
+            <div>
+              {{ bonus.value }}
             </div>
           </div>
-        </el-descriptions-item>
-      </el-descriptions>
-    </div>
+          <div v-if="!getExlbBonus(npc, 'エーテリアルプラス').length" fc flex-1 text-neutral>
+            未获取
+          </div>
+        </div>
+      </el-descriptions-item>
+    </el-descriptions>
   </div>
 </template>
 
