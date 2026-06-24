@@ -7,12 +7,14 @@ import Npc from '../../sidePanel/views/party/components/Npc.vue'
 import Summon from '../../sidePanel/views/party/components/Summon.vue'
 import Weapon from '../../sidePanel/views/party/components/Weapon.vue'
 
-const isExport = computed(() => !!buildRecord.value.key)
-const userName = computed(() => isExport.value ? buildRecord.value.userName : userInfo.value.name)
+const isSnapping = ref(false)
+const isRemote = computed(() => !!buildRecord.value.key)
+const userName = computed(() => isRemote.value ? buildRecord.value.userName : userInfo.value.name)
 const deck = computed(() => buildRecord.value.deck)
 
 async function exportToImg() {
   try {
+    isSnapping.value = true
     const element = document.querySelector(`#record-container`)!
     const result = await useSnapdom(element)
     await result.download({ scale: 1.5, type: 'png', filename: `战斗记录${Date.now()}`, backgroundColor: '#131313' })
@@ -20,6 +22,9 @@ async function exportToImg() {
   }
   catch (error) {
     createNotification({ message: String(error) })
+  }
+  finally {
+    isSnapping.value = false
   }
 }
 </script>
@@ -65,7 +70,7 @@ async function exportToImg() {
       </div>
     </div>
     <div v-if="buildRecord.detail" m-auto mt-20px w-610px>
-      <ActionList :action-queue="buildRecord.detail.actionQueue" :is-export="isExport" mode="horizontal" />
+      <ActionList :action-queue="buildRecord.detail.actionQueue" :is-remote="isRemote" :is-snapping="isSnapping" mode="horizontal" />
     </div>
   </div>
 </template>

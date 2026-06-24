@@ -3,10 +3,10 @@ import type { Action, ActionQueue } from 'extension'
 import { actionTriggerList } from '~/logic'
 import NormalAttackInfo from './NormalAttackInfo.vue'
 
-const { mode = 'vertical', actionQueue, isExport = false } = defineProps<{ actionQueue: ActionQueue[], isExport?: boolean, mode?: 'horizontal' | 'vertical' }>()
+const { mode = 'vertical', actionQueue, isRemote = false, isSnapping = false } = defineProps<{ actionQueue: ActionQueue[], isRemote?: boolean, isSnapping?: boolean, mode?: 'horizontal' | 'vertical' }>()
 
 function handleClickAction(action: Action) {
-  if (!isExport)
+  if (!isRemote)
     toggleActionTrigger(action)
 }
 </script>
@@ -43,7 +43,7 @@ function handleClickAction(action: Action) {
             <img
               h-45px cursor-pointer
               :src="getActionIcon(action)"
-              :class="actionTriggerList.includes(`${action.type}_${action.id}`) && !isExport ? 'ring-3 rounded ring-red-6' : ''"
+              :class="actionTriggerList.includes(`${action.type}_${action.id}`) && !isRemote && !isSnapping ? 'ring-3 rounded ring-red-6' : ''"
               @click="handleClickAction(action)"
             >
             <template v-if="action.aim?.length">
