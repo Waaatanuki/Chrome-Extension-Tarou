@@ -551,43 +551,36 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
         continue
       }
 
-      let flag = true
-      let playerIndex = -1
-      for (let i = 1; i <= 4; i++) {
+      let windowEffectPlayerIndex = -1
+      for (let i = 1; i <= idx; i++) {
         const preAction = data.scenario![idx - i]
 
-        if (!preAction)
-          break
         if (preAction.cmd === 'wait')
           break
         if ((preAction.to !== 'boss') && beforeAbilityDamageCmdList.includes(preAction.cmd)) {
           processDamageScenario(currentRaid, action as DamageScenario, preAction.num)
-          flag = false
           break
         }
         if (preAction.cmd === 'chain_cutin') {
           const pos0NpcNum = currentRaid.formation[0]
           processDamageScenario(currentRaid, action as DamageScenario, pos0NpcNum, 'other')
-          flag = false
           break
         }
         if (preAction.cmd === 'windoweffect' && preAction.kind) {
           const pid = preAction.kind.split('_')[2]
-          const hitIndex = currentRaid.player.findIndex(p => p.pid === pid)
-
-          if (playerIndex === -1 && hitIndex !== -1) {
-            playerIndex = hitIndex
+          if (windowEffectPlayerIndex === -1) {
+            windowEffectPlayerIndex = currentRaid.player.findIndex(p => p.pid === pid)
           }
         }
-      }
-      if (flag && playerIndex !== -1) {
-        processDamageScenario(currentRaid, action as DamageScenario, playerIndex)
+        if (['damage', 'loop_damage'].includes(preAction.cmd) && windowEffectPlayerIndex !== -1) {
+          processDamageScenario(currentRaid, action as DamageScenario, windowEffectPlayerIndex)
+          break
+        }
       }
     }
     if (action.cmd === 'loop_damage' && action.to === 'boss') {
-      let flag = true
-      let playerIndex = -1
-      for (let i = 1; i <= 4; i++) {
+      let windowEffectPlayerIndex = -1
+      for (let i = 1; i <= idx; i++) {
         const preAction = data.scenario![idx - i]
 
         if (!preAction)
@@ -596,20 +589,18 @@ function handleDamageStatistic(resultType: string, data: AttackResultJson | Batt
           break
         if ((preAction.to !== 'boss') && beforeAbilityDamageCmdList.includes(preAction.cmd)) {
           processLoopDamageScenario(currentRaid, action as LoopDamageScenario, preAction.num)
-          flag = false
           break
         }
         if (preAction.cmd === 'windoweffect' && preAction.kind) {
           const pid = preAction.kind.split('_')[2]
-          const hitIndex = currentRaid.player.findIndex(p => p.pid === pid)
-
-          if (playerIndex === -1 && hitIndex !== -1) {
-            playerIndex = hitIndex
+          if (windowEffectPlayerIndex === -1) {
+            windowEffectPlayerIndex = currentRaid.player.findIndex(p => p.pid === pid)
           }
         }
-      }
-      if (flag && playerIndex !== -1) {
-        processLoopDamageScenario(currentRaid, action as LoopDamageScenario, playerIndex)
+        if (['damage', 'loop_damage'].includes(preAction.cmd) && windowEffectPlayerIndex !== -1) {
+          processLoopDamageScenario(currentRaid, action as LoopDamageScenario, windowEffectPlayerIndex)
+          break
+        }
       }
     }
     if (action.cmd === 'summon' && action.list.length > 0)
