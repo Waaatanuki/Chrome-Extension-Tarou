@@ -7,7 +7,8 @@ import Npc from '../../sidePanel/views/party/components/Npc.vue'
 import Summon from '../../sidePanel/views/party/components/Summon.vue'
 import Weapon from '../../sidePanel/views/party/components/Weapon.vue'
 
-const userName = computed(() => buildRecord.value.key ? buildRecord.value.userName : userInfo.value.name)
+const isExport = computed(() => !!buildRecord.value.key)
+const userName = computed(() => isExport.value ? buildRecord.value.userName : userInfo.value.name)
 const deck = computed(() => buildRecord.value.deck)
 
 async function exportToImg() {
@@ -64,7 +65,7 @@ async function exportToImg() {
       </div>
     </div>
     <div v-if="buildRecord.detail" m-auto mt-20px w-610px>
-      <ActionList :action-queue="buildRecord.detail.actionQueue" :is-export="true" mode="horizontal" />
+      <ActionList :action-queue="buildRecord.detail.actionQueue" :is-export="isExport" mode="horizontal" />
     </div>
   </div>
 </template>

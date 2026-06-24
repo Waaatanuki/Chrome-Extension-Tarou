@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import type { ActionQueue } from 'extension'
+import type { Action, ActionQueue } from 'extension'
 import { actionTriggerList } from '~/logic'
 import NormalAttackInfo from './NormalAttackInfo.vue'
 
 const { mode = 'vertical', actionQueue, isExport = false } = defineProps<{ actionQueue: ActionQueue[], isExport?: boolean, mode?: 'horizontal' | 'vertical' }>()
+
+function handleClickAction(action: Action) {
+  if (!isExport)
+    toggleActionTrigger(action)
+}
 </script>
 
 <template>
@@ -39,7 +44,7 @@ const { mode = 'vertical', actionQueue, isExport = false } = defineProps<{ actio
               h-45px cursor-pointer
               :src="getActionIcon(action)"
               :class="actionTriggerList.includes(`${action.type}_${action.id}`) && !isExport ? 'ring-3 rounded ring-red-6' : ''"
-              @click="toggleActionTrigger(action)"
+              @click="handleClickAction(action)"
             >
             <template v-if="action.aim?.length">
               <div class="i-game-icons:fast-forward-button text-xl" />
