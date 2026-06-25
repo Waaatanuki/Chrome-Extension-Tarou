@@ -457,6 +457,7 @@ function recordRaidInfo(data: BattleStartJson) {
 
   const hitMemo = battleMemo.value.find(m => m.battleId === String(data.raid_id))
   const hitDeck = deckList.value.find(d => d.priority === hitMemo?.priority)
+  const isSolo = data.multi === 0 || (data.multi === 1 && data.multi_raid_member_info?.length === 1)
 
   battleRecord.value.unshift({
     quest_id: data.quest_id,
@@ -475,6 +476,7 @@ function recordRaidInfo(data: BattleStartJson) {
     damage: '0',
     point: 0,
     noReload: true,
+    isSolo,
     deck: deepClone(hitDeck),
   })
 

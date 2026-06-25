@@ -199,6 +199,7 @@ declare module 'extension' {
     point: number
     abilityList: Action[]
     noReload: boolean
+    isSolo: boolean
     deck?: Deck
   }
 

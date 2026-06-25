@@ -13,7 +13,14 @@ function handleDetail(data: BattleRecord) {
     <el-card v-for="data, idx in battleRecord" :key="idx" w-300px body-style="padding: 5px !important">
       <el-descriptions size="small" direction="vertical" :column="3" border>
         <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
-          <img h-44px w-44px :src="getBossImg('enemy', data.imgId!, 's')">
+          <div relative>
+            <img h-44px w-44px :src="getBossImg('enemy', data.imgId!, 's')">
+            <div v-if="data.isSolo" class="absolute inset-x-0">
+              <el-tag type="warning" effect="dark" size="small">
+                solo
+              </el-tag>
+            </div>
+          </div>
         </el-descriptions-item>
         <el-descriptions-item label="伤害" label-width="113" align="center">
           {{ data.damage }}

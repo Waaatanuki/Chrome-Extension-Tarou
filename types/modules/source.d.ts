@@ -71,6 +71,7 @@ declare module 'source' {
     special_skill_indicate?: { interrupt_display_text: string[] }[]
     scenario?: ScenarioType[]
     status?: StatusInfo
+    multi: number
     unique_gauge_time_limit?: {
       default_time_limit: string
       limit_reduce_second: number

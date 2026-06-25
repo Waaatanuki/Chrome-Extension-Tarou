@@ -58,6 +58,7 @@ declare module 'api' {
 
   interface BuildItem {
     key: string
+    isSolo: boolean
     userName: string
     bossImage: string
     damage: string
@@ -81,6 +82,7 @@ declare module 'api' {
     createTime: number
     detail: BuildDetail
     noReload: boolean
+    isSolo: boolean
     key?: string
     partyKey?: string
     deck?: Deck

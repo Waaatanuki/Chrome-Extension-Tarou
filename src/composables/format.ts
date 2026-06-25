@@ -105,6 +105,7 @@ export function formatBuild(record: BattleRecord): BuildResDto {
     realSpeed: speed,
     point: record.point,
     damage: record.damage,
+    isSolo: record.isSolo,
     deck: record.deck,
     detail: {
       player: record.player?.map((player) => {

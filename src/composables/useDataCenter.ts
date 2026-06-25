@@ -916,6 +916,14 @@ export async function unpack(parcel: string) {
     const payload = JSON.parse(requestData!)
     handleSpecialSkillSettingJson(payload)
   }
+
+  // BattleLog 记录点击救援按钮
+  if (/\/rest\/multiraid\/assist_check/.test(url)) {
+    const payload = JSON.parse(requestData!)
+    const hitRecord = battleRecord.value.find(b => b.raid_id === payload.raid_id)
+    if (hitRecord)
+      hitRecord.isSolo = false
+  }
 }
 
 // 处理战斗结算数据
