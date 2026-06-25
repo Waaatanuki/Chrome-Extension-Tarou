@@ -75,8 +75,13 @@ export function openPopupWindow(key: string) {
     return windowSize[key] ?? { height: 800, width: 800 }
   }
 
-  chrome.windows.create({ url: `src/views/popup/main.html?${key}`, type: 'popup', ...getWindowSize(key) })
-    .catch((err) => { createNotification({ message: String(err) }) })
+  chrome.runtime.getContexts({}).then((ctx) => {
+    if (key === 'ExportRecord' && ctx.some(c => c.documentUrl?.includes('popup/main.html?ExportRecord')))
+      return
+
+    chrome.windows.create({ url: `src/views/popup/main.html?${key}`, type: 'popup', ...getWindowSize(key) })
+      .catch((err) => { createNotification({ message: String(err) }) })
+  })
 }
 
 export function openCombatPanel() {
