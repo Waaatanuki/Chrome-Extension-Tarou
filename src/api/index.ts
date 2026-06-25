@@ -66,8 +66,13 @@ export function listBuild(data: { questId: string, npcFilter: number[] }) {
 }
 
 // 查询配置详情
-export function detailBuild(key: string) {
-  return request<{ data: { deck: any, detail: any } }>(`/ext/build/detail?key=${key}`, {
+export function detailBuild(key: string, timestamp?: number) {
+  const searchParams = new URLSearchParams({ key })
+
+  if (timestamp)
+    searchParams.set('t', `${timestamp}`)
+
+  return request<{ data: { deck: any, detail: any } }>(`/ext/build/detail?${searchParams.toString()}`, {
     method: 'get',
   })
 }

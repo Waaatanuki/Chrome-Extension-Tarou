@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BuildItem } from 'api'
 import { detailBuild, listBuild } from '~/api'
-import { buildNpcFilter, buildQuestId, buildRecord } from '~/logic'
+import { buildNpcFilter, buildQuestId, buildRecord, viewedBuildMemo } from '~/logic'
 
 const loading = ref(false)
 const queryParams = ref({
@@ -13,6 +13,7 @@ const buildList = ref<BuildItem[]>([])
 const msg = ref('进入副本前自动获取副本ID')
 
 const ATTR_OPTIONS = [1, 2, 3, 4, 5, 6]
+const VIEWED_BUILD_MEMO_EXPIRE_MS = 7 * 24 * 60 * 60 * 1000
 
 const handleQuery = useDebounceFn(() => {
   loading.value = true
@@ -39,11 +40,26 @@ function checkReload() {
   handleQuery()
 }
 
+function updateViewedBuildMemo(key: string, error = false) {
+  const now = Date.now()
+  viewedBuildMemo.value = viewedBuildMemo.value
+    .filter(m => now - m.value <= VIEWED_BUILD_MEMO_EXPIRE_MS && m.key !== key)
+    .concat({ key, value: now, error })
+}
+
+function isDetailViewed(key: string) {
+  return viewedBuildMemo.value.some(m => m.key === key && !m.error)
+}
+
 function checkDetail(build: BuildItem) {
-  detailBuild(build.key).then(({ data }) => {
+  const hitMemo = viewedBuildMemo.value.find(m => m.key === build.key)
+
+  detailBuild(build.key, hitMemo?.error ? Date.now() : undefined).then(({ data }) => {
     buildRecord.value = { ...build, ...data }
+    updateViewedBuildMemo(build.key)
     openPopupWindow('ExportRecord')
   }).catch((error) => {
+    updateViewedBuildMemo(build.key, true)
     ElMessage.error(error.message)
   })
 }
@@ -94,7 +110,7 @@ function checkDetail(build: BuildItem) {
   </div>
   <div mt-10px flex flex-col flex-wrap gap-10px>
     <el-result v-if="msg" icon="info" :sub-title="msg" />
-    <el-card v-for="data, idx in buildList" :key="idx" w-300px body-style="padding: 5px !important">
+    <el-card v-for="data in buildList" :key="data.key" w-300px body-style="padding: 5px !important">
       <el-descriptions size="small" direction="vertical" :column="3" border>
         <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
           <img v-if="data.bossImage" h-44px w-44px :src="getBossImg('enemy', data.bossImage, 's')">
@@ -117,7 +133,7 @@ function checkDetail(build: BuildItem) {
           {{ data.userName }} @ {{ useDateFormat(data.createTime, 'MM-DD HH:mm:ss').value }}
         </div>
 
-        <TheButton @click="checkDetail(data)">
+        <TheButton :color="isDetailViewed(data.key) ? '#909399' : undefined" @click="checkDetail(data)">
           详情
         </TheButton>
       </div>

@@ -69,6 +69,7 @@ export const weaponList = useWebExtensionStorage<OdiantWeapon[]>('weaponList', [
 export const buildQuestId = useWebExtensionStorage('buildQuestId', '')
 export const buildNpcFilter = useWebExtensionStorage<number[]>('buildNpcFilter', [])
 export const uploadBuildMemo = useWebExtensionStorage<{ key: string, value: number }[]>('uploadBuildMemo', [])
+export const viewedBuildMemo = useWebExtensionStorage<{ key: string, value: number, error: boolean }[]>('viewedBuildMemo', [])
 export const buildRecord = useWebExtensionStorage<Partial<BuildResDto>>('buildRecord', {})
 
 // Gacha
