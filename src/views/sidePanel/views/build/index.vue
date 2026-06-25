@@ -7,6 +7,7 @@ const loading = ref(false)
 const queryParams = ref({
   attrs: [] as number[],
   noReload: false,
+  noNbWeapon: false,
 })
 
 const buildList = ref<BuildItem[]>([])
@@ -37,6 +38,11 @@ function checkAttr(attr: number) {
 
 function checkReload() {
   queryParams.value.noReload = !queryParams.value.noReload
+  handleQuery()
+}
+
+function checkWeapon() {
+  queryParams.value.noNbWeapon = !queryParams.value.noNbWeapon
   handleQuery()
 }
 
@@ -72,19 +78,27 @@ function checkDetail(build: BuildItem) {
         <div>
           副本ID
         </div>
-        <el-input v-model="buildQuestId" size="small" style="width: 60px;">
-          管理副本
-        </el-input>
+        <el-input v-model="buildQuestId" size="small" style="width: 60px;" />
       </div>
       <div fc gap-2>
         <button
-          class="rounded-lg px-2 text-12px"
-          :class="queryParams.noReload
-            ? 'shadow-[0_0_3px_3px_#059669]'
-            : 'ring-1 ring-neutral-6'"
+          class="relative rounded px-2 text-12px ring-1 ring-neutral-6"
+          @click="checkWeapon"
+        >
+          辉耀
+          <div v-if="queryParams.noNbWeapon" class="bg-black/50" absolute inset-0 fc rounded>
+            <div text-15px text-red class="i-mynaui:ban" />
+          </div>
+        </button>
+
+        <button
+          class="relative rounded px-2 text-12px ring-1 ring-neutral-6"
           @click="checkReload"
         >
-          无刷新
+          刷新
+          <div v-if="queryParams.noReload" class="bg-black/50" absolute inset-0 fc rounded>
+            <div text-15px text-red class="i-mynaui:ban" />
+          </div>
         </button>
 
         <TheButton icon="carbon:search" :loading="loading" @click="handleQuery">
