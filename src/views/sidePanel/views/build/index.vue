@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { BuildItem } from 'api'
+import copy from 'copy-text-to-clipboard'
 import { detailBuild, listBuild } from '~/api'
 import { buildNpcFilter, buildQuestId, buildRecord, viewedBuildMemo } from '~/logic'
 
 const loading = ref(false)
 const queryParams = ref({
   attrs: [] as number[],
+  isSolo: false,
   noReload: false,
   noNbWeapon: false,
 })
@@ -46,6 +48,11 @@ function checkWeapon() {
   handleQuery()
 }
 
+function checkSolo() {
+  queryParams.value.isSolo = !queryParams.value.isSolo
+  handleQuery()
+}
+
 function updateViewedBuildMemo(key: string, error = false) {
   const now = Date.now()
   viewedBuildMemo.value = viewedBuildMemo.value
@@ -74,19 +81,24 @@ function checkDetail(build: BuildItem) {
 <template>
   <div sticky inset-x-0 top-0 z-999 grid rounded bg-neutral-8 p-2 text-base>
     <div flex items-center justify-between>
-      <div fc gap-2 text-12px>
-        <div>
-          副本ID
-        </div>
-        <el-input v-model="buildQuestId" size="small" style="width: 60px;" />
-      </div>
+      <el-input v-model="buildQuestId" placeholder="副本ID" size="small" style="width: 60px;" />
       <div fc gap-2>
+        <button
+          class="relative rounded px-2 text-12px ring-1 ring-neutral-6"
+          @click="checkSolo"
+        >
+          solo
+          <div v-if="queryParams.isSolo" class="bg-black/70" absolute inset-0 fc rounded>
+            <div text-15px text-teal-6 class="i-material-symbols:check-circle-outline" />
+          </div>
+        </button>
+
         <button
           class="relative rounded px-2 text-12px ring-1 ring-neutral-6"
           @click="checkWeapon"
         >
           辉耀
-          <div v-if="queryParams.noNbWeapon" class="bg-black/50" absolute inset-0 fc rounded>
+          <div v-if="queryParams.noNbWeapon" class="bg-black/70" absolute inset-0 fc rounded>
             <div text-15px text-red class="i-mynaui:ban" />
           </div>
         </button>
@@ -96,7 +108,7 @@ function checkDetail(build: BuildItem) {
           @click="checkReload"
         >
           刷新
-          <div v-if="queryParams.noReload" class="bg-black/50" absolute inset-0 fc rounded>
+          <div v-if="queryParams.noReload" class="bg-black/70" absolute inset-0 fc rounded>
             <div text-15px text-red class="i-mynaui:ban" />
           </div>
         </button>
@@ -128,7 +140,7 @@ function checkDetail(build: BuildItem) {
       <el-descriptions size="small" direction="vertical" :column="3" border>
         <el-descriptions-item label="副本" label-width="60" :rowspan="2" align="center">
           <div relative>
-            <img v-if="data.bossImage" h-44px w-44px :src="getBossImg('enemy', data.bossImage, 's')">
+            <img v-if="data.bossImage" h-44px w-44px :src="getBossImg('enemy', data.bossImage, 's')" @click="copy(data.key)">
             <div v-if="data.isSolo" class="absolute inset-x-0">
               <el-tag type="warning" effect="dark" size="small">
                 solo
@@ -151,10 +163,10 @@ function checkDetail(build: BuildItem) {
       </el-descriptions>
       <div mt-5px flex items-center justify-between>
         <div text-xs>
-          {{ data.userName }} @ {{ useDateFormat(data.createTime, 'MM-DD HH:mm:ss').value }}
+          {{ useDateFormat(data.createTime, 'MM-DD HH:mm:ss').value }} @ {{ data.userName }}
         </div>
 
-        <TheButton :color="isDetailViewed(data.key) ? '#909399' : undefined" @click="checkDetail(data)">
+        <TheButton :color="isDetailViewed(data.key) ? '#525252' : undefined" @click="checkDetail(data)">
           详情
         </TheButton>
       </div>
