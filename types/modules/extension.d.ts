@@ -69,6 +69,7 @@ declare module 'extension' {
   }
 
   interface TeamraidAdditional {
+    eventNo: number
     gachaPoint: number
     drawnBox: number
     lottery: NumberLimitPair
@@ -76,6 +77,11 @@ declare module 'extension' {
     targetHonor: number
     hasSpReward: boolean
     log: { guild1: string, guild2: string, key: string, point: number[][] }
+    record: {
+      user: string
+      guild: string
+      log: string
+    }
   }
 
   interface TeamforceAdditional {

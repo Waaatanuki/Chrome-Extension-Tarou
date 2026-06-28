@@ -1267,6 +1267,10 @@ function processEventData(url: string, responseData: any) {
 
     const firstPoint = [getJapan7AMTimestamp(), 0, 0]
 
+    const reg = /teamraid(\d+)/
+    const match = url.match(reg)
+    const eventNo = match ? match[1] : undefined
+
     const eventInfo: EventInfo & { additional: TeamraidAdditional } = {
       type: eventType,
       isActive: true,
@@ -1281,6 +1285,7 @@ function processEventData(url: string, responseData: any) {
       count: 0,
       updateTime: dayjs().valueOf(),
       additional: {
+        eventNo: Number(eventNo),
         drawnBox: 0,
         gachaPoint,
         lottery,
@@ -1288,6 +1293,11 @@ function processEventData(url: string, responseData: any) {
         targetHonor: 0,
         hasSpReward: $('.cnt-enemy-reward-result').length > 0,
         log: { ...log, point: [] },
+        record: {
+          user: '',
+          guild: '',
+          log: $('#cnt-guild-record').toString(),
+        },
       },
     }
 
@@ -1299,7 +1309,7 @@ function processEventData(url: string, responseData: any) {
       eventList.value.push(eventInfo)
     }
     else {
-      const existingEvent = eventList.value[index]
+      const existingEvent = eventList.value[index] as EventInfo & { additional: TeamraidAdditional }
       const existingEventLog = existingEvent.additional?.log
       eventInfo.additional.drawnBox = existingEvent.additional?.drawnBox || 0
       eventInfo.additional.targetHonor = existingEvent.additional?.targetHonor || 0
@@ -1321,6 +1331,12 @@ function processEventData(url: string, responseData: any) {
         eventLog.point.pop()
       }
       eventLog.point = eventLog.point.filter(p => !Number.isNaN(p[1]) && !Number.isNaN(p[2]))
+
+      if (eventInfo.additional.eventNo === existingEvent.additional.eventNo) {
+        eventInfo.additional.record.user = existingEvent.additional?.record?.user
+        eventInfo.additional.record.guild = existingEvent.additional?.record?.guild
+      }
+
       eventList.value[index] = eventInfo
     }
   }
@@ -1343,6 +1359,21 @@ function processEventData(url: string, responseData: any) {
 
     eventInfo.additional.drawnBox = boxNum
     eventInfo.additional.gachaPoint = gachaPoint
+  }
+
+  // 古战场个排/团排结果
+  if (/\/teamraid\d+\/ranking\/content\/(?:user|totalguild)/.test(url)) {
+    const eventType = 'teamraid'
+    const eventInfo = eventList.value.find(event => event.type === eventType)
+    if (!eventInfo || !eventInfo.additional?.record)
+      return
+    const htmlString = decodeURIComponent(responseData.data)
+    const $ = load(htmlString)
+
+    if (url.includes('/ranking/content/user'))
+      eventInfo.additional.record.user = $('.prt-my-ranking').toString()
+    else
+      eventInfo.additional.record.guild = $('.prt-my-ranking').toString()
   }
 
   // 工会战

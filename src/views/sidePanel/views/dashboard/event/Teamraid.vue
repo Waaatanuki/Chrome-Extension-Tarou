@@ -27,8 +27,11 @@ function onSetTarget() {
   <el-card v-if="eventInfo && eventInfo.isActive && eventInfo.additional" h-full w-300px>
     <template #header>
       <div flex justify-between>
-        <div>
-          古战场({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: token, drawnBox: eventInfo.additional.drawnBox }) }}箱)
+        <div fc gap-2>
+          <div>
+            古战场({{ getEventGachaBoxNum({ eventType: eventInfo.type, currentToken: token, drawnBox: eventInfo.additional.drawnBox }) }}箱)
+          </div>
+          <div i-carbon:document icon-btn title="查看团战记录" @click="openPopupWindow('TeamraidRecord')" />
         </div>
         <el-tooltip content="最后更新时间" placement="top">
           {{ formatEventDate(eventInfo.updateTime) }}

@@ -1,0 +1,337 @@
+@charset "UTF-8";
+
+.prt-my-ranking .ico-rank-digits {
+  font-size: 9px;
+  color: #f2eee2;
+  line-height: 1;
+  text-shadow: 0 0 1px #150f0f, 0 0 1px #150f0f, 0 0 1px #150f0f, 0 0 2px #150f0f, 0 0 2px #150f0f, 0 0 2px #150f0f;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-ranking-name {
+  font-size: 12px;
+  color: #f2eee2;
+  line-height: 1;
+  text-shadow: 0 0 1px #150f0f, 0 0 1px #150f0f, 0 0 1px #150f0f, 0 0 2px #150f0f, 0 0 2px #150f0f, 0 0 2px #150f0f;
+}
+
+.prt-my-ranking {
+  background: url("https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/css_img/event/teamraid/bg_ranking_list.png") no-repeat;
+  background-size: 310px 86px;
+  box-sizing: border-box;
+  width: 310px;
+  height: 86px;
+  margin: 0 auto 5px;
+  position: relative;
+}
+
+.prt-my-ranking .ico-rank-digits {
+  position: absolute;
+  top: -5px;
+  left: 5px;
+  z-index: 5;
+  display: block;
+  background: url("../assets/image/common/teamraid_parts.png") no-repeat 0 -714px;
+  background-size: 336px 3356px;
+  width: 87px;
+  height: 27px;
+  box-sizing: border-box;
+  text-align: left;
+  padding: 8px 0 0 24px;
+}
+
+.prt-my-ranking .prt-thumb-image {
+  position: relative;
+}
+
+.prt-my-ranking .prt-thumb-image .img-list-pc {
+  position: absolute;
+  top: 2px;
+  left: 10px;
+  z-index: 2;
+  width: 210px;
+  height: 82px;
+}
+
+.prt-my-ranking .prt-thumb-image .img-list-summon {
+  position: absolute;
+  top: 2px;
+  left: 10px;
+  z-index: 1;
+  width: 210px;
+  height: 82px;
+}
+
+.prt-my-ranking .prt-ranking-detail {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 5px 4px 3px;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-ranking-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 21px;
+  padding: 0 12px 0 120px;
+  overflow: hidden;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-ranking-name .txt-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-ranking-name .txt-rank {
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-event-record {
+  box-sizing: border-box;
+  padding: 1px 10px 0 140px;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-event-record .txt-record-title,
+.prt-my-ranking .prt-ranking-detail .prt-event-record .txt-total {
+  border: 1px solid #c53b00;
+  background-color: #34201d;
+  color: #f2eee2;
+  font-size: 10px;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 1px 5px 2px;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-event-record .txt-record-title {
+  border-radius: 2px;
+  margin-bottom: 3px;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-event-record .prt-point {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-event-record .prt-point.battle {
+  border-bottom: 1px dashed #6a726f;
+  padding-bottom: 2px;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-event-record .txt-total {
+  border-radius: 8px;
+  width: 50px;
+}
+
+.prt-my-ranking .prt-ranking-detail .prt-event-record .txt-total-record {
+  font-size: 11px;
+  text-align: right;
+  color: #433930;
+}
+
+.prt-my-ranking .btn-ranking-profile {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  z-index: 5;
+  width: 135px;
+  height: 77px;
+}
+
+.prt-my-ranking.guild {
+  background: url("https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/css_img/event/teamraid/ranking/bg_airship_list.png") no-repeat;
+  background-size: 310px 86px;
+}
+
+.prt-my-ranking.guild .img-list-ship {
+  position: absolute;
+  top: 4px;
+  left: 14px;
+  z-index: 2;
+  width: 127px;
+  height: 82px;
+}
+
+.prt-my-ranking.guild .prt-ranking-detail .prt-event-record {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px 0 125px;
+}
+
+.prt-my-ranking.guild .prt-ranking-detail .prt-event-record .prt-point {
+  display: block;
+  margin-bottom: 0;
+}
+
+.prt-my-ranking.guild .prt-ranking-detail .prt-event-record .txt-total {
+  border-radius: 2px;
+  border-color: #ff3c00;
+  width: 104px;
+  margin-bottom: 2px;
+}
+
+.prt-my-ranking.guild .prt-ranking-detail .prt-event-record .txt-total-record {
+  border-bottom: 1px solid #4f8ea2;
+  padding-bottom: 2px;
+}
+
+.prt-my-ranking.guild .btn-ranking-profile::after {
+  right: 20px;
+}
+
+.rank-l-1 {
+  background: url("https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/guild/thumb/grade/grade_1.png") no-repeat;
+  background-size: 40px 45px;
+  width: 40px;
+  height: 45px;
+}
+
+#cnt-guild-record .prt-record-list .prt-result-detail .prt-result-point {
+  color: #f2eee2;
+  line-height: 1;
+  text-shadow: 0 0 1px #150f0f, 0 0 1px #150f0f, 0 0 1px #150f0f, 0 0 2px #150f0f, 0 0 2px #150f0f, 0 0 2px #150f0f;
+}
+
+#cnt-guild-record .prt-record-list .txt-battle-date {
+  font-size: 12px;
+  color: #f2eee2;
+  line-height: 1;
+  text-shadow: 0 0 1px #150f0f, 0 0 1px #150f0f, 0 0 1px #150f0f, 0 0 2px #150f0f, 0 0 2px #150f0f, 0 0 2px #150f0f;
+}
+
+#cnt-guild-record .prt-record-list .txt-user-point {
+  font-size: 12px;
+  color: #150f0f;
+  line-height: 1;
+  text-shadow: 0 0 1px #f2eee2, 0 0 1px #f2eee2, 0 0 1px #f2eee2, 0 0 2px #f2eee2, 0 0 2px #f2eee2, 0 0 2px #f2eee2;
+}
+
+#cnt-guild-record .prt-record-wrapper .prt-guild-record-title {
+  display: none;
+}
+
+#cnt-guild-record .prt-record-list {
+  position: relative;
+  width: 299px;
+  height: 102px;
+  margin: 0 auto;
+}
+
+#cnt-guild-record .prt-record-list.win {
+  background: url("https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/event/common/teamraid/plt_win.png") no-repeat;
+  background-size: 299px 102px;
+}
+
+#cnt-guild-record .prt-record-list.lose {
+  background: url('https://prd-game-a-granbluefantasy.akamaized.net/assets/img/sp/event/common/teamraid/plt_lose.png') no-repeat;
+  background-size: 299px 102px;
+}
+
+#cnt-guild-record .prt-record-list .prt-airship-image {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+#cnt-guild-record .prt-record-list .prt-airship-image .img-guild-airship {
+  width: 96px;
+  height: 62px;
+  transform: scale(-1, 1);
+}
+
+#cnt-guild-record .prt-record-list .prt-airship-image .img-rival-airship {
+  width: 96px;
+  height: 62px;
+}
+
+#cnt-guild-record .prt-record-list .prt-airship-image .onm-guild-airship {
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+
+#cnt-guild-record .prt-record-list .prt-airship-image .btn-rival-airship {
+  position: absolute;
+  top: 10px;
+  right: 0;
+}
+
+#cnt-guild-record .prt-record-list .prt-result-detail {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  width: 136px;
+  margin-left: -68px;
+}
+
+#cnt-guild-record .prt-record-list .prt-result-detail .prt-result-point {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 0 2px;
+  margin-bottom: 16px;
+}
+
+#cnt-guild-record .prt-record-list .prt-result-detail .prt-result-point .txt-guild-point {
+  position: absolute;
+  top: 0;
+  right: 71px;
+  color: #befaff;
+}
+
+#cnt-guild-record .prt-record-list .prt-result-detail .prt-result-point .txt-rival-point {
+  position: absolute;
+  top: 0;
+  left: 71px;
+  color: #ffccbe;
+}
+
+#cnt-guild-record .prt-record-list .prt-result-detail .prt-result-gauge {
+  background-image: linear-gradient(#ffcca9 10%, #b82700 40%, #581a09 80%, #a06150 100%);
+  box-sizing: border-box;
+  width: 100%;
+  height: 8px;
+  border: 1px solid #150f0f;
+}
+
+#cnt-guild-record .prt-record-list .prt-result-detail .prt-result-gauge .prt-result-gauge-inner {
+  background-image: linear-gradient(#8ddef2 10%, #0093eb 40%, #034580 80%, #4f87bc 100%);
+  height: 100%;
+}
+
+#cnt-guild-record .prt-record-list .txt-battle-date {
+  position: absolute;
+  top: 62px;
+  left: 10px;
+  box-sizing: border-box;
+  padding: 2px 0 0 5px;
+}
+
+#cnt-guild-record .prt-record-list .prt-record-infomation {
+  position: absolute;
+  top: 64px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#cnt-guild-record .prt-record-list .prt-record-infomation .txt-rival-name {
+  color: #f2eee2;
+  text-shadow: 0 0 1px #4d1000, 0 0 1px #4d1000, 0 0 1px #4d1000, 0 0 1px #4d1000, 0 0 2px #4d1000, 0 0 2px #4d1000, 0 0 2px #4d1000, 0 0 2px #4d1000;
+}
+
+#cnt-guild-record .prt-record-list .txt-user-point {
+  position: absolute;
+  top: 80px;
+  right: 12px;
+  left: 12px;
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
