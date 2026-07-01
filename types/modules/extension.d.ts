@@ -326,26 +326,8 @@ declare module 'extension' {
   }
 
   interface ArtifactRule {
-    name: string
-    info: ArtifactRuleInfo
-  }
-
-  interface ArtifactRuleInfo {
-    kind: Record<string, number>
-    attribute: Record<string, number>
-    skill: Record<string, number>
-    extra: Record<string, number>
-    highlight: {
-      low?: number
-      high?: number
-    }
-  }
-
-  interface ExtraRule {
-    attribute: string
-    kind: string
-    skillId: number
-    value: number
+    limit: number
+    [k: string]: number
   }
 
   interface ArtifactUsage {

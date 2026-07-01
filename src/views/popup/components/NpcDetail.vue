@@ -74,7 +74,7 @@ async function exportToImg() {
           </div>
         </div>
       </el-descriptions-item>
-      <el-descriptions-item label="创造物" :rowspan="2" align="center" label-width="380">
+      <el-descriptions-item label="神器" :rowspan="2" align="center" label-width="380">
         <div flex flex-col gap-2>
           <div v-for="skill, idx in npc.artifact" :key="idx" flex items-center justify-start gap-4px px-20px>
             <div flex shrink-0 self-start gap-2px>

@@ -6,7 +6,7 @@ import type { Artifact } from 'source'
 import dayjs from 'dayjs'
 import { useWebExtensionStorage } from '~/composables/useWebExtensionStorage'
 import { defaultCombatPanelSetting, defaultNotificationItem, defaultNotificationSetting, defaultWidget } from '~/constants'
-import { defaultArtifactRuleList } from '~/constants/artifact'
+import { defaultArtifactRule } from '~/constants/artifact'
 
 // Debugger
 export const code = useWebExtensionStorage<string>('code', '')
@@ -58,8 +58,7 @@ export const markedUserList = useWebExtensionStorage<MarkedUser[]>('markedUserLi
 // Artifact
 export const language = useWebExtensionStorage<'zh' | 'ja'>('language', 'zh')
 export const artifactList = useWebExtensionStorage<Artifact[]>('artifactList', [])
-export const artifactRuleIndex = useWebExtensionStorage<number>('artifactRuleIndex', 0)
-export const artifactRuleList = useWebExtensionStorage<ArtifactRule[]>('artifactRuleList', defaultArtifactRuleList)
+export const artifactRule = useWebExtensionStorage<ArtifactRule>('artifactRule', defaultArtifactRule)
 export const artifactUsage = useWebExtensionStorage<Partial<ArtifactUsage>>('artifactUsage', {})
 
 // Odiant
