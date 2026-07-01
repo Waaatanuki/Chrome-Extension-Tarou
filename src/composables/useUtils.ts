@@ -58,7 +58,7 @@ function isPlainObject(obj: any): obj is Record<string, any> {
 
 export function openPopupWindow(key: string) {
   const windowSize: Record<string, { height: number, width: number }> = {
-    ArtifactBox: { height: 1000, width: 1580 },
+    ArtifactBox: { height: 1000, width: 1300 },
     ArtifactRule: { height: 700, width: 700 },
     BuildCompare: { height: 900, width: 1100 },
     ExportRecord: { height: 800, width: 800 },

@@ -1,29 +1,40 @@
 <script setup lang="ts">
 import type { Artifact } from 'source'
 import { artifactSkillList } from '~/constants/artifact'
-import { artifactRuleIndex, artifactRuleList, artifactUsage, language } from '~/logic'
+import { artifactRule, artifactUsage, language } from '~/logic'
 
-const { artifact, filter } = defineProps<{ artifact: Artifact, position: string, filter?: { strictMode: boolean, types: string[], ids: number[] } }>()
+const { artifact, filter } = defineProps<{ artifact: Artifact, position: string, filter?: { strictMode: boolean, onlyUnnecessary: boolean, ids: number[] } }>()
 
 type SkillName = 'skill1_info' | 'skill2_info' | 'skill3_info' | 'skill4_info'
 const skillNameList: SkillName[] = ['skill1_info', 'skill2_info', 'skill3_info', 'skill4_info']
 
-const PointTypeColorMap = {
-  success: 'ring-#67C23A',
-  warning: 'ring-#E6A23C',
-  danger: 'ring-#F56C6C',
-}
-
-const currentArtifactRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 const artifactSkillFlatList = computed(() => Object.values(artifactSkillList).flat())
+
+const isUnnecessary = computed(() => {
+  let unnecessaryCount = 0
+  const { limit } = artifactRule.value
+  const skillIds = skillNameList.map(skillName => Math.floor(artifact[skillName].skill_id / 10))
+
+  for (const skillId of skillIds) {
+    const level = artifactRule.value[skillId]
+
+    if (level === 2)
+      return false
+
+    if (level === 0 && ++unnecessaryCount > limit)
+      return true
+  }
+
+  return false
+})
 
 const isTarget = computed(() => {
   if (!filter)
     return true
 
-  const { types, ids, strictMode } = filter
+  const { onlyUnnecessary, ids, strictMode } = filter
 
-  if (types.length > 0 && !types.includes(getPointType(artifact)))
+  if (onlyUnnecessary && !isUnnecessary.value)
     return false
 
   if (ids.length > 0) {
@@ -62,37 +73,6 @@ function getSkillName(skill_id: number) {
     return ''
 
   return language.value === 'zh' ? hitSkill.nameZh : hitSkill.name
-}
-
-function getPoint(artifact: Artifact) {
-  const artifactKind = artifact.kind.padStart(2, '0')
-  const artifactAttribute = String(artifact.attribute)
-  let count = currentArtifactRuleInfo.value.kind[artifactKind] + currentArtifactRuleInfo.value.attribute[artifactAttribute]
-
-  for (const skillName of skillNameList) {
-    const skill_id = String(Math.floor(artifact[skillName].skill_id / 10))
-    count += currentArtifactRuleInfo.value.skill[skill_id] ?? 0
-    const key = `${artifactAttribute}:${artifactKind}:${skill_id}`
-
-    if (currentArtifactRuleInfo.value.extra[key])
-      count += currentArtifactRuleInfo.value.extra[key]
-  }
-  return count
-}
-
-function getPointType(artifact: Artifact) {
-  if (artifact.rarity !== '3')
-    return 'success'
-
-  if (!currentArtifactRuleInfo.value.highlight)
-    return 'warning'
-
-  const { high, low } = currentArtifactRuleInfo.value.highlight
-  if (high && getPoint(artifact) >= high)
-    return 'success'
-  if (low && getPoint(artifact) <= low)
-    return 'danger'
-  return 'warning'
 }
 
 function getSkillQuality(skillName: SkillName) {
@@ -142,8 +122,13 @@ function isRecommendSkill(skill_id: number) {
           </div>
         </div>
 
-        <div absolute right-2 top-2 h-35px w-35px fc rounded-full ring-3 :class="PointTypeColorMap[getPointType(artifact)]">
-          {{ artifact.is_quirk ? '∞' : getPoint(artifact) }}
+        <div v-if="isUnnecessary" absolute right-0 top-0>
+          <div class="relative size-52px fc rotate-[-14deg] select-none border-2 border-red-6 rounded-full bg-red-5/6 text-14px text-red-7 tracking-[0.18em] shadow-[0_0_0_1px_rgba(255,255,255,0.18)_inset,0_3px_10px_rgba(127,29,29,0.18)]">
+            <div class="absolute inset-3px border border-red-5/75 rounded-full" />
+            <span class="translate-x-[2px]">
+              无用
+            </span>
+          </div>
         </div>
       </div>
 

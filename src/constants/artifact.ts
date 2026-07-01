@@ -1,82 +1,5 @@
 import type { ArtifactRule } from 'extension'
 
-const defaultArtifactRule = {
-  skill: {
-    1001: 50,
-    2001: 50,
-    3001: 50,
-    3002: 50,
-    3003: 50,
-    3004: 50,
-    3005: 50,
-    3006: 50,
-    3007: 50,
-    3008: 50,
-    3009: 50,
-    3010: 50,
-    3011: 50,
-    3012: 50,
-    3013: 50,
-    3014: 50,
-    3015: 50,
-    3016: 50,
-    3017: 50,
-    3018: 50,
-    3019: 50,
-    3020: 50,
-    3021: 50,
-    3022: 50,
-    3023: 50,
-    3024: 50,
-    3025: 50,
-    3026: 50,
-    3027: 50,
-    3028: 50,
-    3029: 50,
-    3030: 50,
-    3031: 50,
-    3032: 50,
-    4001: 50,
-    5001: 50,
-    5002: 50,
-    5003: 50,
-    5004: 50,
-    5005: 50,
-    5006: 50,
-    5007: 50,
-    5008: 50,
-    5010: 50,
-    5011: 50,
-    5012: 50,
-    5013: 50,
-    5014: 50,
-    5015: 50,
-    5016: 50,
-    5017: 50,
-    5018: 50,
-    5019: 50,
-    5020: 50,
-    5021: 50,
-    5022: 50,
-    5023: 50,
-    5024: 50,
-    5025: 50,
-    5026: 50,
-    5027: 50,
-    5028: 50,
-    5029: 50,
-  },
-  kind: { '01': 100, '02': 100, '03': 100, '04': 100, '05': 100, '06': 100, '07': 100, '08': 100, '09': 100, '10': 100 },
-  attribute: { 1: 100, 2: 100, 3: 100, 4: 100, 5: 100, 6: 100 },
-  extra: {},
-  highlight: {},
-}
-
-export const defaultArtifactRuleList: ArtifactRule[] = Array.from({ length: 6 }, (_, i) => ({
-  name: `规则${i + 1}`,
-  info: deepClone(defaultArtifactRule),
-}))
-
 export const artifactSkillList = {
   skill1: [
     {
@@ -463,3 +386,16 @@ export const artifactSkillList = {
     },
   ],
 }
+
+export const defaultArtifactRule: ArtifactRule = Object.fromEntries([
+  ...Object.values(artifactSkillList)
+    .flat()
+    .map(skill => [skill.skillId, 1]),
+  ['limit', 3],
+])
+
+export const artifactSkillLevelList = [
+  { label: '有用', value: 1, type: 'success' },
+  { label: '无用', value: 0, type: 'danger' },
+  { label: '锁定', value: 2, type: 'warning' },
+] as const

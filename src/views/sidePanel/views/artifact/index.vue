@@ -1,31 +1,24 @@
 <script setup lang="ts">
 import copy from 'copy-text-to-clipboard'
 import { artifactSkillList } from '~/constants/artifact'
-import { artifactList, artifactRuleIndex, artifactRuleList, artifactUsage, language } from '~/logic'
+import { artifactList, artifactRule, artifactUsage, language } from '~/logic'
 
 const inputVisible = ref(false)
 const textarea = ref('')
 const strictMode = ref(false)
-const types = ref(new Set<string>())
+const onlyUnnecessary = ref(false)
 const ids = ref(new Set<number>())
 const filter = computed(() => ({
   strictMode: strictMode.value,
-  types: [...types.value],
+  onlyUnnecessary: onlyUnnecessary.value,
   ids: [...ids.value],
 }))
-const currentArtifactRuleInfo = computed(() => artifactRuleList.value[artifactRuleIndex.value].info)
 
 watch(artifactUsage, () => {
   ids.value.clear()
 })
 
 const romanNumeral = ['I', 'II', 'III']
-
-const typeList = [
-  { value: 'danger', label: '低分' },
-  { value: 'warning', label: '普通' },
-  { value: 'success', label: '高分' },
-]
 
 function handleCheckFilter(list: Set<any>, value: any) {
   if (list.has(value)) {
@@ -48,8 +41,8 @@ function handleCommand(command: string | number | object) {
       language.value = language.value === 'zh' ? 'ja' : 'zh'
       break
     case 'copy':
-      if (copy(JSON.stringify(currentArtifactRuleInfo.value)))
-        ElMessage.success(`已复制当前权重规则`)
+      if (copy(JSON.stringify(artifactRule.value)))
+        ElMessage.success(`已复制当前规则`)
       break
     case 'paste':
       textarea.value = ''
@@ -71,7 +64,7 @@ function getSkillName(filterId: number) {
 
 function onPasteSubmit() {
   try {
-    artifactRuleList.value[artifactRuleIndex.value].info = JSON.parse(textarea.value)
+    artifactRule.value = JSON.parse(textarea.value)
     inputVisible.value = false
     ElMessage.success('导入成功')
   }
@@ -88,10 +81,6 @@ function onPasteSubmit() {
       <div rounded bg-neutral-8 p-8px>
         <div flex items-center justify-between bg-neutral-8>
           <div fc gap-2>
-            <el-select v-model="artifactRuleIndex" size="small" style="width: 100px;">
-              <el-option v-for="rule, idx in artifactRuleList" :key="idx" :value="idx" :label="rule.name" />
-            </el-select>
-
             <el-popover trigger="click" effect="dark" placement="bottom" width="320" popper-style="padding: 0px;">
               <template #reference>
                 <TheButton title="筛选神器技能">
@@ -100,22 +89,19 @@ function onPasteSubmit() {
               </template>
 
               <div flex items-center justify-between p-10px>
-                <div flex gap-10px>
-                  <div
-                    v-for="item in typeList" :key="item.value"
-                    cursor-pointer select-none rounded-md p-5px text-12px ring-1 ring-neutral-4
-                    :class="{ 'ring-blue-5! ring-2! text-blue-5!': types.has(item.value) }"
-                    @click="handleCheckFilter(types, item.value)"
-                  >
-                    {{ item.label }}
-                  </div>
-                </div>
-                <div fc gap-10px>
-                  <el-checkbox v-model="strictMode" label="严格模式" size="small" />
-                  <TheButton title="重置选项" color="#303133" @click="types.clear(); ids.clear(); strictMode = false">
-                    重置
-                  </TheButton>
-                </div>
+                <button
+                  class="rounded-md px-6px py-4px text-12px"
+                  :class="strictMode
+                    ? 'shadow-[0_0_3px_3px_#059669]'
+                    : 'ring-1 ring-neutral-4'"
+                  @click="strictMode = !strictMode"
+                >
+                  严格模式
+                </button>
+
+                <TheButton title="重置选项" color="#303133" @click="ids.clear(); strictMode = false; onlyUnnecessary = false">
+                  重置
+                </TheButton>
               </div>
               <el-scrollbar height="500">
                 <div flex flex-col p-10px>
@@ -126,18 +112,31 @@ function onPasteSubmit() {
                     <el-divider>
                       {{ romanNumeral[index] }}
                     </el-divider>
-                    <div
+
+                    <button
                       v-for="item in skill" :key="item.skillId"
-                      cursor-pointer select-none rounded-md p-5px text-12px ring-1 ring-neutral-4
-                      :class="{ 'ring-blue-5! ring-2! text-blue-5!': ids.has(item.skillId) }"
+                      class="rounded-md px-6px py-4px text-12px"
+                      :class="ids.has(item.skillId)
+                        ? 'shadow-[0_0_3px_3px_#059669]'
+                        : 'ring-1 ring-neutral-4'"
                       @click="handleCheckFilter(ids, item.skillId)"
                     >
                       {{ language === 'zh' ? item.nameZh : item.name }}
-                    </div>
+                    </button>
                   </div>
                 </div>
               </el-scrollbar>
             </el-popover>
+
+            <button
+              class="rounded-lg px-2 text-12px"
+              :class="onlyUnnecessary
+                ? 'shadow-[0_0_3px_3px_#059669]'
+                : 'ring-1 ring-neutral-6'"
+              @click="onlyUnnecessary = !onlyUnnecessary"
+            >
+              无用
+            </button>
           </div>
 
           <el-dropdown @command="handleCommand">
@@ -150,7 +149,7 @@ function onPasteSubmit() {
                   弹窗展示
                 </el-dropdown-item>
                 <el-dropdown-item command="rule">
-                  配置权重
+                  配置规则
                 </el-dropdown-item>
                 <el-dropdown-item command="lang">
                   切换语言
