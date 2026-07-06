@@ -66,7 +66,7 @@ function handleMark(member: MemberInfo) {
 </script>
 
 <template>
-  <div v-if="data" mt-10px flex flex-wrap gap-20px text-12px>
+  <div v-if="data" grid grid-cols-2 mt-10px gap-20px text-12px>
     <el-tooltip v-for="member, idx in data" :key="idx" placement="top" :show-after="500">
       <template #content>
         <div mb-10px w-100px>

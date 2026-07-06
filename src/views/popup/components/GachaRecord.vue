@@ -56,7 +56,7 @@ function handleDelete(index: number) {
               </div>
             </div>
           </template>
-          <div flex flex-wrap gap-10px>
+          <div grid grid-cols-6 justify-items-center gap-10px>
             <div
               v-for="item, idx in data.ssrList.filter(ssr => resultFilter.type.includes(ssr.type))"
               :key="idx" relative w-100px

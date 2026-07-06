@@ -37,9 +37,9 @@ const showList = computed(() => {
       </div>
     </template>
     <el-scrollbar max-height="215">
-      <div flex flex-wrap gap-7px text-12px>
+      <div grid grid-cols-5 gap-7px text-12px>
         <el-tooltip v-for="quest in showList" :key="quest.questId" :content="quest.bossName" :show-after="500" placement="top">
-          <div relative w-50px fc flex-col>
+          <div relative fc flex-col>
             <img cursor-pointer :src="getBossImg('enemy', quest.bossImgId, 's')" @click="quest.pinned = !quest.pinned">
             <div>{{ quest.count }}</div>
             <div v-if="quest.pinned" i-twemoji:pushpin absolute right-0 top-0 />

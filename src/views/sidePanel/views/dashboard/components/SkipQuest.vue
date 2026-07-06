@@ -24,15 +24,12 @@ function handleClick(quest: typeof skipQuest.value.list[number]) {
     </template>
     <template v-if="skipQuest.list.length">
       <el-alert v-if="skipQuest.list.every(item => item.limitedCount === 0)" title="讨伐次数已达到上限" type="success" :center="true" :closable="false" />
-      <div v-else flex flex-wrap gap-10px>
-        <div v-for="quest in skipQuest.list" :key="quest.questId" relative w-62px cursor-pointer @click="handleClick(quest)">
+      <div v-else grid grid-cols-4 gap-10px>
+        <div v-for="quest in skipQuest.list" :key="quest.questId" relative cursor-pointer @click="handleClick(quest)">
           <div v-if="quest.limitedCount === 0" class="absolute h-full w-full fc bg-black/40">
             <span select-none text-12px text-red font-bold>Done</span>
           </div>
-          <img
-            w-full
-            :src="getOfficialUrl(`/sp/quest/assets/${quest.thumbnailImage}.png`)"
-          >
+          <img w-full :src="getOfficialUrl(`/sp/quest/assets/${quest.thumbnailImage}.png`)">
         </div>
       </div>
     </template>

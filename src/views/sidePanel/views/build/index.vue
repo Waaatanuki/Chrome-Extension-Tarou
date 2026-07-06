@@ -130,7 +130,7 @@ function checkDetail(build: BuildItem) {
           : 'ring-1 ring-neutral-6'"
         @click="checkAttr(item)"
       >
-        <img :src="getOfficialUrl(`/sp/artifact/ui/icon/icn_type_${item}.png`)" alt="属性图标" class="size-25px">
+        <img :src="getOfficialUrl(`/sp/artifact/ui/icon/icn_type_${item}.png`)" alt="属性图标" draggable="false" class="size-25px">
       </button>
     </div>
   </div>

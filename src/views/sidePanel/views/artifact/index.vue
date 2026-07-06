@@ -183,7 +183,7 @@ function onPasteSubmit() {
       </div>
     </div>
 
-    <div mb-10px flex flex-wrap gap-10px>
+    <div grid mb-10px gap-10px>
       <ArtifactCard
         v-for="artifact, idx in artifactList" :key="artifact.id"
         :artifact="artifact"

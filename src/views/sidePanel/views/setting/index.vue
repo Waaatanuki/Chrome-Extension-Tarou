@@ -107,16 +107,14 @@ onMounted(() => {
       </div>
     </template>
   </el-alert>
-  <div v-if="buildNpcFilter.length" px-5>
-    <el-card my-10px>
-      <div flex flex-wrap gap-12px>
-        <div v-for="item in buildNpcFilter" :key="item" relative fc flex-col select-none class="group">
-          <img :src="getAssetImg('npc', `${item}_01`, 's')" h-50px w-50px>
-          <div absolute hidden h-full w-full fc bg-black opacity-70 group-hover:flex>
-            <div i-carbon:close-filled absolute icon-btn @click="updateNpcFilter(item)" />
-          </div>
+  <el-card v-if="buildNpcFilter.length" my-10px>
+    <div grid grid-cols-5 gap-10px>
+      <div v-for="item in buildNpcFilter" :key="item" relative fc flex-col select-none class="group">
+        <img :src="getAssetImg('npc', `${item}_01`, 's')">
+        <div absolute hidden h-full w-full fc bg-black opacity-70 group-hover:flex>
+          <div i-carbon:close-filled absolute icon-btn @click="updateNpcFilter(item)" />
         </div>
       </div>
-    </el-card>
-  </div>
+    </div>
+  </el-card>
 </template>

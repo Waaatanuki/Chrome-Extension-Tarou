@@ -96,7 +96,7 @@ onMounted(() => {
       </template>
       <template #default>
         <el-card v-if="isManage" my-10px h-full>
-          <VueDraggableNext v-model="questConfig" flex flex-wrap gap-12px>
+          <VueDraggableNext v-model="questConfig" grid grid-cols-4 gap-12px>
             <transition-group name="draglist">
               <div
                 v-for="quest in questConfig" :key="quest.questId"
@@ -104,7 +104,7 @@ onMounted(() => {
                 cursor-pointer select-none
                 @click="toggleVisible(quest.questId)"
               >
-                <img w-60px :src="getQuestImg(quest.questId, 'lobby')">
+                <img :src="getQuestImg(quest.questId, 'lobby')">
               </div>
             </transition-group>
           </VueDraggableNext>

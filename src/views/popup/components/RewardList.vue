@@ -27,7 +27,7 @@ const showList = computed(() => order.value
       </div>
     </template>
     <el-scrollbar :height="600" px-10px>
-      <div flex flex-wrap gap-5px text-14px>
+      <div grid grid-cols-8 gap-5px text-14px>
         <div v-for="reward in showList" :key="reward.key" w-80px fc flex-col>
           <img :src="getOfficialUrl(`/sp/assets/${reward.imgId}.jpg`)">
           <div>{{ reward.count }}</div>
