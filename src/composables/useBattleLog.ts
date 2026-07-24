@@ -1,6 +1,6 @@
 import type { Action, BattleRecord, PartyCondition, Player } from 'extension'
 import type { Ability, AttackResultJson, BattleStartJson, ChatInfoEN, ChatInfoJP, Condition, DamageScenario, GuardSettingJson, LoopDamageScenario, ResultJsonPayload, ScenarioType, SpecialScenario, SpecialSkillSetting, SummonScenario, SuperScenario, WsPayloadData } from 'source'
-import { battleInfo, battleMemo, battleRecord, deckList, notificationSetting, questSetting, userInfo } from '~/logic'
+import { battleInfo, battleMemo, battleRecord, deckList, dungeonInfo, notificationSetting, questSetting, userInfo } from '~/logic'
 
 export function handleStartJson(data: BattleStartJson) {
   userInfo.value.name = data.nickname
@@ -59,6 +59,15 @@ export function handleStartJson(data: BattleStartJson) {
     groupNum: cur.group_num,
   }))
 
+  // 更新肉鸽boss信息
+  dungeonInfo.value.bossInfo = data.is_arcarum3
+    ? data.boss.param.map(b => ({
+        imageId: b.cjs.split('_').at(1)!,
+        hp: Number(b.hp),
+        maxHp: Number(b.hpmax),
+      }))
+    : []
+
   handleMainConditionInfo(boss.condition, leader.condition)
   recordRaidInfo(data)
   // 处理开幕特动情况start
@@ -84,6 +93,17 @@ export function handleAttackResultJson(type: string, data: AttackResultJson, pay
 
   if (!currentRaid)
     return
+
+  // 更新肉鸽多boss血量信息
+  for (let i = 0; i < (dungeonInfo.value.bossInfo?.length || 0); i++) {
+    const isBossDie = scenario.some(item => item.cmd === 'die' && item.to === 'boss' && item.pos === i)
+    if (isBossDie)
+      dungeonInfo.value.bossInfo![i].hp = 0
+
+    const bossGauge = scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === i)
+    if (bossGauge)
+      dungeonInfo.value.bossInfo![i].hp = bossGauge.hp!
+  }
 
   const bossGauge = scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)
   const status = data.status
@@ -154,7 +174,7 @@ export function handleAttackResultJson(type: string, data: AttackResultJson, pay
 
   for (let i = 0; i < 6; i++) {
     const playerBuffs = data.scenario.findLast(item => item.cmd === 'condition' && item.to === 'player' && item.pos === i)
-    if (playerBuffs?.condition) {
+    if (playerBuffs?.condition && playerBuffs?.pos !== null) {
       partyCondition.push({
         pos: Number(formation[i]),
         buff: mergeCondition(playerBuffs.condition),

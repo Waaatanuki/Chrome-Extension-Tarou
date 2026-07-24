@@ -27,6 +27,7 @@ const upViewList = computed(() => [
   { key: 'odiant', label: '禁祸祛除', icon: 'game-icons:custodian-helmet' },
   { key: 'party', label: '队伍信息', icon: 'ri:team-fill' },
   { key: 'build', label: '配置查询', icon: 'material-symbols:document-search' },
+  { key: 'dungeon', label: '肉鸽情报', icon: 'game-icons:dungeon-gate' },
   { key: 'combat', label: '战斗信息', icon: 'game-icons:battle-axe' },
   { key: 'history', label: '战斗记录', icon: 'game-icons:scroll-unfurled' },
   { key: 'patient', label: '标记玩家', icon: 'material-symbols:patient-list' },

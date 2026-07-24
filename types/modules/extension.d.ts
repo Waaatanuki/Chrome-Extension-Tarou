@@ -466,4 +466,49 @@ declare module 'extension' {
     skillDepth: number
     skillImage: string
   }
+
+  interface DungeonInfo {
+    currentNodeId: number
+    nodeList: DungeonNode[]
+    party: {
+      attribute: string
+      imageId: string
+      maxHp: number
+      hp: number
+    }[]
+    bossInfo: {
+      imageId: string
+      hp: number
+      maxHp: number
+    }[]
+    statusList: DungeonUserStatus[]
+    lineup: {
+      lineupId: number
+      statusId?: number
+      comment: string
+      price: number
+      canPurchase: boolean
+    }[]
+  }
+
+  interface DungeonNode {
+    nodeId: number
+    nodeType: number
+    positionX: number
+    positionY: number
+    adjacentNodeIds: number[]
+    specialIncidentId: number | null
+
+  }
+
+  interface DungeonStatus {
+    statusId: number
+    rarity: number
+    name: string
+    isFavorited: boolean
+  }
+
+  interface DungeonUserStatus extends DungeonStatus {
+    num: number
+  }
 }

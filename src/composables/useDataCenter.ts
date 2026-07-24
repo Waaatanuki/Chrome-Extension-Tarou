@@ -1,4 +1,4 @@
-import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, Player, SampoParam, TeamforceAdditional, TeamraidAdditional } from 'extension'
+import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, SampoParam, TeamforceAdditional, TeamraidAdditional } from 'extension'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
 import type { BattleStartJson, GachaRatioAppear, GachaRatioAppearItem, GachaResult } from 'source'
 import { load } from 'cheerio'
@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { artifactSkillList } from '~/constants/artifact'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, deckList, displayList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo, weaponList } from '~/logic'
+import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, dungeonInfo, dungeonStatusList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo, weaponList } from '~/logic'
 
 const MaxMemoLength = 50
 
@@ -697,7 +697,9 @@ export async function unpack(parcel: string) {
     // 分析副本数据
     handleStartJson(battleStartJson)
 
-    // 上传副本信息
+    // 上传副本信息 屏蔽沙盒系列
+    if (battleStartJson.is_arcarum3 || battleStartJson.is_arcarum || battleStartJson.is_replicard)
+      return
     const matchName = battleStartJson.boss.param.reduce<string[]>((pre, cur) => {
       pre.push(cur.name.ja, cur.name.en)
       return pre
@@ -924,6 +926,133 @@ export async function unpack(parcel: string) {
     if (hitRecord)
       hitRecord.isSolo = false
   }
+
+  // Dungeon 启动时重制数据
+  if (url.includes('/rest/arcarum3/start_dungeon')) {
+    dungeonInfo.value = {
+      statusList: [],
+    }
+  }
+
+  // Dungeon 记录肉鸽信息
+  if (url.includes('/arcarum3/dungeon/content/index')) {
+    handleDungeonContent(responseData)
+  }
+
+  // Dungeon 记录商店商品
+  if (url.includes('/rest/arcarum3/dungeon/dungeon_shop_lineup/')) {
+    dungeonInfo.value.lineup = responseData.item_list.map((item: any) => ({
+      lineupId: item.lineup_id,
+      statusId: item.status_id,
+      comment: item.comment || item.item_comment,
+      price: item.price,
+      canPurchase: item.can_purchase,
+    }))
+  }
+
+  // Dungeon 记录购买商店导本
+  if (url.includes('/rest/arcarum3/dungeon/purchase_dungeon_shop_item')) {
+    const payload = JSON.parse(requestData!)
+    const hitItem = dungeonInfo.value.lineup?.find(i => i.lineupId === payload.lineup_id)
+    const statusId = hitItem?.statusId
+
+    if (!statusId)
+      return
+
+    dungeonInfo.value.statusList = dungeonInfo.value.statusList || []
+
+    const hitUserStatus = dungeonInfo.value.statusList.find(s => s.statusId === statusId)
+    if (hitUserStatus) {
+      hitUserStatus.num++
+    }
+    else {
+      const hitStatus = dungeonStatusList.value.find(s => s.statusId === statusId)
+      if (hitStatus)
+        dungeonInfo.value.statusList.push({ ...hitStatus, num: 1 })
+    }
+  }
+
+  // Dungeon 更新队伍信息
+  if (url.includes('/rest/arcarum3/dungeon/party_status')) {
+    dungeonInfo.value.party = responseData.map((p: any) => ({
+      attribute: String(p.attribute),
+      imageId: p.image_id,
+      maxHp: Number(p.max_hp),
+      hp: Number(p.hp),
+    }))
+  }
+
+  // Dungeon 移动后更新队伍信息
+  if (/\/rest\/arcarum3\/dungeon\/(?:move_node|proceed_node_event)/.test(url)) {
+    const action_scenario_list = responseData.action_scenario_list
+
+    if (responseData.after_current_node_id)
+      dungeonInfo.value.currentNodeId = responseData.after_current_node_id
+
+    processDungeonActionScenario(action_scenario_list)
+  }
+
+  // Dungeon 选择事件
+  if (url.includes('/rest/arcarum3/dungeon/incident_choose')) {
+    processDungeonActionScenario(responseData.action_scenario_list)
+  }
+
+  // Dungeon 结束节点事件
+  if (url.includes('/rest/arcarum3/dungeon/finish_node_event')) {
+    const hitNode = dungeonInfo.value.nodeList?.find(n => n.nodeId === dungeonInfo.value.currentNodeId)
+    if (!hitNode)
+      return
+
+    hitNode.nodeType = responseData.is_delete_node ? 0 : hitNode.nodeType
+
+    const appearanceList = Object.values(responseData.special_incident_appearance_info).flatMap((item: any) => item.appearance_list)
+
+    for (const appearance of appearanceList) {
+      const hitNode = dungeonInfo.value.nodeList?.find(n => n.nodeId === appearance.node_id)
+      if (hitNode) {
+        hitNode.nodeType = 10
+        hitNode.specialIncidentId = appearance.special_incident_id
+      }
+    }
+  }
+
+  // Dungeon 新增导本信息
+  if (url.includes('/rest/arcarum3/dungeon/proceed_node_event_spacebook_status_add')) {
+    const statusIds = JSON.parse(requestData!).status_ids ?? []
+    addDungeonStatus(statusIds)
+  }
+
+  // Dungeon 删除导本信息
+  if (url.includes('/rest/arcarum3/dungeon/proceed_node_event_spacebook_status_remove')) {
+    const action_scenario_list = responseData.action_scenario_list
+    processDungeonActionScenario(action_scenario_list)
+  }
+
+  // Dungeon 统计导本信息
+  if (url.includes('/rest/arcarum3/dungeon/spacebook_status_list')) {
+    if (responseData.status_list.some((status: any) => !status.num))
+      return
+
+    dungeonInfo.value.statusList = responseData.status_list.map((status: any) => ({
+      statusId: status.status_id,
+      rarity: status.rarity,
+      name: status.name.replace(/@@/g, ''),
+      num: status.num,
+    }))
+
+    for (const status of responseData.status_list) {
+      const hitStatus = dungeonStatusList.value.find(s => s.statusId === status.status_id)
+      const data = {
+        statusId: status.status_id,
+        rarity: status.rarity,
+        name: status.name.replace(/@@/g, ''),
+      }
+      if (hitStatus)
+        Object.assign(hitStatus, data)
+      else
+        dungeonStatusList.value.push({ ...data, isFavorited: false })
+    }
+  }
 }
 
 // 处理战斗结算数据
@@ -953,6 +1082,27 @@ function handleResultContent(responseData: any) {
   const isInAdvent = !!Object.keys(result_data.advent_info).length
   const isInSolotreasure = !!eventList.value.find(e => e.type === 'solotreasure')?.isActive
   const isInBiography = !!eventList.value.find(e => e.type === 'biography')?.isActive
+
+  // 更新肉鸽导本数据
+  if (result_data.arcarum3?.reward_list) {
+    const statusIds = result_data.arcarum3.reward_list
+      .filter((item: any) => item.reward_type === 4)
+      .flatMap((item: any) => item.detail)
+      .map((item: any) => item.status_id)
+
+    dungeonInfo.value.statusList = dungeonInfo.value.statusList ?? []
+    for (const id of statusIds) {
+      const hitUserStatus = dungeonInfo.value.statusList.find(s => s.statusId === id)
+      if (hitUserStatus) {
+        hitUserStatus.num++
+      }
+      else {
+        const hitStatus = dungeonStatusList.value.find(s => s.statusId === id)
+        if (hitStatus)
+          dungeonInfo.value.statusList.push({ ...hitStatus, num: 1 })
+      }
+    }
+  }
 
   // 收集掉落信息
   for (const element of Object.values(result_data.rewards.reward_list)) {

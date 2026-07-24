@@ -1,6 +1,6 @@
 import type { BuildResDto, DropInfo } from 'api'
 import type { BattleInfo } from 'battle'
-import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, EventInfo, GachaInfo, GachaRecord, JoinedRaid, MarkedUser, NotificationSetting, OdiantWeapon, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
+import type { ArtifactRule, ArtifactUsage, BattleMemo, BattleRecord, CombatPanelSetting, DailyCost, DisplayItem, DungeonInfo, DungeonStatus, EventInfo, GachaInfo, GachaRecord, JoinedRaid, MarkedUser, NotificationSetting, OdiantWeapon, Quest, QuestSetting, RecoveryItem, SampoInfo, SampoSetup, SkipQuest, UserInfo, Widget } from 'extension'
 import type { BuildLeaderAbility, BuildNpc, Deck } from 'party'
 import type { Artifact } from 'source'
 import dayjs from 'dayjs'
@@ -73,3 +73,7 @@ export const buildRecord = useWebExtensionStorage<Partial<BuildResDto>>('buildRe
 
 // Gacha
 export const gachaInfo = useWebExtensionStorage<GachaInfo>('gachaInfo', {})
+
+// Dungeon
+export const dungeonInfo = useWebExtensionStorage<Partial<DungeonInfo>>('dungeonInfo', {})
+export const dungeonStatusList = useWebExtensionStorage<DungeonStatus[]>('dungeonStatusList', [])

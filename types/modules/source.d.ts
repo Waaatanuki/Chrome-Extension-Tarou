@@ -92,6 +92,9 @@ declare module 'source' {
         comment: string
       }[]
     }
+    is_replicard: boolean
+    is_arcarum: boolean
+    is_arcarum3: boolean
   }
 
   interface Boss {
@@ -702,5 +705,25 @@ declare module 'source' {
     is_max_quality: boolean
     effect_value: string
     icon_image: string
+  }
+
+  interface DungeonActionScenario {
+    action_type: number
+    after_party_status?: {
+      attribute: string
+      image_id: string
+      max_hp: number
+      hp: number
+    }[]
+    status_list?: DungeonScenarioStatus[]
+    // 传送点id
+    warp_node_id?: number
+    delete_node_ids?: number[]
+    node_id?: number
+    special_incident_id?: number
+  }
+
+  interface DungeonScenarioStatus {
+    status_id: number
   }
 }
