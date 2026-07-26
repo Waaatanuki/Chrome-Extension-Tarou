@@ -974,7 +974,8 @@ export async function unpack(parcel: string) {
 
   // Dungeon 更新队伍信息
   if (url.includes('/rest/arcarum3/dungeon/party_status')) {
-    dungeonInfo.value.party = responseData.map((p: any) => ({
+    const partyInfo = responseData.party || responseData
+    dungeonInfo.value.party = partyInfo.map((p: any) => ({
       attribute: String(p.attribute),
       imageId: p.image_id,
       maxHp: Number(p.max_hp),
@@ -1040,18 +1041,7 @@ export async function unpack(parcel: string) {
       num: status.num,
     }))
 
-    for (const status of responseData.status_list) {
-      const hitStatus = dungeonStatusList.value.find(s => s.statusId === status.status_id)
-      const data = {
-        statusId: status.status_id,
-        rarity: status.rarity,
-        name: status.name.replace(/@@/g, ''),
-      }
-      if (hitStatus)
-        Object.assign(hitStatus, data)
-      else
-        dungeonStatusList.value.push({ ...data, isFavorited: false })
-    }
+    updateDungeonStatus(responseData.status_list)
   }
 }
 

@@ -1,4 +1,4 @@
-import type { DungeonActionScenario } from 'source'
+import type { DungeonActionScenario, DungeonScenarioStatus } from 'source'
 import { DUNGEON_NORMAL_NODE_LIST, DUNGEON_SPECIAL_NODE_LIST } from '~/constants/dungeon'
 import { dungeonInfo, dungeonStatusList } from '~/logic'
 
@@ -64,6 +64,11 @@ export function processDungeonActionScenario(scenarioList: DungeonActionScenario
       addDungeonStatus(statusIds)
     }
 
+    // 选择导本
+    if (scenario.action_type === 401) {
+      updateDungeonStatus(scenario.status_list)
+    }
+
     // 删除导本
     if (scenario.action_type === 402) {
       for (const status of scenario.status_list ?? []) {
@@ -89,6 +94,21 @@ export function addDungeonStatus(statusIds: number[]) {
       if (hitStatus)
         dungeonInfo.value.statusList.push({ ...hitStatus, num: 1 })
     }
+  }
+}
+
+export function updateDungeonStatus(statusList: DungeonScenarioStatus[] = []) {
+  for (const status of statusList) {
+    const hitStatus = dungeonStatusList.value.find(s => s.statusId === status.status_id)
+    const data = {
+      statusId: status.status_id,
+      rarity: status.rarity,
+      name: status.name.replace(/@@/g, ''),
+    }
+    if (hitStatus)
+      Object.assign(hitStatus, data)
+    else
+      dungeonStatusList.value.push({ ...data, isFavorited: false })
   }
 }
 

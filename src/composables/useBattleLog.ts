@@ -96,13 +96,13 @@ export function handleAttackResultJson(type: string, data: AttackResultJson, pay
 
   // 更新肉鸽多boss血量信息
   for (let i = 0; i < (dungeonInfo.value.bossInfo?.length || 0); i++) {
-    const isBossDie = scenario.some(item => item.cmd === 'die' && item.to === 'boss' && item.pos === i)
-    if (isBossDie)
-      dungeonInfo.value.bossInfo![i].hp = 0
-
     const bossGauge = scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === i)
     if (bossGauge)
       dungeonInfo.value.bossInfo![i].hp = bossGauge.hp!
+
+    const isBossDie = scenario.some(item => item.cmd === 'die' && item.to === 'boss' && item.pos === i)
+    if (isBossDie)
+      dungeonInfo.value.bossInfo![i].hp = 0
   }
 
   const bossGauge = scenario.findLast(item => item.cmd === 'boss_gauge' && item.pos === 0)

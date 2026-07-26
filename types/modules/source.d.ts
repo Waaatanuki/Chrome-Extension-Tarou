@@ -725,5 +725,7 @@ declare module 'source' {
 
   interface DungeonScenarioStatus {
     status_id: number
+    rarity: number
+    name: string
   }
 }

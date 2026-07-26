@@ -168,7 +168,7 @@ function onPasteSubmit() {
           </div>
         </div>
 
-        <div v-if="artifactUsage.filterList" relative mt-2 fc gap-2 bg-neutral-8>
+        <div v-if="artifactUsage.filterList" relative mt-2 flex items-center gap-2 bg-neutral-8>
           <div i-carbon:close-outline absolute right-1 top-1 icon-btn text-20px @click="artifactUsage = {}" />
           <img h-100px :src="getAssetImg('npc', artifactUsage.image!, 'quest')">
           <div flex flex-col gap-2px text-12px line-height-18px>
