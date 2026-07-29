@@ -32,6 +32,70 @@ export const DUNGEON_SPECIAL_NODE_LIST = [
   { incidentId: 18, icon: '10_incident', comment: '村落', hasBackground: true },
 ]
 
+export const statusSummaryOptions = [
+  {
+    label: '全种族',
+    status: [
+      { id: 60, value: 1 },
+    ],
+  },
+  {
+    label: '全得意',
+    status: [
+      { id: 59, value: 1 },
+    ],
+  },
+  {
+    label: '弱点攻击',
+    status: [
+      { id: 31, value: 1 },
+    ],
+  },
+  {
+    label: '必中',
+    status: [
+      { id: 32, value: 1 },
+    ],
+  },
+  {
+    label: '不死身',
+    status: [
+      { id: 42, value: 1 },
+    ],
+  },
+  {
+    label: '再使用',
+    status: [
+      { id: 81, value: 1 },
+    ],
+  },
+  {
+    label: '召唤CD1',
+    status: [
+      { id: 83, value: 1 },
+    ],
+  },
+  {
+    label: 'hit减cd',
+    status: [
+      { id: 92, value: 1 },
+    ],
+  },
+  {
+    label: '奥义减cd',
+    status: [
+      { id: 75, value: 1 },
+    ],
+  },
+  {
+    label: '加护',
+    status: [
+      { id: 24, value: 60 },
+      { id: 79, value: 180 },
+    ],
+  },
+]
+
 export const DUNGEON_MAP_WIDTH = 2680
 export const DUNGEON_MAP_HEIGHT = 1830
 

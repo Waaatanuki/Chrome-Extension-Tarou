@@ -1,5 +1,5 @@
 import type { DungeonActionScenario, DungeonScenarioStatus } from 'source'
-import { DUNGEON_NORMAL_NODE_LIST, DUNGEON_SPECIAL_NODE_LIST } from '~/constants/dungeon'
+import { DUNGEON_NORMAL_NODE_LIST, DUNGEON_SPECIAL_NODE_LIST, statusSummaryOptions } from '~/constants/dungeon'
 import { dungeonInfo, dungeonStatusList } from '~/logic'
 
 export function handleDungeonContent(data: any) {
@@ -110,6 +110,18 @@ export function updateDungeonStatus(statusList: DungeonScenarioStatus[] = []) {
     else
       dungeonStatusList.value.push({ ...data, isFavorited: false })
   }
+}
+
+export function processStatusSummary() {
+  return statusSummaryOptions.map((option) => {
+    const { label, status } = option
+    const item = { label, value: 0 }
+    for (const s of status) {
+      const hitStatus = dungeonInfo.value.statusList?.find(item => item.statusId === s.id)
+      item.value += hitStatus ? hitStatus.num * s.value : 0
+    }
+    return item
+  })
 }
 
 export function processNodeSummary() {

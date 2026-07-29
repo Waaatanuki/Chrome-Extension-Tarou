@@ -482,6 +482,7 @@ declare module 'extension' {
       maxHp: number
     }[]
     statusList: DungeonUserStatus[]
+    showStatusList: boolean
     lineup: {
       lineupId: number
       statusId?: number
