@@ -86,9 +86,10 @@ export function getActionIcon(action: Action) {
 
 export function getBuffIcon(buff: Buff, turn: number) {
   const iconUrl = `${IMG_URI}/sp/ui/icon/status/x64/status_`
-  const endTurn = buff.personal_buff_end_turn || buff.personal_debuff_end_turn
-  if (buff.personal_status !== buff.status && endTurn)
-    return `${iconUrl}${buff.personal_status}${Number(endTurn) - turn}.png`
+  // 疑似现在直接返回完整图标地址，带次数的buff不用再拼了
+  // const endTurn = buff.personal_buff_end_turn || buff.personal_debuff_end_turn
+  // if (buff.personal_status !== buff.status && endTurn)
+  //   return `${iconUrl}${buff.personal_status}${Number(endTurn) - turn}.png`
 
   return `${iconUrl}${buff.status.replace(/-/g, '')}.png`
 }
