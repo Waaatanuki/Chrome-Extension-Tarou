@@ -688,7 +688,7 @@ export async function unpack(parcel: string) {
           hitQuest = { questId, ap: 0, bossImgId: '', bossName: '', count: 0 }
           dailyCost.value.quest?.push(hitQuest)
         }
-        hitQuest.bossImgId = hitQuest.bossImgId || battleStartJson.boss.param[0].cjs.split('_').at(-1)!
+        hitQuest.bossImgId = hitQuest.bossImgId || battleStartJson.boss.param[0].cjs.split('_').at(1)!
         hitQuest.bossName = hitQuest.bossName || battleStartJson.boss.param[0].monster
         hitQuest.count++
       }
