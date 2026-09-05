@@ -33,10 +33,12 @@ export function handleDeckJson(data: DeckJson, isTrue: boolean) {
 export function handleCalculateSetting(data: CalculateSetting) {
   const hit = deckList.value.find(item => item.priority === data?.priority)
   if (hit) {
-    hit.supporter = {
-      summonId: String(data.setting.summon_id),
-      imageId: String(data.setting.image_id),
-    }
+    hit.supporter = data?.setting?.summon_id && data?.setting?.image_id
+      ? {
+          summonId: String(data.setting.summon_id),
+          imageId: String(data.setting.image_id),
+        }
+      : undefined
   }
 }
 
