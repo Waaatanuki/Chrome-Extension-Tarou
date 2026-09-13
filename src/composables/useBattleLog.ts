@@ -30,7 +30,7 @@ export function handleStartJson(data: BattleStartJson) {
     name: boss.name.ja,
     hp: Number(boss.hp),
     hpmax: Number(boss.hpmax),
-    hpPercent: Number.parseFloat((Number(boss.hp) / Number(boss.hpmax) * 100).toFixed(2)),
+    hpPercent: getHpPercent(Number(boss.hp), Number(boss.hpmax)),
     timer: data.timer,
     countDownTime: Date.now() + data.timer * 1000,
     turn: data.turn,
@@ -125,7 +125,7 @@ export function handleAttackResultJson(type: string, data: AttackResultJson, pay
   if (bossGauge && battleInfo.value.bossInfo) {
     battleInfo.value.bossInfo.name = bossGauge.name!.ja
     battleInfo.value.bossInfo.hp = bossGauge.hp!
-    battleInfo.value.bossInfo.hpPercent = Number.parseFloat((Number(bossGauge.hp) / Number(battleInfo.value.bossInfo.hpmax) * 100).toFixed(2))
+    battleInfo.value.bossInfo.hpPercent = getHpPercent(Number(bossGauge.hp), Number(battleInfo.value.bossInfo.hpmax))
     battleInfo.value.bossInfo.timer = status?.timer ?? battleInfo.value.bossInfo.timer
     battleInfo.value.bossInfo.countDownTime = status?.timer ? Date.now() + status.timer * 1000 : battleInfo.value.bossInfo.countDownTime
     battleInfo.value.bossInfo.turn = status?.turn ?? battleInfo.value.bossInfo.turn
@@ -299,7 +299,7 @@ export function handleSpecialSkillSettingJson(data: SpecialSkillSetting) {
 export function handleWsPayloadJson(data: WsPayloadData) {
   if (data.bossUpdate && battleInfo.value.bossInfo) {
     battleInfo.value.bossInfo.hp = Number(data.bossUpdate.param.boss1_hp)
-    battleInfo.value.bossInfo.hpPercent = Number.parseFloat((Number(battleInfo.value.bossInfo.hp) / Number(battleInfo.value.bossInfo.hpmax) * 100).toFixed(2))
+    battleInfo.value.bossInfo.hpPercent = getHpPercent(Number(battleInfo.value.bossInfo.hp), Number(battleInfo.value.bossInfo.hpmax))
     handleMainConditionInfo(data.bossUpdate.param.boss1_condition)
   }
 
@@ -903,4 +903,8 @@ function getAbilityList(rawAbility?: Ability) {
     )),
     [],
   )
+}
+
+function getHpPercent(hp: number, hpmax: number) {
+  return Math.ceil((Number(hp) / Number(hpmax) * 100 * 100)) / 100
 }
