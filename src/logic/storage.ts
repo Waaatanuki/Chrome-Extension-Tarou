@@ -46,6 +46,7 @@ export const actionTriggerList = useWebExtensionStorage<string[]>('actionTrigger
 export const questConfig = useWebExtensionStorage<Quest[]>('questConfig', [])
 export const battleMemo = useWebExtensionStorage<BattleMemo[]>('battleMemo', [])
 export const failedDropInfoList = useWebExtensionStorage<DropInfo[]>('failedDropInfoList', [])
+export const sentBossInfo = useWebExtensionStorage<string[]>('sentBossInfo', [])
 
 // Party
 export const deckList = useWebExtensionStorage<Deck[]>('deckList', [])

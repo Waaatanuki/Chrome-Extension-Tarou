@@ -1,3 +1,4 @@
+import type { StartJsonBoss } from 'api'
 import type { AdventAdditional, DisplayItem, EventInfo, GachaNpc, Mission, SampoParam, TeamforceAdditional, TeamraidAdditional } from 'extension'
 import type { BuildLeaderAbility, BuildNpc } from 'party'
 import type { BattleStartJson, GachaRatioAppear, GachaRatioAppearItem, GachaResult } from 'source'
@@ -6,9 +7,10 @@ import dayjs from 'dayjs'
 import { sendBossInfo } from '~/api'
 import { artifactSkillList } from '~/constants/artifact'
 import { getEventGachaBoxNum } from '~/constants/event'
-import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, dungeonInfo, dungeonStatusList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, skipQuest, userInfo, weaponList } from '~/logic'
+import { artifactList, artifactUsage, battleInfo, battleMemo, battleRecord, buildQuestId, dailyCost, displayList, dungeonInfo, dungeonStatusList, eventList, gachaInfo, gachaRecord, jobAbilityList, joinedRaid, localNpcList, notificationSetting, obTabId, recoveryItemList, sampoInfo, sampoSetup, sentBossInfo, skipQuest, userInfo, weaponList } from '~/logic'
 
 const MaxMemoLength = 50
+const MaxSentBossInfoLength = 100
 
 export async function unpack(parcel: string) {
   if (typeof parcel !== 'string')
@@ -720,10 +722,7 @@ export async function unpack(parcel: string) {
         hp: Number(boss.hpmax),
       })),
     }
-    console.log('sendBossInfo', bossInfo)
-    sendBossInfo(bossInfo).catch((err) => {
-      console.log(err.message)
-    })
+    processBossInfo(bossInfo)
   }
 
   // Drop 记录未结算战斗信息
@@ -1972,4 +1971,31 @@ function getJapan7AMTimestamp(): number {
   const day = localDate.getDate()
   const japan7AM = new Date(Date.UTC(year, month, day, 7 - 9, 0, 0, 0))
   return japan7AM.getTime()
+}
+
+function processBossInfo(bossInfo: StartJsonBoss) {
+  const sentBossInfoKey = `${bossInfo.questId}:${bossInfo.battleCount}`
+
+  const hitKeyIndex = sentBossInfo.value.indexOf(sentBossInfoKey)
+  if (hitKeyIndex !== -1) {
+    sentBossInfo.value.splice(hitKeyIndex, 1)
+    sentBossInfo.value.push(sentBossInfoKey)
+    return
+  }
+
+  sentBossInfo.value.push(sentBossInfoKey)
+  if (sentBossInfo.value.length > MaxSentBossInfoLength)
+    sentBossInfo.value.shift()
+
+  // 同一副本键只在首次出现时采样，后续重复事件直接由 LRU 去重。
+  if (Math.random() >= 0.1)
+    return
+
+  console.log('sendBossInfo', bossInfo)
+  sendBossInfo(bossInfo).catch((err) => {
+    const index = sentBossInfo.value.indexOf(sentBossInfoKey)
+    if (index !== -1)
+      sentBossInfo.value.splice(index, 1)
+    console.log(err.message)
+  })
 }
